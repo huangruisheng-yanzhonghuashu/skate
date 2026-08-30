@@ -30,7 +30,9 @@ function ensureOpenid() {
 /* ===== 场地 ===== */
 let _venues = null
 let _venuesPromise = null
-function getVenues() {
+/* force=true 丢弃缓存重新拉取（管理页增删改后调用） */
+function getVenues(force) {
+  if (force) { _venues = null; _venuesPromise = null }
   if (_venues) return Promise.resolve(_venues)
   if (_venuesPromise) return _venuesPromise
   _venuesPromise = db().collection('venues').limit(20).get()
@@ -176,6 +178,58 @@ function getLeaderboard() {
   })
 }
 
+/* ===== 店铺 ===== */
+let _shops = null
+let _shopsPromise = null
+/* force=true 丢弃缓存重新拉取（管理页增删改后调用） */
+function getShops(force) {
+  if (force) { _shops = null; _shopsPromise = null }
+  if (_shops) return Promise.resolve(_shops)
+  if (_shopsPromise) return _shopsPromise
+  _shopsPromise = db().collection('shops').limit(20).get()
+    .then((r) => {
+      _shops = r.data || []
+      return _shops
+    })
+    .catch((e) => {
+      console.warn('[cloud] 店铺读取失败', (e && e.errCode) || (e && e.message))
+      _shops = []
+      return _shops
+    })
+  return _shopsPromise
+}
+
+/* 从已加载的店铺缓存中查找 */
+function findShop(id) {
+  return (_shops || []).find(function (s) { return s.id === id }) || null
+}
+
+/* 店铺营业状态：营业中 / 已打烊 / 未设置 */
+function openStatus(shop) {
+  if (!shop || !shop.hours || !shop.hours.open || !shop.hours.close) return ''
+  const now = new Date()
+  const mins = now.getHours() * 60 + now.getMinutes()
+  const toM = function (s) {
+    const p = s.split(':')
+    return Number(p[0]) * 60 + Number(p[1])
+  }
+  return mins >= toM(shop.hours.open) && mins < toM(shop.hours.close) ? '营业中' : '已打烊'
+}
+
+/* ===== 管理端（manageVenue 云函数封装） ===== */
+function callManage(action, data) {
+  return wx.cloud.callFunction({ name: 'manageVenue', data: { action: action, data: data } })
+    .then(function (r) {
+      const res = (r.result && typeof r.result === 'object') ? r.result : { ok: false, msg: '云函数返回异常' }
+      if (!res.ok) {
+        const e = new Error(res.msg || '操作失败')
+        e.code = res.code
+        throw e
+      }
+      return res
+    })
+}
+
 /* ===== 场地报错 ===== */
 function addVenueReport(doc) {
   return db().collection('venue_reports').add({ data: doc })
@@ -191,9 +245,14 @@ function countMyReports() {
 /* ===== 头像与资料 ===== */
 /* 上传头像到云存储，返回 fileID（image 组件可直接显示 cloud:// 路径） */
 function uploadAvatar(tempFilePath) {
+  return uploadFileTo('avatars', tempFilePath)
+}
+
+/* 通用上传：dir 为云存储目录名，返回 fileID */
+function uploadFileTo(dir, tempFilePath) {
   const m = tempFilePath.match(/\.(\w+)$/)
   const ext = (m && m[1]) || 'jpg'
-  const cloudPath = 'avatars/' + Date.now() + '-' + Math.floor(Math.random() * 1000000) + '.' + ext
+  const cloudPath = dir + '/' + Date.now() + '-' + Math.floor(Math.random() * 1000000) + '.' + ext
   return wx.cloud.uploadFile({ cloudPath: cloudPath, filePath: tempFilePath })
     .then((r) => r.fileID)
 }
@@ -244,7 +303,8 @@ function getOnlineCount(venueId) {
 }
 
 /* 批量：所有场地的在线人数映射 { venueId: count }（一次聚合，首页列表用）
- * 需 presence 集合"所有用户可读"权限，否则只能统计到自己，结果降级为空 */
+ * 成功返回 map（可能为空对象 = 当前无人在线）；失败返回 null（调用方保留兜底显示）
+ * 需 presence 集合"所有用户可读"权限，否则只能统计到自己 */
 function getOnlineMap() {
   const cmd = db().command
   const $ = agg()
@@ -258,7 +318,10 @@ function getOnlineMap() {
       ;(r.list || []).forEach(function (x) { map[x._id] = x.total })
       return map
     })
-    .catch(function () { return {} })
+    .catch(function (e) {
+      console.warn('[cloud] 在线数聚合失败', (e && e.errCode) || (e && e.message))
+      return null
+    })
 }
 
 module.exports = {
@@ -279,9 +342,14 @@ module.exports = {
   addVenueReport: addVenueReport,
   countMyReports: countMyReports,
   uploadAvatar: uploadAvatar,
+  uploadFileTo: uploadFileTo,
   saveProfile: saveProfile,
   distanceM: distanceM,
   heartbeat: heartbeat,
   getOnlineCount: getOnlineCount,
   getOnlineMap: getOnlineMap,
+  getShops: getShops,
+  findShop: findShop,
+  openStatus: openStatus,
+  callManage: callManage,
 }

@@ -1,0 +1,349 @@
+.page {
+  min-height: 100vh;
+  background: #F7F7F8;
+  padding: 24rpx 32rpx calc(60rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ===== 状态区（校验中 / 无权限） ===== */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  padding: 160rpx 40rpx 0;
+  color: #8C8C8C;
+  font-size: 28rpx;
+}
+
+.state-icon {
+  width: 120rpx;
+  height: 120rpx;
+  opacity: 0.4;
+}
+
+.state-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1A1A1E;
+}
+
+.state-desc {
+  font-size: 26rpx;
+  text-align: center;
+}
+
+.state-openid {
+  margin-top: 8rpx;
+  padding: 16rpx 28rpx;
+  background: #FFFFFF;
+  border-radius: 12rpx;
+  font-size: 24rpx;
+  color: #FF5A36;
+  word-break: break-all;
+  max-width: 100%;
+}
+
+/* ===== 实体切换 ===== */
+.seg {
+  display: flex;
+  background: #EBEBEE;
+  border-radius: 16rpx;
+  padding: 6rpx;
+  margin-bottom: 20rpx;
+}
+
+.seg-item {
+  flex: 1;
+  text-align: center;
+  padding: 16rpx 0;
+  font-size: 28rpx;
+  color: #6B6B70;
+  border-radius: 12rpx;
+}
+
+.seg-active {
+  background: #FFFFFF;
+  color: #1A1A1E;
+  font-weight: 600;
+}
+
+.meta-line {
+  font-size: 24rpx;
+  color: #8C8C8C;
+  margin-bottom: 16rpx;
+}
+
+/* ===== 列表行 ===== */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+}
+
+.row-img {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 12rpx;
+  flex-shrink: 0;
+}
+
+.row-img-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F0F0F2;
+  color: #C0C0C4;
+  font-size: 22rpx;
+}
+
+.row-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.row-name {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1E;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-sub {
+  font-size: 24rpx;
+  color: #8C8C8C;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-ops {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  flex-shrink: 0;
+}
+
+.op {
+  font-size: 24rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 10rpx;
+  text-align: center;
+}
+
+.op-edit {
+  color: #2A8CFF;
+  background: #EEF5FF;
+}
+
+.op-del {
+  color: #E5484D;
+  background: #FFEEEE;
+}
+
+/* ===== 新增按钮 ===== */
+.fab {
+  margin-top: 32rpx;
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 600;
+  text-align: center;
+  padding: 24rpx 0;
+  border-radius: 48rpx;
+}
+
+/* ===== 表单弹窗 ===== */
+.mask {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.sheet {
+  width: 100%;
+  max-height: 80vh;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  box-sizing: border-box;
+}
+
+.sheet-title {
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1A1A1E;
+  margin-bottom: 32rpx;
+}
+
+.f-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.f-label {
+  width: 96rpx;
+  font-size: 28rpx;
+  color: #1A1A1E;
+  flex-shrink: 0;
+}
+
+.f-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #1A1A1E;
+}
+
+.ph {
+  color: #C0C0C4;
+}
+
+.f-picker {
+  font-size: 28rpx;
+  color: #1A1A1E;
+  padding: 8rpx 24rpx;
+  background: #F7F7F8;
+  border-radius: 10rpx;
+}
+
+.f-picker-half {
+  min-width: 140rpx;
+  text-align: center;
+}
+
+.f-empty {
+  color: #C0C0C4;
+}
+
+.f-btn {
+  font-size: 26rpx;
+  color: #FF5A36;
+  padding: 10rpx 24rpx;
+  background: #FFF1EE;
+  border-radius: 10rpx;
+}
+
+.f-btn-ok {
+  color: #00B578;
+  background: #EAF9F3;
+}
+
+.f-dash {
+  font-size: 26rpx;
+  color: #8C8C8C;
+}
+
+.f-tip {
+  flex: 1;
+  font-size: 22rpx;
+  color: #C0C0C4;
+}
+
+/* chips 多选 */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14rpx;
+  flex: 1;
+}
+
+.chip {
+  font-size: 24rpx;
+  color: #6B6B70;
+  background: #F0F0F2;
+  padding: 10rpx 24rpx;
+  border-radius: 999rpx;
+}
+
+.chip-on {
+  color: #FFFFFF;
+  background: #FF5A36;
+}
+
+/* 照片多选 */
+.photo-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.photo-item {
+  position: relative;
+  width: 140rpx;
+  height: 140rpx;
+}
+
+.photo-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 12rpx;
+}
+
+.photo-del {
+  position: absolute;
+  top: -12rpx;
+  right: -12rpx;
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: #FFFFFF;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-add {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 12rpx;
+  background: #F0F0F2;
+  color: #8C8C8C;
+  font-size: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.photo-uploading {
+  opacity: 0.5;
+}
+
+/* 保存按钮 */
+.f-save {
+  margin-top: 40rpx;
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+  padding: 8rpx 0;
+}
+
+.f-save::after {
+  border: none;
+}
+
+.f-saving {
+  opacity: 0.6;
+}

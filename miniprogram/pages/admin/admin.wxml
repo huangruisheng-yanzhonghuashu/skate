@@ -1,0 +1,166 @@
+<view class="page">
+  <!-- 权限校验中 -->
+  <view wx:if="{{isAdmin === null}}" class="state">
+    <text>正在校验管理员身份...</text>
+  </view>
+
+  <!-- 无权限 -->
+  <view wx:elif="{{isAdmin === false}}" class="state">
+    <image class="state-icon" src="/images/venue-fog.png" mode="aspectFit" />
+    <text class="state-title">无管理员权限</text>
+    <text class="state-desc">将你的 openid 加入控制台 config 集合 admins 文档后重试</text>
+    <view wx:if="{{myOpenid}}" class="state-openid" bindtap="copyOpenid">点击复制 openid：{{myOpenid}}</view>
+    <text wx:else class="state-desc">若始终无法获取 openid，请先部署云函数：tcb fn deploy manageVenue --force</text>
+  </view>
+
+  <!-- 管理界面 -->
+  <block wx:else>
+    <!-- 实体切换 -->
+    <view class="seg">
+      <view class="seg-item {{entity === 'venue' ? 'seg-active' : ''}}" data-entity="venue" bindtap="switchEntity">滑板场地</view>
+      <view class="seg-item {{entity === 'shop' ? 'seg-active' : ''}}" data-entity="shop" bindtap="switchEntity">滑板店铺</view>
+    </view>
+
+    <view class="meta-line">当前城市：{{city}} · 共 {{entity === 'venue' ? venues.length : shops.length}} 条</view>
+
+    <!-- 列表 -->
+    <block wx:if="{{entity === 'venue'}}">
+      <view wx:for="{{venues}}" wx:key="id" class="row">
+        <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
+        <view wx:else class="row-img row-img-empty">无图</view>
+        <view class="row-info">
+          <text class="row-name">{{item.name}}</text>
+          <text class="row-sub">{{item.category}} · {{item.shortAddr || item.address}}</text>
+          <text class="row-sub">{{item.city}} · {{item.hot ? '热门' : '常规'}}</text>
+        </view>
+        <view class="row-ops">
+          <view class="op op-edit" data-kind="venue" data-id="{{item.id}}" bindtap="openEdit">编辑</view>
+          <view class="op op-del" data-kind="venue" data-id="{{item.id}}" bindtap="removeItem">删除</view>
+        </view>
+      </view>
+      <view wx:if="{{!venues.length}}" class="state"><text>暂无场地，点下方按钮新增</text></view>
+    </block>
+
+    <block wx:else>
+      <view wx:for="{{shops}}" wx:key="id" class="row">
+        <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
+        <view wx:else class="row-img row-img-empty">无图</view>
+        <view class="row-info">
+          <text class="row-name">{{item.name}}</text>
+          <text class="row-sub">{{item.services.join(' / ')}}</text>
+          <text class="row-sub">{{item.city}} · {{item.hours.open}}-{{item.hours.close}}{{item.phone ? ' · ' + item.phone : ''}}</text>
+        </view>
+        <view class="row-ops">
+          <view class="op op-edit" data-kind="shop" data-id="{{item.id}}" bindtap="openEdit">编辑</view>
+          <view class="op op-del" data-kind="shop" data-id="{{item.id}}" bindtap="removeItem">删除</view>
+        </view>
+      </view>
+      <view wx:if="{{!shops.length}}" class="state"><text>暂无店铺，点下方按钮新增</text></view>
+    </block>
+
+    <!-- 新增按钮 -->
+    <view class="fab" bindtap="openCreate">＋ 新增{{entity === 'venue' ? '场地' : '店铺'}}</view>
+  </block>
+
+  <!-- 编辑表单弹窗 -->
+  <view wx:if="{{formOpen}}" class="mask" bindtap="closeForm">
+    <scroll-view class="sheet" scroll-y catchtap="noop">
+      <view class="sheet-title">{{form.id ? '编辑' : '新增'}}{{form.kind === 'venue' ? '场地' : '店铺'}}</view>
+
+      <view class="f-row">
+        <text class="f-label">名称</text>
+        <input class="f-input" value="{{form.name}}" maxlength="30" placeholder="必填，≤30字" placeholder-class="ph" bindinput="formName" />
+      </view>
+
+      <view class="f-row">
+        <text class="f-label">城市</text>
+        <picker range="{{cities}}" bindchange="formCity">
+          <view class="f-picker">{{form.city}}</view>
+        </picker>
+      </view>
+
+      <view wx:if="{{form.kind === 'venue'}}" class="f-row">
+        <text class="f-label">类型</text>
+        <picker range="{{categories}}" bindchange="formCategory">
+          <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择场地类型'}}</view>
+        </picker>
+      </view>
+
+      <view wx:if="{{form.kind === 'shop'}}" class="f-row">
+        <text class="f-label">服务</text>
+        <view class="chips">
+          <view
+            wx:for="{{services}}"
+            wx:key="*this"
+            class="chip {{form.services.indexOf(item) >= 0 ? 'chip-on' : ''}}"
+            data-svc="{{item}}"
+            bindtap="toggleService"
+          >{{item}}</view>
+        </view>
+      </view>
+
+      <view wx:if="{{form.kind === 'venue'}}" class="f-row">
+        <text class="f-label">标签</text>
+        <view class="chips">
+          <view
+            wx:for="{{tagOptions}}"
+            wx:key="*this"
+            class="chip {{form.tags.indexOf(item) >= 0 ? 'chip-on' : ''}}"
+            data-tag="{{item}}"
+            bindtap="toggleTag"
+          >{{item}}</view>
+        </view>
+      </view>
+
+      <view class="f-row">
+        <text class="f-label">坐标</text>
+        <view class="f-btn {{form.latitude !== null ? 'f-btn-ok' : ''}}" bindtap="chooseLocation">
+          {{form.latitude !== null ? '已选点 ' + form.latitude.toFixed(4) + ',' + form.longitude.toFixed(4) : '打开地图选点'}}
+        </view>
+      </view>
+
+      <view class="f-row">
+        <text class="f-label">地址</text>
+        <input class="f-input" value="{{form.address}}" placeholder="选点后自动填入，可修改" placeholder-class="ph" bindinput="formAddress" />
+      </view>
+
+      <view wx:if="{{form.kind === 'shop'}}">
+        <view class="f-row">
+          <text class="f-label">电话</text>
+          <input class="f-input" value="{{form.phone}}" type="number" placeholder="选填，详情页可拨打" placeholder-class="ph" bindinput="formPhone" />
+        </view>
+        <view class="f-row">
+          <text class="f-label">营业</text>
+          <picker mode="time" value="{{form.hours.open}}" bindchange="formHoursOpen">
+            <view class="f-picker f-picker-half">{{form.hours.open}}</view>
+          </picker>
+          <text class="f-dash">至</text>
+          <picker mode="time" value="{{form.hours.close}}" bindchange="formHoursClose">
+            <view class="f-picker f-picker-half">{{form.hours.close}}</view>
+          </picker>
+        </view>
+      </view>
+
+      <view class="f-row">
+        <text class="f-label">照片</text>
+        <view class="photo-list">
+          <view wx:for="{{form.photos}}" wx:key="*this" class="photo-item">
+            <image class="photo-img" src="{{item}}" mode="aspectFill" />
+            <view class="photo-del" data-index="{{index}}" catchtap="removePhoto">×</view>
+          </view>
+          <view wx:if="{{form.photos.length < 6}}" class="photo-add {{photosUploading ? 'photo-uploading' : ''}}" bindtap="choosePhotos">
+            {{photosUploading ? '上传中' : '＋'}}
+          </view>
+        </view>
+      </view>
+
+      <view class="f-row">
+        <text class="f-label">热门</text>
+        <switch checked="{{form.hot}}" bindchange="formHot" color="#FF5A36" />
+        <text class="f-tip">开启后地图 pin 高亮、列表优先</text>
+      </view>
+
+      <button class="f-save {{saving ? 'f-saving' : ''}}" bindtap="saveForm">{{saving ? '保存中...' : '保存'}}</button>
+    </scroll-view>
+  </view>
+</view>

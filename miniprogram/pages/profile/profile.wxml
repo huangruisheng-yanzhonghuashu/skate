@@ -42,6 +42,15 @@
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
+    <view class="menu-item" hover-class="menu-hover" bindtap="goAdmin">
+      <view class="menu-left">
+        <image class="menu-icon" src="{{icons.settings}}" mode="aspectFit" />
+        <text class="menu-label">场地管理</text>
+      </view>
+      <view class="menu-right">
+        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
     <view class="menu-item" hover-class="menu-hover" bindtap="goSuggest">
       <view class="menu-left">
         <image class="menu-icon" src="{{icons.file}}" mode="aspectFit" />

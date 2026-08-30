@@ -4,7 +4,9 @@
     "pages/discover/discover",
     "pages/checkins/checkins",
     "pages/profile/profile",
-    "pages/venue-detail/venue-detail"
+    "pages/venue-detail/venue-detail",
+    "pages/shop-detail/shop-detail",
+    "pages/admin/admin"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1A1A1E",
@@ -40,12 +42,13 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "用于展示附近滑板场地与当前位置"
+      "desc": "用于展示附近滑板场地、当前位置以及场地实时在场人数"
     }
   },
-  "requiredPrivateInfos": ["getLocation"],
+  "requiredPrivateInfos": ["getLocation", "chooseLocation"],
   "usingComponents": {
-    "venue-card": "/components/venue-card/index"
+    "venue-card": "/components/venue-card/index",
+    "shop-card": "/components/shop-card/index"
   },
   "sitemapLocation": "sitemap.json",
   "style": "v2",

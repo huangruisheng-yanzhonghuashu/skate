@@ -128,6 +128,7 @@ Page({
   /* ===== 菜单跳转 ===== */
   goCheckins() { wx.switchTab({ url: '/pages/checkins/checkins' }) },
   goReports() { wx.showToast({ title: '报错记录即将上线', icon: 'none' }) },
+  goAdmin() { wx.navigateTo({ url: '/pages/admin/admin' }) },
   goSuggest() { wx.showToast({ title: '场地推荐即将上线', icon: 'none' }) },
   goSettings() { wx.showToast({ title: '设置即将上线', icon: 'none' }) },
   goVenue(e) { wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + e.currentTarget.dataset.id }) },

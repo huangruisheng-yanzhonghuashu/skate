@@ -292,6 +292,95 @@ const SEED_VENUES = [
   },
 ]
 
+/* 店铺种子数据（含 city 字段；真实店铺：50滑板俱乐部连锁、爱嘉滑板俱乐部、红水极限俱乐部）
+ * services: 卖板/教学/维修/配件/服装；hours 为营业时间（卡片实时显示营业状态） */
+const SEED_SHOPS = [
+  {
+    id: 'jx-aijia',
+    city: '嘉兴',
+    name: '爱嘉滑板俱乐部',
+    services: ['教学', '卖板', '维修'],
+    address: '南湖区中山东路666号商03室-1层（永辉超市旁）',
+    shortAddr: '中山东路666号',
+    latitude: 30.7600,
+    longitude: 120.7500,
+    phone: '',
+    hours: { open: '09:30', close: '21:00' },
+    photos: [IMG_STREET, IMG_FLAT],
+    hot: true,
+  },
+  {
+    id: 'jx-hongshui',
+    city: '嘉兴',
+    name: '红水极限俱乐部',
+    services: ['教学', '卖板', '配件'],
+    address: '秀洲区王江泾镇新镇路西浜8号',
+    shortAddr: '王江泾新镇路',
+    latitude: 30.8180,
+    longitude: 120.7090,
+    phone: '',
+    hours: { open: '10:00', close: '20:00' },
+    photos: [IMG_PUMP, IMG_STREET],
+    hot: false,
+  },
+  {
+    id: 'hz-50-central',
+    city: '杭州',
+    name: '50滑板俱乐部（杭州大厦中央商城店）',
+    services: ['卖板', '教学', '维修', '服装'],
+    address: '拱墅区杭州大厦购物城中央商城',
+    shortAddr: '杭州大厦中央商城',
+    latitude: 30.2740,
+    longitude: 120.1610,
+    phone: '',
+    hours: { open: '10:00', close: '22:00' },
+    photos: [IMG_STREET, IMG_FLAT, IMG_LAKE],
+    hot: true,
+  },
+  {
+    id: 'hz-50-canal',
+    city: '杭州',
+    name: '50滑板俱乐部（运河体育公园店）',
+    services: ['卖板', '教学'],
+    address: '拱墅区丰潭路690号运河体育公园',
+    shortAddr: '丰潭路690号',
+    latitude: 30.2870,
+    longitude: 120.1060,
+    phone: '',
+    hours: { open: '09:00', close: '21:00' },
+    photos: [IMG_FLAT, IMG_PUMP],
+    hot: false,
+  },
+  {
+    id: 'hz-50-kaiyuan',
+    city: '杭州',
+    name: '50滑板俱乐部（加州阳光·开元广场店）',
+    services: ['卖板', '教学', '维修'],
+    address: '萧山区金城路333号加州阳光·开元广场',
+    shortAddr: '萧山金城路333号',
+    latitude: 30.1630,
+    longitude: 120.2640,
+    phone: '17767105967',
+    hours: { open: '10:00', close: '21:30' },
+    photos: [IMG_STREET, IMG_LAKE],
+    hot: false,
+  },
+  {
+    id: 'hz-50-east',
+    city: '杭州',
+    name: '50滑板店（东站西子国际店）',
+    services: ['卖板', '配件'],
+    address: '上城区和兴路东站西子国际大厦',
+    shortAddr: '东站西子国际',
+    latitude: 30.2905,
+    longitude: 120.2125,
+    phone: '',
+    hours: { open: '10:00', close: '21:00' },
+    photos: [IMG_FLAT, IMG_STREET],
+    hot: false,
+  },
+]
+
 /* 动态种子数据（嘉兴 + 杭州） */
 const SEED_FEEDS = [
   { id: 'f1', user: '板仔小张', avatar: '板仔', avatarColor: '#FF5A36', venueId: 'jx-railway', at: hoursAgo(2), text: '火车站滑板公园傍晚人超多，爽滑两小时！', photos: [FEED_IMGS[0], FEED_IMGS[1]], likes: 15, comments: 3 },
@@ -306,7 +395,7 @@ const SEED_FEEDS = [
   { id: 'f10', user: '大龙', avatar: '大龙', avatarColor: '#4D4D4D', venueId: 'hz-huanglong', at: hoursAgo(50), text: '黄龙广场练滑行，地铁直达就是方便。', photos: [FEED_IMGS[1]], likes: 9, comments: 1 },
 ]
 
-const COLLECTIONS = ['venues', 'feeds', 'checkins', 'feed_likes', 'user_profiles', 'venue_reports', 'presence']
+const COLLECTIONS = ['venues', 'feeds', 'checkins', 'feed_likes', 'user_profiles', 'venue_reports', 'presence', 'shops', 'config']
 
 /* 建集合（已存在则忽略） */
 async function ensureCollections() {
@@ -336,10 +425,15 @@ exports.main = async () => {
   const created = await ensureCollections()
   const venues = await seedIfEmpty('venues', [...SEED_VENUES, ...SEED_HZ_VENUES])
   const feeds = await seedIfEmpty('feeds', SEED_FEEDS)
+  const shops = await seedIfEmpty('shops', SEED_SHOPS)
+  /* config：管理员白名单（openid 列表），控制台手动补自己的 openid */
+  const admins = await seedIfEmpty('config', [{ _id: 'admins', openids: [] }])
   return {
     ok: true,
     created,
     venues,
     feeds,
+    shops,
+    admins,
   }
 }

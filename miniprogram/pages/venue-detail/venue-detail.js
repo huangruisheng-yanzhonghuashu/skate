@@ -1,5 +1,6 @@
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
+const { HEARTBEAT_INTERVAL_MS, PRESENCE_RADIUS_M } = require('../../utils/config.js')
 const { fmtAgo } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
@@ -59,13 +60,12 @@ Page({
         setTimeout(() => wx.switchTab({ url: '/pages/home/home' }), 800)
         return
       }
-      this._onlineBase = venue.online
       this.setData({
         venue,
         photos: venue.photos,
         tags: venue.tags.map((t) => ({ label: t.label, src: ICON[t.icon] || ICON.tagMixed })),
-        online: venue.online,
-        moreCount: Math.max(0, venue.online - LIVE_AVATARS.length),
+        online: 0,
+        moreCount: 0,
       })
       wx.setNavigationBarTitle({ title: venue.name })
       this.refresh()
@@ -74,27 +74,56 @@ Page({
 
   onShow() {
     if (this.data.venue) this.refresh()
-    this.startTick()
+    this.startPresence()
   },
 
-  onHide() { this.stopTick() },
-  onUnload() { this.stopTick() },
+  onHide() { this.stopPresence() },
+  onUnload() { this.stopPresence() },
 
-  /* 在线人数随机波动 */
-  startTick() {
-    this.stopTick()
-    this._timer = setInterval(() => {
-      if (!this.data.venue) return
-      const next = Math.min(30, Math.max(1, this.data.online + (Math.random() > 0.5 ? 1 : -1)))
-      this.setData({ online: next, moreCount: Math.max(0, next - LIVE_AVATARS.length) })
-    }, 5000)
+  /* ===== 实时在线心跳（方案 B：定位在场校验 + 30 分钟窗口） ===== */
+  /* 前台期间定时：定位 → 距场地 PRESENCE_RADIUS_M 内才上报心跳 → 刷新在线数 */
+  startPresence() {
+    this.stopPresence()
+    this.tickPresence()
+    this._presenceTimer = setInterval(() => this.tickPresence(), HEARTBEAT_INTERVAL_MS)
   },
 
-  stopTick() {
-    if (this._timer) {
-      clearInterval(this._timer)
-      this._timer = null
+  stopPresence() {
+    if (this._presenceTimer) {
+      clearInterval(this._presenceTimer)
+      this._presenceTimer = null
     }
+  },
+
+  tickPresence() {
+    const v = this.data.venue
+    if (!v) return
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        const dist = cloud.distanceM(res.latitude, res.longitude, v.latitude, v.longitude)
+        /* 只统计真实在场的用户：距离超阈值不上报 */
+        if (dist <= PRESENCE_RADIUS_M) {
+          cloud.heartbeat(v.id).catch((e) => {
+            console.warn('[venue-detail] 心跳上报失败', (e && e.errCode) || (e && e.message))
+          })
+        }
+        this.refreshOnline()
+      },
+      fail: () => {
+        /* 无定位权限/定位失败：不上报心跳（不算在场），但仍展示真实在线数 */
+        this.refreshOnline()
+      },
+    })
+  },
+
+  /* 当前场地真实在线人数（30 分钟窗口内有心跳的独立用户） */
+  refreshOnline() {
+    const v = this.data.venue
+    if (!v) return
+    cloud.getOnlineCount(v.id).then((n) => {
+      this.setData({ online: n, moreCount: Math.max(0, n - LIVE_AVATARS.length) })
+    })
   },
 
   /* 打卡动态 = 用户真实签到(带留言) + 场地打卡动态，最近3条（用户签到带真实身份） */

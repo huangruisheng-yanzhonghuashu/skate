@@ -3,20 +3,22 @@ const cloud = require('../../utils/cloud.js')
 const { QQ_MAP_KEY } = require('../../utils/config.js')
 const { ICON } = require('../../utils/icons.js')
 
-const FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
+const FIELD_FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
+const SHOP_FILTERS = ['全部', '卖板', '教学', '维修', '配件', '服装']
 
 Page({
   data: {
     city: '嘉兴',
     cityOpen: false,
     cities: [],
-    filters: FILTERS,
+    entity: 'venue',
+    filters: FIELD_FILTERS,
     filter: '全部',
     query: '',
     searchOpen: false,
     list: [],
     empty: false,
-    venuesLoaded: false,
+    loaded: false,
     markers: [],
     selectedVenueId: '',
     latitude: 31.2304,
@@ -34,11 +36,14 @@ Page({
 
   onLoad() {
     this._online = {}
-    this._onlineInit = false
     this._venues = []
+    this._shops = []
     this._markerMap = []
     this._located = false
+    this._venuesLoaded = false
+    this._shopsLoaded = false
     this.loadVenues()
+    this.loadShops()
     /* 城市列表来自场地集合聚合 */
     cloud.getCities().then((cities) => {
       this.setData({ cities })
@@ -50,33 +55,55 @@ Page({
   onShow() {
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
     if (tb) tb.setData({ selected: 0 })
-    /* 场地数据 onLoad 已加载（云数据会话内不变），这里只刷新签到状态相关渲染，
-     * 避免与 loadVenues 回调重复全量 setData */
+    /* 数据 onLoad 已加载（云数据会话内不变，管理页改动会刷新 cloud 缓存），这里只刷新渲染 */
     this.refresh()
     this.buildMarkers()
-    this.startTick()
+    this.refreshOnline()
   },
 
   /* 云端场地列表（数据全部来源于云数据库） */
   loadVenues() {
     cloud.getVenues().then((venues) => {
       this._venues = venues
-      if (!this._onlineInit) {
-        venues.forEach((v) => { this._online[v.id] = v.online })
-        this._onlineInit = true
-      }
-      /* 回退逻辑均以当前城市为准（refresh 尚未同步 data.city，直接读 store） */
-      const currentCity = store.getCity()
-      const cityVenues = venues.filter((v) => v.city === currentCity)
-      /* 定位未成功时，地图中心回退到当前城市第一个场地（数据驱动） */
-      if (!this._located && cityVenues.length) {
-        this.setData({ latitude: cityVenues[0].latitude, longitude: cityVenues[0].longitude })
-      }
-      if (!cityVenues.some((v) => v.id === this.data.selectedVenueId) && cityVenues.length) {
-        this.setData({ selectedVenueId: cityVenues[0].id })
-      }
+      /* 在线人数：种子热度值先兜底，真实心跳数据随后覆盖 */
+      venues.forEach((v) => { this._online[v.id] = v.online })
+      this._venuesLoaded = true
+      this.setData({ loaded: this._venuesLoaded && this._shopsLoaded })
+      this.centerOnCityIfNeeded(venues)
       this.refresh()
       this.buildMarkers()
+      this.refreshOnline()
+    })
+  },
+
+  /* 云端店铺列表 */
+  loadShops() {
+    cloud.getShops().then((shops) => {
+      this._shops = shops
+      this._shopsLoaded = true
+      this.setData({ loaded: this._venuesLoaded && this._shopsLoaded })
+      this.refresh()
+      this.buildMarkers()
+    })
+  },
+
+  /* 定位未成功时，地图中心回退到当前城市第一个场地 */
+  centerOnCityIfNeeded(venues) {
+    if (this._located) return
+    const currentCity = store.getCity()
+    const cityVenues = venues.filter((v) => v.city === currentCity)
+    if (!cityVenues.length) return
+    this.setData({ latitude: cityVenues[0].latitude, longitude: cityVenues[0].longitude })
+    const any = cityVenues.some((v) => v.id === this.data.selectedVenueId)
+    if (!any) this.setData({ selectedVenueId: cityVenues[0].id })
+  },
+
+  /* 真实在线人数：一次聚合查询所有场地的窗口内心跳分布，覆盖列表显示 */
+  refreshOnline() {
+    cloud.getOnlineMap().then((map) => {
+      if (!map) return /* 查询失败（如权限未配置），保留兜底热度值 */
+      ;(this._venues || []).forEach((v) => { this._online[v.id] = map[v.id] || 0 })
+      this.refresh()
     })
   },
 
@@ -138,39 +165,20 @@ Page({
     })
   },
 
-  onHide() { this.stopTick() },
-  onUnload() { this.stopTick() },
+  onHide() {},
+  onUnload() {},
 
-  /* 在线人数随机波动，营造"实时感" */
-  startTick() {
-    this.stopTick()
-    this._timer = setInterval(() => {
-      const list = this.data.list
-      if (!list.length) return
-      /* 只在当前渲染列表里随机选一条，定向更新单个字段，避免全量 setData */
-      const i = Math.floor(Math.random() * list.length)
-      const v = list[i]
-      const next = Math.min(28, Math.max(1, (this._online[v.id] || v.online) + (Math.random() > 0.5 ? 1 : -1)))
-      this._online[v.id] = next
-      this.setData({ ['list[' + i + '].online']: next })
-    }, 4000)
-  },
-
-  stopTick() {
-    if (this._timer) {
-      clearInterval(this._timer)
-      this._timer = null
-    }
-  },
-
-  /* 滑板鞋 pin 标记：热门/今日已签到为橙色，其余水泥灰；选中项常驻气泡
-   * 标记直接由云端场地数据生成，markerId 为序号，_markerMap 维护反查关系 */
+  /* 滑板鞋 pin 标记（场地）：热门/今日已签到为橙色，其余水泥灰
+   * 店铺 pin 复用同一套图标，靠气泡"[店铺]"前缀区分；选中项常驻气泡 */
   buildMarkers() {
     const selected = this.data.selectedVenueId
-    const venues = (this._venues || []).filter((v) => v.city === this.data.city)
-    this._markerMap = venues.map((v, i) => ({ markerId: i + 1, venueId: v.id }))
-    const markers = venues.map((v, i) => {
-      const active = v.hot || store.checkedToday(v.id)
+    const entity = this.data.entity
+    const src = (entity === 'venue' ? this._venues : this._shops) || []
+    const items = src.filter((v) => v.city === this.data.city)
+    this._markerMap = items.map((v, i) => ({ markerId: i + 1, kind: entity, id: v.id }))
+    const markers = items.map((v, i) => {
+      const isVenue = entity === 'venue'
+      const active = isVenue ? (v.hot || store.checkedToday(v.id)) : v.hot
       const marker = {
         id: i + 1,
         latitude: v.latitude,
@@ -182,7 +190,7 @@ Page({
       }
       if (v.id === selected) {
         marker.callout = {
-          content: v.name + '\n距你 ' + v.distance,
+          content: (isVenue ? '' : '[店铺] ') + v.name,
           display: 'ALWAYS',
           color: '#1A1A1E',
           fontSize: 12,
@@ -198,16 +206,35 @@ Page({
     this.setData({ markers })
   },
 
-  /* 点标记：首次选中显示气泡，再点进入详情 */
+  /* 点标记：首次选中显示气泡，再点进入对应详情页 */
   onMarkerTap(e) {
     const m = (this._markerMap || []).find((x) => x.markerId === e.detail.markerId)
     if (!m) return
-    if (this.data.selectedVenueId === m.venueId) {
-      wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + m.venueId })
+    if (this.data.selectedVenueId === m.id) {
+      const url = m.kind === 'shop'
+        ? '/pages/shop-detail/shop-detail?id=' + m.id
+        : '/pages/venue-detail/venue-detail?id=' + m.id
+      wx.navigateTo({ url: url })
     } else {
-      this.setData({ selectedVenueId: m.venueId })
+      this.setData({ selectedVenueId: m.id })
       this.buildMarkers()
     }
+  },
+
+  /* 实体切换：场地 ⇄ 店铺（切筛选组、刷新列表与地图） */
+  switchEntity(e) {
+    const entity = e.currentTarget.dataset.entity
+    if (entity === this.data.entity) return
+    this.setData({
+      entity: entity,
+      filters: entity === 'shop' ? SHOP_FILTERS : FIELD_FILTERS,
+      filter: '全部',
+      selectedVenueId: '',
+      searchOpen: false,
+      query: '',
+    })
+    this.refresh()
+    this.buildMarkers()
   },
 
   /* 定位按钮：重新定位 + 城市匹配（onLoad 未授权时可从这里补授权） */
@@ -218,23 +245,41 @@ Page({
 
   refresh() {
     const query = (this.data.query || '').trim()
-    let arr = (this._venues || []).filter((v) => v.city === store.getCity())
-    if (this.data.filter !== '全部') arr = arr.filter((v) => v.category === this.data.filter)
-    if (query) arr = arr.filter((v) => v.name.indexOf(query) >= 0)
-    /* 只传 venue-card 实际渲染的字段，剔除 photos 长URL、feed、坐标等大字段，减小 setData 体积 */
-    const list = arr.map((v) => ({
-      id: v.id,
-      name: v.name,
-      rating: v.rating,
-      distance: v.distance,
-      shortAddr: v.shortAddr,
-      category: v.category,
-      hot: v.hot,
-      tags: v.tags,
-      online: this._online ? this._online[v.id] : v.online,
-      checked: store.checkedToday(v.id),
-    }))
-    this.setData({ list, empty: list.length === 0, venuesLoaded: true, city: store.getCity() })
+    const city = store.getCity()
+    let list = []
+    if (this.data.entity === 'venue') {
+      let arr = (this._venues || []).filter((v) => v.city === city)
+      if (this.data.filter !== '全部') arr = arr.filter((v) => v.category === this.data.filter)
+      if (query) arr = arr.filter((v) => v.name.indexOf(query) >= 0)
+      /* 只传 venue-card 实际渲染的字段，减小 setData 体积 */
+      list = arr.map((v) => ({
+        id: v.id,
+        name: v.name,
+        rating: v.rating,
+        distance: v.distance,
+        shortAddr: v.shortAddr,
+        category: v.category,
+        hot: v.hot,
+        tags: v.tags,
+        online: this._online ? this._online[v.id] : v.online,
+        checked: store.checkedToday(v.id),
+      }))
+    } else {
+      let arr = (this._shops || []).filter((s) => s.city === city)
+      if (this.data.filter !== '全部') arr = arr.filter((s) => (s.services || []).indexOf(this.data.filter) >= 0)
+      if (query) arr = arr.filter((s) => s.name.indexOf(query) >= 0 || (s.address || '').indexOf(query) >= 0)
+      list = arr.map((s) => ({
+        id: s.id,
+        name: s.name,
+        services: s.services || [],
+        shortAddr: s.shortAddr,
+        address: s.address,
+        phone: s.phone || '',
+        hours: s.hours,
+        hot: s.hot,
+      }))
+    }
+    this.setData({ list, empty: list.length === 0, city: city })
   },
 
   /* 城市选择 */
@@ -245,14 +290,16 @@ Page({
   pickCity(e) {
     const c = e.currentTarget.dataset.city
     store.setCity(c)
-    /* 地图中心移到新城市第一个场地，并选中它 */
-    const venue = (this._venues || []).find((v) => v.city === c)
-    if (venue) this._located = false
+    /* 地图中心移到新城市第一个实体位置（当前实体优先，另一实体兜底） */
+    const first = this.data.entity === 'shop'
+      ? ((this._shops || []).find((v) => v.city === c) || (this._venues || []).find((v) => v.city === c))
+      : ((this._venues || []).find((v) => v.city === c) || (this._shops || []).find((v) => v.city === c))
+    if (first) this._located = false
     this.setData({ cityOpen: false })
     this.refresh()
     this.buildMarkers()
-    if (venue) {
-      this.setData({ latitude: venue.latitude, longitude: venue.longitude, scale: 13, selectedVenueId: venue.id })
+    if (first) {
+      this.setData({ latitude: first.latitude, longitude: first.longitude, scale: 13, selectedVenueId: '' })
     }
     wx.showToast({ title: '已切换到' + c, icon: 'none' })
   },
@@ -275,6 +322,16 @@ Page({
   clearQuery() {
     this.setData({ query: '' })
     this.refresh()
+  },
+
+  /* 列表项点击：按实体进对应详情页 */
+  goDetail(e) {
+    const id = e.detail.id
+    if (this.data.entity === 'shop') {
+      wx.navigateTo({ url: '/pages/shop-detail/shop-detail?id=' + id })
+    } else {
+      wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + id })
+    }
   },
 
   /* 筛选 */

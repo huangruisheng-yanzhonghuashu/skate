@@ -66,7 +66,13 @@
     <view class="sheet-pill"></view>
   </view>
 
-  <!-- 快捷筛选 -->
+  <!-- 实体切换：滑板场地 / 滑板店铺 -->
+  <view class="entity-seg">
+    <view class="entity-item {{entity === 'venue' ? 'entity-active' : ''}}" data-entity="venue" bindtap="switchEntity">滑板场地</view>
+    <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" data-entity="shop" bindtap="switchEntity">滑板店铺</view>
+  </view>
+
+  <!-- 快捷筛选（场地=类型，店铺=服务） -->
   <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
     <view
       wx:for="{{filters}}"
@@ -77,22 +83,41 @@
     >{{item}}</view>
   </scroll-view>
 
-  <!-- 场地列表 -->
+  <!-- 列表：场地卡片 / 店铺卡片 -->
   <view class="list">
-    <venue-card
-      wx:for="{{list}}"
-      wx:key="id"
-      venue="{{item}}"
-      online="{{item.online}}"
-      checked="{{item.checked}}"
-      index="{{index}}"
-    />
-    <view wx:if="{{venuesLoaded && empty}}" class="empty">
-      <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
-      <text class="empty-text">{{query ? '没有找到「' + query + '」相关的场地' : '暂无' + filter + '类型的场地'}}</text>
-    </view>
-    <view wx:if="{{venuesLoaded && !empty}}" class="loadmore">
-      <text>已展示{{city}}全部 {{list.length}} 个场地</text>
-    </view>
+    <block wx:if="{{entity === 'venue'}}">
+      <venue-card
+        wx:for="{{list}}"
+        wx:key="id"
+        venue="{{item}}"
+        online="{{item.online}}"
+        checked="{{item.checked}}"
+        index="{{index}}"
+      />
+      <view wx:if="{{loaded && empty}}" class="empty">
+        <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
+        <text class="empty-text">{{query ? '没有找到「' + query + '」相关的场地' : '暂无' + filter + '类型的场地'}}</text>
+      </view>
+      <view wx:if="{{loaded && !empty}}" class="loadmore">
+        <text>已展示{{city}}全部 {{list.length}} 个场地</text>
+      </view>
+    </block>
+
+    <block wx:else>
+      <shop-card
+        wx:for="{{list}}"
+        wx:key="id"
+        shop="{{item}}"
+        index="{{index}}"
+        bind:go="goDetail"
+      />
+      <view wx:if="{{loaded && empty}}" class="empty">
+        <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
+        <text class="empty-text">{{query ? '没有找到「' + query + '」相关的店铺' : '暂无提供「' + filter + '」服务的店铺'}}</text>
+      </view>
+      <view wx:if="{{loaded && !empty}}" class="loadmore">
+        <text>已展示{{city}}全部 {{list.length}} 家店铺</text>
+      </view>
+    </block>
   </view>
 </view>
