@@ -334,8 +334,4 @@ Page({
     const v = this.data.venue
     return { title: '发现一个好场地：' + v.name, query: 'id=' + v.id }
   },
-
-  showAllCheckins() {
-    wx.showToast({ title: '全部打卡列表即将开放', icon: 'none' })
-  },
 })
