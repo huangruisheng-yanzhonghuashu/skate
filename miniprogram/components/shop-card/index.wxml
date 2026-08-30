@@ -10,6 +10,18 @@
     <view class="shop-svc">
       <text wx:for="{{shop.services}}" wx:key="*this" class="svc-tag">{{item}}</text>
     </view>
+    <view class="shop-rating" wx:if="{{shop.rating}}">
+      <view class="stars">
+        <view class="stars-bg">
+          <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="star" src="{{icons.starGray}}" mode="aspectFit" />
+        </view>
+        <view class="stars-fg" style="width: {{shop.rating / 5 * 100}}%">
+          <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="star" src="{{icons.star}}" mode="aspectFit" />
+        </view>
+      </view>
+      <text class="rating-num">{{shop.rating}}</text>
+      <text wx:if="{{shop.ratingCount}}" class="rating-count">{{shop.ratingCount}}人评</text>
+    </view>
     <text class="shop-addr">{{shop.shortAddr || shop.address}}</text>
   </view>
   <view wx:if="{{shop.phone}}" class="shop-call" data-phone="{{shop.phone}}" catchtap="call">拨打</view>

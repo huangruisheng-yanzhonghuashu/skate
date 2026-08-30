@@ -18,9 +18,18 @@
   <view class="info">
     <view class="info-row">
       <text class="name">{{venue.name}}</text>
-      <view class="rating">
-        <image class="rating-star" src="{{icons.star}}" mode="aspectFit" />
-        <text class="rating-num">{{venue.rating}}</text>
+      <!-- 聚合评分（真实均值+人数，无评分用预设分）；点击弹评分弹窗 -->
+      <view class="rating" hover-class="rate-hover" bindtap="openRate" aria-role="button" aria-label="查看评分并评分">
+        <view class="stars">
+          <view class="stars-bg">
+            <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="rating-star" src="{{icons.starGray}}" mode="aspectFit" />
+          </view>
+          <view class="stars-fg" style="width: {{(rating || 0) / 5 * 100}}%">
+            <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="rating-star" src="{{icons.starOrange}}" mode="aspectFit" />
+          </view>
+        </view>
+        <text class="rating-num">{{rating || '暂无'}}</text>
+        <text wx:if="{{ratingCount}}" class="rating-count">{{ratingCount}}人</text>
       </view>
     </view>
     <view class="address">
@@ -217,5 +226,28 @@
     <image class="celebrate-check" src="{{icons.checkCircle}}" mode="aspectFit" />
     <text class="celebrate-title">{{celebrateText}}</text>
     <text class="celebrate-sub">{{celebrateSub}}</text>
+  </view>
+</view>
+
+<!-- 评分弹窗（居中卡片式） -->
+<view wx:if="{{rateOpen}}" class="rate-mask" bindtap="closeRate">
+  <view class="rate-sheet" catchtap="noop">
+    <view class="rate-title">给「{{venue.name}}」评分</view>
+    <text wx:if="{{myRating}}" class="rate-hint">你当前评分 {{myRating}} 星，点击星星可修改</text>
+    <view class="rate-stars-row">
+      <image
+        wx:for="{{[1,2,3,4,5]}}"
+        wx:key="*this"
+        class="rate-star {{rateStars >= item ? 'rate-star-on' : ''}}"
+        src="{{rateStars >= item ? icons.starOrange : icons.starGray}}"
+        mode="aspectFit"
+        data-star="{{item}}"
+        bindtap="pickStar"
+      />
+    </view>
+    <text class="rate-desc">{{rateStars ? rateStars + ' 星' : '点击评分'}}</text>
+    <view class="rate-btn-submit {{rateSubmitting ? 'rate-btn-busy' : ''}}" bindtap="submitRate">
+      {{rateSubmitting ? '提交中...' : '提交评分'}}
+    </view>
   </view>
 </view>

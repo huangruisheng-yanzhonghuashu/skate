@@ -24,6 +24,7 @@
           </view>
         </view>
         <text class="rating-num">{{venue.rating}}</text>
+        <text wx:if="{{venue.ratingCount}}" class="rating-count">{{venue.ratingCount}}人评</text>
       </view>
     </view>
 

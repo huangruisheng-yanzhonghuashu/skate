@@ -50,6 +50,8 @@ Page({
     cloud.getCities().then((cities) => {
       this.setData({ cities })
     })
+    /* 用户评分统计 */
+    this.refreshRatings()
     /* 手机定位：设置地图中心 + 自动匹配城市 */
     this.locate()
   },
@@ -105,6 +107,15 @@ Page({
     cloud.getOnlineMap().then((map) => {
       if (!map) return /* 查询失败（如权限未配置），保留兜底热度值 */
       ;(this._venues || []).forEach((v) => { this._online[v.id] = map[v.id] || 0 })
+      this.refresh()
+    })
+  },
+
+  /* 用户评分统计：真实均值/人数覆盖卡片与详情显示（无评分时用种子预设分兜底） */
+  refreshRatings() {
+    Promise.all([cloud.getRatingStats('venue'), cloud.getRatingStats('shop')]).then((rs) => {
+      this._venueRatings = rs[0]
+      this._shopRatings = rs[1]
       this.refresh()
     })
   },
@@ -176,7 +187,7 @@ Page({
     this.setData({ mapCollapsed: !this.data.mapCollapsed })
   },
 
-  /* 下拉刷新：强制重拉云端两实体 + 在线数 */
+  /* 下拉刷新：强制重拉云端两实体 + 在线数 + 评分统计 */
   onPullDownRefresh() {
     Promise.all([cloud.getVenues(true), cloud.getShops(true)]).then((rs) => {
       this._venues = rs[0]
@@ -185,6 +196,7 @@ Page({
       this.refresh()
       this.buildMarkers()
       this.refreshOnline()
+      this.refreshRatings()
       wx.stopPullDownRefresh()
       wx.showToast({ title: '已刷新', icon: 'none' })
     }).catch(() => {
@@ -289,32 +301,42 @@ Page({
       if (this.data.filter !== '全部') arr = arr.filter((v) => v.category === this.data.filter)
       if (query) arr = arr.filter((v) => v.name.indexOf(query) >= 0)
       /* 只传 venue-card 实际渲染的字段，减小 setData 体积 */
-      list = arr.map((v) => ({
-        id: v.id,
-        name: v.name,
-        rating: v.rating,
-        distance: v.distance,
-        shortAddr: v.shortAddr,
-        category: v.category,
-        hot: v.hot,
-        tags: v.tags,
-        online: this._online ? this._online[v.id] : v.online,
-        checked: store.checkedToday(v.id),
-      }))
+      /* 评分：有用户评分用真实均值（+人数），无则种子预设分 */
+      list = arr.map((v) => {
+        const st = this._venueRatings && this._venueRatings[v.id]
+        return {
+          id: v.id,
+          name: v.name,
+          rating: st ? st.avg : v.rating,
+          ratingCount: st ? st.count : 0,
+          distance: v.distance,
+          shortAddr: v.shortAddr,
+          category: v.category,
+          hot: v.hot,
+          tags: v.tags,
+          online: this._online ? this._online[v.id] : v.online,
+          checked: store.checkedToday(v.id),
+        }
+      })
     } else {
       let arr = (this._shops || []).filter((s) => s.city === city)
       if (this.data.filter !== '全部') arr = arr.filter((s) => (s.services || []).indexOf(this.data.filter) >= 0)
       if (query) arr = arr.filter((s) => s.name.indexOf(query) >= 0 || (s.address || '').indexOf(query) >= 0)
-      list = arr.map((s) => ({
-        id: s.id,
-        name: s.name,
-        services: s.services || [],
-        shortAddr: s.shortAddr,
-        address: s.address,
-        phone: s.phone || '',
-        hours: s.hours,
-        hot: s.hot,
-      }))
+      list = arr.map((s) => {
+        const st = this._shopRatings && this._shopRatings[s.id]
+        return {
+          id: s.id,
+          name: s.name,
+          services: s.services || [],
+          shortAddr: s.shortAddr,
+          address: s.address,
+          phone: s.phone || '',
+          hours: s.hours,
+          hot: s.hot,
+          rating: st ? st.avg : 0,
+          ratingCount: st ? st.count : 0,
+        }
+      })
     }
     this.setData({ list, empty: list.length === 0, city: city })
     /* 列表与地图保持同口径（搜索/筛选/切城后 markers 跟随） */

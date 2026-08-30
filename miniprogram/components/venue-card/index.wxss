@@ -149,6 +149,11 @@
   color: #FF5A36;
 }
 
+.rating-count {
+  font-size: 20rpx;
+  color: #C0C0C4;
+}
+
 /* 地址 · 距离 */
 .addr {
   display: flex;

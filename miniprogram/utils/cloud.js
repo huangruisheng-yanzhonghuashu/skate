@@ -248,6 +248,58 @@ function getCommentCounts(ids) {
     })
 }
 
+/* ===== 用户评分（ratings：一人一实体一条，可改分） ===== */
+/* 某类型全部实体的评分统计聚合：{ targetId: { avg, count } }
+ * 需 ratings"所有用户可读"权限 */
+function getRatingStats(targetType) {
+  const $ = agg()
+  return db().collection('ratings').aggregate()
+    .match({ targetType: targetType })
+    .group({
+      _id: '$targetId',
+      avg: $.avg('$score'),
+      count: $.sum(1),
+    })
+    .end()
+    .then(function (r) {
+      const map = {}
+      ;(r.list || []).forEach(function (x) {
+        map[x._id] = { avg: Math.round((x.avg || 0) * 10) / 10, count: x.count || 0 }
+      })
+      return map
+    })
+    .catch(function (e) {
+      console.warn('[cloud] 评分统计聚合失败', (e && e.errCode) || (e && e.message))
+      return {}
+    })
+}
+
+/* 本人当前评分（无则 null） */
+function getMyRating(targetType, targetId) {
+  return db().collection('ratings')
+    .where({ targetType: targetType, targetId: targetId })
+    .limit(1)
+    .get()
+    .then((r) => ((r.data && r.data[0]) ? r.data[0].score : null))
+    .catch(() => null)
+}
+
+/* 提交评分：upsert（一人一实体一条，改分即覆盖） */
+function rateTarget(targetType, targetId, score) {
+  return db().collection('ratings')
+    .where({ targetType: targetType, targetId: targetId })
+    .limit(1)
+    .get()
+    .then((r) => {
+      if (r.data && r.data[0]) {
+        return db().collection('ratings').doc(r.data[0]._id).update({ data: { score: score, at: new Date().toISOString() } })
+      }
+      return db().collection('ratings').add({
+        data: { targetType: targetType, targetId: targetId, score: score, at: new Date().toISOString() },
+      })
+    })
+}
+
 /* ===== 点赞（用户作用域） ===== */
 function getMyLikes() {
   return db().collection('feed_likes')
@@ -481,6 +533,9 @@ module.exports = {
   addCommentDoc: addCommentDoc,
   removeCommentDoc: removeCommentDoc,
   getCommentCounts: getCommentCounts,
+  getRatingStats: getRatingStats,
+  getMyRating: getMyRating,
+  rateTarget: rateTarget,
   getMyLikes: getMyLikes,
   setLike: setLike,
   getMyProfile: getMyProfile,

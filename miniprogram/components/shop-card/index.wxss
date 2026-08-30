@@ -89,6 +89,52 @@
   border-radius: 6rpx;
 }
 
+/* 评分星级（与 venue-card 同款双层裁剪） */
+.shop-rating {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.stars {
+  position: relative;
+  width: 130rpx;
+  height: 24rpx;
+}
+
+.stars-bg {
+  display: flex;
+  gap: 2rpx;
+}
+
+.stars-fg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  gap: 2rpx;
+  white-space: nowrap;
+}
+
+.star {
+  width: 24rpx;
+  height: 24rpx;
+  flex-shrink: 0;
+}
+
+.rating-num {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #FF9F2E;
+}
+
+.rating-count {
+  font-size: 20rpx;
+  color: #C0C0C4;
+}
+
 .shop-addr {
   font-size: 24rpx;
   color: #8C8C8C;

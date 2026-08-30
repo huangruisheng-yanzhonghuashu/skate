@@ -2,6 +2,7 @@
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { fmtAgo } = require('../../utils/format.js')
+const { ICON } = require('../../utils/icons.js')
 
 Page({
   data: {
@@ -9,6 +10,12 @@ Page({
     status: '',
     openNow: false,
     checked: false,
+    rating: 0,
+    ratingCount: 0,
+    icons: {
+      starOrange: ICON.starOrange,
+      starGray: ICON.starGray,
+    },
     feed: [],
     /* 打卡弹窗 */
     checkinOpen: false,
@@ -40,8 +47,51 @@ Page({
     }
   },
 
+  /* 签到态 + 评分统计（真实均值/人数） */
   refresh() {
     this.setData({ checked: store.checkedToday(this.data.shop.id) })
+    cloud.getRatingStats('shop').then((map) => {
+      const st = map[this.data.shop.id]
+      this.setData({
+        rating: st ? st.avg : 0,
+        ratingCount: st ? st.count : 0,
+      })
+    })
+  },
+
+  /* ===== 店铺评分弹窗 ===== */
+  openRate() {
+    cloud.getMyRating('shop', this.data.shop.id).then((my) => {
+      this.setData({ rateOpen: true, rateStars: my || 0, myRating: my, rateSubmitting: false })
+    })
+  },
+
+  closeRate() {
+    if (this.data.rateSubmitting) return
+    this.setData({ rateOpen: false })
+  },
+
+  pickStar(e) {
+    this.setData({ rateStars: e.currentTarget.dataset.star })
+  },
+
+  submitRate() {
+    if (this.data.rateSubmitting) return
+    const score = this.data.rateStars
+    if (!score) {
+      wx.showToast({ title: '请先点亮星星', icon: 'none' })
+      return
+    }
+    this.setData({ rateSubmitting: true })
+    cloud.rateTarget('shop', this.data.shop.id, score).then(() => {
+      this.setData({ rateOpen: false, rateSubmitting: false })
+      wx.showToast({ title: '评分成功', icon: 'success' })
+      this.refresh()
+    }).catch((e) => {
+      this.setData({ rateSubmitting: false })
+      wx.showToast({ title: '评分失败，请重试', icon: 'none' })
+      console.warn('[shop-detail] 评分失败', (e && e.errCode) || (e && e.message))
+    })
   },
 
   /* 店铺打卡流（所有人带留言的打卡，最近3条） */

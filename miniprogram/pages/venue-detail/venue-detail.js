@@ -39,6 +39,8 @@ Page({
     reportSubmitting: false,
     icons: {
       star: ICON.starAmber,
+      starOrange: ICON.starOrange,
+      starGray: ICON.starGray,
       pin: ICON.pinOrangeSmall,
       send: ICON.sendOrange,
       check: ICON.checkWhite,
@@ -130,10 +132,53 @@ Page({
     })
   },
 
-  /* 签到态 + 打卡动态（云端真实流：该场地所有带留言的打卡，最近3条） */
+  /* 签到态 + 评分统计（真实均值/人数，无评分用预设分兜底） */
   refresh() {
     const venue = this.data.venue
     this.setData({ checked: store.checkedToday(venue.id) })
+    cloud.getRatingStats('venue').then((map) => {
+      const st = map[venue.id]
+      this.setData({
+        rating: st ? st.avg : venue.rating,
+        ratingCount: st ? st.count : 0,
+      })
+    })
+  },
+
+  /* ===== 评分弹窗 ===== */
+  openRate() {
+    cloud.getMyRating('venue', this.data.venue.id).then((my) => {
+      this.setData({ rateOpen: true, rateStars: my || 0, myRating: my, rateSubmitting: false })
+    })
+  },
+
+  closeRate() {
+    if (this.data.rateSubmitting) return
+    this.setData({ rateOpen: false })
+  },
+
+  /* 点第 N 颗星 → 前面 N 颗点亮 */
+  pickStar(e) {
+    this.setData({ rateStars: e.currentTarget.dataset.star })
+  },
+
+  submitRate() {
+    if (this.data.rateSubmitting) return
+    const score = this.data.rateStars
+    if (!score) {
+      wx.showToast({ title: '请先点亮星星', icon: 'none' })
+      return
+    }
+    this.setData({ rateSubmitting: true })
+    cloud.rateTarget('venue', this.data.venue.id, score).then(() => {
+      this.setData({ rateOpen: false, rateSubmitting: false })
+      wx.showToast({ title: '评分成功', icon: 'success' })
+      this.refresh()
+    }).catch((e) => {
+      this.setData({ rateSubmitting: false })
+      wx.showToast({ title: '评分失败，请重试', icon: 'none' })
+      console.warn('[venue-detail] 评分失败', (e && e.errCode) || (e && e.message))
+    })
   },
 
   loadFeed() {

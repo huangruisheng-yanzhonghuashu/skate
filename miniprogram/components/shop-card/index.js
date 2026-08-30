@@ -1,5 +1,6 @@
-/* 店铺卡片：服务标签 + 营业状态 + 拨号 */
+/* 店铺卡片：服务标签 + 营业状态 + 评分星级 + 拨号 */
 const cloud = require('../../utils/cloud.js')
+const { ICON } = require('../../utils/icons.js')
 
 Component({
   properties: {
@@ -10,6 +11,10 @@ Component({
   data: {
     status: '',
     openNow: false,
+    icons: {
+      star: ICON.starOrange,
+      starGray: ICON.starGray,
+    },
   },
 
   observers: {

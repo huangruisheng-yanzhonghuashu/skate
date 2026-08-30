@@ -459,3 +459,127 @@
   font-size: 24rpx;
   color: #8C8C8C;
 }
+
+/* ===== 聚合评分行（可点击评分） ===== */
+.rate-hover {
+  opacity: 0.75;
+}
+
+.rating-line {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.rating-line .stars {
+  position: relative;
+  width: 170rpx;
+  height: 30rpx;
+}
+
+.rating-line .stars-bg {
+  display: flex;
+  gap: 4rpx;
+}
+
+.rating-line .stars-fg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  gap: 4rpx;
+  white-space: nowrap;
+}
+
+.rating-line .rstar {
+  width: 30rpx;
+  height: 30rpx;
+  flex-shrink: 0;
+}
+
+.rating-num {
+  font-size: 28rpx;
+  font-weight: 700;
+  color: #FF9F2E;
+}
+
+.rating-count {
+  font-size: 22rpx;
+  color: #C0C0C4;
+}
+
+/* ===== 评分弹窗 ===== */
+.rate-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.rate-sheet {
+  width: 100%;
+  max-width: 600rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 48rpx 40rpx;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.rate-title {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: #1A1A1E;
+}
+
+.rate-hint {
+  display: block;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #8C8C8C;
+}
+
+.rate-stars-row {
+  display: flex;
+  justify-content: center;
+  gap: 20rpx;
+  margin: 40rpx 0 16rpx;
+}
+
+.rate-star {
+  width: 80rpx;
+  height: 80rpx;
+  transition: transform 0.15s ease;
+}
+
+.rate-star-on {
+  transform: scale(1.1);
+}
+
+.rate-desc {
+  display: block;
+  font-size: 26rpx;
+  color: #8C8C8C;
+  min-height: 40rpx;
+}
+
+.rate-btn-submit {
+  margin-top: 32rpx;
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+  padding: 16rpx 0;
+}
+
+.rate-btn-busy {
+  opacity: 0.6;
+}
