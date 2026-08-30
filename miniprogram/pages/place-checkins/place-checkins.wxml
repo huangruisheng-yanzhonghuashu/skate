@@ -1,0 +1,34 @@
+<view class="page">
+  <view wx:if="{{empty && !loading}}" class="empty">
+    <text class="empty-text">还没有打卡记录，去抢首条打卡吧</text>
+    <view class="empty-btn" bindtap="goPlace">去打卡</view>
+  </view>
+
+  <view wx:for="{{list}}" wx:key="id" class="card">
+    <view class="head">
+      <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
+      <view wx:else class="avatar">{{item.avatarText}}</view>
+      <view class="who">
+        <text class="name">{{item.user}}</text>
+        <text class="time">{{item.time}}</text>
+      </view>
+    </view>
+    <text wx:if="{{item.note}}" class="note">{{item.note}}</text>
+    <view wx:if="{{item.photos.length}}" class="photos">
+      <image
+        wx:for="{{item.photos}}"
+        wx:for-item="p"
+        wx:key="*this"
+        class="photo"
+        src="{{p}}"
+        mode="aspectFill"
+        data-urls="{{item.photos}}"
+        data-url="{{p}}"
+        catchtap="preview"
+      />
+    </view>
+  </view>
+
+  <view wx:if="{{loading}}" class="more">加载中...</view>
+  <view wx:if="{{finished && list.length}}" class="more">— 没有更多了 —</view>
+</view>

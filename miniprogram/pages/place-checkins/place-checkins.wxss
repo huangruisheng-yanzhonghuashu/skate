@@ -1,0 +1,110 @@
+.page {
+  min-height: 100vh;
+  background: #F7F7F8;
+  padding: 24rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* 空态 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  padding: 200rpx 0 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #8C8C8C;
+}
+
+.empty-btn {
+  padding: 16rpx 56rpx;
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+}
+
+/* 打卡卡片 */
+.card {
+  background: #FFFFFF;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  margin-bottom: 20rpx;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+}
+
+.avatar-img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 30rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #1A1A1E;
+}
+
+.time {
+  font-size: 22rpx;
+  color: #B0B0B4;
+}
+
+.note {
+  display: block;
+  margin-top: 18rpx;
+  font-size: 28rpx;
+  color: #1A1A1E;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.photo {
+  width: 210rpx;
+  height: 210rpx;
+  border-radius: 12rpx;
+}
+
+.more {
+  text-align: center;
+  padding: 32rpx 0;
+  font-size: 24rpx;
+  color: #C0C0C4;
+}

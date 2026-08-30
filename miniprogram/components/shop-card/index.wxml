@@ -1,0 +1,16 @@
+<view class="shop-card" style="animation-delay: {{index * 60}}ms" hover-class="shop-hover" bindtap="go">
+  <view class="shop-icon">
+    <text class="shop-icon-text">店</text>
+  </view>
+  <view class="shop-info">
+    <view class="shop-top">
+      <text class="shop-name">{{shop.name}}</text>
+      <text wx:if="{{status}}" class="shop-status {{openNow ? 'status-open' : 'status-closed'}}">{{status}}</text>
+    </view>
+    <view class="shop-svc">
+      <text wx:for="{{shop.services}}" wx:key="*this" class="svc-tag">{{item}}</text>
+    </view>
+    <text class="shop-addr">{{shop.shortAddr || shop.address}}</text>
+  </view>
+  <view wx:if="{{shop.phone}}" class="shop-call" data-phone="{{shop.phone}}" catchtap="call">拨打</view>
+</view>
