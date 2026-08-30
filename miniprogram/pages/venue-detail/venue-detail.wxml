@@ -59,7 +59,8 @@
     <view class="checkin-list">
       <view wx:for="{{feed}}" wx:key="index" class="checkin-card">
         <view class="checkin-head">
-          <view class="checkin-avatar" style="background: {{item.color}}">{{item.avatar}}</view>
+          <image wx:if="{{item.avatarFile}}" class="checkin-avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
+        <view wx:else class="checkin-avatar" style="background: {{item.color}}">{{item.avatar}}</view>
           <view class="checkin-user">
             <text class="checkin-name">{{item.user}}</text>
             <text class="checkin-time">{{item.time}}</text>

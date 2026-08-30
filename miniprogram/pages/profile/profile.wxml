@@ -1,20 +1,23 @@
 <view class="page">
-  <!-- 个人卡片 -->
-  <view class="profile">
-    <view class="avatar">{{user.avatar}}</view>
+  <!-- 个人卡片（点击进入资料编辑） -->
+  <view class="profile" hover-class="profile-hover" bindtap="openEdit">
+    <image wx:if="{{user.avatarFileID}}" class="avatar-img" src="{{user.avatarFileID}}" mode="aspectFill" />
+    <view wx:else class="avatar">{{user.nickname ? user.nickname[0] : '滑'}}</view>
     <view class="profile-info">
-      <text class="profile-name">{{user.name}}</text>
+      <text class="profile-name">{{user.nickname || '滑手'}}</text>
       <view class="profile-meta">
         <view class="meta-row">
           <image class="meta-icon" src="{{icons.flame}}" mode="aspectFit" />
-          <text>滑龄 {{user.skateYears}}</text>
+          <text>滑龄 {{user.skateYears || '未设置'}}</text>
         </view>
         <view class="meta-row">
           <image class="meta-icon" src="{{icons.pin}}" mode="aspectFit" />
           <text>{{city}}</text>
         </view>
       </view>
+      <view wx:if="{{!profileComplete}}" class="profile-hint">点击完善资料，解锁专属身份</view>
     </view>
+    <image class="profile-arrow" src="{{icons.chevron}}" mode="aspectFit" />
   </view>
 
   <!-- 菜单 -->
@@ -35,7 +38,7 @@
         <text class="menu-label">我的报错</text>
       </view>
       <view class="menu-right">
-        <text class="menu-value">2条</text>
+        <text class="menu-value">{{reportCount}}条</text>
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
@@ -80,6 +83,46 @@
       <image class="recent-icon" src="{{icons.pin}}" mode="aspectFit" />
       <text class="recent-name">{{item.venueName}}</text>
       <text class="recent-time">{{item.timeText}}</text>
+    </view>
+  </view>
+
+  <!-- 编辑资料弹窗 -->
+  <view wx:if="{{editOpen}}" class="edit-mask" bindtap="closeEdit">
+    <view class="edit-sheet" catchtap="noop">
+      <view class="edit-title">编辑资料</view>
+
+      <view class="edit-row">
+        <text class="edit-label">头像</text>
+        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+          <image wx:if="{{form.avatarTemp || form.avatarFileID}}" class="avatar-preview" src="{{form.avatarTemp || form.avatarFileID}}" mode="aspectFill" />
+          <view wx:else class="avatar-preview avatar-preview-empty">选</view>
+        </button>
+        <text class="edit-tip">点击头像更换</text>
+      </view>
+
+      <view class="edit-row">
+        <text class="edit-label">昵称</text>
+        <input
+          class="edit-input"
+          type="nickname"
+          value="{{form.nickname}}"
+          placeholder="输入昵称"
+          placeholder-class="edit-ph"
+          maxlength="12"
+          bindinput="onNicknameInput"
+        />
+      </view>
+
+      <view class="edit-row">
+        <text class="edit-label">滑龄</text>
+        <picker mode="selector" range="{{years}}" bindchange="onYearsChange">
+          <view class="edit-picker {{form.skateYears ? '' : 'edit-picker-empty'}}">{{form.skateYears || '选择滑龄'}}</view>
+        </picker>
+      </view>
+
+      <button class="edit-save {{saving ? 'edit-saving' : ''}}" bindtap="saveProfile">
+        {{saving ? '保存中...' : '保存'}}
+      </button>
     </view>
   </view>
 </view>

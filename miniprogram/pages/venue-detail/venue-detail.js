@@ -97,13 +97,21 @@ Page({
     }
   },
 
-  /* 打卡动态 = 用户真实签到(带留言) + 场地打卡动态，最近3条 */
+  /* 打卡动态 = 用户真实签到(带留言) + 场地打卡动态，最近3条（用户签到带真实身份） */
   refresh() {
     const venue = this.data.venue
+    const u = store.getUser()
     const mine = store
       .getState()
       .checkins.filter((c) => c.venueId === venue.id && c.note)
-      .map((c) => ({ user: '我', avatar: '张', color: '#FF5A36', time: fmtAgo(c.at), text: c.note }))
+      .map((c) => ({
+        user: u.nickname || '我',
+        avatar: u.avatarFileID ? '' : (u.nickname || '我').slice(0, 1),
+        avatarFile: u.avatarFileID,
+        color: '#FF5A36',
+        time: fmtAgo(c.at),
+        text: c.note,
+      }))
     this.setData({
       checked: store.checkedToday(venue.id),
       feed: [...mine, ...venue.feed].slice(0, 3),

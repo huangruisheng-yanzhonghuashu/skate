@@ -16,6 +16,7 @@ Page({
     searchOpen: false,
     list: [],
     empty: false,
+    venuesLoaded: false,
     markers: [],
     selectedVenueId: '',
     latitude: 31.2304,
@@ -233,7 +234,7 @@ Page({
       online: this._online ? this._online[v.id] : v.online,
       checked: store.checkedToday(v.id),
     }))
-    this.setData({ list, empty: list.length === 0, city: store.getCity() })
+    this.setData({ list, empty: list.length === 0, venuesLoaded: true, city: store.getCity() })
   },
 
   /* 城市选择 */

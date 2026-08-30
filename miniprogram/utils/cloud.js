@@ -1,6 +1,7 @@
 /* 云开发数据访问层：数据全部来源于云数据库
  * 读失败/无数据返回空数组（页面展示空态）；写失败由调用方处理（store 有重试队列） */
 const ENV_ID = 'cloud1-d4grizmp31acb587e'
+const { ONLINE_WINDOW_MIN } = require('./config.js')
 
 /* wx.cloud.init 在 app.js 执行后才可用，因此全部惰性获取实例 */
 let _db = null
@@ -153,7 +154,7 @@ function saveCity(city) {
 /* ===== 排行榜（聚合所有人签到数，需 checkins"所有用户可读"权限） ===== */
 function getLeaderboard() {
   const $ = agg()
-  return ensureOpenid().then(function (openid) {
+  return ensureOpenid().then(function () {
     return db().collection('checkins').aggregate()
       .group({ _id: '$_openid', count: $.sum(1), name: $.last('$userName') })
       .sort({ count: -1 })
@@ -180,6 +181,86 @@ function addVenueReport(doc) {
   return db().collection('venue_reports').add({ data: doc })
 }
 
+/* 统计本人报错条数 */
+function countMyReports() {
+  return db().collection('venue_reports').count()
+    .then((r) => r.total || 0)
+    .catch(() => 0)
+}
+
+/* ===== 头像与资料 ===== */
+/* 上传头像到云存储，返回 fileID（image 组件可直接显示 cloud:// 路径） */
+function uploadAvatar(tempFilePath) {
+  const m = tempFilePath.match(/\.(\w+)$/)
+  const ext = (m && m[1]) || 'jpg'
+  const cloudPath = 'avatars/' + Date.now() + '-' + Math.floor(Math.random() * 1000000) + '.' + ext
+  return wx.cloud.uploadFile({ cloudPath: cloudPath, filePath: tempFilePath })
+    .then((r) => r.fileID)
+}
+
+/* 保存资料（昵称/头像/滑龄/城市），user_profiles 按用户隔离，upsert */
+function saveProfile(profile) {
+  return getMyProfile().then(function (p) {
+    if (p && p._id) {
+      return db().collection('user_profiles').doc(p._id).update({ data: profile })
+    }
+    return db().collection('user_profiles').add({ data: profile })
+  })
+}
+
+/* ===== 场地实时在线（方案 B：位置心跳） ===== */
+/* 两点球面距离（米），haversine 公式 */
+function distanceM(lat1, lng1, lat2, lng2) {
+  const rad = Math.PI / 180
+  const a = 0.5 - Math.cos((lat2 - lat1) * rad) / 2 +
+    Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * (1 - Math.cos((lng2 - lng1) * rad)) / 2
+  return 12742000 * Math.asin(Math.sqrt(a))
+}
+
+/* 心跳上报（详情页前台 + 定位在场地 PRESENCE_RADIUS_M 内时调用）
+ * presence 集合一人一场地一条记录，upsert 刷新 updatedAt；
+ * 在线数 = 该场地 updatedAt 在窗口内的记录数（天然按人去重） */
+function heartbeat(venueId) {
+  const col = db().collection('presence')
+  const now = new Date().toISOString()
+  return col.where({ venueId: venueId }).limit(1).get()
+    .then(function (r) {
+      if (r.data && r.data[0]) {
+        return col.doc(r.data[0]._id).update({ data: { updatedAt: now } })
+      }
+      return col.add({ data: { venueId: venueId, updatedAt: now } })
+    })
+}
+
+/* 某场地当前在线人数（窗口内有心跳的独立用户数） */
+function getOnlineCount(venueId) {
+  const cmd = db().command
+  const since = new Date(Date.now() - ONLINE_WINDOW_MIN * 60 * 1000).toISOString()
+  return db().collection('presence')
+    .where({ venueId: venueId, updatedAt: cmd.gte(since) })
+    .count()
+    .then(function (r) { return r.total || 0 })
+    .catch(function () { return 0 })
+}
+
+/* 批量：所有场地的在线人数映射 { venueId: count }（一次聚合，首页列表用）
+ * 需 presence 集合"所有用户可读"权限，否则只能统计到自己，结果降级为空 */
+function getOnlineMap() {
+  const cmd = db().command
+  const $ = agg()
+  const since = new Date(Date.now() - ONLINE_WINDOW_MIN * 60 * 1000).toISOString()
+  return db().collection('presence').aggregate()
+    .match({ updatedAt: cmd.gte(since) })
+    .group({ _id: '$venueId', total: $.sum(1) })
+    .end()
+    .then(function (r) {
+      const map = {}
+      ;(r.list || []).forEach(function (x) { map[x._id] = x.total })
+      return map
+    })
+    .catch(function () { return {} })
+}
+
 module.exports = {
   ENV_ID: ENV_ID,
   ensureOpenid: ensureOpenid,
@@ -196,4 +277,11 @@ module.exports = {
   saveCity: saveCity,
   getLeaderboard: getLeaderboard,
   addVenueReport: addVenueReport,
+  countMyReports: countMyReports,
+  uploadAvatar: uploadAvatar,
+  saveProfile: saveProfile,
+  distanceM: distanceM,
+  heartbeat: heartbeat,
+  getOnlineCount: getOnlineCount,
+  getOnlineMap: getOnlineMap,
 }

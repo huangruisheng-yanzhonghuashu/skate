@@ -228,7 +228,7 @@
   gap: 24rpx;
 }
 
-/* 上拉加载更多 */
+/* 列表收尾提示 */
 .loadmore {
   display: flex;
   align-items: center;
@@ -237,19 +237,6 @@
   padding: 24rpx 0 8rpx;
   color: #8C8C8C;
   font-size: 24rpx;
-}
-
-.loadmore-spinner {
-  width: 28rpx;
-  height: 28rpx;
-  border-radius: 50%;
-  border: 4rpx solid #E8E8E8;
-  border-top-color: #FF5A36;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
 }
 
 .empty {

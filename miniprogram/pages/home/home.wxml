@@ -87,13 +87,12 @@
       checked="{{item.checked}}"
       index="{{index}}"
     />
-    <view wx:if="{{empty}}" class="empty">
+    <view wx:if="{{venuesLoaded && empty}}" class="empty">
       <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
       <text class="empty-text">{{query ? '没有找到「' + query + '」相关的场地' : '暂无' + filter + '类型的场地'}}</text>
     </view>
-    <view wx:if="{{!empty}}" class="loadmore">
-      <view class="loadmore-spinner"></view>
-      <text>上拉加载更多</text>
+    <view wx:if="{{venuesLoaded && !empty}}" class="loadmore">
+      <text>已展示{{city}}全部 {{list.length}} 个场地</text>
     </view>
   </view>
 </view>

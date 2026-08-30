@@ -183,3 +183,149 @@
   font-size: 28rpx;
   color: #8C8C8C;
 }
+
+/* ===== 资料头像与引导 ===== */
+.avatar-img {
+  width: 128rpx;
+  height: 128rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.profile-hover {
+  background: #FAFAFA;
+}
+
+.profile-hint {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #FF5A36;
+}
+
+.profile-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  flex-shrink: 0;
+}
+
+/* ===== 编辑资料弹窗（居中卡片式，避开自定义 tabBar 层级遮挡） ===== */
+.edit-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32rpx;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.edit-sheet {
+  width: 100%;
+  max-width: 600rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  box-shadow: 0 16rpx 48rpx rgba(26, 26, 30, 0.2);
+  box-sizing: border-box;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.edit-title {
+  text-align: center;
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1A1A1E;
+  margin-bottom: 40rpx;
+}
+
+.edit-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.edit-label {
+  width: 112rpx;
+  font-size: 30rpx;
+  color: #1A1A1E;
+  flex-shrink: 0;
+}
+
+/* 头像选择按钮（微信 chooseAvatar） */
+.avatar-btn {
+  width: 112rpx;
+  height: 112rpx;
+  padding: 0;
+  margin: 0;
+  border-radius: 50%;
+  background: transparent;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.avatar-btn::after {
+  border: none;
+}
+
+.avatar-preview {
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  display: block;
+}
+
+.avatar-preview-empty {
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 36rpx;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-tip {
+  font-size: 24rpx;
+  color: #8C8C8C;
+}
+
+.edit-input {
+  flex: 1;
+  font-size: 30rpx;
+  color: #1A1A1E;
+}
+
+.edit-ph {
+  color: #C0C0C4;
+}
+
+.edit-picker {
+  font-size: 30rpx;
+  color: #1A1A1E;
+}
+
+.edit-picker-empty {
+  color: #C0C0C4;
+}
+
+.edit-save {
+  margin-top: 48rpx;
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  border-radius: 48rpx;
+  padding: 8rpx 0;
+}
+
+.edit-save::after {
+  border: none;
+}
+
+.edit-saving {
+  opacity: 0.6;
+}

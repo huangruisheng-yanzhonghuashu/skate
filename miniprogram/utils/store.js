@@ -6,7 +6,8 @@ const { dayKey } = require('./format.js')
 const KEY = 'skatespot-mp-state-v1'
 const PENDING_KEY = 'skatespot-mp-pending-v1'
 
-const USER = { name: '板仔小张', avatar: '张', skateYears: '2年' }
+/* 用户资料默认值：未完善资料时的展示降级（用户可在"我的"页编辑） */
+const DEFAULT_USER = { nickname: '', avatarFileID: '', skateYears: '' }
 
 let state = null
 const listeners = new Set()
@@ -39,11 +40,12 @@ function init() {
     if (saved && Array.isArray(saved.checkins)) {
       state = saved
       if (!state.likes) state.likes = {}
-      if (!state.city) state.city = '上海'
+      if (!state.city) state.city = '嘉兴'
+      if (!state.user) state.user = Object.assign({}, DEFAULT_USER)
     }
   } catch (e) { /* ignore */ }
   if (!state) {
-    state = { checkins: [], likes: {}, city: '嘉兴' }
+    state = { checkins: [], likes: {}, city: '嘉兴', user: Object.assign({}, DEFAULT_USER) }
     persist()
   }
   /* 2. 恢复上次未同步成功的队列 */
@@ -89,8 +91,8 @@ function migrateLocal() {
       venueName: c.venueName,
       note: c.note || '',
       at: c.at,
-      userName: USER.name,
-      avatar: USER.avatar,
+      userName: state.user.nickname || '滑手',
+      avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
     }
   })
   const likeIds = Object.keys(state.likes).filter(function (k) { return state.likes[k] })
@@ -107,8 +109,8 @@ function migrateLocal() {
         venueName: c.venueName,
         note: c.note || '',
         at: c.at,
-        userName: USER.name,
-        avatar: USER.avatar,
+        userName: state.user.nickname || '滑手',
+        avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
       }
     })
     pending.likes = likeIds.map(function (feedId) { return { feedId: feedId, liked: true } })
@@ -117,11 +119,24 @@ function migrateLocal() {
   })
 }
 
-/* 拉取用户资料（城市偏好），弱数据失败忽略 */
+/* 拉取用户资料（城市偏好 + 昵称头像滑龄），弱数据失败忽略 */
 function loadProfile() {
   return cloud.getMyProfile().then(function (p) {
-    if (p && p.city && p.city !== state.city) {
+    if (!p) return
+    let changed = false
+    if (p.city && p.city !== state.city) {
       state.city = p.city
+      changed = true
+    }
+    if (p.nickname || p.avatarFileID || p.skateYears) {
+      state.user = {
+        nickname: p.nickname || state.user.nickname,
+        avatarFileID: p.avatarFileID || state.user.avatarFileID,
+        skateYears: p.skateYears || state.user.skateYears,
+      }
+      changed = true
+    }
+    if (changed) {
       persist()
       notify()
     }
@@ -156,6 +171,34 @@ function flushPending() {
 function getState() {
   init()
   return state
+}
+
+/* 用户资料（同步 API） */
+function getUser() {
+  init()
+  return state.user
+}
+
+/* 资料是否已完善（设置了昵称即视为完成） */
+function isProfileComplete() {
+  init()
+  return !!state.user.nickname
+}
+
+/* 保存资料：本地立即生效并通知，云端异步 upsert（返回 Promise 供 UI 提示结果） */
+function saveProfile(profile) {
+  init()
+  if (profile.nickname !== undefined) state.user.nickname = profile.nickname
+  if (profile.avatarFileID !== undefined) state.user.avatarFileID = profile.avatarFileID
+  if (profile.skateYears !== undefined) state.user.skateYears = profile.skateYears
+  persist()
+  notify()
+  return cloud.saveProfile({
+    nickname: state.user.nickname,
+    avatarFileID: state.user.avatarFileID,
+    skateYears: state.user.skateYears,
+    city: state.city,
+  })
 }
 
 /* 今日是否已在某场地签到（不传 venueId 则任意场地） */
@@ -213,22 +256,22 @@ function addCheckin(venueId, venueName, note) {
   })
   persist()
   notify()
-  /* 云端异步写入，失败排队重试 */
+  /* 云端异步写入，失败排队重试；签到记录带真实用户身份（排行榜/打卡动态展示用） */
   cloud.addCheckinDoc({
     venueId: venueId,
     venueName: venueName,
     note: note || '',
     at: at,
-    userName: USER.name,
-    avatar: USER.avatar,
+    userName: state.user.nickname || '滑手',
+    avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
   }).catch(function (e) {
     pending.checkins.push({
       venueId: venueId,
       venueName: venueName,
       note: note || '',
       at: at,
-      userName: USER.name,
-      avatar: USER.avatar,
+      userName: state.user.nickname || '滑手',
+      avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
     })
     persistPending()
     console.warn('[store] 签到上云失败，已排队重试', (e && e.errCode) || (e && e.message))
@@ -286,6 +329,9 @@ function subscribe(fn) {
 module.exports = {
   init: init,
   getState: getState,
+  getUser: getUser,
+  isProfileComplete: isProfileComplete,
+  saveProfile: saveProfile,
   checkedToday: checkedToday,
   calcStats: calcStats,
   addCheckin: addCheckin,
@@ -294,5 +340,4 @@ module.exports = {
   setCity: setCity,
   getCity: getCity,
   subscribe: subscribe,
-  user: USER,
 }

@@ -217,6 +217,13 @@
   flex-shrink: 0;
 }
 
+.checkin-avatar-img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
 .checkin-user {
   flex: 1;
   min-width: 0;
