@@ -29,6 +29,138 @@ function hoursAgo(h) {
   return new Date(Date.now() - h * 3600 * 1000).toISOString()
 }
 
+/* 杭州场地种子数据（含 city 字段，城市列表由该字段聚合生成）
+ * 真实场地：钱塘轮滑中心滑板公园（5660㎡，2025-03 升级开园）、亚运滑板公园（东部湾总部基地）、
+ * BAC 社区滑板场（MOREPRK）、奥体"大莲花"、黄龙体育中心 */
+const SEED_HZ_VENUES = [
+  {
+    id: 'hz-qiantang-wheel',
+    city: '杭州',
+    name: '钱塘轮滑中心滑板公园',
+    rating: 4.8,
+    distance: '0.6km',
+    latitude: 30.3140,
+    longitude: 120.3655,
+    category: '混合',
+    online: 20,
+    hot: true,
+    address: '钱塘区拾里路100号钱塘轮滑中心北侧',
+    shortAddr: '钱塘轮滑中心（拾里路）',
+    tags: [
+      { label: '混合', icon: 'tagMixed' },
+      { label: '免费', icon: 'tagFree' },
+      { label: '有灯', icon: 'tagLight' },
+      { label: '水泥', icon: 'tagCement' },
+    ],
+    photos: [IMG_STATION, IMG_STREET, IMG_FLAT, IMG_PUMP],
+    feed: [
+      { user: '滑板阿凯', avatar: 'AK', color: '#FF5A36', time: '1小时前', text: '升级后的公园太顶了，街式区台阶扶手全套！' },
+      { user: 'LeoYoung', avatar: 'LY', color: '#2A8CFF', time: '5小时前', text: '碗池过渡顺滑，专业训练级别，杭州最佳。' },
+      { user: 'MarsChen', avatar: 'MC', color: '#FFB800', time: '昨天', text: '5600平随便造，就是周末人多，早点来。' },
+    ],
+  },
+  {
+    id: 'hz-asiad-park',
+    city: '杭州',
+    name: '亚运滑板公园',
+    rating: 4.5,
+    distance: '1.8km',
+    latitude: 30.3095,
+    longitude: 120.3925,
+    category: '混合',
+    online: 9,
+    hot: false,
+    address: '钱塘区东部湾总部基地，22号大街与之江东路交叉口',
+    shortAddr: '东部湾（之江东路）',
+    tags: [
+      { label: '混合', icon: 'tagMixed' },
+      { label: '免费', icon: 'tagFree' },
+      { label: '无灯', icon: 'tagLight' },
+    ],
+    photos: [IMG_PUMP, IMG_STREET, IMG_STATION],
+    feed: [
+      { user: '小美', avatar: 'XM', color: '#00D4AA', time: '4小时前', text: '沿江风景好，滑完板看江景，舒服！' },
+      { user: '大龙', avatar: 'DL', color: '#4D4D4D', time: '2天前', text: '场地维护得不错，抛台和弧面都很稳。' },
+      { user: '阿花', avatar: 'AH', color: '#FF5A36', time: '4天前', text: '傍晚人多，白天来基本包场。' },
+    ],
+  },
+  {
+    id: 'hz-bac-moreprk',
+    city: '杭州',
+    name: 'BAC 社区滑板场（MOREPRK）',
+    rating: 4.6,
+    distance: '4.2km',
+    latitude: 30.2075,
+    longitude: 120.2050,
+    category: '街式',
+    online: 10,
+    hot: false,
+    address: '滨江区 MOREPRK 滑板公园',
+    shortAddr: '滨江区（MOREPRK）',
+    tags: [
+      { label: '街式', icon: 'tagMixed' },
+      { label: '收费', icon: 'tagFree' },
+      { label: '有灯', icon: 'tagLight' },
+    ],
+    photos: [IMG_STREET, IMG_FLAT, IMG_LAKE],
+    feed: [
+      { user: '阿强', avatar: 'AQ', color: '#2A8CFF', time: '3小时前', text: 'BAC 日常化路线，新手也能玩得开心。' },
+      { user: '板仔小张', avatar: '张', color: '#FF5A36', time: '3天前', text: '商业场维护到位，道具天天有人收拾。' },
+      { user: 'MarsChen', avatar: 'MC', color: '#FFB800', time: '1周前', text: '夜滑氛围好，认识了不少本地滑手。' },
+    ],
+  },
+  {
+    id: 'hz-olotus-plaza',
+    city: '杭州',
+    name: '奥体"大莲花"极限广场',
+    rating: 4.3,
+    distance: '5.5km',
+    latitude: 30.2280,
+    longitude: 120.2260,
+    category: '平地',
+    online: 12,
+    hot: true,
+    address: '滨江区飞虹路3号奥体博览城',
+    shortAddr: '奥体博览城（飞虹路）',
+    tags: [
+      { label: '平地', icon: 'tagMixed' },
+      { label: '免费', icon: 'tagFree' },
+      { label: '有灯', icon: 'tagLight' },
+    ],
+    photos: [IMG_FLAT, IMG_LAKE, IMG_STREET],
+    feed: [
+      { user: 'LeoYoung', avatar: 'LY', color: '#2A8CFF', time: '2小时前', text: '大莲花下面刷板，夜景无敌，游客都来拍。' },
+      { user: '阿凯', avatar: 'AK', color: '#FF5A36', time: '昨天', text: '广场超大面积平地，平花练习圣地。' },
+      { user: '阿花', avatar: 'AH', color: '#FF5A36', time: '5天前', text: '晚上灯全开，滑到十点都没问题。' },
+    ],
+  },
+  {
+    id: 'hz-huanglong',
+    city: '杭州',
+    name: '黄龙体育中心室外广场',
+    rating: 4.0,
+    distance: '7.6km',
+    latitude: 30.2665,
+    longitude: 120.1335,
+    category: '平地',
+    online: 6,
+    hot: false,
+    address: '西湖区黄龙路1号黄龙体育中心',
+    shortAddr: '黄龙体育中心',
+    tags: [
+      { label: '平地', icon: 'tagMixed' },
+      { label: '免费', icon: 'tagFree' },
+      { label: '有灯', icon: 'tagLight' },
+    ],
+    photos: [IMG_LAKE, IMG_FLAT, IMG_PUMP],
+    feed: [
+      { user: '大龙', avatar: 'DL', color: '#4D4D4D', time: '昨天 19:00', text: '市区最方便的平地块，地铁直达。' },
+      { user: '小美', avatar: 'XM', color: '#00D4AA', time: '4天前', text: '新手练滑行的好地方，地面平整。' },
+      { user: '阿强', avatar: 'AQ', color: '#2A8CFF', time: '1周前', text: '广场舞阿姨和滑板共用，注意错峰。' },
+    ],
+  },
+]
+
 /* 嘉兴场地种子数据（含 city 字段，城市列表由该字段聚合生成）
  * 场地取自真实地点：嘉兴火车站滑板公园（南湖晚报报道）、中央公园泵道（中环南路×纺工路）、
  * 凌公塘公园、秀湖公园、湘家荡 */
@@ -160,13 +292,18 @@ const SEED_VENUES = [
   },
 ]
 
-/* 动态种子数据 */
+/* 动态种子数据（嘉兴 + 杭州） */
 const SEED_FEEDS = [
   { id: 'f1', user: '板仔小张', avatar: '板仔', avatarColor: '#FF5A36', venueId: 'jx-railway', at: hoursAgo(2), text: '火车站滑板公园傍晚人超多，爽滑两小时！', photos: [FEED_IMGS[0], FEED_IMGS[1]], likes: 15, comments: 3 },
   { id: 'f2', user: '小美', avatar: '小美', avatarColor: '#00D4AA', venueId: 'jx-central-pump', at: hoursAgo(26), text: '第一次刷中央公园泵道，全程不推地，太上头了！', photos: [FEED_IMGS[2]], likes: 8, comments: 1 },
   { id: 'f3', user: '阿强', avatar: '阿强', avatarColor: '#2A8CFF', venueId: 'jx-linggongtang', at: hoursAgo(31), text: '凌公塘新板到了，矮台练新招！', photos: [FEED_IMGS[3], FEED_IMGS[4], FEED_IMGS[5]], likes: 23, comments: 5 },
   { id: 'f4', user: '大龙', avatar: '大龙', avatarColor: '#4D4D4D', venueId: 'jx-xiuhu', at: hoursAgo(76), text: '秀湖东广场地面是真平，ollie 姿势终于稳了。', photos: [FEED_IMGS[5], FEED_IMGS[0]], likes: 31, comments: 7 },
   { id: 'f5', user: 'LeoYoung', avatar: 'LY', avatarColor: '#FFB800', venueId: 'jx-xiangjiadang', at: hoursAgo(102), text: '湘家荡环湖刷街看日落，嘉兴最舒服的巡航路线。', photos: [FEED_IMGS[4]], likes: 12, comments: 2 },
+  { id: 'f6', user: '阿凯', avatar: 'AK', avatarColor: '#FF5A36', venueId: 'hz-qiantang-wheel', at: hoursAgo(1), text: '钱塘轮滑中心升级后首刷，碗池太顺了，杭州最强场地！', photos: [FEED_IMGS[0], FEED_IMGS[3]], likes: 42, comments: 9 },
+  { id: 'f7', user: 'LeoYoung', avatar: 'LY', avatarColor: '#2A8CFF', venueId: 'hz-olotus-plaza', at: hoursAgo(5), text: '大莲花夜景刷板，平花练习 + 拍照两不误。', photos: [FEED_IMGS[4], FEED_IMGS[1]], likes: 28, comments: 4 },
+  { id: 'f8', user: '小美', avatar: '小美', avatarColor: '#00D4AA', venueId: 'hz-asiad-park', at: hoursAgo(9), text: '亚运滑板公园沿江太舒服了，滑完看日落。', photos: [FEED_IMGS[2]], likes: 17, comments: 2 },
+  { id: 'f9', user: 'MarsChen', avatar: 'MC', avatarColor: '#FFB800', venueId: 'hz-bac-moreprk', at: hoursAgo(28), text: 'BAC 夜滑局，道具维护得真干净，收费值。', photos: [FEED_IMGS[5], FEED_IMGS[0]], likes: 19, comments: 3 },
+  { id: 'f10', user: '大龙', avatar: '大龙', avatarColor: '#4D4D4D', venueId: 'hz-huanglong', at: hoursAgo(50), text: '黄龙广场练滑行，地铁直达就是方便。', photos: [FEED_IMGS[1]], likes: 9, comments: 1 },
 ]
 
 const COLLECTIONS = ['venues', 'feeds', 'checkins', 'feed_likes', 'user_profiles', 'venue_reports']
@@ -197,7 +334,7 @@ async function seedIfEmpty(coll, docs) {
 
 exports.main = async () => {
   const created = await ensureCollections()
-  const venues = await seedIfEmpty('venues', SEED_VENUES)
+  const venues = await seedIfEmpty('venues', [...SEED_VENUES, ...SEED_HZ_VENUES])
   const feeds = await seedIfEmpty('feeds', SEED_FEEDS)
   return {
     ok: true,

@@ -63,12 +63,15 @@ Page({
         venues.forEach((v) => { this._online[v.id] = v.online })
         this._onlineInit = true
       }
+      /* 回退逻辑均以当前城市为准（refresh 尚未同步 data.city，直接读 store） */
+      const currentCity = store.getCity()
+      const cityVenues = venues.filter((v) => v.city === currentCity)
       /* 定位未成功时，地图中心回退到当前城市第一个场地（数据驱动） */
-      if (!this._located && venues.length) {
-        this.setData({ latitude: venues[0].latitude, longitude: venues[0].longitude })
+      if (!this._located && cityVenues.length) {
+        this.setData({ latitude: cityVenues[0].latitude, longitude: cityVenues[0].longitude })
       }
-      if (!this.data.selectedVenueId && venues.length) {
-        this.setData({ selectedVenueId: venues[0].id })
+      if (!cityVenues.some((v) => v.id === this.data.selectedVenueId) && cityVenues.length) {
+        this.setData({ selectedVenueId: cityVenues[0].id })
       }
       this.refresh()
       this.buildMarkers()
@@ -118,9 +121,12 @@ Page({
         const city = ad && ad.city
         if (!city) return
         const name = city.replace(/市$/, '')
-        if (name && name !== store.getCity()) {
+        /* 只自动切换到云端有场地数据的城市；无数据城市保持当前选择（地图仍定位到真实位置） */
+        const known = this.data.cities || []
+        if (name && name !== store.getCity() && known.indexOf(name) >= 0) {
           store.setCity(name)
           this.refresh()
+          this.buildMarkers()
           wx.showToast({ title: '已定位到' + name, icon: 'none' })
         }
       },
@@ -159,7 +165,7 @@ Page({
    * 标记直接由云端场地数据生成，markerId 为序号，_markerMap 维护反查关系 */
   buildMarkers() {
     const selected = this.data.selectedVenueId
-    const venues = this._venues || []
+    const venues = (this._venues || []).filter((v) => v.city === this.data.city)
     this._markerMap = venues.map((v, i) => ({ markerId: i + 1, venueId: v.id }))
     const markers = venues.map((v, i) => {
       const active = v.hot || store.checkedToday(v.id)
@@ -210,7 +216,7 @@ Page({
 
   refresh() {
     const query = (this.data.query || '').trim()
-    let arr = this._venues || []
+    let arr = (this._venues || []).filter((v) => v.city === store.getCity())
     if (this.data.filter !== '全部') arr = arr.filter((v) => v.category === this.data.filter)
     if (query) arr = arr.filter((v) => v.name.indexOf(query) >= 0)
     const list = arr.map((v) => ({
@@ -229,8 +235,15 @@ Page({
   pickCity(e) {
     const c = e.currentTarget.dataset.city
     store.setCity(c)
+    /* 地图中心移到新城市第一个场地，并选中它 */
+    const venue = (this._venues || []).find((v) => v.city === c)
+    if (venue) this._located = false
     this.setData({ cityOpen: false })
     this.refresh()
+    this.buildMarkers()
+    if (venue) {
+      this.setData({ latitude: venue.latitude, longitude: venue.longitude, scale: 13, selectedVenueId: venue.id })
+    }
     wx.showToast({ title: '已切换到' + c, icon: 'none' })
   },
 
