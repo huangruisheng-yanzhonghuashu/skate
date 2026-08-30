@@ -1,5 +1,5 @@
-const { getVenue } = require('../../data/mock.js')
 const store = require('../../utils/store.js')
+const cloud = require('../../utils/cloud.js')
 const { fmtAgo } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
@@ -52,22 +52,24 @@ Page({
   },
 
   onLoad(options) {
-    const venue = getVenue(options.id)
-    if (!venue) {
-      wx.showToast({ title: '场地不存在或已下线', icon: 'none' })
-      setTimeout(() => wx.switchTab({ url: '/pages/home/home' }), 800)
-      return
-    }
-    this._onlineBase = venue.online
-    this.setData({
-      venue,
-      photos: venue.photos,
-      tags: venue.tags.map((t) => ({ label: t.label, src: ICON[t.icon] || ICON.tagMixed })),
-      online: venue.online,
-      moreCount: Math.max(0, venue.online - LIVE_AVATARS.length),
+    cloud.getVenues().then(() => {
+      const venue = cloud.getCachedVenue(options.id)
+      if (!venue) {
+        wx.showToast({ title: '场地不存在或已下线', icon: 'none' })
+        setTimeout(() => wx.switchTab({ url: '/pages/home/home' }), 800)
+        return
+      }
+      this._onlineBase = venue.online
+      this.setData({
+        venue,
+        photos: venue.photos,
+        tags: venue.tags.map((t) => ({ label: t.label, src: ICON[t.icon] || ICON.tagMixed })),
+        online: venue.online,
+        moreCount: Math.max(0, venue.online - LIVE_AVATARS.length),
+      })
+      wx.setNavigationBarTitle({ title: venue.name })
+      this.refresh()
     })
-    wx.setNavigationBarTitle({ title: venue.name })
-    this.refresh()
   },
 
   onShow() {
@@ -82,6 +84,7 @@ Page({
   startTick() {
     this.stopTick()
     this._timer = setInterval(() => {
+      if (!this.data.venue) return
       const next = Math.min(30, Math.max(1, this.data.online + (Math.random() > 0.5 ? 1 : -1)))
       this.setData({ online: next, moreCount: Math.max(0, next - LIVE_AVATARS.length) })
     }, 5000)
@@ -160,14 +163,12 @@ Page({
 
   confirmCheckin() {
     if (this.data.checkinSubmitting) return
-    this.setData({ checkinSubmitting: true })
-    setTimeout(() => {
-      const v = this.data.venue
-      store.addCheckin(v.id, v.name, this.data.note.trim())
-      this.setData({ checkinOpen: false, checkinSubmitting: false })
-      wx.showToast({ title: '签到成功', icon: 'success' })
-      this.refresh()
-    }, 800)
+    const v = this.data.venue
+    /* 本地立即生效，云端写入由 store 异步处理（失败自动排队重试） */
+    store.addCheckin(v.id, v.name, this.data.note.trim())
+    this.setData({ checkinOpen: false, checkinSubmitting: false })
+    wx.showToast({ title: '签到成功', icon: 'success' })
+    this.refresh()
   },
 
   /* ===== 报错弹窗 ===== */
@@ -223,10 +224,21 @@ Page({
       return
     }
     this.setData({ reportSubmitting: true })
-    setTimeout(() => {
+    const v = this.data.venue
+    cloud.addVenueReport({
+      venueId: v.id,
+      venueName: v.name,
+      type: this.data.reportType,
+      desc: this.data.reportDesc.trim(),
+      at: new Date().toISOString(),
+    }).then(() => {
       this.setData({ reportOpen: false, reportSubmitting: false })
       wx.showToast({ title: '报错已提交', icon: 'success' })
-    }, 800)
+    }).catch((e) => {
+      this.setData({ reportSubmitting: false })
+      wx.showToast({ title: '提交失败，请重试', icon: 'none' })
+      console.warn('[venue-detail] 报错提交失败', (e && e.errCode) || (e && e.message))
+    })
   },
 
   noop() {},

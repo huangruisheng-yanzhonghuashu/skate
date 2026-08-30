@@ -1,5 +1,6 @@
-const { VENUES, MAP_MARKERS, CITIES, getVenue } = require('../../data/mock.js')
+const { MAP_MARKERS, CITIES } = require('../../data/mock.js')
 const store = require('../../utils/store.js')
+const cloud = require('../../utils/cloud.js')
 const { ICON } = require('../../utils/icons.js')
 
 const FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
@@ -32,17 +33,31 @@ Page({
 
   onLoad() {
     this._online = {}
-    VENUES.forEach((v) => { this._online[v.id] = v.online })
-    this.buildMarkers()
-    this.refresh()
+    this._onlineInit = false
+    this._venues = []
+    this.loadVenues()
   },
 
   onShow() {
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
     if (tb) tb.setData({ selected: 0 })
+    this.loadVenues()
     this.refresh()
     this.buildMarkers()
     this.startTick()
+  },
+
+  /* 云端场地列表：云端优先，mock 降级 */
+  loadVenues() {
+    cloud.getVenues().then((venues) => {
+      this._venues = venues
+      if (!this._onlineInit) {
+        venues.forEach((v) => { this._online[v.id] = v.online })
+        this._onlineInit = true
+      }
+      this.refresh()
+      this.buildMarkers()
+    })
   },
 
   onHide() { this.stopTick() },
@@ -52,7 +67,8 @@ Page({
   startTick() {
     this.stopTick()
     this._timer = setInterval(() => {
-      const v = VENUES[Math.floor(Math.random() * VENUES.length)]
+      if (!this._venues.length) return
+      const v = this._venues[Math.floor(Math.random() * this._venues.length)]
       const next = Math.min(28, Math.max(1, this._online[v.id] + (Math.random() > 0.5 ? 1 : -1)))
       this._online[v.id] = next
       const list = this.data.list.map((item) =>
@@ -73,7 +89,8 @@ Page({
   buildMarkers() {
     const selected = this.data.selectedVenueId
     const markers = MAP_MARKERS.map((m) => {
-      const v = getVenue(m.venueId)
+      const v = cloud.getCachedVenue(m.venueId)
+      if (!v) return null
       const active = v.hot || store.checkedToday(v.id)
       const marker = {
         id: m.markerId,
@@ -98,7 +115,7 @@ Page({
         }
       }
       return marker
-    })
+    }).filter(Boolean)
     this.setData({ markers })
   },
 
@@ -123,7 +140,7 @@ Page({
 
   refresh() {
     const query = (this.data.query || '').trim()
-    let arr = VENUES
+    let arr = this._venues || []
     if (this.data.filter !== '全部') arr = arr.filter((v) => v.category === this.data.filter)
     if (query) arr = arr.filter((v) => v.name.indexOf(query) >= 0)
     const list = arr.map((v) => ({

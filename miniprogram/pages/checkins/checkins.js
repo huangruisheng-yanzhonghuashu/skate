@@ -1,5 +1,5 @@
-const { LEADERBOARD } = require('../../data/mock.js')
 const store = require('../../utils/store.js')
+const cloud = require('../../utils/cloud.js')
 const { ICON } = require('../../utils/icons.js')
 
 const WEEK_LABELS = ['日', '一', '二', '三', '四', '五', '六']
@@ -10,7 +10,7 @@ Page({
     weekLabels: WEEK_LABELS,
     cells: [],
     monthTitle: '',
-    board: LEADERBOARD,
+    board: [],
     icons: {
       trophy: ICON.trophyOrange,
       flame: ICON.flameOrangeStat,
@@ -23,6 +23,14 @@ Page({
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
     if (tb) tb.setData({ selected: 2 })
     this.refresh()
+    this.loadBoard()
+  },
+
+  /* 云端排行榜：聚合所有人签到数，需 checkins"所有用户可读"权限，失败降级 mock */
+  loadBoard() {
+    cloud.getLeaderboard().then((board) => {
+      this.setData({ board })
+    })
   },
 
   refresh() {

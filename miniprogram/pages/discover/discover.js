@@ -1,5 +1,5 @@
-const { FEED_LIST, getVenue } = require('../../data/mock.js')
 const store = require('../../utils/store.js')
+const cloud = require('../../utils/cloud.js')
 const { fmtAgo } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
@@ -14,18 +14,32 @@ Page({
     },
   },
 
+  onLoad() {
+    this._feeds = []
+    this.loadFeeds()
+  },
+
   onShow() {
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
     if (tb) tb.setData({ selected: 1 })
+    this.loadFeeds()
     this.refresh()
   },
 
+  /* 云端动态流：云端优先，mock 降级 */
+  loadFeeds() {
+    cloud.getFeeds().then((feeds) => {
+      this._feeds = feeds
+      this.refresh()
+    })
+  },
+
   refresh() {
-    const arr = FEED_LIST.map((f) => {
+    const arr = (this._feeds || []).map((f) => {
       const liked = store.isLiked(f.id)
       return {
         ...f,
-        venueName: (getVenue(f.venueId) || {}).name || '',
+        venueName: (cloud.getCachedVenue(f.venueId) || {}).name || '',
         timeText: fmtAgo(f.at),
         liked,
         likeCount: f.likes + (liked ? 1 : 0),
