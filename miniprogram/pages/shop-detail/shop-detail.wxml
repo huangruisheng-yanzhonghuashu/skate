@@ -75,9 +75,9 @@
     <view wx:else class="fempty">还没有打卡，点下方「打卡」抢首条</view>
   </view>
 
-  <!-- 底部操作：打卡 / 拨号 / 导航 -->
+  <!-- 底部操作：打卡(或补充) / 拨号 / 导航 -->
   <view class="actions">
-    <view wx:if="{{checked}}" class="act act-done">已打卡</view>
+    <view wx:if="{{checked}}" class="act act-done" bindtap="openEditCheckin">已打卡 · 补充</view>
     <button wx:else class="act act-checkin" bindtap="openCheckin">打卡</button>
     <button wx:if="{{shop.phone}}" class="act act-call" bindtap="callShop">拨打电话</button>
     <button class="act act-nav" bindtap="openMap">地图导航</button>
@@ -86,7 +86,7 @@
   <!-- 打卡弹窗 -->
   <view wx:if="{{checkinOpen}}" class="mask" bindtap="closeCheckin" catchtouchmove="noop">
     <view class="sheet" catchtap="noop">
-      <view class="sheet-title">店铺打卡</view>
+      <view class="sheet-title">{{checkinMode === 'edit' ? '补充今日打卡' : '店铺打卡'}}</view>
 
       <view class="f-row">
         <text class="f-label">说点什么</text>
@@ -111,7 +111,7 @@
       </view>
 
       <button class="f-btn {{checkinSubmitting ? 'f-btn-loading' : ''}}" bindtap="confirmCheckin">
-        {{checkinSubmitting ? '打卡中...' : '确认打卡'}}
+        {{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '打卡中...') : (checkinMode === 'edit' ? '更新打卡' : '确认打卡')}}
       </button>
       <view class="f-cancel" bindtap="closeCheckin">取消</view>
     </view>

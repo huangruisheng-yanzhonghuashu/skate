@@ -19,26 +19,36 @@
     </view>
   </view>
 
-  <!-- 动态流 -->
-  <view class="feed">
+  <!-- 打卡社区流 -->
+  <view class="feed" wx:if="{{list.length}}">
     <view wx:for="{{list}}" wx:key="id" class="feed-card">
       <view class="feed-head">
-        <view class="avatar" style="background: {{item.avatarColor}}">{{item.avatar}}</view>
+        <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
+        <view wx:else class="avatar">{{item.avatarText}}</view>
         <view class="feed-user">
           <view class="feed-user-row">
             <text class="feed-name">{{item.user}}</text>
             <text class="feed-dot">·</text>
-            <text class="feed-venue" data-id="{{item.venueId}}" bindtap="goVenue">{{item.venueName}}</text>
+            <text class="feed-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+            <text class="feed-venue" data-id="{{item.venueId}}" data-kind="{{item.kind}}" bindtap="goPlace">{{item.venueName}}</text>
           </view>
           <text class="feed-time">{{item.timeText}}</text>
         </view>
       </view>
 
-      <text class="feed-text">{{item.text}}</text>
+      <text wx:if="{{item.note}}" class="feed-text">{{item.note}}</text>
 
       <view wx:if="{{item.photos.length}}" class="feed-photos photos-{{item.photos.length >= 3 ? 'grid' : item.photos.length}}">
-        <view wx:for="{{item.photos}}" wx:for-item="photo" wx:key="*this" class="photo-cell">
-          <image class="photo" src="{{photo}}" mode="aspectFill" lazy-load />
+        <view wx:for="{{item.photos}}" wx:for-item="p" wx:key="*this" class="photo-cell">
+          <image
+            class="photo"
+            src="{{p}}"
+            mode="aspectFill"
+            lazy-load
+            data-urls="{{item.photos}}"
+            data-url="{{p}}"
+            bindtap="preview"
+          />
         </view>
       </view>
 
@@ -47,11 +57,17 @@
           <image class="action-icon" src="{{item.liked ? icons.heartOrange : icons.heartAsh}}" mode="aspectFit" />
           <text>{{item.likeCount}}</text>
         </view>
-        <view class="action" bindtap="onComment">
-          <image class="action-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
-          <text>{{item.comments}}</text>
-        </view>
       </view>
     </view>
+
+    <view wx:if="{{loading}}" class="more">加载中...</view>
+    <view wx:if="{{finished && list.length}}" class="more">— 没有更多了 —</view>
+  </view>
+
+  <!-- 空态 -->
+  <view wx:if="{{empty && !loading}}" class="empty">
+    <text class="empty-text">还没有打卡内容</text>
+    <text class="empty-sub">去场地或店铺打卡，你的分享会出现在这里</text>
+    <view class="empty-btn" bindtap="goHome">去打卡</view>
   </view>
 </view>

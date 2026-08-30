@@ -171,9 +171,33 @@ Page({
     })
   },
 
-  /* ===== 签到弹窗 ===== */
+  /* ===== 签到弹窗（新增 / 补充今日打卡复用） ===== */
   openCheckin() {
-    this.setData({ checkinOpen: true, note: '', checkinPhotos: [], checkinSubmitting: false })
+    this._editId = ''
+    this.setData({
+      checkinOpen: true,
+      checkinMode: 'new',
+      note: '',
+      checkinPhotos: [],
+      checkinSubmitting: false,
+    })
+  },
+
+  /* 补充今日打卡：预填当日记录的留言/照片（photos 为 fileID 直接回显） */
+  openEditCheckin() {
+    const rec = store.getTodayCheckin(this.data.venue.id)
+    if (!rec) {
+      this.refresh()
+      return
+    }
+    this._editId = rec.id
+    this.setData({
+      checkinOpen: true,
+      checkinMode: 'edit',
+      note: rec.note || '',
+      checkinPhotos: (rec.photos || []).slice(),
+      checkinSubmitting: false,
+    })
   },
 
   closeCheckin() {
@@ -206,6 +230,15 @@ Page({
     this.setData({ checkinPhotos: photos })
   },
 
+  /* 上传照片组：保留已上传的 fileID，只上传新选的临时文件，维持原顺序 */
+  uploadMixedPhotos(photos) {
+    const jobs = photos.map((p) => {
+      if (p.indexOf('cloud://') === 0) return Promise.resolve(p)
+      return cloud.uploadFileTo('checkin-photos', p)
+    })
+    return Promise.all(jobs)
+  },
+
   confirmCheckin() {
     if (this.data.checkinSubmitting) return
     const v = this.data.venue
@@ -213,7 +246,18 @@ Page({
     const photos = this.data.checkinPhotos
     this.setData({ checkinSubmitting: true })
     const finish = (fileIDs) => {
-      /* 本地立即生效，云端写入由 store 异步处理（失败自动排队重试） */
+      if (this._editId) {
+        /* 补充打卡：更新当日记录（不新增，统计口径不变） */
+        store.updateCheckin(this._editId, note, fileIDs).then(() => {
+          this._editId = ''
+          this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
+          wx.showToast({ title: '打卡已更新', icon: 'success' })
+          this.refresh()
+          this.loadFeed()
+        })
+        return
+      }
+      /* 新签到：本地立即生效，云端写入由 store 异步处理（失败自动排队重试） */
       store.addCheckin(v.id, v.name, note, fileIDs, 'venue')
       this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
       wx.showToast({ title: '签到成功', icon: 'success' })
@@ -221,8 +265,8 @@ Page({
       this.loadFeed()
     }
     if (photos.length) {
-      /* 签到照片先传云存储拿 fileID，再落库 */
-      Promise.all(photos.map((p) => cloud.uploadFileTo('checkin-photos', p)))
+      /* 照片组：fileID 保留、临时文件上传，然后落库 */
+      this.uploadMixedPhotos(photos)
         .then(finish)
         .catch((e) => {
           this.setData({ checkinSubmitting: false })

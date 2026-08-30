@@ -88,9 +88,33 @@ Page({
     wx.previewImage({ urls: this.data.shop.photos, current: e.currentTarget.dataset.url })
   },
 
-  /* ===== 店铺打卡弹窗 ===== */
+  /* ===== 店铺打卡弹窗（新增 / 补充今日打卡复用） ===== */
   openCheckin() {
-    this.setData({ checkinOpen: true, note: '', checkinPhotos: [], checkinSubmitting: false })
+    this._editId = ''
+    this.setData({
+      checkinOpen: true,
+      checkinMode: 'new',
+      note: '',
+      checkinPhotos: [],
+      checkinSubmitting: false,
+    })
+  },
+
+  /* 补充今日打卡：预填当日记录 */
+  openEditCheckin() {
+    const rec = store.getTodayCheckin(this.data.shop.id)
+    if (!rec) {
+      this.refresh()
+      return
+    }
+    this._editId = rec.id
+    this.setData({
+      checkinOpen: true,
+      checkinMode: 'edit',
+      note: rec.note || '',
+      checkinPhotos: (rec.photos || []).slice(),
+      checkinSubmitting: false,
+    })
   },
 
   closeCheckin() {
@@ -124,6 +148,15 @@ Page({
     this.setData({ checkinPhotos: photos })
   },
 
+  /* 上传照片组：保留已上传 fileID，只上传新选临时文件 */
+  uploadMixedPhotos(photos) {
+    const jobs = photos.map((p) => {
+      if (p.indexOf('cloud://') === 0) return Promise.resolve(p)
+      return cloud.uploadFileTo('checkin-photos', p)
+    })
+    return Promise.all(jobs)
+  },
+
   confirmCheckin() {
     if (this.data.checkinSubmitting) return
     const s = this.data.shop
@@ -131,6 +164,16 @@ Page({
     const photos = this.data.checkinPhotos
     this.setData({ checkinSubmitting: true })
     const finish = (fileIDs) => {
+      if (this._editId) {
+        store.updateCheckin(this._editId, note, fileIDs).then(() => {
+          this._editId = ''
+          this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
+          wx.showToast({ title: '打卡已更新', icon: 'success' })
+          this.refresh()
+          this.loadFeed()
+        })
+        return
+      }
       store.addCheckin(s.id, s.name, note, fileIDs, 'shop')
       this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
       wx.showToast({ title: '打卡成功', icon: 'success' })
@@ -138,7 +181,7 @@ Page({
       this.loadFeed()
     }
     if (photos.length) {
-      Promise.all(photos.map((p) => cloud.uploadFileTo('checkin-photos', p)))
+      this.uploadMixedPhotos(photos)
         .then(finish)
         .catch((e) => {
           this.setData({ checkinSubmitting: false })

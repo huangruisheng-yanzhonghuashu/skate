@@ -175,3 +175,59 @@
   width: 36rpx;
   height: 36rpx;
 }
+
+/* ===== 头像图片（fileID） ===== */
+.avatar-img {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* 实体类型标签 */
+.feed-kind {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  color: #FF9F2E;
+  background: #FFF9F0;
+  padding: 2rpx 12rpx;
+  border-radius: 6rpx;
+}
+
+/* ===== 分页提示 ===== */
+.more {
+  text-align: center;
+  padding: 32rpx 0;
+  font-size: 24rpx;
+  color: #C0C0C4;
+}
+
+/* ===== 空态 ===== */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20rpx;
+  padding: 220rpx 40rpx 0;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A1E;
+}
+
+.empty-sub {
+  font-size: 26rpx;
+  color: #8C8C8C;
+}
+
+.empty-btn {
+  margin-top: 16rpx;
+  padding: 18rpx 72rpx;
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 600;
+  border-radius: 44rpx;
+}

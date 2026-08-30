@@ -125,6 +125,11 @@ function removeCheckinDoc(id) {
   return db().collection('checkins').doc(id).remove()
 }
 
+/* 补充打卡：更新本人签到记录的留言/照片 */
+function _updateCheckinDoc(id, patch) {
+  return db().collection('checkins').doc(id).update({ data: patch })
+}
+
 /* 某地点（场地/店铺）的打卡流（所有人，按时间倒序）
  * opts: { noteOnly: 只要有留言的（打卡动态区用）, skip: 分页偏移, limit: 条数 }
  * 需 checkins"所有用户可读"权限；无权限时仅返回自己的，行为仍正确 */
@@ -141,6 +146,42 @@ function getPlaceCheckins(venueId, opts) {
     .catch((e) => {
       console.warn('[cloud] 打卡流读取失败', (e && e.errCode) || (e && e.message))
       return []
+    })
+}
+
+/* 发现页社区流：所有人的"内容打卡"（有留言或有照片），全量按时间倒序分页 */
+function getPublicCheckins(opts) {
+  opts = opts || {}
+  const cmd = db().command
+  let q = db().collection('checkins').where(
+    cmd.or([{ note: cmd.neq('') }, { photos: cmd.neq([]) }])
+  )
+  if (opts.skip) q = q.skip(opts.skip)
+  return q.orderBy('at', 'desc').limit(opts.limit || 20).get()
+    .then((r) => (r.data || []).map(mapCheckin))
+    .catch((e) => {
+      console.warn('[cloud] 社区流读取失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
+}
+
+/* 点赞计数聚合：feed_likes 集合按 feedId in ids 分组计数（需"所有用户可读"权限） */
+function getLikeCounts(ids) {
+  const cmd = db().command
+  const $ = agg()
+  if (!ids || !ids.length) return Promise.resolve({})
+  return db().collection('feed_likes').aggregate()
+    .match({ feedId: cmd.in(ids) })
+    .group({ _id: '$feedId', total: $.sum(1) })
+    .end()
+    .then(function (r) {
+      const map = {}
+      ;(r.list || []).forEach(function (x) { map[x._id] = x.total })
+      return map
+    })
+    .catch(function (e) {
+      console.warn('[cloud] 点赞计数聚合失败', (e && e.errCode) || (e && e.message))
+      return {}
     })
 }
 
@@ -368,8 +409,11 @@ module.exports = {
   getMyCheckins: getMyCheckins,
   pushCheckins: pushCheckins,
   addCheckinDoc: addCheckinDoc,
+  _updateCheckinDoc: _updateCheckinDoc,
   removeCheckinDoc: removeCheckinDoc,
   getPlaceCheckins: getPlaceCheckins,
+  getPublicCheckins: getPublicCheckins,
+  getLikeCounts: getLikeCounts,
   getMyLikes: getMyLikes,
   setLike: setLike,
   getMyProfile: getMyProfile,

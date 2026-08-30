@@ -308,6 +308,42 @@ function deleteCheckin(id) {
   })
 }
 
+/* 今天在某地点的打卡记录（供"补充留言/照片"预填），无则返回 null */
+function getTodayCheckin(placeId) {
+  init()
+  const today = dayKey(new Date())
+  return state.checkins.find(function (c) {
+    return c.venueId === placeId && dayKey(c.at) === today
+  }) || null
+}
+
+/* 补充打卡：更新当日已有记录的留言/照片（不新增记录，统计口径不变）
+ * 本地立即生效；已同步记录（云端 _id）异步 update，未同步记录（c- 开头）同步更新重试队列 */
+function updateCheckin(id, note, photos) {
+  init()
+  const rec = state.checkins.find(function (c) { return c.id === id })
+  if (!rec) return Promise.resolve()
+  rec.note = note || ''
+  rec.photos = photos || []
+  persist()
+  notify()
+  if (String(rec.id).indexOf('c-') === 0) {
+    /* 未同步：更新待同步队列里的对应文档 */
+    pending.checkins.forEach(function (p) {
+      if (p.at === rec.at && p.venueId === rec.venueId) {
+        p.note = rec.note
+        p.photos = rec.photos
+      }
+    })
+    persistPending()
+    return Promise.resolve()
+  }
+  return cloud._updateCheckinDoc(rec.id, { note: rec.note, photos: rec.photos })
+    .catch(function (e) {
+      console.warn('[store] 打卡更新上云失败', (e && e.errCode) || (e && e.message))
+    })
+}
+
 function isLiked(feedId) {
   init()
   return !!state.likes[feedId]
@@ -365,6 +401,8 @@ module.exports = {
   checkedToday: checkedToday,
   calcStats: calcStats,
   addCheckin: addCheckin,
+  updateCheckin: updateCheckin,
+  getTodayCheckin: getTodayCheckin,
   deleteCheckin: deleteCheckin,
   isLiked: isLiked,
   toggleLike: toggleLike,

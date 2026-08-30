@@ -91,9 +91,9 @@
       <image class="action-icon" src="{{icons.send}}" mode="aspectFit" />
       <text class="action-label">导航</text>
     </view>
-    <view wx:if="{{checked}}" class="action-item action-checkin action-done">
+    <view wx:if="{{checked}}" class="action-item action-checkin action-done" hover-class="action-hover" bindtap="openEditCheckin">
       <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
-      <text class="action-label">已签到</text>
+      <text class="action-label">已签到·补充</text>
     </view>
     <view wx:else class="action-item action-checkin" hover-class="action-checkin-hover" bindtap="openCheckin">
       <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
@@ -110,7 +110,7 @@
     <view class="modal anim-modal-in" catchtap="noop">
       <view class="modal-title-row">
         <image class="modal-title-icon" src="{{icons.checkCircle}}" mode="aspectFit" />
-        <text class="modal-title">签到打卡</text>
+        <text class="modal-title">{{checkinMode === 'edit' ? '补充今日打卡' : '签到打卡'}}</text>
       </view>
 
       <view class="field">
@@ -145,7 +145,7 @@
       </view>
 
       <view class="modal-btn {{checkinSubmitting ? 'modal-btn-loading' : ''}}" bindtap="confirmCheckin">
-        {{checkinSubmitting ? '签到中...' : '确认签到'}}
+        {{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '签到中...') : (checkinMode === 'edit' ? '更新打卡' : '确认签到')}}
       </view>
       <view class="modal-cancel" bindtap="closeCheckin">取消</view>
     </view>
