@@ -6,6 +6,7 @@
     "pages/profile/profile",
     "pages/venue-detail/venue-detail",
     "pages/shop-detail/shop-detail",
+    "pages/place-checkins/place-checkins",
     "pages/admin/admin"
   ],
   "window": {

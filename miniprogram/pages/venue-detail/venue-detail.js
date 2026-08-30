@@ -69,11 +69,15 @@ Page({
       })
       wx.setNavigationBarTitle({ title: venue.name })
       this.refresh()
+      this.loadFeed()
     })
   },
 
   onShow() {
-    if (this.data.venue) this.refresh()
+    if (this.data.venue) {
+      this.refresh()
+      this.loadFeed()
+    }
     this.startPresence()
   },
 
@@ -126,24 +130,28 @@ Page({
     })
   },
 
-  /* 打卡动态 = 用户真实签到(带留言) + 场地打卡动态，最近3条（用户签到带真实身份） */
+  /* 签到态 + 打卡动态（云端真实流：该场地所有带留言的打卡，最近3条） */
   refresh() {
     const venue = this.data.venue
-    const u = store.getUser()
-    const mine = store
-      .getState()
-      .checkins.filter((c) => c.venueId === venue.id && c.note)
-      .map((c) => ({
-        user: u.nickname || '我',
-        avatar: u.avatarFileID ? '' : (u.nickname || '我').slice(0, 1),
-        avatarFile: u.avatarFileID,
-        color: '#FF5A36',
-        time: fmtAgo(c.at),
-        text: c.note,
-      }))
-    this.setData({
-      checked: store.checkedToday(venue.id),
-      feed: [...mine, ...venue.feed].slice(0, 3),
+    this.setData({ checked: store.checkedToday(venue.id) })
+  },
+
+  loadFeed() {
+    const venue = this.data.venue
+    if (!venue) return
+    cloud.getPlaceCheckins(venue.id, { noteOnly: true, limit: 3 }).then((feed) => {
+      this.setData({
+        feed: feed.map((f) => ({
+          id: f.id,
+          user: f.user,
+          avatarFile: f.avatarFile,
+          avatarText: f.avatarText,
+          color: '#FF5A36',
+          time: fmtAgo(f.at),
+          note: f.note,
+          photos: f.photos,
+        })),
+      })
     })
   },
 
@@ -201,11 +209,43 @@ Page({
   confirmCheckin() {
     if (this.data.checkinSubmitting) return
     const v = this.data.venue
-    /* 本地立即生效，云端写入由 store 异步处理（失败自动排队重试） */
-    store.addCheckin(v.id, v.name, this.data.note.trim())
-    this.setData({ checkinOpen: false, checkinSubmitting: false })
-    wx.showToast({ title: '签到成功', icon: 'success' })
-    this.refresh()
+    const note = this.data.note.trim()
+    const photos = this.data.checkinPhotos
+    this.setData({ checkinSubmitting: true })
+    const finish = (fileIDs) => {
+      /* 本地立即生效，云端写入由 store 异步处理（失败自动排队重试） */
+      store.addCheckin(v.id, v.name, note, fileIDs, 'venue')
+      this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
+      wx.showToast({ title: '签到成功', icon: 'success' })
+      this.refresh()
+      this.loadFeed()
+    }
+    if (photos.length) {
+      /* 签到照片先传云存储拿 fileID，再落库 */
+      Promise.all(photos.map((p) => cloud.uploadFileTo('checkin-photos', p)))
+        .then(finish)
+        .catch((e) => {
+          this.setData({ checkinSubmitting: false })
+          wx.showToast({ title: '照片上传失败，请重试', icon: 'none' })
+          console.warn('[venue-detail] 签到照片上传失败', (e && e.errCode) || (e && e.message))
+        })
+    } else {
+      finish([])
+    }
+  },
+
+  /* 查看该场地全部打卡 */
+  showAllCheckins() {
+    const v = this.data.venue
+    wx.navigateTo({ url: '/pages/place-checkins/place-checkins?id=' + v.id + '&kind=venue' })
+  },
+
+  /* 打卡照片预览 */
+  previewFeedPhotos(e) {
+    wx.previewImage({
+      urls: e.currentTarget.dataset.urls,
+      current: e.currentTarget.dataset.url,
+    })
   },
 
   /* ===== 报错弹窗 ===== */

@@ -86,22 +86,29 @@ function getFeeds() {
 }
 
 /* ===== 签到（用户作用域：默认权限下自动只读写本人数据） ===== */
+/* 单条签到记录 → 展示结构（avatar 兼容 fileID 与文字头像两种存储） */
+function mapCheckin(d) {
+  const avatar = d.avatar || ''
+  return {
+    id: d._id,
+    kind: d.kind || 'venue',
+    venueId: d.venueId,
+    venueName: d.venueName,
+    note: d.note || '',
+    photos: d.photos || [],
+    at: d.at,
+    user: d.userName || '滑手',
+    avatarFile: avatar.indexOf('cloud://') === 0 ? avatar : '',
+    avatarText: avatar.indexOf('cloud://') === 0 ? (d.userName || '滑').slice(0, 1) : (avatar || (d.userName || '滑').slice(0, 1)),
+  }
+}
+
 function getMyCheckins() {
   return db().collection('checkins')
     .orderBy('at', 'desc')
     .limit(100)
     .get()
-    .then((r) => (r.data || []).map(function (d) {
-      return {
-        id: d._id,
-        venueId: d.venueId,
-        venueName: d.venueName,
-        note: d.note || '',
-        at: d.at,
-        userName: d.userName || '',
-        avatar: d.avatar || '',
-      }
-    }))
+    .then((r) => (r.data || []).map(mapCheckin))
 }
 
 function pushCheckins(docs) {
@@ -111,6 +118,30 @@ function pushCheckins(docs) {
 
 function addCheckinDoc(doc) {
   return db().collection('checkins').add({ data: doc })
+}
+
+/* 删除本人签到（"仅创建者可写"权限下只能删自己的） */
+function removeCheckinDoc(id) {
+  return db().collection('checkins').doc(id).remove()
+}
+
+/* 某地点（场地/店铺）的打卡流（所有人，按时间倒序）
+ * opts: { noteOnly: 只要有留言的（打卡动态区用）, skip: 分页偏移, limit: 条数 }
+ * 需 checkins"所有用户可读"权限；无权限时仅返回自己的，行为仍正确 */
+function getPlaceCheckins(venueId, opts) {
+  opts = opts || {}
+  const cmd = db().command
+  const where = opts.noteOnly
+    ? { venueId: venueId, note: cmd.neq('') }
+    : { venueId: venueId }
+  let q = db().collection('checkins').where(where)
+  if (opts.skip) q = q.skip(opts.skip)
+  return q.orderBy('at', 'desc').limit(opts.limit || 20).get()
+    .then((r) => (r.data || []).map(mapCheckin))
+    .catch((e) => {
+      console.warn('[cloud] 打卡流读取失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
 }
 
 /* ===== 点赞（用户作用域） ===== */
@@ -153,14 +184,17 @@ function saveCity(city) {
   })
 }
 
-/* ===== 排行榜（聚合所有人签到数，需 checkins"所有用户可读"权限） ===== */
-function getLeaderboard() {
+/* ===== 排行榜（聚合所有人场地签到数，需 checkins"所有用户可读"权限）
+ * limit 参数化（首页榜 5 / 完整榜 20）；店铺打卡不计入（kind != shop，旧数据无 kind 字段视为场地） */
+function getLeaderboard(limit) {
   const $ = agg()
+  const cmd = db().command
   return ensureOpenid().then(function () {
     return db().collection('checkins').aggregate()
+      .match({ kind: cmd.neq('shop') })
       .group({ _id: '$_openid', count: $.sum(1), name: $.last('$userName') })
       .sort({ count: -1 })
-      .limit(5)
+      .limit(limit || 5)
       .end()
   }).then(function (r) {
     const rows = (r.list || []).filter(function (x) { return !!x._id })
@@ -334,6 +368,8 @@ module.exports = {
   getMyCheckins: getMyCheckins,
   pushCheckins: pushCheckins,
   addCheckinDoc: addCheckinDoc,
+  removeCheckinDoc: removeCheckinDoc,
+  getPlaceCheckins: getPlaceCheckins,
   getMyLikes: getMyLikes,
   setLike: setLike,
   getMyProfile: getMyProfile,

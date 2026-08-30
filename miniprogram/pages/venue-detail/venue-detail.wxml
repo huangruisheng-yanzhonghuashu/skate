@@ -47,28 +47,42 @@
     </view>
   </view>
 
-  <!-- 打卡动态 -->
+  <!-- 打卡动态（云端真实流：所有人带留言的打卡，最近3条） -->
   <view class="checkins">
     <view class="checkins-head">
-      <text class="checkins-title">打卡动态 (最近3条)</text>
+      <text class="checkins-title">打卡动态</text>
       <view class="checkins-more" bindtap="showAllCheckins">
         <text>查看全部打卡</text>
         <image class="checkins-more-icon" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
-    <view class="checkin-list">
-      <view wx:for="{{feed}}" wx:key="index" class="checkin-card">
+    <view class="checkin-list" wx:if="{{feed.length}}">
+      <view wx:for="{{feed}}" wx:key="id" class="checkin-card">
         <view class="checkin-head">
           <image wx:if="{{item.avatarFile}}" class="checkin-avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
-        <view wx:else class="checkin-avatar" style="background: {{item.color}}">{{item.avatar}}</view>
+          <view wx:else class="checkin-avatar" style="background: {{item.color}}">{{item.avatarText}}</view>
           <view class="checkin-user">
             <text class="checkin-name">{{item.user}}</text>
             <text class="checkin-time">{{item.time}}</text>
           </view>
         </view>
-        <text class="checkin-text">{{item.text}}</text>
+        <text class="checkin-text">{{item.note}}</text>
+        <view wx:if="{{item.photos.length}}" class="checkin-photos">
+          <image
+            wx:for="{{item.photos}}"
+            wx:for-item="p"
+            wx:key="*this"
+            class="checkin-photo"
+            src="{{p}}"
+            mode="aspectFill"
+            data-urls="{{item.photos}}"
+            data-url="{{p}}"
+            catchtap="previewFeedPhotos"
+          />
+        </view>
       </view>
     </view>
+    <view wx:else class="checkin-empty">还没有打卡，点下方「签到」抢首条打卡</view>
   </view>
 
   <!-- 底部固定操作栏 -->

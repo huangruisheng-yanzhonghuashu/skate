@@ -83,13 +83,15 @@ function syncFromCloud() {
     })
 }
 
-/* 本地 → 云端一次性迁移（仅签到与点赞） */
+/* 本地 → 云端一次性迁移（仅签到与点赞；旧本地记录补 photos/kind 默认值） */
 function migrateLocal() {
   const docs = state.checkins.map(function (c) {
     return {
       venueId: c.venueId,
       venueName: c.venueName,
       note: c.note || '',
+      photos: c.photos || [],
+      kind: c.kind || 'venue',
       at: c.at,
       userName: state.user.nickname || '滑手',
       avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
@@ -244,37 +246,65 @@ function calcStats() {
   return { total: state.checkins.length, streak: streak, weekDays: weekDays, monthDays: monthDays }
 }
 
-function addCheckin(venueId, venueName, note) {
+/* 签到（photos: 云存储 fileID 数组；kind: 'venue'|'shop'）
+ * 本地立即生效；云端写入成功后把云端 _id 回写到本地记录（供删除用），失败进重试队列 */
+function addCheckin(venueId, venueName, note, photos, kind) {
   init()
   const at = new Date().toISOString()
+  const localId = 'c-' + Date.now()
   state.checkins.unshift({
-    id: 'c-' + Date.now(),
+    id: localId,
     venueId: venueId,
     venueName: venueName,
     note: note || '',
+    photos: photos || [],
+    kind: kind || 'venue',
     at: at,
   })
   persist()
   notify()
-  /* 云端异步写入，失败排队重试；签到记录带真实用户身份（排行榜/打卡动态展示用） */
-  cloud.addCheckinDoc({
+  const doc = {
     venueId: venueId,
     venueName: venueName,
     note: note || '',
+    photos: photos || [],
+    kind: kind || 'venue',
     at: at,
     userName: state.user.nickname || '滑手',
     avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
+  }
+  cloud.addCheckinDoc(doc).then(function (r) {
+    if (r && r._id) {
+      const rec = state.checkins.find(function (c) { return c.id === localId })
+      if (rec) {
+        rec.id = r._id
+        persist()
+      }
+    }
   }).catch(function (e) {
-    pending.checkins.push({
-      venueId: venueId,
-      venueName: venueName,
-      note: note || '',
-      at: at,
-      userName: state.user.nickname || '滑手',
-      avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
-    })
+    pending.checkins.push(doc)
     persistPending()
     console.warn('[store] 签到上云失败，已排队重试', (e && e.errCode) || (e && e.message))
+  })
+}
+
+/* 删除本人签到：本地立即移除 + 清理待同步队列 + 云端删除
+ * 云端删除仅对已同步的记录有效（本地临时 id 开头的记录尚未上云，无需云删） */
+function deleteCheckin(id) {
+  init()
+  const rec = state.checkins.find(function (c) { return c.id === id })
+  state.checkins = state.checkins.filter(function (c) { return c.id !== id })
+  persist()
+  notify()
+  if (!rec) return Promise.resolve()
+  /* 待同步队列里按 at+venueId 匹配移除（pending 记录没有本地 id 关联） */
+  pending.checkins = pending.checkins.filter(function (p) {
+    return !(p.at === rec.at && p.venueId === rec.venueId)
+  })
+  persistPending()
+  if (String(rec.id).indexOf('c-') === 0) return Promise.resolve()
+  return cloud.removeCheckinDoc(rec.id).catch(function (e) {
+    console.warn('[store] 签到云端删除失败', (e && e.errCode) || (e && e.message))
   })
 }
 
@@ -335,6 +365,7 @@ module.exports = {
   checkedToday: checkedToday,
   calcStats: calcStats,
   addCheckin: addCheckin,
+  deleteCheckin: deleteCheckin,
   isLiked: isLiked,
   toggleLike: toggleLike,
   setCity: setCity,
