@@ -21,11 +21,17 @@
       <view class="seg-item {{entity === 'shop' ? 'seg-active' : ''}}" data-entity="shop" bindtap="switchEntity">滑板店铺</view>
     </view>
 
-    <view class="meta-line">当前城市：{{city}} · 共 {{entity === 'venue' ? venues.length : shops.length}} 条</view>
+    <!-- 城市筛选 + 计数 -->
+    <view class="meta-line">
+      <picker range="{{cityOptions}}" bindchange="onCityFilter">
+        <view class="city-filter">城市：{{cityFilter}} ▾</view>
+      </picker>
+      <text class="meta-count">共 {{entity === 'venue' ? viewVenues.length : viewShops.length}} 条</text>
+    </view>
 
     <!-- 列表 -->
     <block wx:if="{{entity === 'venue'}}">
-      <view wx:for="{{venues}}" wx:key="id" class="row">
+      <view wx:for="{{viewVenues}}" wx:key="id" class="row">
         <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
         <view wx:else class="row-img row-img-empty">无图</view>
         <view class="row-info">
@@ -38,11 +44,11 @@
           <view class="op op-del" data-kind="venue" data-id="{{item.id}}" bindtap="removeItem">删除</view>
         </view>
       </view>
-      <view wx:if="{{!venues.length}}" class="state"><text>暂无场地，点下方按钮新增</text></view>
+      <view wx:if="{{!viewVenues.length}}" class="state"><text>{{cityFilter === '全部' ? '暂无场地，点下方按钮新增' : cityFilter + '暂无场地'}}</text></view>
     </block>
 
     <block wx:else>
-      <view wx:for="{{shops}}" wx:key="id" class="row">
+      <view wx:for="{{viewShops}}" wx:key="id" class="row">
         <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
         <view wx:else class="row-img row-img-empty">无图</view>
         <view class="row-info">
@@ -55,7 +61,7 @@
           <view class="op op-del" data-kind="shop" data-id="{{item.id}}" bindtap="removeItem">删除</view>
         </view>
       </view>
-      <view wx:if="{{!shops.length}}" class="state"><text>暂无店铺，点下方按钮新增</text></view>
+      <view wx:if="{{!viewShops.length}}" class="state"><text>{{cityFilter === '全部' ? '暂无店铺，点下方按钮新增' : cityFilter + '暂无店铺'}}</text></view>
     </block>
 
     <!-- 新增按钮 -->

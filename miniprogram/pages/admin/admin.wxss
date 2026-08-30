@@ -69,9 +69,26 @@
 }
 
 .meta-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 24rpx;
   color: #8C8C8C;
   margin-bottom: 16rpx;
+}
+
+.city-filter {
+  display: inline-block;
+  padding: 10rpx 24rpx;
+  background: #FFFFFF;
+  border-radius: 10rpx;
+  color: #1A1A1E;
+  font-size: 26rpx;
+}
+
+.meta-count {
+  font-size: 24rpx;
+  color: #8C8C8C;
 }
 
 /* ===== 列表行 ===== */

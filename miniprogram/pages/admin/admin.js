@@ -25,8 +25,12 @@ Page({
     myOpenid: '',
     entity: 'venue',
     city: '',
+    cityFilter: '全部',
+    cityOptions: ['全部'],
     venues: [],
     shops: [],
+    viewVenues: [],
+    viewShops: [],
     /* 表单 */
     formOpen: false,
     saving: false,
@@ -63,12 +67,42 @@ Page({
 
   reload() {
     Promise.all([cloud.getVenues(true), cloud.getShops(true)]).then((rs) => {
-      this.setData({ venues: rs[0], shops: rs[1] })
+      /* 城市选项：从场地+店铺数据自动聚合（有序去重），前置"全部" */
+      const seen = {}
+      const cities = []
+      rs[0].concat(rs[1]).forEach((d) => {
+        if (d.city && !seen[d.city]) {
+          seen[d.city] = true
+          cities.push(d.city)
+        }
+      })
+      this.setData({
+        venues: rs[0],
+        shops: rs[1],
+        cityOptions: ['全部'].concat(cities),
+      })
+      this.applyFilter()
     })
+  },
+
+  /* 城市筛选变化后重算视图列表（前端过滤，不重复拉云端） */
+  applyFilter() {
+    const c = this.data.cityFilter
+    const byCity = (arr) => (c === '全部' ? arr : arr.filter((x) => x.city === c))
+    this.setData({
+      viewVenues: byCity(this.data.venues),
+      viewShops: byCity(this.data.shops),
+    })
+  },
+
+  onCityFilter(e) {
+    this.setData({ cityFilter: this.data.cityOptions[Number(e.detail.value)] })
+    this.applyFilter()
   },
 
   switchEntity(e) {
     this.setData({ entity: e.currentTarget.dataset.entity })
+    this.applyFilter()
   },
 
   /* ===== 表单 ===== */
