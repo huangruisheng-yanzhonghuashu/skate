@@ -44,15 +44,19 @@
     </view>
   </view>
 
-  <!-- 实时状态 -->
+  <!-- 实时状态（在线口径：30 分钟窗口内有过在场心跳） -->
   <view class="live">
     <view class="live-row">
       <view class="dot-ping"></view>
-      <text class="live-text">此刻 {{online}} 位滑手在此</text>
+      <text class="live-text">{{online > 0 ? '此刻 ' + online + ' 位滑手在此' : '近 30 分钟暂无滑手在场'}}</text>
     </view>
-    <view class="live-avatars">
-      <view wx:for="{{liveAvatars}}" wx:key="text" class="live-avatar" style="background: {{item.color}}">{{item.text}}</view>
-      <view class="live-avatar live-more">+{{moreCount}}</view>
+    <!-- 在场头像：真实心跳用户；无人时整块隐藏 -->
+    <view class="live-avatars" wx:if="{{online > 0 && presenceUsers.length}}">
+      <block wx:for="{{presenceUsers}}" wx:key="index">
+        <image wx:if="{{item.avatarFile}}" class="live-avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
+        <view wx:else class="live-avatar" style="background: {{item.color}}">{{item.text}}</view>
+      </block>
+      <view wx:if="{{moreCount > 0}}" class="live-avatar live-more">+{{moreCount}}</view>
     </view>
   </view>
 

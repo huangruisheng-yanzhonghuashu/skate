@@ -85,10 +85,11 @@ module.exports = {
     <view class="fab" bindtap="openCreate">＋ 新增{{entity === 'venue' ? '场地' : '店铺'}}</view>
   </block>
 
-  <!-- 编辑表单弹窗 -->
+  <!-- 编辑表单弹窗（sheet 固定 80vh；字段区+保存按钮整体滚动，按钮在内容末尾） -->
   <view wx:if="{{formOpen}}" class="mask" bindtap="closeForm">
-    <scroll-view class="sheet" scroll-y catchtap="noop">
+    <view class="sheet" catchtap="noop">
       <view class="sheet-title">{{form.id ? '编辑' : '新增'}}{{form.kind === 'venue' ? '场地' : '店铺'}}</view>
+      <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
 
       <view class="f-row">
         <text class="f-label">名称</text>
@@ -185,5 +186,6 @@ module.exports = {
 
       <button class="f-save {{saving ? 'f-saving' : ''}}" bindtap="saveForm">{{saving ? '保存中...' : '保存'}}</button>
     </scroll-view>
+    </view>
   </view>
 </view>

@@ -468,16 +468,40 @@ function distanceM(lat1, lng1, lat2, lng2) {
 
 /* 心跳上报（详情页前台 + 定位在场地 PRESENCE_RADIUS_M 内时调用）
  * presence 集合一人一场地一条记录，upsert 刷新 updatedAt；
+ * 冗余携带用户身份（昵称/头像），供"在场头像"展示（改资料后下次心跳自动同步）
  * 在线数 = 该场地 updatedAt 在窗口内的记录数（天然按人去重） */
-function heartbeat(venueId) {
+function heartbeat(venueId, user) {
   const col = db().collection('presence')
   const now = new Date().toISOString()
+  const identity = {
+    userName: (user && user.nickname) || '滑手',
+    avatarFileID: (user && user.avatarFileID) || '',
+  }
   return col.where({ venueId: venueId }).limit(1).get()
     .then(function (r) {
       if (r.data && r.data[0]) {
-        return col.doc(r.data[0]._id).update({ data: { updatedAt: now } })
+        return col.doc(r.data[0]._id).update({ data: { updatedAt: now, userName: identity.userName, avatarFileID: identity.avatarFileID } })
       }
-      return col.add({ data: { venueId: venueId, updatedAt: now } })
+      return col.add({ data: { venueId: venueId, updatedAt: now, userName: identity.userName, avatarFileID: identity.avatarFileID } })
+    })
+}
+
+/* 某场地当前在场用户（窗口内，按心跳时间倒序，最多 8 个）
+ * 返回 [{ userName, avatarFileID }]；旧记录无身份字段时 userName 为空串 */
+function getPresenceUsers(venueId) {
+  const cmd = db().command
+  const since = new Date(Date.now() - ONLINE_WINDOW_MIN * 60 * 1000).toISOString()
+  return db().collection('presence')
+    .where({ venueId: venueId, updatedAt: cmd.gte(since) })
+    .orderBy('updatedAt', 'desc')
+    .limit(8)
+    .get()
+    .then((r) => (r.data || []).map(function (d) {
+      return { userName: d.userName || '', avatarFileID: d.avatarFileID || '' }
+    }))
+    .catch(function (e) {
+      console.warn('[cloud] 在场用户读取失败', (e && e.errCode) || (e && e.message))
+      return []
     })
 }
 
@@ -548,6 +572,7 @@ module.exports = {
   saveProfile: saveProfile,
   distanceM: distanceM,
   heartbeat: heartbeat,
+  getPresenceUsers: getPresenceUsers,
   getOnlineCount: getOnlineCount,
   getOnlineMap: getOnlineMap,
   getShops: getShops,

@@ -137,6 +137,14 @@
   margin-top: 24rpx;
 }
 
+.live-avatar-img {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  border: 3rpx solid #FFFFFF;
+  box-sizing: border-box;
+}
+
 .live-avatar {
   width: 72rpx;
   height: 72rpx;

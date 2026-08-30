@@ -4,12 +4,8 @@ const { HEARTBEAT_INTERVAL_MS, PRESENCE_RADIUS_M } = require('../../utils/config
 const { fmtAgo } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
-const LIVE_AVATARS = [
-  { text: 'AK', color: '#FF5A36' },
-  { text: 'LY', color: '#2A8CFF' },
-  { text: 'MC', color: '#FFB800' },
-  { text: 'JD', color: '#00D4AA' },
-]
+/* 在场头像最多展示 4 个（真实心跳数据，超出折叠为 +N） */
+const MAX_LIVE_AVATARS = 4
 
 const REPORT_TYPES = ['地址错误', '已关闭', '设施损坏', '信息变更', '其他']
 
@@ -20,7 +16,7 @@ Page({
     tags: [],
     current: 0,
     online: 0,
-    liveAvatars: LIVE_AVATARS,
+    presenceUsers: [],
     moreCount: 0,
     feed: [],
     checked: false,
@@ -68,6 +64,7 @@ Page({
         tags: venue.tags.map((t) => ({ label: t.label, src: ICON[t.icon] || ICON.tagMixed })),
         online: 0,
         moreCount: 0,
+        presenceUsers: [],
       })
       wx.setNavigationBarTitle({ title: venue.name })
       this.refresh()
@@ -110,7 +107,8 @@ Page({
         const dist = cloud.distanceM(res.latitude, res.longitude, v.latitude, v.longitude)
         /* 只统计真实在场的用户：距离超阈值不上报 */
         if (dist <= PRESENCE_RADIUS_M) {
-          cloud.heartbeat(v.id).catch((e) => {
+          const u = store.getUser()
+          cloud.heartbeat(v.id, { nickname: u.nickname, avatarFileID: u.avatarFileID }).catch((e) => {
             console.warn('[venue-detail] 心跳上报失败', (e && e.errCode) || (e && e.message))
           })
         }
@@ -123,12 +121,22 @@ Page({
     })
   },
 
-  /* 当前场地真实在线人数（30 分钟窗口内有心跳的独立用户） */
+  /* 当前场地真实在线人数 + 在场用户头像（30 分钟窗口内有心跳的独立用户） */
   refreshOnline() {
     const v = this.data.venue
     if (!v) return
     cloud.getOnlineCount(v.id).then((n) => {
-      this.setData({ online: n, moreCount: Math.max(0, n - LIVE_AVATARS.length) })
+      this.setData({ online: n, moreCount: Math.max(0, n - MAX_LIVE_AVATARS) })
+    })
+    cloud.getPresenceUsers(v.id).then((users) => {
+      /* 文字头像色板轮换；fileID 头像直接用 image 渲染 */
+      const palette = ['#FF5A36', '#2A8CFF', '#FFB800', '#00D4AA']
+      const avatars = users.slice(0, MAX_LIVE_AVATARS).map((u, i) => ({
+        text: (u.userName || '滑').slice(0, 1),
+        avatarFile: u.avatarFileID || '',
+        color: palette[i % palette.length],
+      }))
+      this.setData({ presenceUsers: avatars })
     })
   },
 

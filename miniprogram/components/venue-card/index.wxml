@@ -36,7 +36,6 @@
     <view class="tags">
       <view
         wx:for="{{venue.tags}}"
-        wx:if="{{index < 3}}"
         wx:key="label"
         class="tag"
       >{{item.label}}</view>

@@ -179,7 +179,7 @@
   border-radius: 48rpx;
 }
 
-/* ===== 表单弹窗 ===== */
+/* ===== 表单弹窗（固定 80vh：标题固定顶部，字段+保存整体滚动） ===== */
 .mask {
   position: fixed;
   inset: 0;
@@ -193,11 +193,28 @@
 
 .sheet {
   width: 100%;
-  max-height: 80vh;
+  height: 80vh; /* 固定高度（max-height 会让 flex 子项拒绝收缩，滚动失效） */
   background: #FFFFFF;
   border-radius: 16rpx;
-  padding: 40rpx;
+  padding: 40rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* 滚动区：flex 子项获得确定高度，scroll-y 生效；min-height:0 是关键 */
+.sheet-body {
+  flex: 1;
+  min-height: 0;
+}
+
+/* 滚动条隐藏（enhanced/show-scrollbar 在部分机型失效，CSS 双保险） */
+.sheet-body::-webkit-scrollbar,
+.sheet-body ::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .sheet-title {
@@ -346,7 +363,7 @@
   opacity: 0.5;
 }
 
-/* 保存按钮 */
+/* 保存按钮（滚动内容末尾，热门之后） */
 .f-save {
   margin-top: 40rpx;
   background: #FF5A36;
