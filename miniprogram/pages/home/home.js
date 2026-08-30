@@ -1,12 +1,13 @@
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
+const { QQ_MAP_KEY } = require('../../utils/config.js')
 const { ICON } = require('../../utils/icons.js')
 
 const FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
 
 Page({
   data: {
-    city: '上海',
+    city: '嘉兴',
     cityOpen: false,
     cities: [],
     filters: FILTERS,
@@ -35,11 +36,14 @@ Page({
     this._onlineInit = false
     this._venues = []
     this._markerMap = []
+    this._located = false
     this.loadVenues()
     /* 城市列表来自场地集合聚合 */
     cloud.getCities().then((cities) => {
       this.setData({ cities })
     })
+    /* 手机定位：设置地图中心 + 自动匹配城市 */
+    this.locate()
   },
 
   onShow() {
@@ -59,11 +63,70 @@ Page({
         venues.forEach((v) => { this._online[v.id] = v.online })
         this._onlineInit = true
       }
+      /* 定位未成功时，地图中心回退到当前城市第一个场地（数据驱动） */
+      if (!this._located && venues.length) {
+        this.setData({ latitude: venues[0].latitude, longitude: venues[0].longitude })
+      }
       if (!this.data.selectedVenueId && venues.length) {
         this.setData({ selectedVenueId: venues[0].id })
       }
       this.refresh()
       this.buildMarkers()
+    })
+  },
+
+  /* ===== 手机定位 ===== */
+  /* 获取经纬度：成功则移动地图中心并尝试逆地理匹配城市 */
+  locate() {
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        this._located = true
+        this.setData({ latitude: res.latitude, longitude: res.longitude, scale: 14 })
+        this.autoMatchCity(res.latitude, res.longitude)
+      },
+      fail: (e) => {
+        /* 用户拒绝授权或定位失败：保持默认中心（当前城市第一个场地） */
+        const msg = (e && e.errMsg) || ''
+        console.warn('[home] 定位失败，使用默认中心', msg)
+        if (msg.indexOf('auth') >= 0 || msg.indexOf('deny') >= 0) {
+          wx.showModal({
+            title: '需要位置权限',
+            content: '用于展示附近滑板场地与当前位置',
+            confirmText: '去设置',
+            success: (r) => {
+              if (r.confirm) wx.openSetting()
+            },
+          })
+        }
+      },
+    })
+  },
+
+  /* 逆地理编码：经纬度 → 城市名（需腾讯位置服务 Key，未配置时跳过） */
+  autoMatchCity(latitude, longitude) {
+    if (!QQ_MAP_KEY) return
+    wx.request({
+      url: 'https://apis.map.qq.com/ws/geocoder/v1/',
+      data: {
+        location: latitude + ',' + longitude,
+        key: QQ_MAP_KEY,
+        get_poi: 0,
+      },
+      success: (r) => {
+        const ad = r.data && r.data.result && r.data.result.ad_info
+        const city = ad && ad.city
+        if (!city) return
+        const name = city.replace(/市$/, '')
+        if (name && name !== store.getCity()) {
+          store.setCity(name)
+          this.refresh()
+          wx.showToast({ title: '已定位到' + name, icon: 'none' })
+        }
+      },
+      fail: (e) => {
+        console.warn('[home] 逆地理编码失败', (e && e.errMsg) || e)
+      },
     })
   },
 
@@ -139,11 +202,10 @@ Page({
     }
   },
 
-  /* 回到当前定位 */
-  onLocate() {
-    if (!this._mapCtx) this._mapCtx = wx.createMapContext('map', this)
-    this._mapCtx.moveToLocation()
-    wx.showToast({ title: '已回到当前位置', icon: 'none' })
+  /* 定位按钮：重新定位 + 城市匹配（onLoad 未授权时可从这里补授权） */
+  onTapLocate() {
+    this.locate()
+    wx.showToast({ title: '正在定位...', icon: 'none' })
   },
 
   refresh() {

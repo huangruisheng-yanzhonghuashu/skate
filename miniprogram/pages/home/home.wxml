@@ -55,8 +55,8 @@
     show-location
     bindmarkertap="onMarkerTap"
   >
-    <!-- 回到当前定位 -->
-    <cover-view class="locate-btn" bindtap="onLocate">
+    <!-- 定位按钮：回到当前位置并匹配城市 -->
+    <cover-view class="locate-btn" bindtap="onTapLocate">
       <cover-image class="locate-icon" src="{{icons.locate}}" />
     </cover-view>
   </map>
