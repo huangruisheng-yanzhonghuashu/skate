@@ -43,7 +43,7 @@ function init() {
     }
   } catch (e) { /* ignore */ }
   if (!state) {
-    state = { checkins: [], likes: {}, city: '上海' }
+    state = { checkins: [], likes: {}, city: '嘉兴' }
     persist()
   }
   /* 2. 恢复上次未同步成功的队列 */
