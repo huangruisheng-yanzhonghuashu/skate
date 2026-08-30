@@ -1,0 +1,41 @@
+<view class="card" style="animation-delay: {{delay}}ms" bindtap="go">
+  <!-- 角标：已签到（右上，绿底对勾）优先，其次热门（图标右侧） -->
+  <view wx:if="{{checked}}" class="badge-checked">
+    <image class="badge-check" src="{{icons.checkGreen}}" mode="aspectFit" />
+    <text>已签到</text>
+  </view>
+  <view wx:elif="{{venue.hot}}" class="badge-hot">热门</view>
+
+  <view class="icon">
+    <image class="icon-img" src="{{icons.venue}}" mode="aspectFit" />
+  </view>
+
+  <view class="body">
+    <view class="name-row {{checked ? 'name-row-checked' : ''}}">
+      <view class="name {{venue.hot && !checked ? 'name-hot' : ''}}">{{venue.name}}</view>
+      <view class="rating">
+        <image class="rating-star" src="{{icons.star}}" mode="aspectFit" />
+        <text class="rating-num">{{venue.rating}}</text>
+      </view>
+    </view>
+
+    <view class="addr">
+      <image class="addr-pin" src="{{icons.pin}}" mode="aspectFit" />
+      <text class="addr-text">{{venue.shortAddr}} · 距你 {{venue.distance}}</text>
+    </view>
+
+    <view class="tags">
+      <view
+        wx:for="{{venue.tags}}"
+        wx:if="{{index < 3}}"
+        wx:key="label"
+        class="tag"
+      >{{item.label}}</view>
+    </view>
+
+    <view class="live">
+      <view class="live-dot"></view>
+      <text>此刻 {{online}} 人</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <style id="theme-vars">
+/* Skate Spot UI — Brand tokens */
+
+:root {
+  /* Primary brand: neon orange-red */
+  --skate-primary-50: #FFF2EE;
+  --skate-primary-100: #FFE0D6;
+  --skate-primary-200: #FFC1B0;
+  --skate-primary-300: #FF9A7E;
+  --skate-primary-400: #FF5A36;
+  --skate-primary-500: #FF4A24;
+  --skate-primary-600: #E63A16;
+
+  /* Neutral: street black + concrete grey scale */
+  --skate-neutral-0: #FFFFFF;
+  --skate-neutral-50: #F5F5F5;
+  --skate-neutral-100: #E8E8E8;
+  --skate-neutral-200: #D9D9D9;
+  --skate-neutral-400: #8C8C8C;
+  --skate-neutral-600: #4D4D4D;
+  --skate-neutral-900: #1A1A1E;
+
+  /* State colors */
+  --skate-state-success: #00D4AA;
+  --skate-state-warning: #FFB800;
+  --skate-state-error: #FF3B30;
+  --skate-state-info: #2A8CFF;
+
+  /* Semantic aliases */
+  --skate-background: var(--skate-neutral-50);
+  --skate-foreground: var(--skate-neutral-900);
+  --skate-card: var(--skate-neutral-0);
+  --skate-card-foreground: var(--skate-neutral-900);
+  --skate-popover: var(--skate-neutral-0);
+  --skate-popover-foreground: var(--skate-neutral-900);
+  --skate-primary: var(--skate-primary-400);
+  --skate-primary-foreground: var(--skate-neutral-0);
+  --skate-muted: var(--skate-neutral-100);
+  --skate-muted-foreground: var(--skate-neutral-400);
+  --skate-border: var(--skate-neutral-100);
+  --skate-input: var(--skate-neutral-100);
+  --skate-ring: var(--skate-primary-400);
+
+  /* Radius */
+  --skate-radius-sm: 4px;
+  --skate-radius-md: 8px;
+  --skate-radius-lg: 12px;
+  --skate-radius-full: 9999px;
+
+  /* Typography */
+  --skate-font-title: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  --skate-font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+
+  /* Shadow (only for floating layers) */
+  --skate-shadow-float: 0 8px 24px rgba(26, 26, 30, 0.10);
+}
+
+@theme inline {
+  --color-background: var(--skate-background);
+  --color-foreground: var(--skate-foreground);
+  --color-card: var(--skate-card);
+  --color-card-foreground: var(--skate-card-foreground);
+  --color-popover: var(--skate-popover);
+  --color-popover-foreground: var(--skate-popover-foreground);
+  --color-primary: var(--skate-primary);
+  --color-primary-foreground: var(--skate-primary-foreground);
+  --color-muted: var(--skate-muted);
+  --color-muted-foreground: var(--skate-muted-foreground);
+  --color-border: var(--skate-border);
+  --color-input: var(--skate-input);
+  --color-ring: var(--skate-ring);
+  --radius-sm: var(--skate-radius-sm);
+  --radius-md: var(--skate-radius-md);
+  --radius-lg: var(--skate-radius-lg);
+  --radius-full: var(--skate-radius-full);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--skate-background);
+    --color-foreground: var(--skate-foreground);
+    --color-card: var(--skate-card);
+    --color-card-foreground: var(--skate-card-foreground);
+    --color-popover: var(--skate-popover);
+    --color-popover-foreground: var(--skate-popover-foreground);
+    --color-primary: var(--skate-primary);
+    --color-primary-foreground: var(--skate-primary-foreground);
+    --color-muted: var(--skate-muted);
+    --color-muted-foreground: var(--skate-muted-foreground);
+    --color-border: var(--skate-border);
+    --color-input: var(--skate-input);
+    --color-ring: var(--skate-ring);
+    --radius-sm: var(--skate-radius-sm);
+    --radius-md: var(--skate-radius-md);
+    --radius-lg: var(--skate-radius-lg);
+    --radius-full: var(--skate-radius-full);
+  }
+  @layer base {
+    body { background: var(--skate-background); color: var(--skate-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--skate-background); }
+      .text-background { color: var(--skate-background); }
+      .border-background { border-color: var(--skate-background); }
+      .ring-background { --tw-ring-color: var(--skate-background); }
+      .bg-foreground { background-color: var(--skate-foreground); }
+      .text-foreground { color: var(--skate-foreground); }
+      .border-foreground { border-color: var(--skate-foreground); }
+      .ring-foreground { --tw-ring-color: var(--skate-foreground); }
+      .bg-card { background-color: var(--skate-card); }
+      .text-card { color: var(--skate-card); }
+      .border-card { border-color: var(--skate-card); }
+      .ring-card { --tw-ring-color: var(--skate-card); }
+      .bg-card-foreground { background-color: var(--skate-card-foreground); }
+      .text-card-foreground { color: var(--skate-card-foreground); }
+      .border-card-foreground { border-color: var(--skate-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--skate-card-foreground); }
+      .bg-popover { background-color: var(--skate-popover); }
+      .text-popover { color: var(--skate-popover); }
+      .border-popover { border-color: var(--skate-popover); }
+      .ring-popover { --tw-ring-color: var(--skate-popover); }
+      .bg-popover-foreground { background-color: var(--skate-popover-foreground); }
+      .text-popover-foreground { color: var(--skate-popover-foreground); }
+      .border-popover-foreground { border-color: var(--skate-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--skate-popover-foreground); }
+      .bg-primary { background-color: var(--skate-primary); }
+      .text-primary { color: var(--skate-primary); }
+      .border-primary { border-color: var(--skate-primary); }
+      .ring-primary { --tw-ring-color: var(--skate-primary); }
+      .bg-primary-foreground { background-color: var(--skate-primary-foreground); }
+      .text-primary-foreground { color: var(--skate-primary-foreground); }
+      .border-primary-foreground { border-color: var(--skate-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--skate-primary-foreground); }
+      .bg-muted { background-color: var(--skate-muted); }
+      .text-muted { color: var(--skate-muted); }
+      .border-muted { border-color: var(--skate-muted); }
+      .ring-muted { --tw-ring-color: var(--skate-muted); }
+      .bg-muted-foreground { background-color: var(--skate-muted-foreground); }
+      .text-muted-foreground { color: var(--skate-muted-foreground); }
+      .border-muted-foreground { border-color: var(--skate-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--skate-muted-foreground); }
+      .bg-border { background-color: var(--skate-border); }
+      .text-border { color: var(--skate-border); }
+      .border-border { border-color: var(--skate-border); }
+      .ring-border { --tw-ring-color: var(--skate-border); }
+      .bg-input { background-color: var(--skate-input); }
+      .text-input { color: var(--skate-input); }
+      .border-input { border-color: var(--skate-input); }
+      .ring-input { --tw-ring-color: var(--skate-input); }
+      .bg-ring { background-color: var(--skate-ring); }
+      .text-ring { color: var(--skate-ring); }
+      .border-ring { border-color: var(--skate-ring); }
+      .ring-ring { --tw-ring-color: var(--skate-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="bg-[#F5F5F5] text-[#1A1A1E] antialiased">
+  <style id="critical-layout">
+    .skate-shell { max-width: 28rem; margin-left: auto; margin-right: auto; min-height: 100vh; display: flex; flex-direction: column; }
+    .skate-status { background: #1A1A1E; color: #fff; display: flex; align-items: center; justify-content: space-between; padding-left: 1.25rem; padding-right: 1.25rem; height: 1.75rem; font-size: 0.75rem; }
+    .skate-header { background: #1A1A1E; display: flex; align-items: center; justify-content: space-between; padding-left: 1rem; padding-right: 1rem; height: 2.75rem; }
+    .skate-map { position: relative; background: #E0E0E0; height: 42vh; min-height: 260px; overflow: hidden; }
+    .skate-card { background: #fff; border-radius: 0.5rem; padding: 1rem; display: flex; gap: 0.75rem; }
+    .skate-nav { width: 100%; background: #1A1A1E; border-top: 1px solid #2A2A2E; }
+    .skate-nav > div { width: 100%; max-width: 28rem; margin-left: auto; margin-right: auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); height: 3.5rem; }
+  </style>
+  <div class="max-w-md mx-auto min-h-screen flex flex-col skate-shell">
+    <!-- Status bar -->
+    <div class="bg-[#1A1A1E] text-white flex items-center justify-between px-5 h-7 text-xs select-none skate-status">
+      <span class="font-semibold">9:41</span>
+      <div class="flex items-center gap-1.5">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2 17h2v4H2zm4-5h2v9H6zm4-4h2v13h-2zm4-3h2v16h-2zm4 6h2v10h-2z"/></svg>
+        <svg class="w-5 h-3" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="1" width="18" height="10" rx="2"/><path d="M21 4v4"/></svg>
+      </div>
+    </div>
+
+    <!-- App header -->
+    <header class="bg-[#1A1A1E] flex items-center justify-between px-4 h-11 gap-3 sticky top-0 z-20 skate-header">
+      <button class="flex items-center gap-1 text-white text-sm font-medium shrink-0" data-dom-id="location-picker">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>上海</span>
+      </button>
+      <button data-dom-id="search-bar" class="flex-1 flex items-center gap-2 bg-[#2A2A2E] text-[#8C8C8C] text-sm rounded-full px-4 h-8 max-w-[220px]">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>搜索场地</span>
+      </button>
+    </header>
+
+    <!-- Map area -->
+    <section class="relative bg-[#E0E0E0] h-[42vh] min-h-[260px] overflow-hidden shrink-0 skate-map" data-dom-id="map-area">
+      <!-- Road lines -->
+      <svg class="absolute inset-0 w-full h-full" preserveAspectRatio="none" viewBox="0 0 375 320">
+        <path d="M-20 180 Q120 160 200 220 T420 260" stroke="#C8C8C8" stroke-width="18" fill="none"/>
+        <path d="M-20 180 Q120 160 200 220 T420 260" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="10 14" fill="none"/>
+        <path d="M60 -20 Q80 100 40 180 T20 360" stroke="#C8C8C8" stroke-width="14" fill="none"/>
+        <path d="M60 -20 Q80 100 40 180 T20 360" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="8 12" fill="none"/>
+        <path d="M260 -20 Q240 80 300 160 T360 360" stroke="#C8C8C8" stroke-width="14" fill="none"/>
+        <path d="M260 -20 Q240 80 300 160 T360 360" stroke="#FFFFFF" stroke-width="2" stroke-dasharray="8 12" fill="none"/>
+      </svg>
+
+      <!-- Current location pulse -->
+      <div class="absolute left-[38%] top-[55%] -translate-x-1/2 -translate-y-1/2">
+        <span class="absolute inline-flex h-8 w-8 rounded-full bg-blue-500 opacity-30 animate-ping"></span>
+        <span class="relative inline-flex h-4 w-4 rounded-full border-2 border-white bg-blue-500 shadow"></span>
+      </div>
+
+      <!-- Venue marker A -->
+      <button class="absolute left-[24%] top-[34%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group" data-dom-id="map-marker-a">
+        <div class="w-9 h-9 rounded-full bg-[#FF5A36] text-white flex items-center justify-center shadow-md border-2 border-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8z"/><path d="M12 11V7"/><path d="M8 15h8"/></svg>
+        </div>
+        <span class="mt-1 text-[11px] font-medium text-[#1A1A1E] bg-white/90 px-1.5 py-0.5 rounded">场地A</span>
+      </button>
+
+      <!-- Venue marker B -->
+      <button class="absolute left-[66%] top-[44%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group" data-dom-id="map-marker-b">
+        <div class="w-9 h-9 rounded-full bg-[#FF5A36] text-white flex items-center justify-center shadow-md border-2 border-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8z"/><path d="M12 11V7"/><path d="M8 15h8"/></svg>
+        </div>
+        <span class="mt-1 text-[11px] font-medium text-[#1A1A1E] bg-white/90 px-1.5 py-0.5 rounded">场地B</span>
+      </button>
+
+      <!-- Venue marker C -->
+      <button class="absolute left-[52%] top-[72%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group" data-dom-id="map-marker-c">
+        <div class="w-9 h-9 rounded-full bg-[#FF5A36] text-white flex items-center justify-center shadow-md border-2 border-white">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8z"/><path d="M12 11V7"/><path d="M8 15h8"/></svg>
+        </div>
+        <span class="mt-1 text-[11px] font-medium text-[#1A1A1E] bg-white/90 px-1.5 py-0.5 rounded">场地C</span>
+      </button>
+    </section>
+
+    <!-- Quick filter tags -->
+    <div class="bg-[#F5F5F5] py-3 px-4">
+      <div class="flex gap-2 overflow-x-auto no-scrollbar -mx-4 px-4">
+        <button class="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium bg-[#FF5A36] text-white" data-dom-id="filter-all">全部</button>
+        <button class="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium bg-white text-[#1A1A1E] border border-[#E8E8E8]" data-dom-id="filter-bowl">碗池</button>
+        <button class="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium bg-white text-[#1A1A1E] border border-[#E8E8E8]" data-dom-id="filter-ramp">U池</button>
+        <button class="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium bg-white text-[#1A1A1E] border border-[#E8E8E8]" data-dom-id="filter-street">街式</button>
+        <button class="shrink-0 px-4 py-1.5 rounded-full text-sm font-medium bg-white text-[#1A1A1E] border border-[#E8E8E8]" data-dom-id="filter-flat">平地</button>
+      </div>
+    </div>
+
+    <!-- Venue card list -->
+    <main class="flex-1 px-4 pb-4 space-y-3">
+      <!-- Card 1 -->
+      <article data-dom-id="venue-card-1" class="relative bg-white rounded-lg p-4 flex gap-3 active:opacity-80 skate-card">
+        <span class="absolute left-3 top-3 px-1.5 py-0.5 bg-[#FF5A36] text-white text-[10px] font-semibold rounded">热门</span>
+        <div class="w-12 h-12 rounded-full bg-[#FFF0ED] flex items-center justify-center shrink-0 mt-5">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8z"/><path d="M12 11V7"/><path d="M8 15h8"/></svg>
+        </div>
+        <div class="flex-1 min-w-0 mt-5">
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="text-base font-bold truncate">滨江滑板公园</h3>
+            <div class="flex items-center gap-0.5 text-sm font-semibold text-[#FF5A36] shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>4.5</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mt-1.5 text-xs text-[#8C8C8C]">
+            <span class="flex items-center gap-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              230m
+            </span>
+            <span class="px-1.5 py-0.5 rounded bg-[#F5F5F5] text-[#1A1A1E]">混合</span>
+            <span class="flex items-center gap-0.5 text-[#00D4AA]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#00D4AA]"></span>
+              12人在线
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article data-dom-id="venue-card-2" class="relative bg-white rounded-lg p-4 flex gap-3 active:opacity-80 skate-card">
+        <span class="absolute right-3 top-3 px-1.5 py-0.5 bg-[#00D4AA] text-white text-[10px] font-semibold rounded">已签到</span>
+        <div class="w-12 h-12 rounded-full bg-[#FFF0ED] flex items-center justify-center shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8z"/><path d="M12 11V7"/><path d="M8 15h8"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="text-base font-bold truncate">虹口碗池</h3>
+            <div class="flex items-center gap-0.5 text-sm font-semibold text-[#FF5A36] shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>4.2</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mt-1.5 text-xs text-[#8C8C8C]">
+            <span class="flex items-center gap-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              1.2km
+            </span>
+            <span class="px-1.5 py-0.5 rounded bg-[#F5F5F5] text-[#1A1A1E]">碗池</span>
+            <span class="flex items-center gap-0.5 text-[#00D4AA]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#00D4AA]"></span>
+              5人在线
+            </span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article data-dom-id="venue-card-3" class="relative bg-white rounded-lg p-4 flex gap-3 active:opacity-80 skate-card">
+        <div class="w-12 h-12 rounded-full bg-[#FFF0ED] flex items-center justify-center shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FF5A36" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h8z"/><path d="M12 11V7"/><path d="M8 15h8"/></svg>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-start justify-between gap-2">
+            <h3 class="text-base font-bold truncate">徐汇滨江平地</h3>
+            <div class="flex items-center gap-0.5 text-sm font-semibold text-[#FF5A36] shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>3.8</span>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 mt-1.5 text-xs text-[#8C8C8C]">
+            <span class="flex items-center gap-0.5">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              2.5km
+            </span>
+            <span class="px-1.5 py-0.5 rounded bg-[#F5F5F5] text-[#1A1A1E]">平地</span>
+            <span class="flex items-center gap-0.5 text-[#00D4AA]">
+              <span class="w-1.5 h-1.5 rounded-full bg-[#00D4AA]"></span>
+              3人在线
+            </span>
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <!-- Bottom tab bar -->
+    <nav data-mobile-nav='global' class='w-full h-14 bg-[#1A1A1E] border-t border-[#2A2A2E]'><div class='w-full max-w-md mx-auto grid grid-cols-4 h-full'><a href='#' data-nav-key='home' data-dom-id='nav-home' class='min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[#FF5A36] font-medium no-underline'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='w-5 h-5 shrink-0'><path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/><polyline points='9 22 9 12 15 12 15 22'/></svg><span class='text-[11px] leading-none whitespace-nowrap max-w-full truncate'>首页</span></a><a href='#' data-nav-key='discover' data-dom-id='nav-discover' class='min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[#8C8C8C] no-underline'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='w-5 h-5 shrink-0'><path d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-2.072-2.143-2.072-2.143S8.5 8.5 7 10c-1.5 1.5-2 2.5-2 3.5a4.5 4.5 0 0 0 8.5 1.5c.5-1 0-2-1-3-1-1-2-1.5-2-1.5s.5 1 0 2c-.5 1-1.5 1.5-2.5 1.5Z'/><path d='M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z'/></svg><span class='text-[11px] leading-none whitespace-nowrap max-w-full truncate'>发现</span></a><a href='#' data-nav-key='checkin' data-dom-id='nav-checkin' class='min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[#8C8C8C] no-underline'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='w-5 h-5 shrink-0'><path d='M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z'/><circle cx='12' cy='10' r='3'/></svg><span class='text-[11px] leading-none whitespace-nowrap max-w-full truncate'>签到</span></a><a href='#' data-nav-key='profile' data-dom-id='nav-profile' class='min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[#8C8C8C] no-underline'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='w-5 h-5 shrink-0'><path d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg><span class='text-[11px] leading-none whitespace-nowrap max-w-full truncate'>我的</span></a></div></nav>
+  </div>
+
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</body>
+</html>

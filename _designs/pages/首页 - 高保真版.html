@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 - 高保真版</title>
+    <style id="theme-vars">
+/* Skate Spot UI — Brand tokens */
+
+:root {
+  /* Primary brand: neon orange-red */
+  --skate-primary-50: #FFF2EE;
+  --skate-primary-100: #FFE0D6;
+  --skate-primary-200: #FFC1B0;
+  --skate-primary-300: #FF9A7E;
+  --skate-primary-400: #FF5A36;
+  --skate-primary-500: #FF4A24;
+  --skate-primary-600: #E63A16;
+
+  /* Neutral: street black + concrete grey scale */
+  --skate-neutral-0: #FFFFFF;
+  --skate-neutral-50: #F5F5F5;
+  --skate-neutral-100: #E8E8E8;
+  --skate-neutral-200: #D9D9D9;
+  --skate-neutral-400: #8C8C8C;
+  --skate-neutral-600: #4D4D4D;
+  --skate-neutral-900: #1A1A1E;
+
+  /* State colors */
+  --skate-state-success: #00D4AA;
+  --skate-state-warning: #FFB800;
+  --skate-state-error: #FF3B30;
+  --skate-state-info: #2A8CFF;
+
+  /* Semantic aliases */
+  --skate-background: var(--skate-neutral-50);
+  --skate-foreground: var(--skate-neutral-900);
+  --skate-card: var(--skate-neutral-0);
+  --skate-card-foreground: var(--skate-neutral-900);
+  --skate-popover: var(--skate-neutral-0);
+  --skate-popover-foreground: var(--skate-neutral-900);
+  --skate-primary: var(--skate-primary-400);
+  --skate-primary-foreground: var(--skate-neutral-0);
+  --skate-muted: var(--skate-neutral-100);
+  --skate-muted-foreground: var(--skate-neutral-400);
+  --skate-border: var(--skate-neutral-100);
+  --skate-input: var(--skate-neutral-100);
+  --skate-ring: var(--skate-primary-400);
+
+  /* Radius */
+  --skate-radius-sm: 4px;
+  --skate-radius-md: 8px;
+  --skate-radius-lg: 12px;
+  --skate-radius-full: 9999px;
+
+  /* Typography */
+  --skate-font-title: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+  --skate-font-body: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
+
+  /* Shadow (only for floating layers) */
+  --skate-shadow-float: 0 8px 24px rgba(26, 26, 30, 0.10);
+}
+
+@theme inline {
+  --color-background: var(--skate-background);
+  --color-foreground: var(--skate-foreground);
+  --color-card: var(--skate-card);
+  --color-card-foreground: var(--skate-card-foreground);
+  --color-popover: var(--skate-popover);
+  --color-popover-foreground: var(--skate-popover-foreground);
+  --color-primary: var(--skate-primary);
+  --color-primary-foreground: var(--skate-primary-foreground);
+  --color-muted: var(--skate-muted);
+  --color-muted-foreground: var(--skate-muted-foreground);
+  --color-border: var(--skate-border);
+  --color-input: var(--skate-input);
+  --color-ring: var(--skate-ring);
+  --radius-sm: var(--skate-radius-sm);
+  --radius-md: var(--skate-radius-md);
+  --radius-lg: var(--skate-radius-lg);
+  --radius-full: var(--skate-radius-full);
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--skate-background);
+    --color-foreground: var(--skate-foreground);
+    --color-card: var(--skate-card);
+    --color-card-foreground: var(--skate-card-foreground);
+    --color-popover: var(--skate-popover);
+    --color-popover-foreground: var(--skate-popover-foreground);
+    --color-primary: var(--skate-primary);
+    --color-primary-foreground: var(--skate-primary-foreground);
+    --color-muted: var(--skate-muted);
+    --color-muted-foreground: var(--skate-muted-foreground);
+    --color-border: var(--skate-border);
+    --color-input: var(--skate-input);
+    --color-ring: var(--skate-ring);
+    --radius-sm: var(--skate-radius-sm);
+    --radius-md: var(--skate-radius-md);
+    --radius-lg: var(--skate-radius-lg);
+    --radius-full: var(--skate-radius-full);
+  }
+  @layer base {
+    body { background: var(--skate-background); color: var(--skate-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--skate-background); }
+      .text-background { color: var(--skate-background); }
+      .border-background { border-color: var(--skate-background); }
+      .ring-background { --tw-ring-color: var(--skate-background); }
+      .bg-foreground { background-color: var(--skate-foreground); }
+      .text-foreground { color: var(--skate-foreground); }
+      .border-foreground { border-color: var(--skate-foreground); }
+      .ring-foreground { --tw-ring-color: var(--skate-foreground); }
+      .bg-card { background-color: var(--skate-card); }
+      .text-card { color: var(--skate-card); }
+      .border-card { border-color: var(--skate-card); }
+      .ring-card { --tw-ring-color: var(--skate-card); }
+      .bg-card-foreground { background-color: var(--skate-card-foreground); }
+      .text-card-foreground { color: var(--skate-card-foreground); }
+      .border-card-foreground { border-color: var(--skate-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--skate-card-foreground); }
+      .bg-popover { background-color: var(--skate-popover); }
+      .text-popover { color: var(--skate-popover); }
+      .border-popover { border-color: var(--skate-popover); }
+      .ring-popover { --tw-ring-color: var(--skate-popover); }
+      .bg-popover-foreground { background-color: var(--skate-popover-foreground); }
+      .text-popover-foreground { color: var(--skate-popover-foreground); }
+      .border-popover-foreground { border-color: var(--skate-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--skate-popover-foreground); }
+      .bg-primary { background-color: var(--skate-primary); }
+      .text-primary { color: var(--skate-primary); }
+      .border-primary { border-color: var(--skate-primary); }
+      .ring-primary { --tw-ring-color: var(--skate-primary); }
+      .bg-primary-foreground { background-color: var(--skate-primary-foreground); }
+      .text-primary-foreground { color: var(--skate-primary-foreground); }
+      .border-primary-foreground { border-color: var(--skate-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--skate-primary-foreground); }
+      .bg-muted { background-color: var(--skate-muted); }
+      .text-muted { color: var(--skate-muted); }
+      .border-muted { border-color: var(--skate-muted); }
+      .ring-muted { --tw-ring-color: var(--skate-muted); }
+      .bg-muted-foreground { background-color: var(--skate-muted-foreground); }
+      .text-muted-foreground { color: var(--skate-muted-foreground); }
+      .border-muted-foreground { border-color: var(--skate-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--skate-muted-foreground); }
+      .bg-border { background-color: var(--skate-border); }
+      .text-border { color: var(--skate-border); }
+      .border-border { border-color: var(--skate-border); }
+      .ring-border { --tw-ring-color: var(--skate-border); }
+      .bg-input { background-color: var(--skate-input); }
+      .text-input { color: var(--skate-input); }
+      .border-input { border-color: var(--skate-input); }
+      .ring-input { --tw-ring-color: var(--skate-input); }
+      .bg-ring { background-color: var(--skate-ring); }
+      .text-ring { color: var(--skate-ring); }
+      .border-ring { border-color: var(--skate-ring); }
+      .ring-ring { --tw-ring-color: var(--skate-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+  <style id="critical-layout">
+    /* ===== base resets (no-Tailwind safety) ===== */
+    body { margin: 0; background: var(--skate-background); }
+    .skate-shell, .skate-shell * { box-sizing: border-box; }
+    .skate-shell h3, .skate-shell p, .skate-shell span { margin: 0; }
+    .skate-shell button { font-family: inherit; margin: 0; }
+
+    /* ===== app shell ===== */
+    .skate-shell {
+      max-width: 28rem; margin-left: auto; margin-right: auto;
+      min-height: 100vh; display: flex; flex-direction: column;
+      background: var(--skate-neutral-50);
+      font-family: var(--skate-font-body);
+      color: var(--skate-neutral-900);
+    }
+
+    /* ===== dark status bar (source shell) ===== */
+    .skate-status {
+      background: var(--skate-neutral-900); color: var(--skate-neutral-0);
+      display: flex; align-items: center; justify-content: space-between;
+      padding-left: 1.25rem; padding-right: 1.25rem; height: 1.75rem;
+      font-size: 0.75rem; flex-shrink: 0; user-select: none;
+    }
+
+    /* ===== dark header ===== */
+    .skate-header {
+      position: sticky; top: 0; z-index: 20;
+      background: var(--skate-neutral-900); color: var(--skate-neutral-0);
+      display: flex; align-items: center; justify-content: space-between; gap: 0.75rem;
+      padding-left: 1rem; padding-right: 1rem; height: 2.75rem; flex-shrink: 0;
+    }
+    .skate-city {
+      border: 0; background: none; padding: 0; display: flex; align-items: center; gap: 0.25rem;
+      color: var(--skate-neutral-0); font-size: 0.875rem; font-weight: 500;
+      cursor: pointer; flex-shrink: 0; transition: opacity 120ms ease;
+    }
+    .skate-city:active { opacity: 0.65; }
+    .skate-city svg { display: block; }
+    .skate-search {
+      border: 0; flex: 1 1 0%; max-width: 220px; height: 2rem; border-radius: 9999px;
+      background: #2C2C30; display: flex; align-items: center; gap: 0.5rem;
+      padding: 0 0.875rem; color: #C7C7C7; font-size: 0.8125rem; cursor: pointer;
+      transition: opacity 120ms ease;
+    }
+    .skate-search:active { opacity: 0.75; }
+    .skate-search svg { display: block; flex-shrink: 0; }
+
+    /* ===== map region ===== */
+    .skate-map {
+      position: relative; background: #E8ECEF;
+      height: 42vh; min-height: 260px; overflow: hidden; flex-shrink: 0;
+    }
+    .skate-basemap { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+    /* current location breathing dot */
+    .skate-loc { position: absolute; left: 38%; top: 55%; width: 32px; height: 32px; margin: -16px 0 0 -16px; }
+    .skate-loc-pulse {
+      position: absolute; inset: 0; border-radius: 9999px;
+      background: rgba(42, 140, 255, 0.16); border: 1px solid rgba(42, 140, 255, 0.38);
+    }
+    .skate-loc-dot {
+      position: absolute; left: 50%; top: 50%; width: 16px; height: 16px; margin: -8px 0 0 -8px;
+      border-radius: 9999px; background: var(--skate-state-info);
+      border: 2.5px solid var(--skate-neutral-0); box-shadow: 0 1px 4px rgba(26, 26, 30, 0.18);
+    }
+
+    /* venue markers (sneaker pins, tip anchored) */
+    .skate-marker {
+      position: absolute; width: 22px; height: 26px; padding: 0; border: 0; background: transparent;
+      cursor: pointer; transform: translate(-50%, -100%);
+      filter: drop-shadow(0 2px 3px rgba(26, 26, 30, 0.22));
+      transition: transform 120ms ease;
+    }
+    .skate-marker:active { transform: translate(-50%, -100%) scale(0.92); }
+    .skate-marker svg { display: block; width: 22px; height: 26px; }
+    .skate-marker-a { left: 24%; top: 34%; z-index: 20; }
+    .skate-marker-b { left: 66%; top: 44%; z-index: 10; }
+    .skate-marker-c { left: 52%; top: 72%; z-index: 10; }
+
+    /* selected marker callout */
+    .skate-callout {
+      position: absolute; left: 24%; top: 34%; margin-top: -32px;
+      transform: translate(-50%, -100%); z-index: 30; pointer-events: none;
+    }
+    .skate-callout-inner {
+      position: relative; background: var(--skate-neutral-0); border-radius: 8px;
+      padding: 6px 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.10); transform-origin: 50% 100%;
+    }
+    .skate-callout-title { font-size: 12px; font-weight: 600; color: var(--skate-neutral-900); line-height: 1.3; white-space: nowrap; }
+    .skate-callout-sub { font-size: 11px; color: var(--skate-neutral-400); line-height: 1.3; margin-top: 1px; white-space: nowrap; }
+    .skate-callout-tick {
+      position: absolute; left: 50%; bottom: -3px; width: 8px; height: 8px; margin-left: -4px;
+      background: var(--skate-neutral-0); transform: rotate(45deg); border-radius: 1px;
+    }
+
+    /* locate button */
+    .skate-locate {
+      position: absolute; top: 12px; right: 12px; width: 36px; height: 36px; border-radius: 9999px;
+      background: var(--skate-neutral-0); border: 1px solid var(--skate-neutral-100);
+      box-shadow: 0 2px 8px rgba(26, 26, 30, 0.10);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--skate-neutral-900); cursor: pointer; transition: transform 120ms ease;
+    }
+    .skate-locate:active { transform: scale(0.95); }
+    .skate-locate svg { display: block; }
+
+    /* map/list split handle */
+    .skate-sheet-handle {
+      background: var(--skate-neutral-0); height: 20px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 -1px 4px rgba(0, 0, 0, 0.03);
+    }
+    .skate-sheet-pill { width: 36px; height: 4px; border-radius: 9999px; background: var(--skate-neutral-200); }
+
+    /* ===== filter bar ===== */
+    .skate-filters { background: var(--skate-neutral-50); padding: 4px 16px; flex-shrink: 0; }
+    .skate-filter-row { display: flex; gap: 8px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .skate-chip {
+      flex-shrink: 0; height: 28px; border: 0; border-radius: 9999px; padding: 0 16px;
+      background: #EEEEEE; color: #4A4A4A; font-size: 13px; font-weight: 500; line-height: 28px;
+      white-space: nowrap; cursor: pointer; transition: background-color 120ms ease, color 120ms ease;
+    }
+    .skate-chip:active { background: #E2E2E2; }
+    .skate-chip.is-active { background: var(--skate-primary-400); color: var(--skate-neutral-0); font-weight: 600; }
+    .skate-chip.is-active:active { background: var(--skate-primary-500); }
+
+    /* ===== venue card list ===== */
+    .skate-venue-list {
+      flex: 1 1 auto; padding: 12px 16px 16px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .venue-card {
+      position: relative; width: 100%; border: 0; text-align: left;
+      background: var(--skate-neutral-0); border-radius: var(--skate-radius-lg); padding: 14px;
+      display: flex; gap: 12px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+      cursor: pointer; transition: opacity 120ms ease, transform 120ms ease;
+    }
+    .venue-card:active { opacity: 0.7; transform: scale(0.99); }
+    .venue-icon {
+      width: 44px; height: 44px; border-radius: 9999px; background: #FFF0ED;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      color: var(--skate-primary-400);
+    }
+    .venue-icon svg { width: 22px; height: 22px; display: block; }
+    .venue-info { flex: 1 1 0%; min-width: 0; }
+    .venue-name-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .venue-name {
+      min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+      font-size: 15px; font-weight: 700; color: var(--skate-neutral-900); line-height: 1.35;
+    }
+    .venue-card.has-hot .venue-name { padding-left: 36px; }
+    .venue-card.has-checked .venue-name-row { padding-right: 58px; }
+    .venue-rating {
+      display: flex; align-items: center; gap: 3px; flex-shrink: 0;
+      color: var(--skate-primary-400); font-size: 13px; font-weight: 600; line-height: 1;
+    }
+    .venue-rating svg { display: block; }
+    .venue-addr {
+      display: flex; align-items: center; gap: 4px; margin-top: 4px;
+      font-size: 12px; color: var(--skate-neutral-400); line-height: 1.4; min-width: 0;
+    }
+    .venue-addr svg { flex-shrink: 0; display: block; }
+    .venue-addr-text { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .venue-tags { display: flex; gap: 4px; margin-top: 6px; overflow: hidden; }
+    .venue-tag {
+      flex-shrink: 0; background: #F0F0F0; color: #666666; font-size: 11px; line-height: 1;
+      padding: 3px 6px; border-radius: var(--skate-radius-sm); white-space: nowrap;
+    }
+    .venue-live {
+      display: flex; align-items: center; gap: 5px; margin-top: 6px;
+      color: var(--skate-state-success); font-size: 12px; font-weight: 500; line-height: 1;
+    }
+    .venue-live-dot { width: 6px; height: 6px; border-radius: 9999px; background: var(--skate-state-success); flex-shrink: 0; }
+
+    /* card status badges (explicit offsets, reserved padding on sibling rows) */
+    .venue-badge-hot {
+      position: absolute; top: 12px; left: 68px;
+      background: var(--skate-primary-400); color: var(--skate-neutral-0);
+      font-size: 10px; font-weight: 600; line-height: 1; padding: 3px 6px;
+      border-radius: var(--skate-radius-sm); white-space: nowrap;
+    }
+    .venue-badge-checked {
+      position: absolute; top: 12px; right: 12px;
+      display: flex; align-items: center; gap: 3px;
+      background: #E8F8F0; color: #00B386;
+      font-size: 10px; font-weight: 600; line-height: 1; padding: 3px 6px;
+      border-radius: var(--skate-radius-sm); white-space: nowrap;
+    }
+    .venue-badge-checked svg { display: block; }
+
+    /* list footer */
+    .venue-loadmore {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 12px 0 4px; color: var(--skate-neutral-400); font-size: 12px;
+    }
+    .loadmore-spinner {
+      width: 14px; height: 14px; flex-shrink: 0; border-radius: 9999px;
+      border: 2px solid var(--skate-neutral-100); border-top-color: var(--skate-primary-400);
+    }
+
+    /* ===== canonical bottom nav (works without Tailwind) ===== */
+    nav[data-mobile-nav] { width: 100%; height: 3.5rem; background: var(--skate-neutral-900); border-top: 1px solid #2A2A2E; }
+    nav[data-mobile-nav] > div {
+      width: 100%; max-width: 28rem; margin-left: auto; margin-right: auto;
+      display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); height: 100%;
+    }
+    nav[data-mobile-nav] a {
+      min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2px; padding: 0 4px; height: 100%; text-decoration: none;
+    }
+    nav[data-mobile-nav] a svg { width: 20px; height: 20px; flex-shrink: 0; display: block; }
+    nav[data-mobile-nav] a span {
+      font-size: 11px; line-height: 1; white-space: nowrap; max-width: 100%;
+      overflow: hidden; text-overflow: ellipsis;
+    }
+    nav[data-mobile-nav] a[data-nav-key="home"] { color: var(--skate-primary-400); font-weight: 500; }
+    nav[data-mobile-nav] a[data-nav-key="home"]:active { opacity: 0.7; }
+    nav[data-mobile-nav] a:not([data-nav-key="home"]) { color: var(--skate-neutral-400); }
+    nav[data-mobile-nav] a:not([data-nav-key="home"]):active { opacity: 0.7; }
+  </style>
+
+  <style id="page-motion">
+    /* card list entrance: fade-in-up, 400ms, staggered 50ms */
+    @keyframes skate-card-in {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .venue-card { animation: skate-card-in 400ms ease-out backwards; }
+    .skate-venue-list article:nth-of-type(1) { animation-delay: 60ms; }
+    .skate-venue-list article:nth-of-type(2) { animation-delay: 110ms; }
+    .skate-venue-list article:nth-of-type(3) { animation-delay: 160ms; }
+
+    /* marker pins pop-in (transform keeps tip anchor) */
+    @keyframes skate-pin-in {
+      from { opacity: 0; transform: translate(-50%, -100%) scale(0.6); }
+      to { opacity: 1; transform: translate(-50%, -100%) scale(1); }
+    }
+    .skate-marker { animation: skate-pin-in 250ms ease-out backwards; }
+    .skate-marker-a { animation-delay: 40ms; }
+    .skate-marker-b { animation-delay: 100ms; }
+    .skate-marker-c { animation-delay: 160ms; }
+
+    /* selected callout scale-in */
+    @keyframes skate-callout-in {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .skate-callout-inner { animation: skate-callout-in 200ms ease-out backwards; animation-delay: 140ms; }
+
+    /* location breathing pulse */
+    @keyframes skate-breathe {
+      0%, 100% { opacity: 0.85; transform: scale(0.7); }
+      50% { opacity: 0.3; transform: scale(1.02); }
+    }
+    .skate-loc-pulse { animation: skate-breathe 1.8s ease-in-out infinite; }
+
+    /* load-more spinner */
+    @keyframes skate-spin { to { transform: rotate(360deg); } }
+    .loadmore-spinner { animation: skate-spin 0.8s linear infinite; }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-delay: 0ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+
+  <div class="skate-shell">
+    <!-- Status bar (source shell, unchanged) -->
+    <div class="skate-status bg-[#1A1A1E] text-white flex items-center justify-between px-5 h-7 text-xs select-none">
+      <span class="font-semibold">9:41</span>
+      <div class="flex items-center gap-1.5">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M2 17h2v4H2zm4-5h2v9H6zm4-4h2v13h-2zm4-3h2v16h-2zm4 6h2v10h-2z"/></svg>
+        <svg class="w-5 h-3" viewBox="0 0 24 12" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="1" width="18" height="10" rx="2"/><path d="M21 4v4"/></svg>
+      </div>
+    </div>
+
+    <!-- App header: city picker + search pill -->
+    <header class="skate-header">
+      <button type="button" class="skate-city" data-dom-id="location-picker" aria-label="切换城市，当前上海">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>上海</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+      </button>
+      <button type="button" class="skate-search" data-dom-id="search-bar" aria-label="搜索场地、店铺">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span class="truncate">搜索场地、店铺...</span>
+      </button>
+    </header>
+
+    <!-- Map area -->
+    <section class="skate-map" data-dom-id="map-area" aria-label="附近场地地图">
+      <!-- stylized light basemap -->
+      <svg class="skate-basemap" viewBox="0 0 375 320" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M-20 292 Q80 268 170 288 T400 280 L400 340 L-20 340 Z" fill="#D6E4EC"/>
+        <rect x="100" y="32" width="58" height="44" rx="4" fill="#DFE5EA"/>
+        <rect x="244" y="192" width="62" height="34" rx="4" fill="#DFE5EA"/>
+        <rect x="44" y="246" width="70" height="28" rx="4" fill="#DFE5EA"/>
+        <rect x="218" y="24" width="64" height="60" rx="10" fill="#DDE8DC"/>
+        <g fill="none" stroke="#D8DEE3">
+          <path d="M-20 118 Q120 100 200 150 T400 176" stroke-width="18"/>
+          <path d="M56 -20 Q76 90 40 168 T10 340" stroke-width="14"/>
+          <path d="M298 -20 Q282 96 330 186 T358 340" stroke-width="14"/>
+          <path d="M352 -20 Q272 120 168 236 T40 340" stroke-width="14"/>
+          <path d="M-20 236 Q140 218 260 244 T400 232" stroke-width="14"/>
+        </g>
+        <g fill="none" stroke="#FFFFFF">
+          <path d="M-20 118 Q120 100 200 150 T400 176" stroke-width="2" stroke-dasharray="10 14"/>
+          <path d="M56 -20 Q76 90 40 168 T10 340" stroke-width="1.8" stroke-dasharray="8 12"/>
+          <path d="M298 -20 Q282 96 330 186 T358 340" stroke-width="1.8" stroke-dasharray="8 12"/>
+          <path d="M352 -20 Q272 120 168 236 T40 340" stroke-width="1.8" stroke-dasharray="8 12"/>
+          <path d="M-20 236 Q140 218 260 244 T400 232" stroke-width="1.8" stroke-dasharray="8 12"/>
+        </g>
+      </svg>
+
+      <!-- current location -->
+      <div class="skate-loc" aria-hidden="true">
+        <span class="skate-loc-pulse"></span>
+        <span class="skate-loc-dot"></span>
+      </div>
+
+      <!-- venue marker A (has check-ins today) -->
+      <button type="button" class="skate-marker skate-marker-a" data-dom-id="map-marker-a" aria-label="滨江滑板公园">
+        <svg viewBox="0 0 22 26" aria-hidden="true">
+          <path d="M11 25 C8 21.5 2 16.5 2 10 A9 9 0 1 1 20 10 C20 16.5 14 21.5 11 25 Z" fill="var(--skate-primary-400)" stroke="#FFFFFF" stroke-width="2"/>
+          <g transform="translate(2.38,0.32) scale(0.72)" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.5 17.2h17" stroke-width="3.6"/>
+            <path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/>
+            <path d="M12.1 12.3L13.5 11.85" stroke-width="2.8"/>
+          </g>
+        </svg>
+      </button>
+
+      <!-- venue marker B (no check-ins today) -->
+      <button type="button" class="skate-marker skate-marker-b" data-dom-id="map-marker-b" aria-label="虹口碗池公园">
+        <svg viewBox="0 0 22 26" aria-hidden="true">
+          <path d="M11 25 C8 21.5 2 16.5 2 10 A9 9 0 1 1 20 10 C20 16.5 14 21.5 11 25 Z" fill="var(--skate-neutral-400)" stroke="#FFFFFF" stroke-width="2"/>
+          <g transform="translate(2.38,0.32) scale(0.72)" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.5 17.2h17" stroke-width="3.6"/>
+            <path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/>
+            <path d="M12.1 12.3L13.5 11.85" stroke-width="2.8"/>
+          </g>
+        </svg>
+      </button>
+
+      <!-- venue marker C (has check-ins today) -->
+      <button type="button" class="skate-marker skate-marker-c" data-dom-id="map-marker-c" aria-label="徐汇滨江平地">
+        <svg viewBox="0 0 22 26" aria-hidden="true">
+          <path d="M11 25 C8 21.5 2 16.5 2 10 A9 9 0 1 1 20 10 C20 16.5 14 21.5 11 25 Z" fill="var(--skate-primary-400)" stroke="#FFFFFF" stroke-width="2"/>
+          <g transform="translate(2.38,0.32) scale(0.72)" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.5 17.2h17" stroke-width="3.6"/>
+            <path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/>
+            <path d="M12.1 12.3L13.5 11.85" stroke-width="2.8"/>
+          </g>
+        </svg>
+      </button>
+
+      <!-- selected marker callout -->
+      <div class="skate-callout" data-dom-id="marker-callout-a">
+        <div class="skate-callout-inner">
+          <div class="skate-callout-title">滨江滑板公园</div>
+          <div class="skate-callout-sub">距你 230m</div>
+          <span class="skate-callout-tick" aria-hidden="true"></span>
+        </div>
+      </div>
+
+      <!-- locate button -->
+      <button type="button" class="skate-locate" data-dom-id="map-locate-btn" aria-label="回到当前位置">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="7"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/></svg>
+      </button>
+    </section>
+
+    <!-- map/list split handle -->
+    <div class="skate-sheet-handle" aria-hidden="true"><span class="skate-sheet-pill"></span></div>
+
+    <!-- filter chips -->
+    <div class="skate-filters">
+      <div class="skate-filter-row no-scrollbar">
+        <button type="button" class="skate-chip is-active" data-dom-id="filter-all">全部</button>
+        <button type="button" class="skate-chip" data-dom-id="filter-bowl">碗池</button>
+        <button type="button" class="skate-chip" data-dom-id="filter-street">街式</button>
+        <button type="button" class="skate-chip" data-dom-id="filter-flat">平地</button>
+        <button type="button" class="skate-chip" data-dom-id="filter-ramp">U池</button>
+        <button type="button" class="skate-chip" data-dom-id="filter-mixed">混合</button>
+      </div>
+    </div>
+
+    <!-- venue card list -->
+    <main class="skate-venue-list">
+      <!-- Card 1 -->
+      <article class="venue-card has-hot" data-dom-id="venue-card-1">
+        <span class="venue-badge-hot">热门</span>
+        <div class="venue-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3.5 17.2h17" stroke-width="2.6"/>
+            <path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/>
+            <path d="M12.1 12.3L13.5 11.85"/>
+          </svg>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name-row">
+            <h3 class="venue-name">滨江滑板公园</h3>
+            <div class="venue-rating">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>4.5</span>
+            </div>
+          </div>
+          <div class="venue-addr">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span class="venue-addr-text">浦东滨江大道 · 距你 230m</span>
+          </div>
+          <div class="venue-tags">
+            <span class="venue-tag">混合</span><span class="venue-tag">免费</span><span class="venue-tag">有灯</span>
+          </div>
+          <div class="venue-live">
+            <span class="venue-live-dot" aria-hidden="true"></span>
+            <span>此刻 12 人</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="venue-card" data-dom-id="venue-card-2">
+        <div class="venue-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3.5 17.2h17" stroke-width="2.6"/>
+            <path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/>
+            <path d="M12.1 12.3L13.5 11.85"/>
+          </svg>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name-row">
+            <h3 class="venue-name">虹口碗池公园</h3>
+            <div class="venue-rating">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>4.2</span>
+            </div>
+          </div>
+          <div class="venue-addr">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span class="venue-addr-text">虹口区东体育会路 · 距你 1.2km</span>
+          </div>
+          <div class="venue-tags">
+            <span class="venue-tag">碗池</span><span class="venue-tag">收费</span><span class="venue-tag">无灯</span>
+          </div>
+          <div class="venue-live">
+            <span class="venue-live-dot" aria-hidden="true"></span>
+            <span>此刻 5 人</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="venue-card has-checked" data-dom-id="venue-card-3">
+        <span class="venue-badge-checked">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+          已签到
+        </span>
+        <div class="venue-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M3.5 17.2h17" stroke-width="2.6"/>
+            <path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/>
+            <path d="M12.1 12.3L13.5 11.85"/>
+          </svg>
+        </div>
+        <div class="venue-info">
+          <div class="venue-name-row">
+            <h3 class="venue-name">徐汇滨江平地</h3>
+            <div class="venue-rating">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span>3.8</span>
+            </div>
+          </div>
+          <div class="venue-addr">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span class="venue-addr-text">徐汇滨江龙腾大道 · 距你 2.5km</span>
+          </div>
+          <div class="venue-tags">
+            <span class="venue-tag">平地</span><span class="venue-tag">免费</span><span class="venue-tag">有灯</span>
+          </div>
+          <div class="venue-live">
+            <span class="venue-live-dot" aria-hidden="true"></span>
+            <span>此刻 3 人</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- list footer -->
+      <div class="venue-loadmore" data-dom-id="list-load-more">
+        <span class="loadmore-spinner" aria-hidden="true"></span>
+        <span>上拉加载更多</span>
+      </div>
+    </main>
+
+    <!-- Bottom tab bar (canonical global nav, active = home) -->
+    <nav data-mobile-nav='global' class='w-full h-14 bg-[#1A1A1E] border-t border-[#2A2A2E]'><div class='w-full max-w-md mx-auto grid grid-cols-4 h-full'><a href='#' data-nav-key='home' data-dom-id='nav-home' class='min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[#FF5A36] font-medium no-underline'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='w-5 h-5 shrink-0'><path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/><polyline points='9 22 9 12 15 12 15 22'/></svg><span class='text-[11px] leading-none whitespace-nowrap max-w-full truncate'>首页</span></a><a href='#' data-nav-key='discover' data-dom-id='nav-discover' class='min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[#8C8C8C] no-underline'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='w-5 h-5 shrink-0'><path d='M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-2.072-2.143-2.072-2.143S8.5 8.5 7 10c-1.5 1.5-2 2.5-2 3.5a4.5 4.5 0 0 0 8.5 1.5c.5-1 0-2-1-3-1-1-2-1.5-2-1.5s.5 1 0 2c-.5 1-1.5 1.5-2.5 1.5Z'/><path d='M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10Z'/></svg><span class='text-[11px] leading-none whitespace-nowrap max-w-full truncate'>发现</span></a><a href='#' data-nav-key='checkin' data-dom-id='nav-checkin' class='min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[#8C8C8C] no-underline'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='w-5 h-5 shrink-0'><path d='M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z'/><circle cx='12' cy='10' r='3'/></svg><span class='text-[11px] leading-none whitespace-nowrap max-w-full truncate'>签到</span></a><a href='#' data-nav-key='profile' data-dom-id='nav-profile' class='min-w-0 flex flex-col items-center justify-center gap-0.5 px-1 h-full text-[#8C8C8C] no-underline'><svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' class='w-5 h-5 shrink-0'><path d='M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2'/><circle cx='12' cy='7' r='4'/></svg><span class='text-[11px] leading-none whitespace-nowrap max-w-full truncate'>我的</span></a></div></nav>
+  </div>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

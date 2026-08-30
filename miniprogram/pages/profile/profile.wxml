@@ -1,0 +1,85 @@
+<view class="page">
+  <!-- 个人卡片 -->
+  <view class="profile">
+    <view class="avatar">{{user.avatar}}</view>
+    <view class="profile-info">
+      <text class="profile-name">{{user.name}}</text>
+      <view class="profile-meta">
+        <view class="meta-row">
+          <image class="meta-icon" src="{{icons.flame}}" mode="aspectFit" />
+          <text>滑龄 {{user.skateYears}}</text>
+        </view>
+        <view class="meta-row">
+          <image class="meta-icon" src="{{icons.pin}}" mode="aspectFit" />
+          <text>{{city}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 菜单 -->
+  <view class="menu">
+    <view class="menu-item" hover-class="menu-hover" bindtap="goCheckins">
+      <view class="menu-left">
+        <image class="menu-icon" src="{{icons.pin}}" mode="aspectFit" />
+        <text class="menu-label">我的签到</text>
+      </view>
+      <view class="menu-right">
+        <text class="menu-value">{{checkinCount}}次</text>
+        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
+    <view class="menu-item" hover-class="menu-hover" bindtap="goReports">
+      <view class="menu-left">
+        <image class="menu-icon" src="{{icons.file}}" mode="aspectFit" />
+        <text class="menu-label">我的报错</text>
+      </view>
+      <view class="menu-right">
+        <text class="menu-value">2条</text>
+        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
+    <view class="menu-item" hover-class="menu-hover" bindtap="goSuggest">
+      <view class="menu-left">
+        <image class="menu-icon" src="{{icons.file}}" mode="aspectFit" />
+        <text class="menu-label">场地建议</text>
+      </view>
+      <view class="menu-right">
+        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
+    <view class="menu-item menu-item-last" hover-class="menu-hover" bindtap="goSettings">
+      <view class="menu-left">
+        <image class="menu-icon" src="{{icons.settings}}" mode="aspectFit" />
+        <text class="menu-label">设置</text>
+      </view>
+      <view class="menu-right">
+        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 最近签到记录 -->
+  <view class="recent">
+    <view class="recent-title">
+      <view class="line"></view>
+      <view class="recent-title-inner">
+        <image class="recent-title-icon" src="{{icons.flame}}" mode="aspectFit" />
+        <text>最近签到记录</text>
+      </view>
+      <view class="line"></view>
+    </view>
+    <view
+      wx:for="{{recent}}"
+      wx:key="id"
+      class="recent-item"
+      hover-class="menu-hover"
+      data-id="{{item.venueId}}"
+      bindtap="goVenue"
+    >
+      <image class="recent-icon" src="{{icons.pin}}" mode="aspectFit" />
+      <text class="recent-name">{{item.venueName}}</text>
+      <text class="recent-time">{{item.timeText}}</text>
+    </view>
+  </view>
+</view>

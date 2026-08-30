@@ -1,0 +1,271 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ===== 头部 ===== */
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: #1A1A1E;
+  padding: 0 32rpx;
+}
+
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* 设计稿：城市贴左、搜索胶囊贴右 */
+  gap: 24rpx;
+  height: 88rpx;
+}
+
+.city-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.city {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+.city-pin {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+/* 城市下拉箭头：与 pin 同尺寸（设计稿 14×14px，白色） */
+.city-chevron {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
+}
+
+.city-pop {
+  position: absolute;
+  left: 0;
+  top: 64rpx;
+  z-index: 30;
+  width: 224rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 16rpx 48rpx rgba(26, 26, 30, 0.16);
+}
+
+.city-item {
+  padding: 20rpx 32rpx;
+  font-size: 28rpx;
+  color: #1A1A1E;
+}
+
+.city-item-active {
+  background: #FFF2EE;
+  color: #FF5A36;
+  font-weight: 500;
+}
+
+.search-pill {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  height: 64rpx;
+  max-width: 440rpx;
+  padding: 0 28rpx;
+  border-radius: 999rpx;
+  background: #2C2C30;
+  color: #C7C7C7;
+  font-size: 26rpx;
+  overflow: hidden;
+}
+
+/* 胶囊占位文字：单行截断（同设计稿 truncate） */
+.search-pill-text {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.search-icon {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
+}
+
+.search-input-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  height: 64rpx;
+  padding: 0 28rpx;
+  border-radius: 999rpx;
+  background: #2C2C30;
+}
+
+.search-input {
+  flex: 1;
+  height: 64rpx;
+  font-size: 26rpx;
+  color: #FFFFFF;
+}
+
+/* 输入框占位符颜色（同胶囊文字） */
+.search-ph {
+  color: #C7C7C7;
+}
+
+.search-clear {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: rgba(140, 140, 140, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.search-clear-icon {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.search-cancel {
+  flex-shrink: 0;
+  color: #8C8C8C;
+  font-size: 28rpx;
+}
+
+/* ===== 地图 ===== */
+.map {
+  width: 100%;
+  height: 42vh;
+  min-height: 520rpx;
+}
+
+/* 回到当前定位按钮（原生地图需用 cover-view） */
+.locate-btn {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2rpx solid #E8E8E8;
+  box-shadow: 0 4rpx 16rpx rgba(26, 26, 30, 0.10);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.locate-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+/* ===== 地图/列表分隔手柄 ===== */
+.sheet-handle {
+  height: 40rpx;
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 -2rpx 8rpx rgba(0, 0, 0, 0.03);
+}
+
+.sheet-pill {
+  width: 72rpx;
+  height: 8rpx;
+  border-radius: 999rpx;
+  background: #D9D9D9;
+}
+
+/* ===== 筛选 ===== */
+.filters {
+  background: #F5F5F5;
+  padding: 8rpx 32rpx;
+  white-space: nowrap;
+}
+
+.filter-chip {
+  display: inline-block;
+  height: 56rpx;
+  line-height: 56rpx;
+  padding: 0 32rpx;
+  margin-right: 16rpx;
+  border-radius: 999rpx;
+  background: #EEEEEE;
+  color: #4A4A4A;
+  font-size: 26rpx;
+  font-weight: 500;
+}
+
+.filter-chip-active {
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+/* ===== 列表 ===== */
+.list {
+  flex: 1;
+  padding: 24rpx 32rpx 32rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+/* 上拉加载更多 */
+.loadmore {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  padding: 24rpx 0 8rpx;
+  color: #8C8C8C;
+  font-size: 24rpx;
+}
+
+.loadmore-spinner {
+  width: 28rpx;
+  height: 28rpx;
+  border-radius: 50%;
+  border: 4rpx solid #E8E8E8;
+  border-top-color: #FF5A36;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 112rpx 0;
+}
+
+.empty-icon {
+  width: 80rpx;
+  height: 80rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #8C8C8C;
+}

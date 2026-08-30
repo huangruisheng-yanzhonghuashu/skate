@@ -1,0 +1,99 @@
+<view class="page">
+  <!-- 头部：定位 + 搜索 -->
+  <view class="header">
+    <view wx:if="{{!searchOpen}}" class="header-row">
+      <view class="city-wrap">
+        <view class="city" bindtap="toggleCity">
+          <image class="city-pin" src="{{icons.pinWhite}}" mode="aspectFit" />
+          <text>{{city}}</text>
+          <image class="city-chevron" src="{{icons.chevronDown}}" mode="aspectFit" />
+        </view>
+        <view wx:if="{{cityOpen}}" class="city-pop anim-fade-in">
+          <view
+            wx:for="{{cities}}"
+            wx:key="*this"
+            class="city-item {{item === city ? 'city-item-active' : ''}}"
+            data-city="{{item}}"
+            bindtap="pickCity"
+          >{{item}}</view>
+        </view>
+      </view>
+      <view class="search-pill" bindtap="openSearch">
+        <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
+        <text class="search-pill-text">搜索场地、店铺...</text>
+      </view>
+    </view>
+
+    <view wx:else class="header-row">
+      <view class="search-input-wrap">
+        <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
+        <input
+          class="search-input"
+          value="{{query}}"
+          focus
+          confirm-type="search"
+          placeholder="搜索场地、店铺..."
+          placeholder-class="search-ph"
+          bindinput="onQueryInput"
+        />
+        <view wx:if="{{query}}" class="search-clear" bindtap="clearQuery">
+          <image class="search-clear-icon" src="{{icons.xWhite}}" mode="aspectFit" />
+        </view>
+      </view>
+      <view class="search-cancel" bindtap="closeSearch">取消</view>
+    </view>
+  </view>
+
+  <!-- 地图 -->
+  <map
+    id="map"
+    class="map"
+    latitude="{{latitude}}"
+    longitude="{{longitude}}"
+    scale="{{scale}}"
+    markers="{{markers}}"
+    show-location
+    bindmarkertap="onMarkerTap"
+  >
+    <!-- 回到当前定位 -->
+    <cover-view class="locate-btn" bindtap="onLocate">
+      <cover-image class="locate-icon" src="{{icons.locate}}" />
+    </cover-view>
+  </map>
+
+  <!-- 地图/列表分隔手柄 -->
+  <view class="sheet-handle" aria-hidden="true">
+    <view class="sheet-pill"></view>
+  </view>
+
+  <!-- 快捷筛选 -->
+  <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
+    <view
+      wx:for="{{filters}}"
+      wx:key="*this"
+      class="filter-chip {{filter === item ? 'filter-chip-active' : ''}}"
+      data-filter="{{item}}"
+      bindtap="pickFilter"
+    >{{item}}</view>
+  </scroll-view>
+
+  <!-- 场地列表 -->
+  <view class="list">
+    <venue-card
+      wx:for="{{list}}"
+      wx:key="id"
+      venue="{{item}}"
+      online="{{item.online}}"
+      checked="{{item.checked}}"
+      index="{{index}}"
+    />
+    <view wx:if="{{empty}}" class="empty">
+      <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
+      <text class="empty-text">{{query ? '没有找到「' + query + '」相关的场地' : '暂无' + filter + '类型的场地'}}</text>
+    </view>
+    <view wx:if="{{!empty}}" class="loadmore">
+      <view class="loadmore-spinner"></view>
+      <text>上拉加载更多</text>
+    </view>
+  </view>
+</view>

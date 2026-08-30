@@ -1,0 +1,203 @@
+.page {
+  padding: 32rpx;
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 32rpx;
+}
+
+/* ===== 统计 ===== */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16rpx;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.stat-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #8C8C8C;
+}
+
+.stat-value {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A1E;
+}
+
+/* ===== 日历 ===== */
+.calendar {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+
+.section-title {
+  display: block;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A1E;
+  margin-bottom: 24rpx;
+}
+
+.week-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 16rpx;
+}
+
+.week-label {
+  font-size: 24rpx;
+  color: #8C8C8C;
+  padding: 8rpx 0;
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  row-gap: 16rpx;
+  text-align: center;
+}
+
+.day-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  padding: 8rpx 0;
+}
+
+.day-num {
+  font-size: 28rpx;
+  color: #4D4D4D;
+}
+
+.day-num-checked {
+  color: #1A1A1E;
+}
+
+.day-today {
+  width: 56rpx;
+  height: 56rpx;
+  line-height: 56rpx;
+  border-radius: 50%;
+  border: 3rpx solid #E8E8E8;
+  color: #8C8C8C;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+.day-today-checked {
+  border-color: #FF5A36;
+  color: #FF5A36;
+  font-weight: 500;
+}
+
+.day-dot {
+  width: 8rpx;
+  height: 8rpx;
+  border-radius: 50%;
+}
+
+.day-dot-on {
+  background: #FF5A36;
+}
+
+/* ===== 排行榜 ===== */
+.board {
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 32rpx;
+}
+
+.board-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #1A1A1E;
+}
+
+.line {
+  width: 48rpx;
+  height: 1rpx;
+  background: #E8E8E8;
+}
+
+.board-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 0;
+}
+
+.board-left {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.board-rank {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #F5F5F5;
+  color: #8C8C8C;
+  font-size: 24rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-rank-top {
+  background: #FFF2EE;
+  color: #FF5A36;
+  font-weight: 700;
+}
+
+.board-user {
+  font-size: 28rpx;
+  color: #1A1A1E;
+}
+
+.board-user-self {
+  color: #FF5A36;
+  font-weight: 600;
+}
+
+.board-count {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #8C8C8C;
+}
+
+.board-count-top {
+  color: #FF5A36;
+}
+
+.board-more {
+  margin-top: 32rpx;
+  text-align: center;
+  font-size: 28rpx;
+  color: #FF5A36;
+  padding: 8rpx 0;
+}

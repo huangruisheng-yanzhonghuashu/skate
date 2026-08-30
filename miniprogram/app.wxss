@@ -1,0 +1,68 @@
+/* ===== SkateSpot 设计令牌（与设计稿一致） ===== */
+page {
+  /* Primary brand: neon orange-red */
+  --primary: #FF5A36;
+  --primary-50: #FFF2EE;
+  --primary-100: #FFE0D6;
+  --primary-600: #E63A16;
+
+  /* State colors */
+  --success: #00D4AA;
+  --warning: #FFB800;
+  --error: #FF3B30;
+  --info: #2A8CFF;
+
+  /* Neutral */
+  --ink: #1A1A1E;
+  --ink-line: #2A2A2E;
+  --graphite: #4D4D4D;
+  --ash: #8C8C8C;
+  --fog: #E8E8E8;
+  --mist: #F5F5F5;
+
+  background: #F5F5F5;
+  color: #1A1A1E;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 28rpx;
+}
+
+/* ===== 通用动画 ===== */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(40rpx) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes shake {
+  10%, 90% { transform: translateX(-2rpx); }
+  20%, 80% { transform: translateX(4rpx); }
+  30%, 50%, 70% { transform: translateX(-6rpx); }
+  40%, 60% { transform: translateX(6rpx); }
+}
+@keyframes ping {
+  0% { transform: scale(1); opacity: 0.6; }
+  75%, 100% { transform: scale(2.2); opacity: 0; }
+}
+
+.anim-fade-in { animation: fade-in 0.2s ease-out both; }
+.anim-modal-in { animation: modal-in 0.24s ease-out both; }
+.anim-shake { animation: shake 0.4s ease-in-out both; }
+
+/* 在线人数脉冲点 */
+.dot-ping {
+  position: relative;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: var(--success);
+}
+.dot-ping::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--success);
+  animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}

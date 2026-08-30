@@ -1,0 +1,196 @@
+<view wx:if="{{venue}}" class="page">
+  <!-- 图片轮播 -->
+  <view class="carousel">
+    <swiper
+      class="swiper"
+      current="{{current}}"
+      circular="{{photos.length > 1}}"
+      bindchange="onSwiperChange"
+    >
+      <swiper-item wx:for="{{photos}}" wx:key="*this">
+        <image class="photo" src="{{item}}" mode="aspectFill" />
+      </swiper-item>
+    </swiper>
+    <view wx:if="{{photos.length > 1}}" class="indicator">{{current + 1}}/{{photos.length}}</view>
+  </view>
+
+  <!-- 名称 / 评分 / 地址 / 标签 -->
+  <view class="info">
+    <view class="info-row">
+      <text class="name">{{venue.name}}</text>
+      <view class="rating">
+        <image class="rating-star" src="{{icons.star}}" mode="aspectFit" />
+        <text class="rating-num">{{venue.rating}}</text>
+      </view>
+    </view>
+    <view class="address">
+      <image class="address-pin" src="{{icons.pin}}" mode="aspectFit" />
+      <text>{{venue.address}}</text>
+    </view>
+    <view class="tags">
+      <view wx:for="{{tags}}" wx:key="label" class="tag">
+        <image class="tag-icon" src="{{item.src}}" mode="aspectFit" />
+        <text>{{item.label}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 实时状态 -->
+  <view class="live">
+    <view class="live-row">
+      <view class="dot-ping"></view>
+      <text class="live-text">此刻 {{online}} 位滑手在此</text>
+    </view>
+    <view class="live-avatars">
+      <view wx:for="{{liveAvatars}}" wx:key="text" class="live-avatar" style="background: {{item.color}}">{{item.text}}</view>
+      <view class="live-avatar live-more">+{{moreCount}}</view>
+    </view>
+  </view>
+
+  <!-- 打卡动态 -->
+  <view class="checkins">
+    <view class="checkins-head">
+      <text class="checkins-title">打卡动态 (最近3条)</text>
+      <view class="checkins-more" bindtap="showAllCheckins">
+        <text>查看全部打卡</text>
+        <image class="checkins-more-icon" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
+    <view class="checkin-list">
+      <view wx:for="{{feed}}" wx:key="index" class="checkin-card">
+        <view class="checkin-head">
+          <view class="checkin-avatar" style="background: {{item.color}}">{{item.avatar}}</view>
+          <view class="checkin-user">
+            <text class="checkin-name">{{item.user}}</text>
+            <text class="checkin-time">{{item.time}}</text>
+          </view>
+        </view>
+        <text class="checkin-text">{{item.text}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部固定操作栏 -->
+  <view class="action-bar">
+    <view class="action-item" hover-class="action-hover" bindtap="openNav">
+      <image class="action-icon" src="{{icons.send}}" mode="aspectFit" />
+      <text class="action-label">导航</text>
+    </view>
+    <view wx:if="{{checked}}" class="action-item action-checkin action-done">
+      <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
+      <text class="action-label">已签到</text>
+    </view>
+    <view wx:else class="action-item action-checkin" hover-class="action-checkin-hover" bindtap="openCheckin">
+      <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
+      <text class="action-label">签到</text>
+    </view>
+    <view class="action-item" hover-class="action-hover" bindtap="openReport">
+      <image class="action-icon" src="{{icons.flag}}" mode="aspectFit" />
+      <text class="action-label">报错</text>
+    </view>
+  </view>
+
+  <!-- 签到弹窗 -->
+  <view wx:if="{{checkinOpen}}" class="modal-mask anim-fade-in" bindtap="closeCheckin" catchtouchmove="noop">
+    <view class="modal anim-modal-in" catchtap="noop">
+      <view class="modal-title-row">
+        <image class="modal-title-icon" src="{{icons.checkCircle}}" mode="aspectFit" />
+        <text class="modal-title">签到打卡</text>
+      </view>
+
+      <view class="field">
+        <view class="field-label">
+          <image class="field-label-icon" src="{{icons.edit}}" mode="aspectFit" />
+          <text>说点什么</text>
+        </view>
+        <textarea
+          class="field-textarea"
+          value="{{note}}"
+          maxlength="200"
+          placeholder="说点什么... (选填)"
+          placeholder-class="ph"
+          bindinput="onNoteInput"
+        />
+      </view>
+
+      <view class="field">
+        <view class="photo-grid">
+          <view wx:for="{{checkinPhotos}}" wx:key="*this" class="photo-tile">
+            <image class="photo-tile-img" src="{{item}}" mode="aspectFill" />
+            <view class="photo-tile-del" data-index="{{index}}" catchtap="removeCheckinPhoto">
+              <image class="photo-tile-del-icon" src="{{icons.x}}" mode="aspectFit" />
+            </view>
+          </view>
+          <view wx:if="{{checkinPhotos.length < 9}}" class="photo-add" bindtap="chooseCheckinPhoto">
+            <image class="photo-add-icon" src="{{icons.plus}}" mode="aspectFit" />
+            <text class="photo-add-text">添加照片</text>
+            <text class="photo-add-sub">(最多9张)</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-btn {{checkinSubmitting ? 'modal-btn-loading' : ''}}" bindtap="confirmCheckin">
+        {{checkinSubmitting ? '签到中...' : '确认签到'}}
+      </view>
+      <view class="modal-cancel" bindtap="closeCheckin">取消</view>
+    </view>
+  </view>
+
+  <!-- 报错弹窗 -->
+  <view wx:if="{{reportOpen}}" class="modal-mask anim-fade-in" bindtap="closeReport" catchtouchmove="noop">
+    <view class="modal anim-modal-in" catchtap="noop">
+      <view class="modal-title-row">
+        <image class="modal-title-icon report-icon" src="{{icons.flag}}" mode="aspectFit" />
+        <text class="modal-title">场地报错</text>
+      </view>
+
+      <view class="field">
+        <text class="field-label-plain">问题类型：</text>
+        <view class="type-wrap">
+          <view
+            wx:for="{{reportTypes}}"
+            wx:key="*this"
+            class="type-chip {{reportType === item ? 'type-chip-active' : ''}}"
+            data-type="{{item}}"
+            bindtap="pickReportType"
+          >{{item}}</view>
+        </view>
+      </view>
+
+      <view class="field">
+        <textarea
+          class="field-textarea {{reportError ? 'field-error anim-shake' : ''}}"
+          value="{{reportDesc}}"
+          maxlength="500"
+          placeholder="请详细描述问题... (必填)"
+          placeholder-class="ph"
+          bindinput="onReportInput"
+        />
+        <text wx:if="{{reportError}}" class="error-text">请填写问题描述后再提交</text>
+      </view>
+
+      <view class="field">
+        <view wx:if="{{reportPhotos.length === 0}}" class="report-photo-add" bindtap="chooseReportPhoto">
+          <image class="report-photo-add-icon" src="{{icons.imagePlus}}" mode="aspectFit" />
+          <text>添加举证照片</text>
+        </view>
+        <view wx:else class="photo-grid">
+          <view wx:for="{{reportPhotos}}" wx:key="*this" class="photo-tile photo-tile-sm">
+            <image class="photo-tile-img" src="{{item}}" mode="aspectFill" />
+            <view class="photo-tile-del" data-index="{{index}}" catchtap="removeReportPhoto">
+              <image class="photo-tile-del-icon" src="{{icons.x}}" mode="aspectFit" />
+            </view>
+          </view>
+          <view wx:if="{{reportPhotos.length < 3}}" class="photo-add photo-add-sm" bindtap="chooseReportPhoto">
+            <image class="photo-add-icon" src="{{icons.imagePlus}}" mode="aspectFit" />
+          </view>
+        </view>
+      </view>
+
+      <view class="modal-btn {{reportSubmitting ? 'modal-btn-loading' : ''}}" bindtap="submitReport">
+        {{reportSubmitting ? '提交中...' : '提交报错'}}
+      </view>
+      <view class="modal-cancel" bindtap="closeReport">取消</view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,53 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/discover/discover",
+    "pages/checkins/checkins",
+    "pages/profile/profile",
+    "pages/venue-detail/venue-detail"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#1A1A1E",
+    "navigationBarTitleText": "SkateSpot",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#F5F5F5",
+    "backgroundTextStyle": "dark"
+  },
+  "tabBar": {
+    "custom": true,
+    "color": "#8C8C8C",
+    "selectedColor": "#FF5A36",
+    "backgroundColor": "#1A1A1E",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/discover/discover",
+        "text": "发现"
+      },
+      {
+        "pagePath": "pages/checkins/checkins",
+        "text": "签到"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于展示附近滑板场地与当前位置"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation"],
+  "usingComponents": {
+    "venue-card": "/components/venue-card/index"
+  },
+  "sitemapLocation": "sitemap.json",
+  "style": "v2",
+  "lazyCodeLoading": "requiredComponents"
+}

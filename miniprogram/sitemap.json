@@ -1,0 +1,9 @@
+{
+  "desc": "SkateSpot 滑板场地小程序",
+  "rules": [
+    {
+      "action": "allow",
+      "page": "*"
+    }
+  ]
+}
