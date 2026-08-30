@@ -72,7 +72,7 @@ Page({
   },
 
   pickStar(e) {
-    this.setData({ rateStars: e.currentTarget.dataset.star })
+    this.setData({ rateStars: Number(e.currentTarget.dataset.star) })
   },
 
   submitRate() {
@@ -89,8 +89,13 @@ Page({
       this.refresh()
     }).catch((e) => {
       this.setData({ rateSubmitting: false })
-      wx.showToast({ title: '评分失败，请重试', icon: 'none' })
-      console.warn('[shop-detail] 评分失败', (e && e.errCode) || (e && e.message))
+      const code = e && e.errCode
+      if (code === -502024 || code === -501024 || (e && e.errMsg && e.errMsg.indexOf('permission') >= 0)) {
+        wx.showToast({ title: '无写入权限：请在控制台将 ratings 权限设为「所有用户可读，仅创建者可写」', icon: 'none', duration: 3500 })
+      } else {
+        wx.showToast({ title: '评分失败，请重试', icon: 'none' })
+      }
+      console.error('[shop-detail] 评分失败', code, (e && e.errMsg) || e)
     })
   },
 
