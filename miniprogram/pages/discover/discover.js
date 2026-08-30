@@ -16,6 +16,7 @@ Page({
     icons: {
       heartAsh: ICON.heartAsh,
       heartOrange: ICON.heartOrange,
+      commentAsh: ICON.commentAsh,
     },
   },
 
@@ -45,8 +46,9 @@ Page({
     cloud.getPublicCheckins({ skip: this._skip, limit: PAGE_SIZE }).then((rows) => {
       this._skip += rows.length
       const ids = rows.map((r) => r.id)
-      return cloud.getLikeCounts(ids).then((counts) => {
-        Object.assign(this._counts, counts)
+      return Promise.all([cloud.getLikeCounts(ids), cloud.getCommentCounts(ids)]).then((rs) => {
+        Object.assign(this._counts, rs[0])
+        const cCounts = rs[1]
         const mapped = rows.map((r) => ({
           id: r.id,
           kind: r.kind,
@@ -60,6 +62,8 @@ Page({
           timeText: fmtAgo(r.at),
           liked: store.isLiked(r.id),
           likeCount: this._counts[r.id] || 0,
+          commentCount: cCounts[r.id] || 0,
+          commentsOpen: false,
         }))
         const list = this.data.list.concat(mapped)
         this.setData({
@@ -70,6 +74,28 @@ Page({
         })
       })
     })
+  },
+
+  /* 展开/收起评论区 */
+  toggleComments(e) {
+    const id = e.currentTarget.dataset.id
+    const list = this.data.list.map((item) => {
+      if (item.id !== id) return item
+      return { ...item, commentsOpen: !item.commentsOpen }
+    })
+    this.setData({ list: this.sortList(list) })
+  },
+
+  /* comment-box 发布/删除评论后计数联动 */
+  onCommentCount(e) {
+    const id = e.currentTarget.dataset.id
+    const delta = e.detail.delta
+    const list = this.data.list.map((item) => {
+      if (item.id !== id) return item
+      const next = Math.max(0, (item.commentCount || 0) + delta)
+      return { ...item, commentCount: next }
+    })
+    this.setData({ list: this.sortList(list) })
   },
 
   onReachBottom() {

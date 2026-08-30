@@ -1,0 +1,34 @@
+<view class="cbox" catchtap="noop">
+  <!-- 评论列表 -->
+  <view wx:for="{{list}}" wx:key="id" class="crow">
+    <image wx:if="{{item.avatarFile}}" class="cavatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
+    <view wx:else class="cavatar">{{item.avatarText}}</view>
+    <view class="cmain">
+      <view class="crow1">
+        <text class="cname">{{item.user}}</text>
+        <text class="ctime">{{item.at}}</text>
+      </view>
+      <text class="cnote">{{item.note}}</text>
+    </view>
+    <view class="cdel" data-id="{{item.id}}" bindlongpress="del">删除</view>
+  </view>
+  <view wx:if="{{loading}}" class="c-loading">加载中...</view>
+  <view wx:if="{{finished && list.length}}" class="c-end">— 全部评论 —</view>
+
+  <!-- 输入行 -->
+  <view class="cinput-row">
+    <image wx:if="{{myAvatarFile}}" class="cavatar-img cavatar-me" src="{{myAvatarFile}}" mode="aspectFill" />
+    <view wx:else class="cavatar cavatar-me">{{myAvatarText}}</view>
+    <input
+      class="cinput"
+      value="{{note}}"
+      placeholder="友善评论..."
+      placeholder-class="cph"
+      maxlength="200"
+      confirm-type="send"
+      bindinput="onNoteInput"
+      bindconfirm="submit"
+    />
+    <view class="csend {{note ? 'csend-on' : ''}} {{submitting ? 'csend-busy' : ''}}" bindtap="submit">发送</view>
+  </view>
+</view>

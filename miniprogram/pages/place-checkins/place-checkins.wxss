@@ -108,3 +108,29 @@
   font-size: 24rpx;
   color: #C0C0C4;
 }
+
+/* 评论入口 */
+.cmt-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-top: 18rpx;
+  padding-top: 18rpx;
+  border-top: 1rpx solid #F5F5F5;
+  font-size: 24rpx;
+  color: #8C8C8C;
+}
+
+.cmt-icon {
+  width: 30rpx;
+  height: 30rpx;
+}
+
+.cmt-count {
+  flex: 1;
+}
+
+.cmt-caret {
+  font-size: 22rpx;
+  color: #C0C0C4;
+}

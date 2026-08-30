@@ -57,7 +57,19 @@
           <image class="action-icon" src="{{item.liked ? icons.heartOrange : icons.heartAsh}}" mode="aspectFit" />
           <text>{{item.likeCount}}</text>
         </view>
+        <view class="action {{item.commentsOpen ? 'action-liked' : ''}}" data-id="{{item.id}}" bindtap="toggleComments">
+          <image class="action-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
+          <text>{{item.commentCount}}</text>
+        </view>
       </view>
+
+      <!-- 评论区（内嵌展开） -->
+      <comment-box
+        wx:if="{{item.commentsOpen}}"
+        checkin-id="{{item.id}}"
+        data-id="{{item.id}}"
+        bind:countchange="onCommentCount"
+      />
     </view>
 
     <view wx:if="{{loading}}" class="more">加载中...</view>

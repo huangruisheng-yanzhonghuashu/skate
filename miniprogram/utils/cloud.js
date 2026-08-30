@@ -185,6 +185,69 @@ function getLikeCounts(ids) {
     })
 }
 
+/* ===== 评论（UGC 最小版：发布即显示，仅可删自己的；公开内容） ===== */
+/* 某条打卡的评论列表（时间正序，分页） */
+function getComments(checkinId, opts) {
+  opts = opts || {}
+  let q = db().collection('comments').where({ checkinId: checkinId })
+  if (opts.skip) q = q.skip(opts.skip)
+  return q.orderBy('at', 'asc').limit(opts.limit || 20).get()
+    .then((r) => (r.data || []).map(function (d) {
+      const avatar = d.avatar || ''
+      return {
+        id: d._id,
+        checkinId: d.checkinId,
+        user: d.userName || '滑手',
+        avatarFile: avatar.indexOf('cloud://') === 0 ? avatar : '',
+        avatarText: avatar.indexOf('cloud://') === 0 ? (d.userName || '滑').slice(0, 1) : (avatar || '滑'),
+        note: d.note || '',
+        at: d.at,
+      }
+    }))
+    .catch((e) => {
+      console.warn('[cloud] 评论读取失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
+}
+
+/* 发布评论（需携带发布者昵称/头像冗余，展示免联表） */
+function addCommentDoc(checkinId, note, user) {
+  return db().collection('comments').add({
+    data: {
+      checkinId: checkinId,
+      note: note,
+      at: new Date().toISOString(),
+      userName: (user && user.nickname) || '滑手',
+      avatar: (user && user.avatarFileID) || ((user && user.nickname) || '滑').slice(0, 1),
+    },
+  }).then((r) => ({ id: r._id }))
+}
+
+/* 删除自己的评论（"仅创建者可写"下只能删自己的） */
+function removeCommentDoc(id) {
+  return db().collection('comments').doc(id).remove()
+}
+
+/* 评论计数聚合：comments 集合按 checkinId in ids 分组计数 */
+function getCommentCounts(ids) {
+  const cmd = db().command
+  const $ = agg()
+  if (!ids || !ids.length) return Promise.resolve({})
+  return db().collection('comments').aggregate()
+    .match({ checkinId: cmd.in(ids) })
+    .group({ _id: '$checkinId', total: $.sum(1) })
+    .end()
+    .then(function (r) {
+      const map = {}
+      ;(r.list || []).forEach(function (x) { map[x._id] = x.total })
+      return map
+    })
+    .catch(function (e) {
+      console.warn('[cloud] 评论计数聚合失败', (e && e.errCode) || (e && e.message))
+      return {}
+    })
+}
+
 /* ===== 点赞（用户作用域） ===== */
 function getMyLikes() {
   return db().collection('feed_likes')
@@ -414,6 +477,10 @@ module.exports = {
   getPlaceCheckins: getPlaceCheckins,
   getPublicCheckins: getPublicCheckins,
   getLikeCounts: getLikeCounts,
+  getComments: getComments,
+  addCommentDoc: addCommentDoc,
+  removeCommentDoc: removeCommentDoc,
+  getCommentCounts: getCommentCounts,
   getMyLikes: getMyLikes,
   setLike: setLike,
   getMyProfile: getMyProfile,

@@ -27,6 +27,18 @@
         catchtap="preview"
       />
     </view>
+    <!-- 评论入口 + 内嵌评论区 -->
+    <view class="cmt-toggle" data-id="{{item.id}}" bindtap="toggleComments">
+      <image class="cmt-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
+      <text class="cmt-count">{{item.commentCount}} 条评论</text>
+      <text class="cmt-caret">{{item.commentsOpen ? '收起 ▴' : '展开 ▾'}}</text>
+    </view>
+    <comment-box
+      wx:if="{{item.commentsOpen}}"
+      checkin-id="{{item.id}}"
+      data-id="{{item.id}}"
+      bind:countchange="onCommentCount"
+    />
   </view>
 
   <view wx:if="{{loading}}" class="more">加载中...</view>

@@ -395,7 +395,7 @@ const SEED_FEEDS = [
   { id: 'f10', user: '大龙', avatar: '大龙', avatarColor: '#4D4D4D', venueId: 'hz-huanglong', at: hoursAgo(50), text: '黄龙广场练滑行，地铁直达就是方便。', photos: [FEED_IMGS[1]], likes: 9, comments: 1 },
 ]
 
-const COLLECTIONS = ['venues', 'feeds', 'checkins', 'feed_likes', 'user_profiles', 'venue_reports', 'presence', 'shops', 'config']
+const COLLECTIONS = ['venues', 'feeds', 'checkins', 'feed_likes', 'user_profiles', 'venue_reports', 'presence', 'shops', 'config', 'comments']
 
 /* 建集合（已存在则忽略） */
 async function ensureCollections() {

@@ -1,6 +1,7 @@
 /* 全部打卡列表（场地/店铺共用）：分页加载所有人的打卡 */
 const cloud = require('../../utils/cloud.js')
 const { fmtAgo } = require('../../utils/format.js')
+const { ICON } = require('../../utils/icons.js')
 
 const PAGE_SIZE = 20
 
@@ -12,6 +13,7 @@ Page({
     empty: false,
     finished: false, /* 没有更多 */
     loading: false,
+    icons: { commentAsh: ICON.commentAsh },
   },
 
   onLoad(options) {
@@ -43,15 +45,46 @@ Page({
     if (this.data.loading || this.data.finished) return
     this.setData({ loading: true })
     cloud.getPlaceCheckins(this._id, { skip: this._skip, limit: PAGE_SIZE }).then((rows) => {
-      const mapped = rows.map((r) => ({ ...r, time: fmtAgo(r.at) }))
+      const mapped = rows.map((r) => ({
+        ...r,
+        time: fmtAgo(r.at),
+        commentCount: 0,
+        commentsOpen: false,
+      }))
       this._skip += rows.length
-      this.setData({
-        list: this.data.list.concat(mapped),
-        loading: false,
-        finished: rows.length < PAGE_SIZE,
-        empty: this.data.list.length + mapped.length === 0,
+      /* 本页评论计数一次性聚合 */
+      const ids = mapped.map((r) => r.id)
+      return cloud.getCommentCounts(ids).then((cCounts) => {
+        mapped.forEach((r) => { r.commentCount = cCounts[r.id] || 0 })
+        this.setData({
+          list: this.data.list.concat(mapped),
+          loading: false,
+          finished: rows.length < PAGE_SIZE,
+          empty: this.data.list.length + mapped.length === 0,
+        })
       })
     })
+  },
+
+  /* 展开/收起评论区 */
+  toggleComments(e) {
+    const id = e.currentTarget.dataset.id
+    const list = this.data.list.map((item) => {
+      if (item.id !== id) return item
+      return { ...item, commentsOpen: !item.commentsOpen }
+    })
+    this.setData({ list: list })
+  },
+
+  /* comment-box 计数联动 */
+  onCommentCount(e) {
+    const id = e.currentTarget.dataset.id
+    const delta = e.detail.delta
+    const list = this.data.list.map((item) => {
+      if (item.id !== id) return item
+      return { ...item, commentCount: Math.max(0, (item.commentCount || 0) + delta) }
+    })
+    this.setData({ list: list })
   },
 
   onReachBottom() {
