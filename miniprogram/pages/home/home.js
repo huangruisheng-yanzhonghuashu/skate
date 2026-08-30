@@ -49,7 +49,8 @@ Page({
   onShow() {
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
     if (tb) tb.setData({ selected: 0 })
-    this.loadVenues()
+    /* 场地数据 onLoad 已加载（云数据会话内不变），这里只刷新签到状态相关渲染，
+     * 避免与 loadVenues 回调重复全量 setData */
     this.refresh()
     this.buildMarkers()
     this.startTick()
@@ -143,14 +144,14 @@ Page({
   startTick() {
     this.stopTick()
     this._timer = setInterval(() => {
-      if (!this._venues.length) return
-      const v = this._venues[Math.floor(Math.random() * this._venues.length)]
-      const next = Math.min(28, Math.max(1, this._online[v.id] + (Math.random() > 0.5 ? 1 : -1)))
+      const list = this.data.list
+      if (!list.length) return
+      /* 只在当前渲染列表里随机选一条，定向更新单个字段，避免全量 setData */
+      const i = Math.floor(Math.random() * list.length)
+      const v = list[i]
+      const next = Math.min(28, Math.max(1, (this._online[v.id] || v.online) + (Math.random() > 0.5 ? 1 : -1)))
       this._online[v.id] = next
-      const list = this.data.list.map((item) =>
-        item.id === v.id ? { ...item, online: next } : item
-      )
-      this.setData({ list })
+      this.setData({ ['list[' + i + '].online']: next })
     }, 4000)
   },
 
@@ -219,8 +220,16 @@ Page({
     let arr = (this._venues || []).filter((v) => v.city === store.getCity())
     if (this.data.filter !== '全部') arr = arr.filter((v) => v.category === this.data.filter)
     if (query) arr = arr.filter((v) => v.name.indexOf(query) >= 0)
+    /* 只传 venue-card 实际渲染的字段，剔除 photos 长URL、feed、坐标等大字段，减小 setData 体积 */
     const list = arr.map((v) => ({
-      ...v,
+      id: v.id,
+      name: v.name,
+      rating: v.rating,
+      distance: v.distance,
+      shortAddr: v.shortAddr,
+      category: v.category,
+      hot: v.hot,
+      tags: v.tags,
       online: this._online ? this._online[v.id] : v.online,
       checked: store.checkedToday(v.id),
     }))
