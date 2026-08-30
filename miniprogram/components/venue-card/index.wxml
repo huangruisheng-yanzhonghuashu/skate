@@ -1,4 +1,4 @@
-<view class="card" style="animation-delay: {{delay}}ms" bindtap="go">
+<view class="card" style="animation-delay: {{delay}}ms" bindtap="go" aria-role="button" aria-label="{{venue.name}}，查看场地详情">
   <!-- 角标：已签到（右上，绿底对勾）优先，其次热门（图标右侧） -->
   <view wx:if="{{checked}}" class="badge-checked">
     <image class="badge-check" src="{{icons.checkGreen}}" mode="aspectFit" />
@@ -13,8 +13,16 @@
   <view class="body">
     <view class="name-row {{checked ? 'name-row-checked' : ''}}">
       <view class="name {{venue.hot && !checked ? 'name-hot' : ''}}">{{venue.name}}</view>
+      <!-- 星级可视化：灰星底层 + 橙星顶层按评分比例裁剪 -->
       <view class="rating">
-        <image class="rating-star" src="{{icons.star}}" mode="aspectFit" />
+        <view class="stars">
+          <view class="stars-bg">
+            <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="star" src="{{icons.starGray}}" mode="aspectFit" />
+          </view>
+          <view class="stars-fg" style="width: {{(venue.rating || 0) / 5 * 100}}%">
+            <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="star" src="{{icons.star}}" mode="aspectFit" />
+          </view>
+        </view>
         <text class="rating-num">{{venue.rating}}</text>
       </view>
     </view>

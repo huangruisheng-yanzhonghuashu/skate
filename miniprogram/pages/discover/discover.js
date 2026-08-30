@@ -37,13 +37,13 @@ Page({
     this._skip = 0
     this._counts = {}
     this.setData({ list: [], finished: false, empty: false })
-    this.loadMore()
+    return this.loadMore()
   },
 
   loadMore() {
-    if (this.data.loading || this.data.finished) return
+    if (this.data.loading || this.data.finished) return Promise.resolve()
     this.setData({ loading: true })
-    cloud.getPublicCheckins({ skip: this._skip, limit: PAGE_SIZE }).then((rows) => {
+    return cloud.getPublicCheckins({ skip: this._skip, limit: PAGE_SIZE }).then((rows) => {
       this._skip += rows.length
       const ids = rows.map((r) => r.id)
       return Promise.all([cloud.getLikeCounts(ids), cloud.getCommentCounts(ids)]).then((rs) => {
@@ -102,10 +102,15 @@ Page({
     this.loadMore()
   },
 
-  /* 最新：时间倒序（已是查询序）；热门：点赞数优先 */
+  onPullDownRefresh() {
+    this.reload().then(() => wx.stopPullDownRefresh()).catch(() => wx.stopPullDownRefresh())
+  },
+
+  /* 最新：时间倒序（已是查询序）；热门：点赞×2 + 评论×3 混合权重（互动加权，避免纯点赞冷启动全 0 失真） */
   sortList(list) {
     if (this.data.tab === 'hot') {
-      return list.slice().sort((a, b) => (b.likeCount || 0) - (a.likeCount || 0))
+      const score = (x) => (x.likeCount || 0) * 2 + (x.commentCount || 0) * 3
+      return list.slice().sort((a, b) => score(b) - score(a))
     }
     return list
   },

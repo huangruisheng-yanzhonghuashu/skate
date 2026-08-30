@@ -38,8 +38,10 @@ Component({
       this.setData({ loading: true })
       cloud.getComments(this.data.checkinId, { skip: this._skip, limit: PAGE_SIZE }).then((rows) => {
         this._skip += rows.length
+        /* 评论时间格式化（相对时间），避免 WXML 直接显示 UTC 原始串 */
+        const list = this.data.list.concat(rows.map((r) => ({ ...r, timeText: fmtAgo(r.at) })))
         this.setData({
-          list: this.data.list.concat(rows),
+          list: list,
           loading: false,
           finished: rows.length < PAGE_SIZE,
         })
@@ -83,6 +85,7 @@ Component({
               avatarText: (u.nickname || '滑').slice(0, 1),
               note: note,
               at: new Date().toISOString(),
+              timeText: '刚刚',
             }]),
             note: '',
             submitting: false,

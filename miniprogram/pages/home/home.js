@@ -19,6 +19,8 @@ Page({
     list: [],
     empty: false,
     loaded: false,
+    locating: true,
+    mapCollapsed: false,
     markers: [],
     selectedVenueId: '',
     latitude: 31.2304,
@@ -114,11 +116,12 @@ Page({
       type: 'gcj02',
       success: (res) => {
         this._located = true
-        this.setData({ latitude: res.latitude, longitude: res.longitude, scale: 14 })
+        this.setData({ latitude: res.latitude, longitude: res.longitude, scale: 14, locating: false })
         this.autoMatchCity(res.latitude, res.longitude)
       },
       fail: (e) => {
         /* 用户拒绝授权或定位失败：保持默认中心（当前城市第一个场地） */
+        this.setData({ locating: false })
         const msg = (e && e.errMsg) || ''
         console.warn('[home] 定位失败，使用默认中心', msg)
         if (msg.indexOf('auth') >= 0 || msg.indexOf('deny') >= 0) {
@@ -168,13 +171,47 @@ Page({
   onHide() {},
   onUnload() {},
 
+  /* 地图折叠/展开：点击分隔手柄切换（收起后列表全屏，地图实例保留不销毁） */
+  toggleMap() {
+    this.setData({ mapCollapsed: !this.data.mapCollapsed })
+  },
+
+  /* 下拉刷新：强制重拉云端两实体 + 在线数 */
+  onPullDownRefresh() {
+    Promise.all([cloud.getVenues(true), cloud.getShops(true)]).then((rs) => {
+      this._venues = rs[0]
+      this._shops = rs[1]
+      rs[0].forEach((v) => { this._online[v.id] = v.online })
+      this.refresh()
+      this.buildMarkers()
+      this.refreshOnline()
+      wx.stopPullDownRefresh()
+      wx.showToast({ title: '已刷新', icon: 'none' })
+    }).catch(() => {
+      wx.stopPullDownRefresh()
+    })
+  },
+
   /* 滑板鞋 pin 标记（场地）：热门/今日已签到为橙色，其余水泥灰
-   * 店铺 pin 复用同一套图标，靠气泡"[店铺]"前缀区分；选中项常驻气泡 */
+   * 店铺 pin 复用同一套图标，靠气泡"[店铺]"前缀区分；选中项常驻气泡
+   * 与列表同口径过滤（城市+筛选+搜索），保证地图与列表认知一致 */
   buildMarkers() {
     const selected = this.data.selectedVenueId
     const entity = this.data.entity
     const src = (entity === 'venue' ? this._venues : this._shops) || []
-    const items = src.filter((v) => v.city === this.data.city)
+    const query = (this.data.query || '').trim()
+    let items = src.filter((v) => v.city === this.data.city)
+    if (entity === 'venue' && this.data.filter !== '全部') {
+      items = items.filter((v) => v.category === this.data.filter)
+    }
+    if (entity === 'shop' && this.data.filter !== '全部') {
+      items = items.filter((s) => (s.services || []).indexOf(this.data.filter) >= 0)
+    }
+    if (query) {
+      items = items.filter((v) =>
+        v.name.indexOf(query) >= 0 || (entity === 'shop' && (v.address || '').indexOf(query) >= 0)
+      )
+    }
     this._markerMap = items.map((v, i) => ({ markerId: i + 1, kind: entity, id: v.id }))
     const markers = items.map((v, i) => {
       const isVenue = entity === 'venue'
@@ -280,6 +317,8 @@ Page({
       }))
     }
     this.setData({ list, empty: list.length === 0, city: city })
+    /* 列表与地图保持同口径（搜索/筛选/切城后 markers 跟随） */
+    this.buildMarkers()
   },
 
   /* 城市选择 */

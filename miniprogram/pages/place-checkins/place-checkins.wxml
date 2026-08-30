@@ -4,7 +4,7 @@
     <view class="empty-btn" bindtap="goPlace">去打卡</view>
   </view>
 
-  <view wx:for="{{list}}" wx:key="id" class="card">
+  <view wx:for="{{list}}" wx:key="id" class="card card-in" style="animation-delay: {{index < 10 ? index * 60 : 0}}ms">
     <view class="head">
       <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
       <view wx:else class="avatar">{{item.avatarText}}</view>

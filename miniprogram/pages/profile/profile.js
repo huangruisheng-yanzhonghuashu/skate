@@ -20,11 +20,11 @@ Page({
     form: { nickname: '', skateYears: '', avatarFileID: '', avatarTemp: '' },
     years: SKATE_YEARS,
     icons: {
-      chevron: ICON.chevron,
-      flame: ICON.flame,
-      pin: ICON.pin,
-      file: ICON.file,
-      settings: ICON.settings,
+      chevron: ICON.chevronRightAsh,
+      flame: ICON.flameOrange,
+      pin: ICON.pinOrangeSmall,
+      file: ICON.fileOrange,
+      settings: ICON.settingsOrange,
     },
   },
 

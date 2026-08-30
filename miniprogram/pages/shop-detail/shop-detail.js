@@ -88,6 +88,44 @@ Page({
     wx.previewImage({ urls: this.data.shop.photos, current: e.currentTarget.dataset.url })
   },
 
+  /* 打卡成功轻庆祝：1.8s 自动消失 */
+  showCelebrate(title, placeName) {
+    this.setData({
+      celebrate: true,
+      celebrateText: title,
+      celebrateSub: placeName,
+    })
+    if (this._celebrateTimer) clearTimeout(this._celebrateTimer)
+    this._celebrateTimer = setTimeout(() => {
+      this.setData({ celebrate: false })
+    }, 1800)
+  },
+
+  /* 下拉刷新 */
+  onPullDownRefresh() {
+    this.refresh()
+    this.loadFeed()
+    wx.stopPullDownRefresh()
+  },
+
+  /* 分享给好友 / 分享朋友圈 */
+  onShareAppMessage() {
+    const s = this.data.shop
+    return {
+      title: s.name + ' · 滑板好店推荐',
+      path: '/pages/shop-detail/shop-detail?id=' + s.id,
+      imageUrl: s.photos && s.photos[0] ? s.photos[0] : '',
+    }
+  },
+
+  onShareTimeline() {
+    const s = this.data.shop
+    return {
+      title: s.name + ' · 滑板好店推荐',
+      query: 'id=' + s.id,
+    }
+  },
+
   /* ===== 店铺打卡弹窗（新增 / 补充今日打卡复用） ===== */
   openCheckin() {
     this._editId = ''
@@ -176,7 +214,7 @@ Page({
       }
       store.addCheckin(s.id, s.name, note, fileIDs, 'shop')
       this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
-      wx.showToast({ title: '打卡成功', icon: 'success' })
+      this.showCelebrate('打卡成功', s.name)
       this.refresh()
       this.loadFeed()
     }

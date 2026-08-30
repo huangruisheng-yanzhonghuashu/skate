@@ -61,8 +61,9 @@ const ICON = {
   userAsh: svg(P.user, { stroke: ASH }),
   userOrange: svg(P.user, { stroke: ORANGE }),
 
-  /* 评分星（橙 / 琥珀，实心） */
+  /* 评分星（橙实心 / 灰实心 / 琥珀，星级可视化用） */
   starOrange: svg(P.star, { fill: ORANGE, stroke: ORANGE }),
+  starGray: svg(P.star, { fill: '#E8E8EA', stroke: '#E8E8EA' }),
   starAmber: svg(P.star, { fill: '#FFB800', stroke: '#FFB800' }),
 
   /* 发现页 */

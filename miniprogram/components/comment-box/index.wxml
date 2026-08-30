@@ -6,7 +6,7 @@
     <view class="cmain">
       <view class="crow1">
         <text class="cname">{{item.user}}</text>
-        <text class="ctime">{{item.at}}</text>
+        <text class="ctime">{{item.timeText}}</text>
       </view>
       <text class="cnote">{{item.note}}</text>
     </view>

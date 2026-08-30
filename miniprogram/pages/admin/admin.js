@@ -137,9 +137,26 @@ Page({
     })
   },
 
+  /* 关闭表单：有未保存内容时二次确认，防误触丢失 */
   closeForm() {
     if (this.data.saving || this.data.photosUploading) return
-    this.setData({ formOpen: false })
+    const f = this.data.form
+    const dirty = !!(f.name.trim() || f.address.trim() || f.latitude !== null ||
+      (f.photos && f.photos.length) || (f.kind === 'shop' && f.services.length))
+    if (!dirty) {
+      this.setData({ formOpen: false })
+      return
+    }
+    wx.showModal({
+      title: '放弃修改？',
+      content: '当前填写的内容尚未保存',
+      confirmText: '放弃',
+      cancelText: '继续编辑',
+      confirmColor: '#E5484D',
+      success: (r) => {
+        if (r.confirm) this.setData({ formOpen: false })
+      },
+    })
   },
 
   noop() { /* 阻止冒泡 */ },

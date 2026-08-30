@@ -193,7 +193,7 @@
   background: #D9D9D9;
 }
 
-/* ===== 实体切换 Tab ===== */
+/* ===== 实体切换 Tab（主题橙统一） ===== */
 .entity-seg {
   display: flex;
   gap: 12rpx;
@@ -210,9 +210,93 @@
 }
 
 .entity-active {
-  background: #1A1A1E;
+  background: #FF5A36;
   color: #FFFFFF;
   font-weight: 600;
+}
+
+/* ===== 地图折叠 ===== */
+.map {
+  transition: height 0.3s ease;
+  overflow: hidden;
+}
+
+.map-collapsed {
+  height: 0 !important;
+}
+
+/* 分隔手柄可点击折叠 */
+.sheet-handle {
+  cursor: pointer;
+}
+
+.sheet-handle-hover {
+  opacity: 0.7;
+}
+
+.sheet-hint {
+  font-size: 20rpx;
+  color: #C0C0C4;
+  margin-top: 6rpx;
+}
+
+/* ===== 定位中提示（地图浮层） ===== */
+.locating-tip {
+  position: absolute;
+  top: 20rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26, 26, 30, 0.8);
+  color: #FFFFFF;
+  font-size: 22rpx;
+  padding: 10rpx 28rpx;
+  border-radius: 999rpx;
+}
+
+/* ===== 骨架屏 ===== */
+.skel-card {
+  display: flex;
+  gap: 24rpx;
+  padding: 28rpx;
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.skel-icon {
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.skel-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+  justify-content: center;
+}
+
+.skel-line {
+  height: 24rpx;
+  border-radius: 8rpx;
+}
+
+.skel-w60 { width: 60%; }
+.skel-w80 { width: 80%; }
+.skel-w40 { width: 40%; }
+
+.skel-card .skel-icon,
+.skel-card .skel-line {
+  background: linear-gradient(90deg, #EFEFF1 25%, #F7F7F8 50%, #EFEFF1 75%);
+  background-size: 200% 100%;
+  animation: skel-shine 1.2s ease infinite;
+}
+
+@keyframes skel-shine {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
 }
 
 /* ===== 筛选 ===== */

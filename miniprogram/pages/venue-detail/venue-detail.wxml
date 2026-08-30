@@ -8,7 +8,7 @@
       bindchange="onSwiperChange"
     >
       <swiper-item wx:for="{{photos}}" wx:key="*this">
-        <image class="photo" src="{{item}}" mode="aspectFill" />
+        <image class="photo photo-fade" src="{{item}}" mode="aspectFill" lazy-load />
       </swiper-item>
     </swiper>
     <view wx:if="{{photos.length > 1}}" class="indicator">{{current + 1}}/{{photos.length}}</view>
@@ -207,5 +207,15 @@
       </view>
       <view class="modal-cancel" bindtap="closeReport">取消</view>
     </view>
+  </view>
+</view>
+
+<!-- 签到成功轻庆祝（全屏轻提示，1.8s 自动消失） -->
+<view wx:if="{{celebrate}}" class="celebrate" catchtouchmove="noop">
+  <view class="celebrate-card">
+    <view class="celebrate-ring"></view>
+    <image class="celebrate-check" src="{{icons.checkCircle}}" mode="aspectFit" />
+    <text class="celebrate-title">{{celebrateText}}</text>
+    <text class="celebrate-sub">{{celebrateSub}}</text>
   </view>
 </view>

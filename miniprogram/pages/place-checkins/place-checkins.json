@@ -1,3 +1,5 @@
 {
-  "navigationBarTitleText": "全部打卡"
+  "navigationBarTitleText": "全部打卡",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
 }

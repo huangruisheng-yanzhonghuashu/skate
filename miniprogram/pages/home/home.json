@@ -1,3 +1,5 @@
 {
-  "navigationBarTitleText": "SkateSpot"
+  "navigationBarTitleText": "SkateSpot",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
 }

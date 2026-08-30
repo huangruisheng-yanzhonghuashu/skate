@@ -14,6 +14,7 @@ Component({
     icons: {
       venue: ICON.venueOrange,
       star: ICON.starOrange,
+      starGray: ICON.starGray,
       pin: ICON.pinAshSmall,
       checkGreen: ICON.checkGreenBold,
     },

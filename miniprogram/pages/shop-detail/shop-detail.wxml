@@ -2,7 +2,7 @@
   <!-- 照片轮播（云存储 fileID，点击预览） -->
   <swiper class="photos" indicator-dots indicator-active-color="#FF5A36" circular>
     <swiper-item wx:for="{{shop.photos}}" wx:key="*this">
-      <image class="photo" src="{{item}}" mode="aspectFill" data-url="{{item}}" bindtap="previewPhoto" />
+      <image class="photo photo-fade" src="{{item}}" mode="aspectFill" lazy-load data-url="{{item}}" bindtap="previewPhoto" />
     </swiper-item>
   </swiper>
 
@@ -115,5 +115,15 @@
       </button>
       <view class="f-cancel" bindtap="closeCheckin">取消</view>
     </view>
+  </view>
+</view>
+
+<!-- 打卡成功轻庆祝 -->
+<view wx:if="{{celebrate}}" class="celebrate" catchtouchmove="noop">
+  <view class="celebrate-card">
+    <view class="celebrate-ring"></view>
+    <image class="celebrate-check" src="/images/marker.png" mode="aspectFit" />
+    <text class="celebrate-title">{{celebrateText}}</text>
+    <text class="celebrate-sub">{{celebrateSub}}</text>
   </view>
 </view>

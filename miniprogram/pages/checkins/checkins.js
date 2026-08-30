@@ -39,6 +39,13 @@ Page({
     })
   },
 
+  /* 下拉刷新：统计/日历/记录/榜单全量重取 */
+  onPullDownRefresh() {
+    this.refresh()
+    this.loadBoard(this.data.boardExpanded)
+    wx.stopPullDownRefresh()
+  },
+
   toggleBoard() {
     const expanded = !this.data.boardExpanded
     this.setData({ boardExpanded: expanded })

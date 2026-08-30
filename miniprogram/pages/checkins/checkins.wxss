@@ -303,3 +303,29 @@
   font-size: 26rpx;
   color: #C0C0C4;
 }
+
+/* ===== #14 日历今日/已签高亮强化 ===== */
+/* 今日未签：橙色描边圈 */
+.day-today {
+  border-color: #FF5A36 !important;
+  color: #FF5A36 !important;
+  font-weight: 600 !important;
+}
+
+/* 今日已签：橙底实心白字（与普通已签日期明确区分） */
+.day-today-checked {
+  background: #FF5A36 !important;
+  border-color: #FF5A36 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+/* 普通已签日期：橙字 + 实心点 */
+.day-num-checked {
+  color: #FF5A36;
+  font-weight: 600;
+}
+
+.day-dot-on {
+  background: #FF5A36;
+}

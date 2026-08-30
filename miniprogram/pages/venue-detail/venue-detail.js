@@ -260,7 +260,7 @@ Page({
       /* 新签到：本地立即生效，云端写入由 store 异步处理（失败自动排队重试） */
       store.addCheckin(v.id, v.name, note, fileIDs, 'venue')
       this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
-      wx.showToast({ title: '签到成功', icon: 'success' })
+      this.showCelebrate('签到成功', v.name)
       this.refresh()
       this.loadFeed()
     }
@@ -282,6 +282,28 @@ Page({
   showAllCheckins() {
     const v = this.data.venue
     wx.navigateTo({ url: '/pages/place-checkins/place-checkins?id=' + v.id + '&kind=venue' })
+  },
+
+  /* 签到成功轻庆祝：1.8s 自动消失 */
+  showCelebrate(title, placeName) {
+    const s = store.calcStats()
+    this.setData({
+      celebrate: true,
+      celebrateText: title,
+      celebrateSub: placeName + ' · 连续打卡 ' + s.streak + ' 天',
+    })
+    if (this._celebrateTimer) clearTimeout(this._celebrateTimer)
+    this._celebrateTimer = setTimeout(() => {
+      this.setData({ celebrate: false })
+    }, 1800)
+  },
+
+  /* 下拉刷新：重拉打卡流 + 在线数 + 签到态 */
+  onPullDownRefresh() {
+    this.refresh()
+    this.loadFeed()
+    this.refreshOnline()
+    wx.stopPullDownRefresh()
   },
 
   /* 打卡照片预览 */

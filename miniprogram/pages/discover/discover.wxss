@@ -176,6 +176,16 @@
   height: 36rpx;
 }
 
+/* 卡片错峰入场（前 10 张依次淡入上移，加载更多不重复播） */
+.feed-in {
+  animation: feed-in 0.35s ease backwards;
+}
+
+@keyframes feed-in {
+  from { opacity: 0; transform: translateY(24rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* ===== 头像图片（fileID） ===== */
 .avatar-img {
   width: 80rpx;

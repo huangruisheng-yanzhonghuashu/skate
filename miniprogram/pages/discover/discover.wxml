@@ -21,7 +21,7 @@
 
   <!-- 打卡社区流 -->
   <view class="feed" wx:if="{{list.length}}">
-    <view wx:for="{{list}}" wx:key="id" class="feed-card">
+    <view wx:for="{{list}}" wx:key="id" class="feed-card feed-in" style="animation-delay: {{index < 10 ? index * 60 : 0}}ms">
       <view class="feed-head">
         <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
         <view wx:else class="avatar">{{item.avatarText}}</view>

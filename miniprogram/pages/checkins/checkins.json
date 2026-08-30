@@ -1,3 +1,5 @@
 {
-  "navigationBarTitleText": "我的签到"
+  "navigationBarTitleText": "签到",
+  "enablePullDownRefresh": true,
+  "backgroundTextStyle": "dark"
 }

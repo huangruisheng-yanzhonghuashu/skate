@@ -110,13 +110,37 @@
 .rating {
   display: flex;
   align-items: center;
-  gap: 6rpx;
+  gap: 8rpx;
   flex-shrink: 0;
 }
 
-.rating-star {
-  width: 26rpx;
-  height: 26rpx;
+/* 星级可视化：底层 5 灰星，顶层 5 橙星按评分比例裁剪 */
+.stars {
+  position: relative;
+  width: 130rpx;
+  height: 24rpx;
+}
+
+.stars-bg {
+  display: flex;
+  gap: 2rpx;
+}
+
+.stars-fg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  gap: 2rpx;
+  white-space: nowrap;
+}
+
+.star {
+  width: 24rpx;
+  height: 24rpx;
+  flex-shrink: 0;
 }
 
 .rating-num {

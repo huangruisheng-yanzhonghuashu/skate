@@ -41,6 +41,14 @@ Page({
     }
   },
 
+  /* 下拉刷新：重置分页重拉 */
+  onPullDownRefresh() {
+    this._skip = 0
+    this.setData({ list: [], finished: false, empty: false })
+    this.loadMore()
+    wx.stopPullDownRefresh()
+  },
+
   loadMore() {
     if (this.data.loading || this.data.finished) return
     this.setData({ loading: true })
