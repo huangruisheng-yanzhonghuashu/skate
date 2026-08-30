@@ -50,6 +50,7 @@ Component({
       this.setData({ note: e.detail.value })
     },
 
+    /* 发布前内容安全校验（服务端 msgSecCheck）：通过才落库 */
     submit() {
       if (this.data.submitting) return
       const note = this.data.note.trim()
@@ -58,26 +59,41 @@ Component({
         return
       }
       this.setData({ submitting: true })
-      cloud.addCommentDoc(this.data.checkinId, note, store.getUser()).then((r) => {
-        const u = store.getUser()
-        this.setData({
-          list: this.data.list.concat([{
-            id: r.id,
-            user: u.nickname || '滑手',
-            avatarFile: u.avatarFileID || '',
-            avatarText: (u.nickname || '滑').slice(0, 1),
-            note: note,
-            at: new Date().toISOString(),
-          }]),
-          note: '',
-          submitting: false,
+      wx.cloud.callFunction({ name: 'checkMsg', data: { content: note } })
+        .then((r) => {
+          const res = (r.result && typeof r.result === 'object') ? r.result : { ok: false, msg: '校验服务异常' }
+          if (!res.ok) {
+            this.setData({ submitting: false })
+            wx.showToast({ title: res.msg || '内容包含违规信息，请修改后发布', icon: 'none' })
+            return null
+          }
+          if (res.degraded) {
+            console.warn('[comment-box] 安全校验降级放行：', res.msg)
+          }
+          return cloud.addCommentDoc(this.data.checkinId, note, store.getUser())
         })
-        this.triggerEvent('countchange', { delta: 1 })
-      }).catch((e) => {
-        this.setData({ submitting: false })
-        wx.showToast({ title: '评论发布失败', icon: 'none' })
-        console.warn('[comment-box] 发布失败', (e && e.errCode) || (e && e.message))
-      })
+        .then((r) => {
+          if (!r) return /* 被拦截，toast 已提示 */
+          const u = store.getUser()
+          this.setData({
+            list: this.data.list.concat([{
+              id: r.id,
+              user: u.nickname || '滑手',
+              avatarFile: u.avatarFileID || '',
+              avatarText: (u.nickname || '滑').slice(0, 1),
+              note: note,
+              at: new Date().toISOString(),
+            }]),
+            note: '',
+            submitting: false,
+          })
+          this.triggerEvent('countchange', { delta: 1 })
+        })
+        .catch((e) => {
+          this.setData({ submitting: false })
+          wx.showToast({ title: '评论发布失败，请重试', icon: 'none' })
+          console.warn('[comment-box] 发布失败', (e && e.errCode) || (e && e.message))
+        })
     },
 
     /* 长按删除自己的评论：云端 remove 只能删自己的（"仅创建者可写"），
