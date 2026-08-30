@@ -3,7 +3,7 @@ const cloud = require('wx-server-sdk')
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV })
 const db = cloud.database()
 
-/* 与 data/mock.js 保持一致的图片生成 URL */
+/* 场地图片（与小程序端展示一致的生成式图片 URL） */
 function genImg(prompt, imageSize) {
   imageSize = imageSize || 'landscape_16_9'
   return 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=' +
@@ -29,10 +29,11 @@ function hoursAgo(h) {
   return new Date(Date.now() - h * 3600 * 1000).toISOString()
 }
 
-/* 场地种子数据：结构必须与 data/mock.js 的 VENUES 完全一致 */
+/* 场地种子数据（含 city 字段，城市列表由该字段聚合生成） */
 const SEED_VENUES = [
   {
     id: 'binjiang',
+    city: '上海',
     name: '滨江滑板公园',
     rating: 4.5,
     distance: '230m',
@@ -58,6 +59,7 @@ const SEED_VENUES = [
   },
   {
     id: 'hongkou',
+    city: '上海',
     name: '虹口碗池公园',
     rating: 4.2,
     distance: '1.2km',
@@ -82,6 +84,7 @@ const SEED_VENUES = [
   },
   {
     id: 'xuhui',
+    city: '上海',
     name: '徐汇滨江平地',
     rating: 3.8,
     distance: '2.5km',
@@ -106,6 +109,7 @@ const SEED_VENUES = [
   },
   {
     id: 'jingan',
+    city: '上海',
     name: '静安街式广场',
     rating: 4.0,
     distance: '980m',
@@ -130,6 +134,7 @@ const SEED_VENUES = [
   },
   {
     id: 'yangpu',
+    city: '上海',
     name: '杨浦U池公园',
     rating: 4.7,
     distance: '3.1km',
@@ -154,7 +159,7 @@ const SEED_VENUES = [
   },
 ]
 
-/* 动态种子数据：结构必须与 data/mock.js 的 FEED_LIST 完全一致 */
+/* 动态种子数据 */
 const SEED_FEEDS = [
   { id: 'f1', user: '板仔小张', avatar: '板仔', avatarColor: '#FF5A36', venueId: 'binjiang', at: hoursAgo(2), text: '今天碗池人少，爽滑两小时！', photos: [FEED_IMGS[0], FEED_IMGS[1]], likes: 15, comments: 3 },
   { id: 'f2', user: '小美', avatar: '小美', avatarColor: '#00D4AA', venueId: 'hongkou', at: hoursAgo(26), text: '第一次下碗池，腿软！', photos: [FEED_IMGS[2]], likes: 8, comments: 1 },

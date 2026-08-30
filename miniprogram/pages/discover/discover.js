@@ -26,10 +26,10 @@ Page({
     this.refresh()
   },
 
-  /* 云端动态流：云端优先，mock 降级 */
+  /* 云端动态流（同时确保场地缓存已加载，用于显示场地名） */
   loadFeeds() {
-    cloud.getFeeds().then((feeds) => {
-      this._feeds = feeds
+    Promise.all([cloud.getFeeds(), cloud.getVenues()]).then((rs) => {
+      this._feeds = rs[0]
       this.refresh()
     })
   },
@@ -39,7 +39,7 @@ Page({
       const liked = store.isLiked(f.id)
       return {
         ...f,
-        venueName: (cloud.getCachedVenue(f.venueId) || {}).name || '',
+        venueName: (cloud.findVenue(f.venueId) || {}).name || '',
         timeText: fmtAgo(f.at),
         liked,
         likeCount: f.likes + (liked ? 1 : 0),

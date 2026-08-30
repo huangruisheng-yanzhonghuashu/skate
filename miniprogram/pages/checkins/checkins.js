@@ -26,7 +26,7 @@ Page({
     this.loadBoard()
   },
 
-  /* 云端排行榜：聚合所有人签到数，需 checkins"所有用户可读"权限，失败降级 mock */
+  /* 云端排行榜：聚合所有人签到数，需 checkins"所有用户可读"权限 */
   loadBoard() {
     cloud.getLeaderboard().then((board) => {
       this.setData({ board })

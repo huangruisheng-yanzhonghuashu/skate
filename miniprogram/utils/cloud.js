@@ -1,7 +1,5 @@
-/* 云开发数据访问层：云端优先，本地 mock 降级
- * 所有接口返回 Promise；云端不可用/无数据时降级到 data/mock.js，保证离线可体验 */
-const mock = require('../data/mock.js')
-
+/* 云开发数据访问层：数据全部来源于云数据库
+ * 读失败/无数据返回空数组（页面展示空态）；写失败由调用方处理（store 有重试队列） */
 const ENV_ID = 'cloud1-d4grizmp31acb587e'
 
 /* wx.cloud.init 在 app.js 执行后才可用，因此全部惰性获取实例 */
@@ -36,22 +34,33 @@ function getVenues() {
   if (_venuesPromise) return _venuesPromise
   _venuesPromise = db().collection('venues').limit(20).get()
     .then((r) => {
-      if (!r.data || r.data.length === 0) throw new Error('venues empty')
-      _venues = r.data
+      _venues = r.data || []
       return _venues
     })
     .catch((e) => {
-      console.warn('[cloud] 场地读取失败，降级本地数据', (e && e.errCode) || (e && e.message))
-      _venues = mock.VENUES
+      console.warn('[cloud] 场地读取失败', (e && e.errCode) || (e && e.message))
+      _venues = []
       return _venues
     })
   return _venuesPromise
 }
 
-/* 同步取场地：优先云端缓存，未加载时降级 mock（详情页直达场景） */
-function getCachedVenue(id) {
-  const fromCloud = (_venues || []).find(function (v) { return v.id === id })
-  return fromCloud || mock.getVenue(id)
+/* 从已加载的场地缓存中查找（需先调用过 getVenues） */
+function findVenue(id) {
+  return (_venues || []).find(function (v) { return v.id === id }) || null
+}
+
+/* 城市列表：从场地集合聚合 distinct */
+function getCities() {
+  return db().collection('venues').aggregate()
+    .group({ _id: '$city' })
+    .sort({ _id: 1 })
+    .end()
+    .then((r) => (r.list || []).map((x) => x._id).filter(Boolean))
+    .catch((e) => {
+      console.warn('[cloud] 城市聚合失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
 }
 
 /* ===== 动态 ===== */
@@ -62,13 +71,12 @@ function getFeeds() {
   if (_feedsPromise) return _feedsPromise
   _feedsPromise = db().collection('feeds').limit(20).get()
     .then((r) => {
-      if (!r.data || r.data.length === 0) throw new Error('feeds empty')
-      _feeds = r.data
+      _feeds = r.data || []
       return _feeds
     })
     .catch((e) => {
-      console.warn('[cloud] 动态读取失败，降级本地数据', (e && e.errCode) || (e && e.message))
-      _feeds = mock.FEED_LIST
+      console.warn('[cloud] 动态读取失败', (e && e.errCode) || (e && e.message))
+      _feeds = []
       return _feeds
     })
   return _feedsPromise
@@ -142,7 +150,7 @@ function saveCity(city) {
   })
 }
 
-/* ===== 排行榜（聚合所有人签到数，需 checkins"所有用户可读"权限；未配置时降级 mock） ===== */
+/* ===== 排行榜（聚合所有人签到数，需 checkins"所有用户可读"权限） ===== */
 function getLeaderboard() {
   const $ = agg()
   return ensureOpenid().then(function (openid) {
@@ -153,7 +161,6 @@ function getLeaderboard() {
       .end()
   }).then(function (r) {
     const rows = (r.list || []).filter(function (x) { return !!x._id })
-    if (rows.length === 0) throw new Error('leaderboard empty')
     return rows.map(function (x, i) {
       return {
         rank: i + 1,
@@ -163,8 +170,8 @@ function getLeaderboard() {
       }
     })
   }).catch(function (e) {
-    console.warn('[cloud] 排行榜聚合失败，降级本地数据', (e && e.errCode) || (e && e.message))
-    return mock.LEADERBOARD
+    console.warn('[cloud] 排行榜聚合失败', (e && e.errCode) || (e && e.message))
+    return []
   })
 }
 
@@ -177,7 +184,8 @@ module.exports = {
   ENV_ID: ENV_ID,
   ensureOpenid: ensureOpenid,
   getVenues: getVenues,
-  getCachedVenue: getCachedVenue,
+  findVenue: findVenue,
+  getCities: getCities,
   getFeeds: getFeeds,
   getMyCheckins: getMyCheckins,
   pushCheckins: pushCheckins,

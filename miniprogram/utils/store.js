@@ -8,35 +8,6 @@ const PENDING_KEY = 'skatespot-mp-pending-v1'
 
 const USER = { name: '板仔小张', avatar: '张', skateYears: '2年' }
 
-/* 基于当前时间生成种子签到（首次使用且无本地数据时展示） */
-function seedCheckins() {
-  const now = new Date()
-  const rel = function (daysAgo, h, m, venueId, venueName) {
-    const d = new Date(now)
-    d.setDate(d.getDate() - daysAgo)
-    d.setHours(h, m, 0, 0)
-    return { id: 'seed-' + daysAgo + '-' + h, venueId: venueId, venueName: venueName, at: d.toISOString(), note: '' }
-  }
-  return [
-    rel(0, 14, 30, 'binjiang', '滨江滑板公园'),
-    rel(1, 18, 0, 'hongkou', '虹口碗池公园'),
-    rel(2, 10, 0, 'xuhui', '徐汇滨江平地'),
-    rel(3, 16, 20, 'binjiang', '滨江滑板公园'),
-    rel(5, 9, 40, 'yangpu', '杨浦U池公园'),
-    rel(6, 19, 5, 'jingan', '静安街式广场'),
-    rel(8, 15, 0, 'hongkou', '虹口碗池公园'),
-    rel(9, 11, 30, 'binjiang', '滨江滑板公园'),
-    rel(11, 17, 10, 'xuhui', '徐汇滨江平地'),
-    rel(13, 10, 50, 'yangpu', '杨浦U池公园'),
-    rel(15, 14, 15, 'binjiang', '滨江滑板公园'),
-    rel(18, 16, 0, 'jingan', '静安街式广场'),
-    rel(21, 9, 30, 'hongkou', '虹口碗池公园'),
-    rel(24, 15, 40, 'binjiang', '滨江滑板公园'),
-    rel(27, 11, 0, 'xuhui', '徐汇滨江平地'),
-    rel(30, 10, 20, 'binjiang', '滨江滑板公园'),
-  ]
-}
-
 let state = null
 const listeners = new Set()
 /* 云端写入失败的重试队列：checkins 为云端 doc 结构，likes 只保留最新目标状态 */
@@ -72,7 +43,7 @@ function init() {
     }
   } catch (e) { /* ignore */ }
   if (!state) {
-    state = { checkins: seedCheckins(), likes: {}, city: '上海' }
+    state = { checkins: [], likes: {}, city: '上海' }
     persist()
   }
   /* 2. 恢复上次未同步成功的队列 */

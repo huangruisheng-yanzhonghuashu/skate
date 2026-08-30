@@ -52,8 +52,8 @@ Page({
   },
 
   onLoad(options) {
-    cloud.getVenues().then(() => {
-      const venue = cloud.getCachedVenue(options.id)
+    cloud.getVenues().then((venues) => {
+      const venue = venues.find((v) => v.id === options.id) || null
       if (!venue) {
         wx.showToast({ title: '场地不存在或已下线', icon: 'none' })
         setTimeout(() => wx.switchTab({ url: '/pages/home/home' }), 800)
@@ -97,7 +97,7 @@ Page({
     }
   },
 
-  /* 打卡动态 = 用户真实签到(带留言) + mock，最近3条 */
+  /* 打卡动态 = 用户真实签到(带留言) + 场地打卡动态，最近3条 */
   refresh() {
     const venue = this.data.venue
     const mine = store
