@@ -20,7 +20,6 @@
         </view>
       </view>
       <text class="rating-num">{{shop.rating}}</text>
-      <text wx:if="{{shop.ratingCount}}" class="rating-count">{{shop.ratingCount}}人评</text>
     </view>
     <text class="shop-addr">{{shop.shortAddr || shop.address}}</text>
   </view>
