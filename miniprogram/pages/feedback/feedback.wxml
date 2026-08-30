@@ -1,0 +1,92 @@
+<view class="page">
+  <!-- 顶部说明 -->
+  <view class="hero">
+    <view class="hero-title">你提我改</view>
+    <view class="hero-desc">功能建议、场地信息纠错、体验问题都可以提，处理结果会回复在这里</view>
+  </view>
+
+  <!-- 列表 -->
+  <view wx:if="{{loading}}" class="state"><text>加载中...</text></view>
+  <block wx:elif="{{list.length}}">
+    <view wx:for="{{list}}" wx:key="id" class="fb-card">
+      <view class="fb-head">
+        <text class="fb-type">{{item.type}}</text>
+        <text class="fb-status fb-status-{{item.status}}">{{item.statusText}}</text>
+      </view>
+      <text class="fb-desc">{{item.desc}}</text>
+      <view wx:if="{{item.photos.length}}" class="fb-photos">
+        <image
+          wx:for="{{item.photos}}"
+          wx:for-item="p"
+          wx:key="*this"
+          class="fb-photo"
+          src="{{p}}"
+          mode="aspectFill"
+          data-photos="{{item.photos}}"
+          data-src="{{p}}"
+          bindtap="previewPhoto"
+        />
+      </view>
+      <view wx:if="{{item.reply}}" class="fb-reply">
+        <view class="fb-reply-head">
+          <text class="fb-reply-label">官方回复</text>
+          <text wx:if="{{item.replyAt}}" class="fb-reply-time">{{item.replyAt}}</text>
+        </view>
+        <text class="fb-reply-text">{{item.reply}}</text>
+      </view>
+      <text class="fb-time">提交于 {{item.timeText}}</text>
+    </view>
+  </block>
+  <view wx:else class="state">
+    <text class="state-title">还没有提过建议</text>
+    <text class="state-desc">点下方按钮，第一条由你来提</text>
+  </view>
+
+  <!-- 提交按钮 -->
+  <view class="fab" bindtap="openForm">＋ 提一条</view>
+
+  <!-- 提交弹窗 -->
+  <view wx:if="{{formOpen}}" class="mask" bindtap="closeForm">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">提一条</view>
+      <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
+
+        <view class="f-row">
+          <text class="f-label">类型</text>
+          <picker range="{{types}}" bindchange="onTypeChange">
+            <view class="f-picker">{{form.type}}</view>
+          </picker>
+        </view>
+
+        <view class="f-row f-row-top">
+          <text class="f-label">内容</text>
+          <textarea
+            class="f-textarea"
+            value="{{form.desc}}"
+            maxlength="500"
+            placeholder="描述你的建议或问题（必填）"
+            placeholder-class="ph"
+            bindinput="onDescInput"
+          />
+        </view>
+
+        <view class="f-row">
+          <text class="f-label">图片</text>
+          <view class="photo-list">
+            <view wx:for="{{form.photos}}" wx:key="*this" class="photo-item">
+              <image class="photo-img" src="{{item}}" mode="aspectFill" data-src="{{item}}" bindtap="previewFormPhoto" />
+              <view class="photo-del" data-index="{{index}}" catchtap="removePhoto">×</view>
+            </view>
+            <view wx:if="{{form.photos.length < 3}}" class="photo-add {{uploading ? 'photo-uploading' : ''}}" bindtap="choosePhotos">
+              {{uploading ? '上传中' : '＋'}}
+            </view>
+          </view>
+        </view>
+
+        <view class="f-tip">提交后可在列表查看处理进度与官方回复</view>
+
+        <button class="f-save {{submitting ? 'f-saving' : ''}}" bindtap="submit">{{submitting ? '提交中...' : '提交'}}</button>
+      </scroll-view>
+    </view>
+  </view>
+</view>

@@ -36,14 +36,17 @@ module.exports = {
     <view class="seg">
       <view class="seg-item {{entity === 'venue' ? 'seg-active' : ''}}" data-entity="venue" bindtap="switchEntity">滑板场地</view>
       <view class="seg-item {{entity === 'shop' ? 'seg-active' : ''}}" data-entity="shop" bindtap="switchEntity">滑板店铺</view>
+      <view class="seg-item {{entity === 'feedback' ? 'seg-active' : ''}}" data-entity="feedback" bindtap="switchEntity">建议</view>
+      <view class="seg-item {{entity === 'report' ? 'seg-active' : ''}}" data-entity="report" bindtap="switchEntity">报错</view>
     </view>
 
-    <!-- 城市筛选 + 计数 -->
+    <!-- 城市筛选 + 计数（建议 tab 无城市维度，仅显示计数） -->
     <view class="meta-line">
-      <picker range="{{cityOptions}}" bindchange="onCityFilter">
+      <picker wx:if="{{entity === 'venue' || entity === 'shop'}}" range="{{cityOptions}}" bindchange="onCityFilter">
         <view class="city-filter">城市：{{cityFilter}} ▾</view>
       </picker>
-      <text class="meta-count">共 {{entity === 'venue' ? viewVenues.length : viewShops.length}} 条</text>
+      <text wx:else>按提交时间倒序</text>
+      <text class="meta-count">共 {{entity === 'venue' ? viewVenues.length : entity === 'shop' ? viewShops.length : entity === 'feedback' ? feedbacks.length : reports.length}} 条</text>
     </view>
 
     <!-- 列表 -->
@@ -64,7 +67,7 @@ module.exports = {
       <view wx:if="{{!viewVenues.length}}" class="state"><text>{{cityFilter === '全部' ? '暂无场地，点下方按钮新增' : cityFilter + '暂无场地'}}</text></view>
     </block>
 
-    <block wx:else>
+    <block wx:elif="{{entity === 'shop'}}">
       <view wx:for="{{viewShops}}" wx:key="id" class="row">
         <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
         <view wx:else class="row-img row-img-empty">无图</view>
@@ -81,8 +84,75 @@ module.exports = {
       <view wx:if="{{!viewShops.length}}" class="state"><text>{{cityFilter === '全部' ? '暂无店铺，点下方按钮新增' : cityFilter + '暂无店铺'}}</text></view>
     </block>
 
-    <!-- 新增按钮 -->
-    <view class="fab" bindtap="openCreate">＋ 新增{{entity === 'venue' ? '场地' : '店铺'}}</view>
+    <!-- 建议处理（你提我改） -->
+    <block wx:elif="{{entity === 'feedback'}}">
+      <view wx:if="{{feedbackLoading}}" class="state"><text>加载中...</text></view>
+      <block wx:elif="{{feedbacks.length}}">
+        <view wx:for="{{feedbacks}}" wx:key="_id" class="fb-card">
+          <view class="fb-head">
+            <text class="fb-type">{{item.type}}</text>
+            <text class="fb-status fb-status-{{item.status}}">{{item.statusText}}</text>
+          </view>
+          <text class="fb-desc">{{item.desc}}</text>
+          <view wx:if="{{item.photos.length}}" class="fb-photos">
+            <image
+              wx:for="{{item.photos}}"
+              wx:for-item="p"
+              wx:key="*this"
+              class="fb-photo"
+              src="{{p}}"
+              mode="aspectFill"
+              data-photos="{{item.photos}}"
+              data-src="{{p}}"
+              bindtap="previewFbPhoto"
+            />
+          </view>
+          <view wx:if="{{item.reply}}" class="fb-reply">已回复：{{item.reply}}</view>
+          <view class="fb-foot">
+            <text class="fb-foot-user">{{item.userName}} · {{item.timeText}}</text>
+            <view wx:if="{{item.status === 'pending'}}" class="op op-edit" data-source="feedback" data-id="{{item._id}}" bindtap="openReply">处理</view>
+          </view>
+        </view>
+      </block>
+      <view wx:else class="state"><text>暂无用户建议</text></view>
+    </block>
+
+    <!-- 场地报错处理 -->
+    <block wx:elif="{{entity === 'report'}}">
+      <view wx:if="{{reportsLoading}}" class="state"><text>加载中...</text></view>
+      <block wx:elif="{{reports.length}}">
+        <view wx:for="{{reports}}" wx:key="_id" class="fb-card">
+          <view class="fb-head">
+            <text class="fb-type">{{item.type}}</text>
+            <text class="fb-status fb-status-{{item.status}}">{{item.statusText}}</text>
+          </view>
+          <view class="fb-venue" data-id="{{item.venueId}}" bindtap="goVenueDetail">{{item.venueName}}</view>
+          <text class="fb-desc">{{item.desc}}</text>
+          <view wx:if="{{item.photos.length}}" class="fb-photos">
+            <image
+              wx:for="{{item.photos}}"
+              wx:for-item="p"
+              wx:key="*this"
+              class="fb-photo"
+              src="{{p}}"
+              mode="aspectFill"
+              data-photos="{{item.photos}}"
+              data-src="{{p}}"
+              bindtap="previewFbPhoto"
+            />
+          </view>
+          <view wx:if="{{item.reply}}" class="fb-reply">已回复：{{item.reply}}</view>
+          <view class="fb-foot">
+            <text class="fb-foot-user">{{item.timeText}}</text>
+            <view wx:if="{{item.status === 'pending'}}" class="op op-edit" data-source="report" data-id="{{item._id}}" bindtap="openReply">处理</view>
+          </view>
+        </view>
+      </block>
+      <view wx:else class="state"><text>暂无场地报错</text></view>
+    </block>
+
+    <!-- 新增按钮（仅场地/店铺 tab 显示） -->
+    <view wx:if="{{entity === 'venue' || entity === 'shop'}}" class="fab" bindtap="openCreate">＋ 新增{{entity === 'venue' ? '场地' : '店铺'}}</view>
   </block>
 
   <!-- 编辑表单弹窗（sheet 固定 80vh；字段区+保存按钮整体滚动，按钮在内容末尾） -->
@@ -186,6 +256,39 @@ module.exports = {
 
       <button class="f-save {{saving ? 'f-saving' : ''}}" bindtap="saveForm">{{saving ? '保存中...' : '保存'}}</button>
     </scroll-view>
+    </view>
+  </view>
+
+  <!-- 建议处理弹窗（你提我改） -->
+  <view wx:if="{{replyOpen}}" class="mask" bindtap="closeReply">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-title">{{replySource === 'report' ? '处理报错' : '处理建议'}}</view>
+      <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
+
+        <view class="fb-quote">{{replyTarget.desc}}</view>
+
+        <view class="f-row">
+          <text class="f-label">结论</text>
+          <view class="chips">
+            <view class="chip {{replyForm.status === 'done' ? 'chip-on' : ''}}" data-status="done" bindtap="setReplyStatus">已处理</view>
+            <view class="chip {{replyForm.status === 'rejected' ? 'chip-reject-on' : ''}}" data-status="rejected" bindtap="setReplyStatus">已驳回</view>
+          </view>
+        </view>
+
+        <view class="f-row f-row-top">
+          <text class="f-label">回复</text>
+          <textarea
+            class="f-textarea"
+            value="{{replyForm.reply}}"
+            maxlength="200"
+            placeholder="向用户说明处理结果，用户可见（必填）"
+            placeholder-class="ph"
+            bindinput="onReplyInput"
+          />
+        </view>
+
+        <button class="f-save {{replying ? 'f-saving' : ''}}" bindtap="submitReply">{{replying ? '提交中...' : '提交回复'}}</button>
+      </scroll-view>
     </view>
   </view>
 </view>

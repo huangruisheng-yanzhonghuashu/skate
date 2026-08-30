@@ -1,0 +1,170 @@
+.page {
+  min-height: 100vh;
+  background: #F7F7F8;
+  padding: 24rpx 32rpx calc(60rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* ===== 顶部说明 ===== */
+.hero {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 36rpx 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(26, 26, 30, 0.04);
+}
+
+.hero-title {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1A1A1E;
+}
+
+.hero-desc {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #8C8C8C;
+  line-height: 1.6;
+}
+
+/* ===== 空态/加载 ===== */
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  padding: 120rpx 40rpx 0;
+  color: #8C8C8C;
+  font-size: 28rpx;
+}
+
+.state-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #4D4D4D;
+}
+
+.state-desc {
+  font-size: 26rpx;
+}
+
+/* ===== 报错卡片 ===== */
+.rp-card {
+  background: #FFFFFF;
+  border-radius: 24rpx;
+  padding: 28rpx 32rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(26, 26, 30, 0.04);
+}
+
+.rp-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rp-type {
+  font-size: 24rpx;
+  color: #2A8CFF;
+  background: #EEF5FF;
+  padding: 6rpx 20rpx;
+  border-radius: 999rpx;
+}
+
+.rp-status {
+  font-size: 24rpx;
+}
+
+.rp-status-pending {
+  color: #8C8C8C;
+}
+
+.rp-status-done {
+  color: #00B386;
+}
+
+.rp-status-rejected {
+  color: #E5484D;
+}
+
+/* 场地名行（点击回详情） */
+.rp-venue-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18rpx;
+}
+
+.rp-venue {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1A1A1E;
+}
+
+.rp-venue-link {
+  font-size: 24rpx;
+  color: #2A8CFF;
+}
+
+.rp-desc {
+  display: block;
+  margin-top: 14rpx;
+  font-size: 30rpx;
+  color: #4D4D4D;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.rp-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 18rpx;
+}
+
+.rp-photo {
+  width: 150rpx;
+  height: 150rpx;
+  border-radius: 12rpx;
+}
+
+/* 官方回复块 */
+.rp-reply {
+  margin-top: 20rpx;
+  background: #F7F7F8;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+}
+
+.rp-reply-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rp-reply-label {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #00B386;
+}
+
+.rp-reply-time {
+  font-size: 22rpx;
+  color: #C0C0C4;
+}
+
+.rp-reply-text {
+  display: block;
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: #4D4D4D;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.rp-time {
+  display: block;
+  margin-top: 16rpx;
+  font-size: 22rpx;
+  color: #C0C0C4;
+}

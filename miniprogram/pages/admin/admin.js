@@ -1,6 +1,7 @@
 /* 场地/店铺管理（管理员白名单，写操作全部走 manageVenue 云函数） */
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
+const { fmtRel } = require('../../utils/format.js')
 
 const CATEGORIES = ['混合', '碗池', '街式', '平地', 'U池']
 /* 场地标签选项 → 存库结构 { label, icon }（icon 供 venue-card 显示） */
@@ -31,6 +32,16 @@ Page({
     shops: [],
     viewVenues: [],
     viewShops: [],
+    /* 建议处理（你提我改）+ 场地报错处理 */
+    feedbacks: [],
+    feedbackLoading: false,
+    reports: [],
+    reportsLoading: false,
+    replyOpen: false,
+    replying: false,
+    replySource: 'feedback',
+    replyTarget: { id: '', desc: '' },
+    replyForm: { status: 'done', reply: '' },
     /* 表单 */
     formOpen: false,
     saving: false,
@@ -101,8 +112,123 @@ Page({
   },
 
   switchEntity(e) {
-    this.setData({ entity: e.currentTarget.dataset.entity })
-    this.applyFilter()
+    const entity = e.currentTarget.dataset.entity
+    this.setData({ entity: entity })
+    if (entity === 'feedback') this.loadFeedback()
+    else if (entity === 'report') this.loadReports()
+    else this.applyFilter()
+  },
+
+  /* ===== 建议处理（你提我改） ===== */
+  loadFeedback() {
+    if (this.data.feedbackLoading) return
+    this.setData({ feedbackLoading: true })
+    cloud.callManage('listFeedback', {}).then((res) => {
+      const list = (res.list || []).map(function (d) {
+        const st = { pending: '待处理', done: '已处理', rejected: '已驳回' }[d.status] || '待处理'
+        return {
+          _id: d._id,
+          type: d.type || '其他',
+          desc: d.desc || '',
+          photos: d.photos || [],
+          status: d.status || 'pending',
+          statusText: st,
+          reply: d.reply || '',
+          userName: d.userName || '滑手',
+          timeText: fmtRel(d.at),
+        }
+      })
+      this.setData({ feedbacks: list, feedbackLoading: false })
+    }).catch((e) => {
+      this.setData({ feedbackLoading: false })
+      wx.showToast({ title: (e && e.message) || '建议加载失败', icon: 'none' })
+      console.warn('[admin] 建议加载失败', (e && e.code) || '', (e && e.message) || e)
+    })
+  },
+
+  /* 场地报错列表（venue_reports，含旧数据无 status 时按待处理兜底） */
+  loadReports() {
+    if (this.data.reportsLoading) return
+    this.setData({ reportsLoading: true })
+    cloud.callManage('listReports', {}).then((res) => {
+      const list = (res.list || []).map(function (d) {
+        const st = { pending: '待处理', done: '已处理', rejected: '已驳回' }[d.status || 'pending'] || '待处理'
+        return {
+          _id: d._id,
+          venueId: d.venueId || '',
+          venueName: d.venueName || '场地',
+          type: d.type || '其他',
+          desc: d.desc || '',
+          photos: d.photos || [],
+          status: d.status || 'pending',
+          statusText: st,
+          reply: d.reply || '',
+          timeText: fmtRel(d.at),
+        }
+      })
+      this.setData({ reports: list, reportsLoading: false })
+    }).catch((e) => {
+      this.setData({ reportsLoading: false })
+      wx.showToast({ title: (e && e.message) || '报错加载失败', icon: 'none' })
+      console.warn('[admin] 报错加载失败', (e && e.code) || '', (e && e.message) || e)
+    })
+  },
+
+  /* 报错关联场地，点击回详情页核对信息 */
+  goVenueDetail(e) {
+    const id = e.currentTarget.dataset.id
+    if (id) wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + id })
+  },
+
+  openReply(e) {
+    const source = e.currentTarget.dataset.source || 'feedback'
+    const id = e.currentTarget.dataset.id
+    const list = source === 'report' ? this.data.reports : this.data.feedbacks
+    const item = list.find((x) => x._id === id)
+    if (!item) return
+    this.setData({
+      replyOpen: true,
+      replying: false,
+      replySource: source,
+      replyTarget: { id: id, desc: item.desc },
+      replyForm: { status: 'done', reply: '' },
+    })
+  },
+
+  closeReply() {
+    if (this.data.replying) return
+    this.setData({ replyOpen: false })
+  },
+
+  setReplyStatus(e) {
+    this.setData({ 'replyForm.status': e.currentTarget.dataset.status })
+  },
+
+  onReplyInput(e) {
+    this.setData({ 'replyForm.reply': e.detail.value })
+  },
+
+  /* 提交回复（状态+回复一起写入，用户端立即可见；按来源分发到建议/报错） */
+  submitReply() {
+    if (this.data.replying) return
+    const f = this.data.replyForm
+    if (!f.reply.trim()) { wx.showToast({ title: '请填写回复内容', icon: 'none' }); return }
+    this.setData({ replying: true })
+    const action = this.data.replySource === 'report' ? 'replyReport' : 'replyFeedback'
+    cloud.callManage(action, { id: this.data.replyTarget.id, status: f.status, reply: f.reply }).then(() => {
+      this.setData({ replyOpen: false, replying: false })
+      wx.showToast({ title: '已提交', icon: 'success' })
+      if (this.data.replySource === 'report') this.loadReports()
+      else this.loadFeedback()
+    }).catch((e) => {
+      this.setData({ replying: false })
+      wx.showToast({ title: (e && e.message) || '提交失败', icon: 'none' })
+      console.warn('[admin] 回复失败', (e && e.code) || '', (e && e.message) || e)
+    })
+  },
+
+  previewFbPhoto(e) {
+    wx.previewImage({ urls: e.currentTarget.dataset.photos, current: e.currentTarget.dataset.src })
   },
 
   /* ===== 表单 ===== */

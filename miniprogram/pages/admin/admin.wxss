@@ -381,3 +381,124 @@
 .f-saving {
   opacity: 0.6;
 }
+
+/* ===== 你提我改：建议卡片 ===== */
+.fb-card {
+  display: flex;
+  flex-direction: column;
+  background: #FFFFFF;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+}
+
+.fb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fb-type {
+  font-size: 22rpx;
+  color: #FF5A36;
+  background: #FFF2EE;
+  padding: 4rpx 16rpx;
+  border-radius: 999rpx;
+}
+
+.fb-status {
+  font-size: 22rpx;
+  color: #8C8C8C;
+}
+
+.fb-status-done {
+  color: #00B386;
+}
+
+.fb-status-rejected {
+  color: #E5484D;
+}
+
+/* 报错关联场地（点击回详情页） */
+.fb-venue {
+  margin-top: 14rpx;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #2A8CFF;
+}
+
+.fb-desc {
+  margin-top: 14rpx;
+  font-size: 28rpx;
+  color: #1A1A1E;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.fb-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 14rpx;
+}
+
+.fb-photo {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 10rpx;
+}
+
+.fb-reply {
+  margin-top: 14rpx;
+  background: #F7F7F8;
+  border-radius: 10rpx;
+  padding: 14rpx 18rpx;
+  font-size: 24rpx;
+  color: #4D4D4D;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.fb-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14rpx;
+}
+
+.fb-foot-user {
+  font-size: 22rpx;
+  color: #C0C0C4;
+}
+
+/* 处理弹窗内引用原建议 */
+.fb-quote {
+  background: #F7F7F8;
+  border-radius: 10rpx;
+  padding: 16rpx 20rpx;
+  font-size: 24rpx;
+  color: #6B6B70;
+  line-height: 1.6;
+  margin-bottom: 8rpx;
+  word-break: break-all;
+}
+
+/* 回复 textarea */
+.f-row-top {
+  align-items: flex-start;
+}
+
+.f-textarea {
+  flex: 1;
+  width: 100%;
+  min-height: 150rpx;
+  font-size: 28rpx;
+  color: #1A1A1E;
+  line-height: 1.6;
+}
+
+/* 已驳回 chip 激活态（红色） */
+.chip-reject-on {
+  color: #FFFFFF;
+  background: #E5484D;
+}

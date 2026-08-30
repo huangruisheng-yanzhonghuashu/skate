@@ -427,20 +427,38 @@ Page({
     }
     this.setData({ reportSubmitting: true })
     const v = this.data.venue
-    cloud.addVenueReport({
-      venueId: v.id,
-      venueName: v.name,
-      type: this.data.reportType,
-      desc: this.data.reportDesc.trim(),
-      at: new Date().toISOString(),
-    }).then(() => {
-      this.setData({ reportOpen: false, reportSubmitting: false })
-      wx.showToast({ title: '报错已提交', icon: 'success' })
-    }).catch((e) => {
-      this.setData({ reportSubmitting: false })
-      wx.showToast({ title: '提交失败，请重试', icon: 'none' })
-      console.warn('[venue-detail] 报错提交失败', (e && e.errCode) || (e && e.message))
-    })
+    /* 先传云存储拿 fileID 再落库，photos 随报错一并写入 */
+    const submit = (photos) => {
+      cloud.addVenueReport({
+        venueId: v.id,
+        venueName: v.name,
+        type: this.data.reportType,
+        desc: this.data.reportDesc.trim(),
+        photos: photos,
+        status: 'pending',
+        reply: '',
+        replyAt: '',
+        at: new Date().toISOString(),
+      }).then(() => {
+        this.setData({ reportOpen: false, reportSubmitting: false })
+        wx.showToast({ title: '报错已提交', icon: 'success' })
+      }).catch((e) => {
+        this.setData({ reportSubmitting: false })
+        wx.showToast({ title: '提交失败，请重试', icon: 'none' })
+        console.warn('[venue-detail] 报错提交失败', (e && e.errCode) || (e && e.message))
+      })
+    }
+    if (this.data.reportPhotos.length) {
+      Promise.all(this.data.reportPhotos.map((p) => cloud.uploadFileTo('reports', p)))
+        .then(submit)
+        .catch((e) => {
+          this.setData({ reportSubmitting: false })
+          wx.showToast({ title: '图片上传失败，请重试', icon: 'none' })
+          console.warn('[venue-detail] 报错图片上传失败', (e && e.errCode) || (e && e.message))
+        })
+    } else {
+      submit([])
+    }
   },
 
   noop() {},

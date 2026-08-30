@@ -432,6 +432,44 @@ function countMyReports() {
     .catch(() => 0)
 }
 
+/* 我的报错列表（时间倒序；仅创建者可读写下自动只返回本人的） */
+function getMyReports() {
+  return db().collection('venue_reports')
+    .orderBy('at', 'desc')
+    .limit(100)
+    .get()
+    .then((r) => r.data || [])
+    .catch((e) => {
+      console.warn('[cloud] 报错读取失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
+}
+
+/* ===== 你提我改（feedback：仅创建者可读写，用户只能看自己的；管理员读全部/回复走 manageVenue 云函数） ===== */
+function addFeedback(doc) {
+  return db().collection('feedback').add({ data: doc }).then((r) => ({ id: r._id }))
+}
+
+/* 我的建议列表（时间倒序） */
+function getMyFeedback() {
+  return db().collection('feedback')
+    .orderBy('at', 'desc')
+    .limit(100)
+    .get()
+    .then((r) => r.data || [])
+    .catch((e) => {
+      console.warn('[cloud] 建议读取失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
+}
+
+/* 统计本人建议条数（我的页菜单显示） */
+function countMyFeedback() {
+  return db().collection('feedback').count()
+    .then((r) => r.total || 0)
+    .catch(() => 0)
+}
+
 /* ===== 头像与资料 ===== */
 /* 上传头像到云存储，返回 fileID（image 组件可直接显示 cloud:// 路径） */
 function uploadAvatar(tempFilePath) {
@@ -567,6 +605,10 @@ module.exports = {
   getLeaderboard: getLeaderboard,
   addVenueReport: addVenueReport,
   countMyReports: countMyReports,
+  getMyReports: getMyReports,
+  addFeedback: addFeedback,
+  getMyFeedback: getMyFeedback,
+  countMyFeedback: countMyFeedback,
   uploadAvatar: uploadAvatar,
   uploadFileTo: uploadFileTo,
   saveProfile: saveProfile,

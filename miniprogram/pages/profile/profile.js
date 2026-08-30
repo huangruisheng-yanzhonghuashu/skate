@@ -13,6 +13,7 @@ Page({
     city: '嘉兴',
     checkinCount: 0,
     reportCount: 0,
+    feedbackCount: 0,
     recent: [],
     /* 编辑资料弹窗 */
     editOpen: false,
@@ -26,6 +27,7 @@ Page({
       file: ICON.fileOrange,
       settings: ICON.settingsOrange,
       admin: ICON.venueOrange,
+      send: ICON.sendOrange,
     },
   },
 
@@ -53,10 +55,13 @@ Page({
     })
   },
 
-  /* 报错计数（真实云数据） */
+  /* 报错/建议计数（真实云数据，互相独立） */
   loadCounts() {
     cloud.countMyReports().then((n) => {
       this.setData({ reportCount: n })
+    })
+    cloud.countMyFeedback().then((n) => {
+      this.setData({ feedbackCount: n })
     })
   },
 
@@ -128,9 +133,9 @@ Page({
 
   /* ===== 菜单跳转 ===== */
   goCheckins() { wx.switchTab({ url: '/pages/checkins/checkins' }) },
-  goReports() { wx.showToast({ title: '报错记录即将上线', icon: 'none' }) },
+  goReports() { wx.navigateTo({ url: '/pages/reports/reports' }) },
+  goFeedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }) },
   goAdmin() { wx.navigateTo({ url: '/pages/admin/admin' }) },
-  goSuggest() { wx.showToast({ title: '场地推荐即将上线', icon: 'none' }) },
   goSettings() { wx.showToast({ title: '设置即将上线', icon: 'none' }) },
   goVenue(e) { wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + e.currentTarget.dataset.id }) },
 })

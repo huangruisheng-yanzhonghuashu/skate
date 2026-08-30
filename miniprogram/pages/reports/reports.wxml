@@ -1,0 +1,48 @@
+<view class="page">
+  <!-- 顶部说明 -->
+  <view class="hero">
+    <view class="hero-title">我的报错</view>
+    <view class="hero-desc">在场地详情页提交的报错会展示在这里，处理结果会回复在对应条目下</view>
+  </view>
+
+  <!-- 列表 -->
+  <view wx:if="{{loading}}" class="state"><text>加载中...</text></view>
+  <block wx:elif="{{list.length}}">
+    <view wx:for="{{list}}" wx:key="id" class="rp-card">
+      <view class="rp-head">
+        <text class="rp-type">{{item.type}}</text>
+        <text class="rp-status rp-status-{{item.status}}">{{item.statusText}}</text>
+      </view>
+      <view class="rp-venue-row" data-id="{{item.venueId}}" bindtap="goVenue">
+        <text class="rp-venue">{{item.venueName}}</text>
+        <text class="rp-venue-link">查看场地 ›</text>
+      </view>
+      <text class="rp-desc">{{item.desc}}</text>
+      <view wx:if="{{item.photos.length}}" class="rp-photos">
+        <image
+          wx:for="{{item.photos}}"
+          wx:for-item="p"
+          wx:key="*this"
+          class="rp-photo"
+          src="{{p}}"
+          mode="aspectFill"
+          data-photos="{{item.photos}}"
+          data-src="{{p}}"
+          bindtap="previewPhoto"
+        />
+      </view>
+      <view wx:if="{{item.reply}}" class="rp-reply">
+        <view class="rp-reply-head">
+          <text class="rp-reply-label">官方回复</text>
+          <text wx:if="{{item.replyAt}}" class="rp-reply-time">{{item.replyAt}}</text>
+        </view>
+        <text class="rp-reply-text">{{item.reply}}</text>
+      </view>
+      <text class="rp-time">提交于 {{item.timeText}}</text>
+    </view>
+  </block>
+  <view wx:else class="state">
+    <text class="state-title">还没有提交过报错</text>
+    <text class="state-desc">进入场地详情页，点「报错」即可提交</text>
+  </view>
+</view>

@@ -7,7 +7,9 @@
     "pages/venue-detail/venue-detail",
     "pages/shop-detail/shop-detail",
     "pages/place-checkins/place-checkins",
-    "pages/admin/admin"
+    "pages/admin/admin",
+    "pages/feedback/feedback",
+    "pages/reports/reports"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1A1A1E",

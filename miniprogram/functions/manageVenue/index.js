@@ -155,6 +155,52 @@ exports.main = async (event) => {
         return { ok: true }
       }
 
+      /* ===== 你提我改（建议处理） ===== */
+      case 'listFeedback': {
+        const r = await db.collection('feedback')
+          .orderBy('at', 'desc')
+          .limit(200)
+          .get()
+        return { ok: true, list: r.data || [] }
+      }
+      case 'replyFeedback': {
+        if (!data.id) invalid('缺少 id')
+        if (data.status !== 'done' && data.status !== 'rejected') invalid('状态必须是 done 或 rejected')
+        if (!data.reply || typeof data.reply !== 'string' || !data.reply.trim()) invalid('回复内容必填')
+        if (data.reply.trim().length > 200) invalid('回复最多 200 字')
+        await db.collection('feedback').doc(data.id).update({
+          data: {
+            status: data.status,
+            reply: data.reply.trim(),
+            replyAt: new Date().toISOString(),
+          },
+        })
+        return { ok: true }
+      }
+
+      /* ===== 场地报错处理 ===== */
+      case 'listReports': {
+        const r = await db.collection('venue_reports')
+          .orderBy('at', 'desc')
+          .limit(200)
+          .get()
+        return { ok: true, list: r.data || [] }
+      }
+      case 'replyReport': {
+        if (!data.id) invalid('缺少 id')
+        if (data.status !== 'done' && data.status !== 'rejected') invalid('状态必须是 done 或 rejected')
+        if (!data.reply || typeof data.reply !== 'string' || !data.reply.trim()) invalid('回复内容必填')
+        if (data.reply.trim().length > 200) invalid('回复最多 200 字')
+        await db.collection('venue_reports').doc(data.id).update({
+          data: {
+            status: data.status,
+            reply: data.reply.trim(),
+            replyAt: new Date().toISOString(),
+          },
+        })
+        return { ok: true }
+      }
+
       default:
         invalid('未知操作: ' + action)
     }
