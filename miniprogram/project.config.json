@@ -1,6 +1,7 @@
 {
   "appid": "wx35095d0c1fe3c145",
   "compileType": "miniprogram",
+  "cloudfunctionRoot": "functions/",
   "libVersion": "3.8.0",
   "projectname": "skate-spot",
   "setting": {

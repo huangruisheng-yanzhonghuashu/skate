@@ -1,7 +1,24 @@
 {
-  "envId": "{{env.ENV_ID}}",
+  "envId": "cloud1-d4grizmp31acb587e",
   "functionRoot": "./functions",
-  "functions": [],
+  "functions": [
+    {
+      "name": "seed",
+      "handler": "index.main",
+      "runtime": "Nodejs18.15",
+      "timeout": 60,
+      "memorySize": 256,
+      "installDependency": true
+    },
+    {
+      "name": "getOpenId",
+      "handler": "index.main",
+      "runtime": "Nodejs18.15",
+      "timeout": 10,
+      "memorySize": 128,
+      "installDependency": true
+    }
+  ],
   "ai": {
     "defaultAgent": "{{env.AI_DEFAULT_AGENT}}",
     "agents": {
