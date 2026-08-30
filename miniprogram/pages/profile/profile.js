@@ -25,6 +25,7 @@ Page({
       pin: ICON.pinOrangeSmall,
       file: ICON.fileOrange,
       settings: ICON.settingsOrange,
+      admin: ICON.venueOrange,
     },
   },
 

@@ -44,7 +44,7 @@
     </view>
     <view class="menu-item" hover-class="menu-hover" bindtap="goAdmin">
       <view class="menu-left">
-        <image class="menu-icon" src="{{icons.settings}}" mode="aspectFit" />
+        <image class="menu-icon" src="{{icons.admin}}" mode="aspectFit" />
         <text class="menu-label">场地管理</text>
       </view>
       <view class="menu-right">
