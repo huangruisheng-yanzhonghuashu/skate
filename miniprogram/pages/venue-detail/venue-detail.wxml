@@ -96,17 +96,21 @@
           </view>
         </view>
         <text class="checkin-text">{{item.note}}</text>
-        <view wx:if="{{item.photos.length}}" class="checkin-photos">
+        <view wx:if="{{item.photos.length}}" class="checkin-photos cp-{{item.layout}}">
           <image
             wx:for="{{item.photos}}"
             wx:for-item="p"
+            wx:for-index="pi"
             wx:key="*this"
             class="checkin-photo"
+            style="{{item.photoStyle}}"
             src="{{p}}"
             mode="aspectFill"
+            data-fidx="{{index}}"
             data-urls="{{item.photos}}"
             data-url="{{p}}"
             catchtap="previewFeedPhotos"
+            bindload="onFeedPhotoLoad"
           />
         </view>
       </view>

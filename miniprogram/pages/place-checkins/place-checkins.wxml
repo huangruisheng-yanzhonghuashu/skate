@@ -17,17 +17,21 @@
       </view>
     </view>
     <text wx:if="{{item.note}}" class="note">{{item.note}}</text>
-    <view wx:if="{{item.photos.length}}" class="photos">
+    <view wx:if="{{item.photos.length}}" class="photos cp-{{item.layout}}">
       <image
         wx:for="{{item.photos}}"
         wx:for-item="p"
+        wx:for-index="pi"
         wx:key="*this"
         class="photo"
+        style="{{item.photoStyle}}"
         src="{{p}}"
         mode="aspectFill"
+        data-fidx="{{index}}"
         data-urls="{{item.photos}}"
         data-url="{{p}}"
         catchtap="preview"
+        bindload="onFeedPhotoLoad"
       />
     </view>
     <!-- 评论入口（设计稿：💬 N 条评论 左 + 展开/收起 右，两端对齐） -->

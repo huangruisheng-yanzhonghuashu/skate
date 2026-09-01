@@ -5,6 +5,14 @@ const { ICON } = require('../../utils/icons.js')
 
 const PAGE_SIZE = 20
 
+/* 微博式打卡图布局：1 张 → 原比例单图；4 张 → 2×2 紧凑格；其余 → 3 列方格 */
+function checkinPhotoLayout(photos) {
+  const n = (photos || []).length
+  if (n === 1) return 'one'
+  if (n === 4) return 'four'
+  return 'grid'
+}
+
 Page({
   data: {
     placeName: '',
@@ -58,6 +66,8 @@ Page({
         time: fmtAgo(r.at),
         commentCount: 0,
         commentsOpen: false,
+        layout: checkinPhotoLayout(r.photos),
+        photoStyle: '',
       }))
       this._skip += rows.length
       /* 本页评论计数一次性聚合 */
@@ -104,6 +114,21 @@ Page({
       urls: e.currentTarget.dataset.urls,
       current: e.currentTarget.dataset.url,
     })
+  },
+
+  /* 微博式单图：按原图宽高比换算展示尺寸（宽封顶 420 / 高封顶 560，rpx） */
+  onFeedPhotoLoad(e) {
+    const { width, height } = e.detail
+    const idx = e.currentTarget.dataset.fidx
+    const item = this.data.list[idx]
+    if (!item || item.layout !== 'one' || !width || !height) return
+    let w = 420
+    let h = (420 * height) / width
+    if (h > 560) {
+      h = 560
+      w = (560 * width) / height
+    }
+    this.setData({ [`list[${idx}].photoStyle`]: `width:${Math.round(w)}rpx;height:${Math.round(h)}rpx;` })
   },
 
   goPlace() {

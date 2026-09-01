@@ -360,9 +360,23 @@
 }
 
 .checkin-photo {
-  width: 180rpx;
-  height: 180rpx;
+  width: calc((100% - 24rpx) / 3);
+  aspect-ratio: 1 / 1;
   border-radius: 12rpx;
+}
+
+/* 微博式布局（与发现页动态流同款）：3 列格子随容器宽精确铺满；
+   1 张原比例大图（bindload 换算，方图为加载前兜底）；4 张 2×2 紧凑格（格子与九宫格同尺寸） */
+.checkin-photos.cp-one .checkin-photo {
+  width: 420rpx;
+}
+
+.checkin-photos.cp-four {
+  max-width: calc((100% - 24rpx) / 3 * 2 + 14rpx);
+}
+
+.checkin-photos.cp-four .checkin-photo {
+  width: calc((100% - 12rpx) / 2);
 }
 
 /* 轮播图片渐显（CSS 一次性动画，播完定格，无 JS 依赖） */

@@ -107,9 +107,23 @@
 }
 
 .photo {
-  width: 210rpx;
-  height: 210rpx;
+  width: calc((100% - 24rpx) / 3);
+  aspect-ratio: 1 / 1;
   border-radius: 12rpx;
+}
+
+/* 微博式布局（与详情页打卡动态同款）：3 列格子精确铺满；
+   1 张原比例大图（bindload 换算，方图为加载前兜底）；4 张 2×2 紧凑格（格子与九宫格同尺寸） */
+.photos.cp-one .photo {
+  width: 420rpx;
+}
+
+.photos.cp-four {
+  max-width: calc((100% - 24rpx) / 3 * 2 + 14rpx);
+}
+
+.photos.cp-four .photo {
+  width: calc((100% - 12rpx) / 2);
 }
 
 .more {

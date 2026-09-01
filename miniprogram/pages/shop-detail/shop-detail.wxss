@@ -189,9 +189,23 @@
 }
 
 .fphoto {
-  width: 170rpx;
-  height: 170rpx;
+  width: calc((100% - 20rpx) / 3);
+  aspect-ratio: 1 / 1;
   border-radius: 10rpx;
+}
+
+/* 微博式布局（与发现页动态流同款）：3 列格子随容器宽精确铺满；
+   1 张原比例大图（bindload 换算，方图为加载前兜底）；4 张 2×2 紧凑格（格子与九宫格同尺寸） */
+.fphotos.cp-one .fphoto {
+  width: 420rpx;
+}
+
+.fphotos.cp-four {
+  max-width: calc((100% - 20rpx) / 3 * 2 + 14rpx);
+}
+
+.fphotos.cp-four .fphoto {
+  width: calc((100% - 10rpx) / 2);
 }
 
 .fempty {
