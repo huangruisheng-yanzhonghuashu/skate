@@ -7,14 +7,6 @@ const { ICON } = require('../../utils/icons.js')
 /* 连签徽章里程碑（庆祝层提示用，与场地详情页一致） */
 const STREAK_MILESTONES = [3, 7, 30, 100]
 
-/* 微博式打卡图布局：1 张 → 原比例单图；4 张 → 2×2 紧凑格；其余 → 3 列方格 */
-function checkinPhotoLayout(photos) {
-  const n = (photos || []).length
-  if (n === 1) return 'one'
-  if (n === 4) return 'four'
-  return 'grid'
-}
-
 /* 庆祝彩纸：14 片随机位置/颜色/时序 */
 function buildConfetti() {
   const colors = ['#FF5A36', '#00D4AA', '#FFB800', '#2A8CFF', '#A06BFF', '#FF8A6E']
@@ -142,8 +134,6 @@ Page({
           time: fmtAgo(f.at),
           note: f.note,
           photos: f.photos,
-          layout: checkinPhotoLayout(f.photos),
-          photoStyle: '',
         })),
       })
     })
@@ -333,18 +323,4 @@ Page({
     })
   },
 
-  /* 微博式单图：按原图宽高比换算展示尺寸（宽封顶 420 / 高封顶 560，rpx） */
-  onFeedPhotoLoad(e) {
-    const { width, height } = e.detail
-    const idx = e.currentTarget.dataset.fidx
-    const item = this.data.feed[idx]
-    if (!item || item.layout !== 'one' || !width || !height) return
-    let w = 420
-    let h = (420 * height) / width
-    if (h > 560) {
-      h = 560
-      w = (560 * width) / height
-    }
-    this.setData({ [`feed[${idx}].photoStyle`]: `width:${Math.round(w)}rpx;height:${Math.round(h)}rpx;` })
-  },
 })

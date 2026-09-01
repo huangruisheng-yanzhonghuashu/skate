@@ -69,22 +69,18 @@
           </view>
         </view>
         <text class="fnote">{{item.note}}</text>
-        <view wx:if="{{item.photos.length}}" class="fphotos cp-{{item.layout}}">
-          <image
-            wx:for="{{item.photos}}"
-            wx:for-item="p"
-            wx:for-index="pi"
-            wx:key="*this"
-            class="fphoto"
-            style="{{item.photoStyle}}"
-            src="{{p}}"
-            mode="aspectFill"
-            data-fidx="{{index}}"
-            data-urls="{{item.photos}}"
-            data-url="{{p}}"
-            catchtap="previewFeedPhotos"
-            bindload="onFeedPhotoLoad"
-          />
+        <view wx:if="{{item.photos.length}}" class="fphotos photos-{{item.photos.length >= 3 ? 'grid' : item.photos.length}}">
+          <view wx:for="{{item.photos}}" wx:for-item="p" wx:key="*this" class="photo-cell">
+            <image
+              class="fphoto"
+              src="{{p}}"
+              mode="aspectFill"
+              lazy-load
+              data-urls="{{item.photos}}"
+              data-url="{{p}}"
+              catchtap="previewFeedPhotos"
+            />
+          </view>
         </view>
       </view>
     </view>

@@ -96,22 +96,18 @@
           </view>
         </view>
         <text class="checkin-text">{{item.note}}</text>
-        <view wx:if="{{item.photos.length}}" class="checkin-photos cp-{{item.layout}}">
-          <image
-            wx:for="{{item.photos}}"
-            wx:for-item="p"
-            wx:for-index="pi"
-            wx:key="*this"
-            class="checkin-photo"
-            style="{{item.photoStyle}}"
-            src="{{p}}"
-            mode="aspectFill"
-            data-fidx="{{index}}"
-            data-urls="{{item.photos}}"
-            data-url="{{p}}"
-            catchtap="previewFeedPhotos"
-            bindload="onFeedPhotoLoad"
-          />
+        <view wx:if="{{item.photos.length}}" class="checkin-photos photos-{{item.photos.length >= 3 ? 'grid' : item.photos.length}}">
+          <view wx:for="{{item.photos}}" wx:for-item="p" wx:key="*this" class="photo-cell">
+            <image
+              class="checkin-photo"
+              src="{{p}}"
+              mode="aspectFill"
+              lazy-load
+              data-urls="{{item.photos}}"
+              data-url="{{p}}"
+              catchtap="previewFeedPhotos"
+            />
+          </view>
         </view>
       </view>
     </view>

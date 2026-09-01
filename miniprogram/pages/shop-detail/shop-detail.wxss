@@ -184,28 +184,30 @@
 .fphotos {
   display: flex;
   flex-wrap: wrap;
-  gap: 10rpx;
+  gap: 12rpx;
   margin-top: 14rpx;
 }
 
-.fphoto {
-  width: calc((100% - 20rpx) / 3);
-  aspect-ratio: 1 / 1;
+/* 图片布局与发现页动态流同款：1 张 320rpx 方图；2 张对半分；3 张起 3 列方格铺满 */
+.fphotos .photo-cell {
+  width: calc((100% - 24rpx) / 3);
+  aspect-ratio: 1;
   border-radius: 10rpx;
+  overflow: hidden;
+  background: #17171B;
 }
 
-/* 微博式布局（与发现页动态流同款）：3 列格子随容器宽精确铺满；
-   1 张原比例大图（bindload 换算，方图为加载前兜底）；4 张 2×2 紧凑格（格子与九宫格同尺寸） */
-.fphotos.cp-one .fphoto {
-  width: 420rpx;
+.fphotos.photos-1 .photo-cell {
+  width: 320rpx;
 }
 
-.fphotos.cp-four {
-  max-width: calc((100% - 20rpx) / 3 * 2 + 14rpx);
+.fphotos.photos-2 .photo-cell {
+  width: calc((100% - 12rpx) / 2);
 }
 
-.fphotos.cp-four .fphoto {
-  width: calc((100% - 10rpx) / 2);
+.fphoto {
+  width: 100%;
+  height: 100%;
 }
 
 .fempty {

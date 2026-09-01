@@ -359,24 +359,26 @@
   margin-top: 16rpx;
 }
 
-.checkin-photo {
+/* 图片布局与发现页动态流同款：1 张 320rpx 方图；2 张对半分；3 张起 3 列方格铺满 */
+.checkin-photos .photo-cell {
   width: calc((100% - 24rpx) / 3);
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1;
   border-radius: 12rpx;
+  overflow: hidden;
+  background: #17171B;
 }
 
-/* 微博式布局（与发现页动态流同款）：3 列格子随容器宽精确铺满；
-   1 张原比例大图（bindload 换算，方图为加载前兜底）；4 张 2×2 紧凑格（格子与九宫格同尺寸） */
-.checkin-photos.cp-one .checkin-photo {
-  width: 420rpx;
+.checkin-photos.photos-1 .photo-cell {
+  width: 320rpx;
 }
 
-.checkin-photos.cp-four {
-  max-width: calc((100% - 24rpx) / 3 * 2 + 14rpx);
-}
-
-.checkin-photos.cp-four .checkin-photo {
+.checkin-photos.photos-2 .photo-cell {
   width: calc((100% - 12rpx) / 2);
+}
+
+.checkin-photo {
+  width: 100%;
+  height: 100%;
 }
 
 /* 轮播图片渐显（CSS 一次性动画，播完定格，无 JS 依赖） */
