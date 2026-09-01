@@ -1,27 +1,41 @@
-/* ===== SkateSpot 设计令牌（与设计稿一致） ===== */
+/* ===== SkateSpot 设计令牌（暗色街头风 · 与设计稿一致） ===== */
 page {
+  /* Surfaces */
+  --bg: #111114;
+  --card: #1E1E23;
+  --inset: #17171B;
+  --line: #26262C;
+
   /* Primary brand: neon orange-red */
   --primary: #FF5A36;
-  --primary-50: #FFF2EE;
-  --primary-100: #FFE0D6;
-  --primary-600: #E63A16;
+  --primary-lt: #FF8A6E;
+  --primary-50: rgba(255, 90, 54, 0.16);
+  --primary-100: rgba(255, 90, 54, 0.24);
+  --primary-600: #FF8A6E;
 
-  /* State colors */
+  /* State colors（绿仅「在场/营业中/已签到/已处理」语义） */
   --success: #00D4AA;
   --warning: #FFB800;
   --error: #FF3B30;
   --info: #2A8CFF;
 
-  /* Neutral */
-  --ink: #1A1A1E;
-  --ink-line: #2A2A2E;
-  --graphite: #4D4D4D;
-  --ash: #8C8C8C;
-  --fog: #E8E8E8;
-  --mist: #F5F5F5;
+  /* Text（暗底层级：白 → 次级 → 弱化 → 占位） */
+  --t1: #FFFFFF;
+  --t2: #D9D9DE;
+  --t3: #A6A6AD;
+  --t4: #8C8C94;
+  --t5: #6E6E76;
 
-  background: #F5F5F5;
-  color: #1A1A1E;
+  /* 兼容旧变量名（暗色语义翻转） */
+  --ink: #FFFFFF;
+  --ink-line: #26262C;
+  --graphite: #A6A6AD;
+  --ash: #8C8C94;
+  --fog: #26262C;
+  --mist: #1E1E23;
+
+  background: #111114;
+  color: #D9D9DE;
   font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
   font-size: 28rpx;
 }

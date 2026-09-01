@@ -3,55 +3,105 @@
   padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
-  gap: 32rpx;
+  gap: 24rpx;
 }
 
-/* ===== 统计 ===== */
+/* ===== 统计卡 ×3（设计稿：独立小卡，图标 + 大数字 + 小单位 + 标签） ===== */
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16rpx;
-  background: #FFFFFF;
-  border-radius: 16rpx;
-  padding: 32rpx;
 }
 
 .stat {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10rpx;
+  gap: 8rpx;
+  background: #1E1E23;
+  border-radius: 20rpx;
+  padding: 28rpx 12rpx;
 }
 
 .stat-icon {
-  width: 48rpx;
-  height: 48rpx;
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+/* 数字 40rpx 粗体 + 单位 22rpx 弱化，形成数据节奏 */
+.stat-num {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.stat-unit {
+  font-size: 22rpx;
+  color: #8C8C94;
 }
 
 .stat-label {
-  font-size: 24rpx;
-  color: #8C8C8C;
+  font-size: 22rpx;
+  color: #8C8C94;
 }
 
-.stat-value {
+/* ===== 区块标题（左对齐，去横线装饰，与设计稿一致） ===== */
+.section-title {
+  display: block;
   font-size: 32rpx;
-  font-weight: 600;
-  color: #1A1A1E;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 24rpx;
 }
 
 /* ===== 日历 ===== */
 .calendar {
-  background: #FFFFFF;
-  border-radius: 16rpx;
+  background: #1E1E23;
+  border-radius: 20rpx;
   padding: 32rpx;
 }
 
-.section-title {
-  display: block;
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24rpx;
+}
+
+.cal-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #1A1A1E;
-  margin-bottom: 24rpx;
+  color: #FFFFFF;
+}
+
+.cal-arrow {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #17171B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-arrow-hover {
+  background: #26262C;
+}
+
+.cal-arrow-disabled {
+  opacity: 0.35;
+}
+
+.cal-arrow-icon {
+  width: 28rpx;
+  height: 28rpx;
 }
 
 .week-row {
@@ -63,7 +113,7 @@
 
 .week-label {
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #6E6E76;
   padding: 8rpx 0;
 }
 
@@ -78,160 +128,64 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6rpx;
-  padding: 8rpx 0;
+  padding: 6rpx 0;
 }
 
 .day-num {
-  font-size: 28rpx;
-  color: #4D4D4D;
-}
-
-.day-num-checked {
-  color: #1A1A1E;
-}
-
-.day-today {
   width: 56rpx;
   height: 56rpx;
   line-height: 56rpx;
-  border-radius: 50%;
-  border: 3rpx solid #E8E8E8;
-  color: #8C8C8C;
   font-size: 28rpx;
-  box-sizing: border-box;
+  color: #A6A6AD;
 }
 
-.day-today-checked {
-  border-color: #FF5A36;
-  color: #FF5A36;
-  font-weight: 500;
-}
-
-.day-dot {
-  width: 8rpx;
-  height: 8rpx;
-  border-radius: 50%;
-}
-
-.day-dot-on {
-  background: #FF5A36;
-}
-
-/* ===== 排行榜 ===== */
-.board {
-  background: #FFFFFF;
-  border-radius: 16rpx;
-  padding: 32rpx;
-}
-
-.board-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16rpx;
-  margin-bottom: 24rpx;
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #1A1A1E;
-}
-
-.line {
-  width: 48rpx;
-  height: 1rpx;
-  background: #E8E8E8;
-}
-
-.board-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12rpx 0;
-}
-
-.board-left {
-  display: flex;
-  align-items: center;
-  gap: 24rpx;
-}
-
-.board-rank {
-  width: 48rpx;
-  height: 48rpx;
-  border-radius: 50%;
-  background: #F5F5F5;
-  color: #8C8C8C;
-  font-size: 24rpx;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.board-rank-top {
-  background: #FFF2EE;
+/* 已签日期：橙色数字（设计稿同款） */
+.day-num-checked {
   color: #FF5A36;
   font-weight: 700;
 }
 
-.board-user {
-  font-size: 28rpx;
-  color: #1A1A1E;
+/* 未来日期：弱化 40% */
+.day-future {
+  opacity: 0.4;
 }
 
-.board-user-self {
+/* 今日：橙色描边圈；今日已签：橙底实心白字 */
+.day-today {
+  width: 56rpx;
+  height: 56rpx;
+  line-height: 52rpx;
+  border-radius: 50%;
+  border: 3rpx solid #FF5A36;
   color: #FF5A36;
+  font-size: 28rpx;
   font-weight: 600;
+  box-sizing: border-box;
 }
 
-.board-count {
-  font-size: 28rpx;
-  font-weight: 600;
-  color: #8C8C8C;
-}
-
-.board-count-top {
-  color: #FF5A36;
-}
-
-.board-more {
-  margin-top: 32rpx;
-  text-align: center;
-  font-size: 28rpx;
-  color: #FF5A36;
-  padding: 8rpx 0;
-}
-
-.board-empty {
-  padding: 24rpx 0;
-  text-align: center;
-  font-size: 26rpx;
-  color: #C0C0C4;
+.day-today-checked {
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-weight: 700;
 }
 
 /* ===== 打卡记录 ===== */
 .records {
-  background: #FFFFFF;
-  border-radius: 16rpx;
+  background: #1E1E23;
+  border-radius: 20rpx;
   padding: 32rpx;
-  margin-bottom: 24rpx;
 }
 
 .rec {
-  display: flex;
-  align-items: center;
-  gap: 16rpx;
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #26262C;
 }
 
-.rec:last-child {
+.rec:last-of-type {
   border-bottom: none;
 }
 
 .rec-main {
-  flex: 1;
-  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 8rpx;
@@ -246,36 +200,38 @@
 .rec-name {
   font-size: 28rpx;
   font-weight: 600;
-  color: #1A1A1E;
+  color: #FFFFFF;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+/* 类型徽章：场地=青色调 / 店铺=橙色调（设计稿：名称旁小徽章） */
 .rec-kind {
   flex-shrink: 0;
   font-size: 20rpx;
-  color: #FF5A36;
-  background: #FFF1EE;
-  padding: 2rpx 12rpx;
+  color: #00D4AA;
+  background: rgba(0, 212, 170, 0.12);
+  padding: 4rpx 12rpx;
   border-radius: 6rpx;
+  line-height: 1.2;
 }
 
 .rec-kind-shop {
-  color: #FF9F2E;
-  background: #FFF9F0;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
 }
 
 .rec-time {
   flex-shrink: 0;
   margin-left: auto;
   font-size: 22rpx;
-  color: #B0B0B4;
+  color: #6E6E76;
 }
 
 .rec-note {
   font-size: 25rpx;
-  color: #6B6B70;
+  color: #A6A6AD;
   line-height: 1.5;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -288,44 +244,111 @@
   border-radius: 10rpx;
 }
 
-.rec-del {
-  flex-shrink: 0;
-  font-size: 24rpx;
-  color: #E5484D;
-  background: #FFEEEE;
-  padding: 10rpx 20rpx;
-  border-radius: 10rpx;
-}
-
 .rec-empty {
   padding: 32rpx 0;
   text-align: center;
   font-size: 26rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
-/* ===== #14 日历今日/已签高亮强化 ===== */
-/* 今日未签：橙色描边圈 */
-.day-today {
-  border-color: #FF5A36 !important;
-  color: #FF5A36 !important;
-  font-weight: 600 !important;
+/* 长按删除提示 */
+.rec-hint {
+  margin-top: 16rpx;
+  text-align: center;
+  font-size: 22rpx;
+  color: #6E6E76;
 }
 
-/* 今日已签：橙底实心白字（与普通已签日期明确区分） */
-.day-today-checked {
-  background: #FF5A36 !important;
-  border-color: #FF5A36 !important;
-  color: #FFFFFF !important;
-  font-weight: 700 !important;
+/* ===== 打卡排行榜 ===== */
+.board {
+  background: #1E1E23;
+  border-radius: 20rpx;
+  padding: 32rpx;
 }
 
-/* 普通已签日期：橙字 + 实心点 */
-.day-num-checked {
+.board-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14rpx 16rpx;
+  border-radius: 16rpx;
+}
+
+/* 我的行：橙色淡底高亮（设计稿同款） */
+.board-row-self {
+  background: rgba(255, 90, 54, 0.10);
+}
+
+.board-left {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+/* 名次徽章：金/银/铜 + 其余灰 */
+.board-rank {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  font-size: 24rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board-rank-1 {
+  background: rgba(255, 184, 0, 0.16);
+  color: #FFB800;
+}
+
+.board-rank-2 {
+  background: rgba(192, 196, 204, 0.16);
+  color: #C0C4CC;
+}
+
+.board-rank-3 {
+  background: rgba(224, 138, 80, 0.18);
+  color: #E08A50;
+}
+
+.board-rank-n {
+  background: #17171B;
+  color: #8C8C94;
+  font-weight: 500;
+}
+
+.board-user {
+  font-size: 28rpx;
+  color: #D9D9DE;
+}
+
+.board-user-self {
   color: #FF5A36;
   font-weight: 600;
 }
 
-.day-dot-on {
-  background: #FF5A36;
+.board-count {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #8C8C94;
+}
+
+.board-count-top {
+  color: #FF5A36;
+}
+
+.board-more {
+  margin-top: 32rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #8C8C94;
+  padding: 8rpx 0;
+}
+
+.board-empty {
+  padding: 24rpx 0;
+  text-align: center;
+  font-size: 26rpx;
+  color: #6E6E76;
 }

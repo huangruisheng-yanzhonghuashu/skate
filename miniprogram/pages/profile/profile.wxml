@@ -1,4 +1,7 @@
 <view class="page">
+  <!-- 页面大标题（设计稿同款） -->
+  <view class="page-title">我的</view>
+
   <!-- 个人卡片（点击进入资料编辑） -->
   <view class="profile" hover-class="profile-hover" bindtap="openEdit">
     <image wx:if="{{user.avatarFileID}}" class="avatar-img" src="{{user.avatarFileID}}" mode="aspectFill" />
@@ -18,6 +21,22 @@
       <view wx:if="{{!profileComplete}}" class="profile-hint">点击完善资料，解锁专属身份</view>
     </view>
     <image class="profile-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+  </view>
+
+  <!-- 统计行（设计稿：3 个独立小卡，数字大 + 标签小；签到数字橙色） -->
+  <view class="stats">
+    <view class="stat" bindtap="goCheckins">
+      <text class="stat-num stat-num-orange">{{checkinCount}}</text>
+      <text class="stat-label">签到</text>
+    </view>
+    <view class="stat" bindtap="goReports">
+      <text class="stat-num">{{reportCount}}</text>
+      <text class="stat-label">报错</text>
+    </view>
+    <view class="stat" bindtap="goFeedback">
+      <text class="stat-num">{{feedbackCount}}</text>
+      <text class="stat-label">建议</text>
+    </view>
   </view>
 
   <!-- 菜单 -->
@@ -72,16 +91,9 @@
     </view>
   </view>
 
-  <!-- 最近签到记录 -->
+  <!-- 最近签到记录（设计稿：左对齐标题） -->
   <view class="recent">
-    <view class="recent-title">
-      <view class="line"></view>
-      <view class="recent-title-inner">
-        <image class="recent-title-icon" src="{{icons.flame}}" mode="aspectFit" />
-        <text>最近签到记录</text>
-      </view>
-      <view class="line"></view>
-    </view>
+    <text class="recent-title">最近签到</text>
     <view
       wx:for="{{recent}}"
       wx:key="id"

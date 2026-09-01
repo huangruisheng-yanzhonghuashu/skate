@@ -32,10 +32,10 @@ module.exports = {
 
   <!-- 管理界面 -->
   <block wx:else>
-    <!-- 实体切换 -->
+    <!-- 实体切换（设计稿：场地/店铺/建议/报错 橙色胶囊 tab） -->
     <view class="seg">
-      <view class="seg-item {{entity === 'venue' ? 'seg-active' : ''}}" data-entity="venue" bindtap="switchEntity">滑板场地</view>
-      <view class="seg-item {{entity === 'shop' ? 'seg-active' : ''}}" data-entity="shop" bindtap="switchEntity">滑板店铺</view>
+      <view class="seg-item {{entity === 'venue' ? 'seg-active' : ''}}" data-entity="venue" bindtap="switchEntity">场地</view>
+      <view class="seg-item {{entity === 'shop' ? 'seg-active' : ''}}" data-entity="shop" bindtap="switchEntity">店铺</view>
       <view class="seg-item {{entity === 'feedback' ? 'seg-active' : ''}}" data-entity="feedback" bindtap="switchEntity">建议</view>
       <view class="seg-item {{entity === 'report' ? 'seg-active' : ''}}" data-entity="report" bindtap="switchEntity">报错</view>
     </view>
@@ -155,10 +155,13 @@ module.exports = {
     <view wx:if="{{entity === 'venue' || entity === 'shop'}}" class="fab" bindtap="openCreate">＋ 新增{{entity === 'venue' ? '场地' : '店铺'}}</view>
   </block>
 
-  <!-- 编辑表单弹窗（sheet 固定 80vh；字段区+保存按钮整体滚动，按钮在内容末尾） -->
+  <!-- 编辑表单弹窗（居中卡片；标题左对齐 + 关闭，设计稿同款） -->
   <view wx:if="{{formOpen}}" class="mask" bindtap="closeForm">
     <view class="sheet" catchtap="noop">
-      <view class="sheet-title">{{form.id ? '编辑' : '新增'}}{{form.kind === 'venue' ? '场地' : '店铺'}}</view>
+      <view class="sheet-head">
+        <view class="sheet-title">{{form.id ? '编辑' : '新增'}}{{form.kind === 'venue' ? '场地' : '店铺'}}</view>
+        <view class="sheet-close" catchtap="closeForm" aria-role="button" aria-label="关闭">×</view>
+      </view>
       <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
 
       <view class="f-row">
@@ -166,18 +169,18 @@ module.exports = {
         <input class="f-input" value="{{form.name}}" maxlength="30" placeholder="必填，≤30字" placeholder-class="ph" bindinput="formName" />
       </view>
 
+      <!-- 城市 + 类型同行（设计稿：两列下拉） -->
       <view class="f-row">
         <text class="f-label">城市</text>
         <picker range="{{cities}}" bindchange="formCity">
           <view class="f-picker">{{form.city}}</view>
         </picker>
-      </view>
-
-      <view wx:if="{{form.kind === 'venue'}}" class="f-row">
-        <text class="f-label">类型</text>
-        <picker range="{{categories}}" bindchange="formCategory">
-          <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择场地类型'}}</view>
-        </picker>
+        <block wx:if="{{form.kind === 'venue'}}">
+          <text class="f-label f-label-2">类型</text>
+          <picker range="{{categories}}" bindchange="formCategory">
+            <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
+          </picker>
+        </block>
       </view>
 
       <view wx:if="{{form.kind === 'shop'}}" class="f-row">
@@ -246,12 +249,13 @@ module.exports = {
             {{photosUploading ? '上传中' : '＋'}}
           </view>
         </view>
+        <text class="f-sub">最多 6 张</text>
       </view>
 
       <view class="f-row">
-        <text class="f-label">热门</text>
+        <text class="f-label">热门场地</text>
         <switch checked="{{form.hot}}" bindchange="formHot" color="#FF5A36" />
-        <text class="f-tip">开启后地图 pin 高亮、列表优先</text>
+        <text class="f-tip">地图 pin 高亮、列表优先</text>
       </view>
 
       <button class="f-save {{saving ? 'f-saving' : ''}}" bindtap="saveForm">{{saving ? '保存中...' : '保存'}}</button>
@@ -262,7 +266,10 @@ module.exports = {
   <!-- 建议处理弹窗（你提我改） -->
   <view wx:if="{{replyOpen}}" class="mask" bindtap="closeReply">
     <view class="sheet" catchtap="noop">
-      <view class="sheet-title">{{replySource === 'report' ? '处理报错' : '处理建议'}}</view>
+      <view class="sheet-head">
+        <view class="sheet-title">{{replySource === 'report' ? '处理报错' : '处理建议'}}</view>
+        <view class="sheet-close" catchtap="closeReply" aria-role="button" aria-label="关闭">×</view>
+      </view>
       <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
 
         <view class="fb-quote">{{replyTarget.desc}}</view>

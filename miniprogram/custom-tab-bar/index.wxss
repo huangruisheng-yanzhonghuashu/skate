@@ -1,32 +1,49 @@
+/* 通栏贴底 TabBar（设计稿：深色通栏、无留边无圆角） */
 .tabbar {
   display: flex;
-  height: 100rpx;
+  align-items: center;
+  height: 120rpx;
   padding-bottom: env(safe-area-inset-bottom);
-  background: #1A1A1E;
-  border-top: 1rpx solid #2A2A2E;
+  background: #111114;
 }
 
 .tab-item {
   flex: 1;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 激活/未激活统一竖排：图标上、文字下（设计稿同款） */
+.tab-pill {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 6rpx;
-  color: #8C8C8C;
+  padding: 14rpx 48rpx;
+  border-radius: 999rpx;
+  color: #8C8C94;
 }
 
-.tab-item.active {
-  color: #FF5A36;
-  font-weight: 500;
+/* 激活：橙渐变胶囊包住整组，图标文字变白（布局不变，仅配色变化） */
+.tab-item.active .tab-pill {
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+  box-shadow: 0 6rpx 20rpx rgba(255, 90, 54, 0.35);
 }
 
 .tab-icon {
-  width: 40rpx;
-  height: 40rpx;
+  width: 42rpx;
+  height: 42rpx;
 }
 
 .tab-label {
   font-size: 22rpx;
   line-height: 1;
+}
+
+.tab-item.active .tab-label {
+  color: #FFFFFF;
+  font-weight: 600;
 }

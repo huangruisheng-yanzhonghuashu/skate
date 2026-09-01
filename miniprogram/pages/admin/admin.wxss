@@ -1,7 +1,7 @@
 .page {
   min-height: 100vh;
-  background: #F7F7F8;
-  padding: 24rpx 32rpx calc(60rpx + env(safe-area-inset-bottom));
+  background: #111114;
+  padding: 24rpx 32rpx calc(180rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -12,7 +12,7 @@
   align-items: center;
   gap: 20rpx;
   padding: 160rpx 40rpx 0;
-  color: #8C8C8C;
+  color: #8C8C94;
   font-size: 28rpx;
 }
 
@@ -25,7 +25,7 @@
 .state-title {
   font-size: 34rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
 }
 
 .state-desc {
@@ -36,35 +36,34 @@
 .state-openid {
   margin-top: 8rpx;
   padding: 16rpx 28rpx;
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 12rpx;
   font-size: 24rpx;
-  color: #FF5A36;
+  color: #FF8A6E;
   word-break: break-all;
   max-width: 100%;
 }
 
-/* ===== 实体切换 ===== */
+/* ===== 实体切换（设计稿：靠左自适应胶囊组） ===== */
 .seg {
   display: flex;
-  background: #EBEBEE;
-  border-radius: 16rpx;
-  padding: 6rpx;
+  justify-content: flex-start;
+  gap: 14rpx;
   margin-bottom: 20rpx;
 }
 
 .seg-item {
-  flex: 1;
-  text-align: center;
-  padding: 16rpx 0;
+  padding: 14rpx 36rpx;
   font-size: 28rpx;
-  color: #6B6B70;
-  border-radius: 12rpx;
+  color: #8C8C94;
+  background: #1E1E23;
+  border-radius: 999rpx;
+  white-space: nowrap;
 }
 
 .seg-active {
-  background: #FFFFFF;
-  color: #1A1A1E;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+  color: #FFFFFF;
   font-weight: 600;
 }
 
@@ -73,22 +72,22 @@
   align-items: center;
   justify-content: space-between;
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
   margin-bottom: 16rpx;
 }
 
 .city-filter {
   display: inline-block;
   padding: 10rpx 24rpx;
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 10rpx;
-  color: #1A1A1E;
+  color: #FFFFFF;
   font-size: 26rpx;
 }
 
 .meta-count {
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
 }
 
 /* ===== 列表行 ===== */
@@ -96,7 +95,7 @@
   display: flex;
   align-items: center;
   gap: 20rpx;
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 16rpx;
   padding: 20rpx;
   margin-bottom: 16rpx;
@@ -113,8 +112,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #F0F0F2;
-  color: #C0C0C4;
+  background: #17171B;
+  color: #6E6E76;
   font-size: 22rpx;
 }
 
@@ -129,7 +128,7 @@
 .row-name {
   font-size: 30rpx;
   font-weight: 600;
-  color: #1A1A1E;
+  color: #FFFFFF;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -137,7 +136,7 @@
 
 .row-sub {
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -157,26 +156,41 @@
   text-align: center;
 }
 
+/* 编辑：橙色实心（设计稿）；删除：红色描边 */
 .op-edit {
-  color: #2A8CFF;
-  background: #EEF5FF;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
 }
 
 .op-del {
-  color: #E5484D;
-  background: #FFEEEE;
+  color: #FF3B30;
+  background: transparent;
+  border: 2rpx solid rgba(255, 59, 48, 0.5);
+  box-sizing: border-box;
 }
 
-/* ===== 新增按钮 ===== */
+/* ===== 新增按钮（固定底部全宽，设计稿同款） ===== */
 .fab {
-  margin-top: 32rpx;
-  background: #FF5A36;
+  position: fixed;
+  left: 32rpx;
+  right: 32rpx;
+  bottom: calc(32rpx + env(safe-area-inset-bottom));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8rpx;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 30rpx;
   font-weight: 600;
-  text-align: center;
-  padding: 24rpx 0;
-  border-radius: 48rpx;
+  padding: 26rpx 0;
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 90, 54, 0.35);
+}
+
+.fab:active {
+  opacity: 0.85;
 }
 
 /* ===== 表单弹窗（固定 80vh：标题固定顶部，字段+保存整体滚动） ===== */
@@ -188,14 +202,14 @@
   align-items: center;
   justify-content: center;
   padding: 32rpx;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .sheet {
   width: 100%;
   height: 80vh; /* 固定高度（max-height 会让 flex 子项拒绝收缩，滚动失效） */
-  background: #FFFFFF;
-  border-radius: 16rpx;
+  background: #1B1B20;
+  border-radius: 20rpx;
   padding: 40rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
   display: flex;
@@ -217,12 +231,33 @@
   height: 0;
 }
 
+/* 标题行：左对齐 + 右侧关闭（设计稿同款） */
+.sheet-head {
+  display: flex;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
 .sheet-title {
-  text-align: center;
+  flex: 1;
+  text-align: left;
   font-size: 34rpx;
   font-weight: 700;
-  color: #1A1A1E;
-  margin-bottom: 32rpx;
+  color: #FFFFFF;
+}
+
+.sheet-close {
+  width: 56rpx;
+  height: 56rpx;
+  border-radius: 50%;
+  background: #26262C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 30rpx;
+  color: #8C8C94;
+  line-height: 1;
 }
 
 .f-row {
@@ -231,31 +266,43 @@
   flex-wrap: wrap;
   gap: 20rpx;
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #26262C;
 }
 
 .f-label {
   width: 96rpx;
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #FFFFFF;
   flex-shrink: 0;
+}
+
+/* 同行第二个字段标签（城市+类型同行布局） */
+.f-label-2 {
+  margin-left: 16rpx;
+}
+
+/* 字段补充说明（如：最多 6 张） */
+.f-sub {
+  width: 100%;
+  font-size: 22rpx;
+  color: #6E6E76;
 }
 
 .f-input {
   flex: 1;
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
 }
 
 .ph {
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 .f-picker {
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #FF8A6E;
   padding: 8rpx 24rpx;
-  background: #F7F7F8;
+  background: rgba(255, 90, 54, 0.16);
   border-radius: 10rpx;
 }
 
@@ -265,31 +312,31 @@
 }
 
 .f-empty {
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 .f-btn {
   font-size: 26rpx;
-  color: #FF5A36;
+  color: #FF8A6E;
   padding: 10rpx 24rpx;
-  background: #FFF1EE;
+  background: rgba(255, 90, 54, 0.16);
   border-radius: 10rpx;
 }
 
 .f-btn-ok {
-  color: #00B578;
-  background: #EAF9F3;
+  color: #00D4AA;
+  background: rgba(0, 212, 170, 0.12);
 }
 
 .f-dash {
   font-size: 26rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
 }
 
 .f-tip {
   flex: 1;
   font-size: 22rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 /* chips 多选 */
@@ -302,15 +349,15 @@
 
 .chip {
   font-size: 24rpx;
-  color: #6B6B70;
-  background: #F0F0F2;
+  color: #A6A6AD;
+  background: #26262C;
   padding: 10rpx 24rpx;
   border-radius: 999rpx;
 }
 
 .chip-on {
-  color: #FFFFFF;
-  background: #FF5A36;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
 }
 
 /* 照片多选 */
@@ -351,8 +398,9 @@
   width: 140rpx;
   height: 140rpx;
   border-radius: 12rpx;
-  background: #F0F0F2;
-  color: #8C8C8C;
+  background: #17171B;
+  border: 2rpx dashed #3A3A42;
+  color: #8C8C94;
   font-size: 48rpx;
   display: flex;
   align-items: center;
@@ -366,7 +414,7 @@
 /* 保存按钮（滚动内容末尾，热门之后） */
 .f-save {
   margin-top: 40rpx;
-  background: #FF5A36;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 30rpx;
   font-weight: 600;
@@ -386,7 +434,7 @@
 .fb-card {
   display: flex;
   flex-direction: column;
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 16rpx;
   padding: 24rpx;
   margin-bottom: 16rpx;
@@ -400,23 +448,23 @@
 
 .fb-type {
   font-size: 22rpx;
-  color: #FF5A36;
-  background: #FFF2EE;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
   padding: 4rpx 16rpx;
   border-radius: 999rpx;
 }
 
 .fb-status {
   font-size: 22rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
 }
 
 .fb-status-done {
-  color: #00B386;
+  color: #00D4AA;
 }
 
 .fb-status-rejected {
-  color: #E5484D;
+  color: #FF3B30;
 }
 
 /* 报错关联场地（点击回详情页） */
@@ -424,13 +472,13 @@
   margin-top: 14rpx;
   font-size: 28rpx;
   font-weight: 600;
-  color: #2A8CFF;
+  color: #FF8A6E;
 }
 
 .fb-desc {
   margin-top: 14rpx;
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
   line-height: 1.6;
   word-break: break-all;
 }
@@ -450,11 +498,11 @@
 
 .fb-reply {
   margin-top: 14rpx;
-  background: #F7F7F8;
+  background: #17171B;
   border-radius: 10rpx;
   padding: 14rpx 18rpx;
   font-size: 24rpx;
-  color: #4D4D4D;
+  color: #A6A6AD;
   line-height: 1.6;
   word-break: break-all;
 }
@@ -468,16 +516,16 @@
 
 .fb-foot-user {
   font-size: 22rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 /* 处理弹窗内引用原建议 */
 .fb-quote {
-  background: #F7F7F8;
+  background: #17171B;
   border-radius: 10rpx;
   padding: 16rpx 20rpx;
   font-size: 24rpx;
-  color: #6B6B70;
+  color: #A6A6AD;
   line-height: 1.6;
   margin-bottom: 8rpx;
   word-break: break-all;
@@ -493,7 +541,7 @@
   width: 100%;
   min-height: 150rpx;
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
   line-height: 1.6;
 }
 

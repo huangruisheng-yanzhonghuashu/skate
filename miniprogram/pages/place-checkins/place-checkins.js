@@ -13,7 +13,7 @@ Page({
     empty: false,
     finished: false, /* 没有更多 */
     loading: false,
-    icons: { commentAsh: ICON.commentAsh },
+    icons: { commentAsh: ICON.commentAsh, chevronDown: ICON.chevronDownAsh },
   },
 
   onLoad(options) {

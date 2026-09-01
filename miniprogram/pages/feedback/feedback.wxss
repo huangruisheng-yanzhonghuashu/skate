@@ -1,29 +1,28 @@
 .page {
   min-height: 100vh;
-  background: #F7F7F8;
-  padding: 24rpx 32rpx calc(60rpx + env(safe-area-inset-bottom));
+  background: #111114;
+  padding: 24rpx 32rpx calc(180rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
 /* ===== 顶部说明 ===== */
 .hero {
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 24rpx;
   padding: 36rpx 32rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 2rpx 8rpx rgba(26, 26, 30, 0.04);
 }
 
 .hero-title {
   font-size: 34rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
 }
 
 .hero-desc {
   margin-top: 10rpx;
   font-size: 26rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
   line-height: 1.6;
 }
 
@@ -34,14 +33,14 @@
   align-items: center;
   gap: 12rpx;
   padding: 120rpx 40rpx 0;
-  color: #8C8C8C;
+  color: #8C8C94;
   font-size: 28rpx;
 }
 
 .state-title {
   font-size: 32rpx;
   font-weight: 600;
-  color: #4D4D4D;
+  color: #D9D9DE;
 }
 
 .state-desc {
@@ -50,11 +49,10 @@
 
 /* ===== 建议卡片 ===== */
 .fb-card {
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 24rpx;
   padding: 28rpx 32rpx;
   margin-bottom: 20rpx;
-  box-shadow: 0 2rpx 8rpx rgba(26, 26, 30, 0.04);
 }
 
 .fb-head {
@@ -63,36 +61,43 @@
   justify-content: space-between;
 }
 
+/* 建议类型：白色粗标题（设计稿同款） */
 .fb-type {
-  font-size: 24rpx;
-  color: #FF5A36;
-  background: #FFF2EE;
-  padding: 6rpx 20rpx;
-  border-radius: 999rpx;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #FFFFFF;
 }
 
+/* 状态徽章：待处理橙 / 已处理青 / 已驳回红 */
 .fb-status {
-  font-size: 24rpx;
-  color: #8C8C8C;
+  flex-shrink: 0;
+  font-size: 22rpx;
+  font-weight: 500;
+  padding: 6rpx 16rpx;
+  border-radius: 999rpx;
+  line-height: 1.2;
 }
 
 .fb-status-pending {
-  color: #8C8C8C;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.14);
 }
 
 .fb-status-done {
-  color: #00B386;
+  color: #00D4AA;
+  background: rgba(0, 212, 170, 0.12);
 }
 
 .fb-status-rejected {
-  color: #E5484D;
+  color: #FF3B30;
+  background: rgba(255, 59, 48, 0.12);
 }
 
 .fb-desc {
   display: block;
   margin-top: 18rpx;
   font-size: 30rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
   line-height: 1.6;
   word-break: break-all;
 }
@@ -113,7 +118,7 @@
 /* 官方回复块 */
 .fb-reply {
   margin-top: 20rpx;
-  background: #F7F7F8;
+  background: #17171B;
   border-radius: 12rpx;
   padding: 20rpx 24rpx;
 }
@@ -127,19 +132,19 @@
 .fb-reply-label {
   font-size: 24rpx;
   font-weight: 600;
-  color: #FF5A36;
+  color: #FF8A6E;
 }
 
 .fb-reply-time {
   font-size: 22rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 .fb-reply-text {
   display: block;
   margin-top: 10rpx;
   font-size: 26rpx;
-  color: #4D4D4D;
+  color: #A6A6AD;
   line-height: 1.6;
   word-break: break-all;
 }
@@ -148,19 +153,29 @@
   display: block;
   margin-top: 16rpx;
   font-size: 22rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
-/* ===== 提交按钮 ===== */
+/* ===== 提交按钮（悬浮 FAB，右下角，设计稿同款） ===== */
 .fab {
-  margin-top: 32rpx;
-  background: #FF5A36;
+  position: fixed;
+  right: 32rpx;
+  bottom: calc(48rpx + env(safe-area-inset-bottom));
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
-  font-size: 30rpx;
+  font-size: 28rpx;
   font-weight: 600;
-  text-align: center;
-  padding: 24rpx 0;
-  border-radius: 48rpx;
+  padding: 20rpx 36rpx;
+  border-radius: 999rpx;
+  box-shadow: 0 8rpx 24rpx rgba(255, 90, 54, 0.35);
+}
+
+.fab:active {
+  opacity: 0.85;
 }
 
 /* ===== 提交弹窗（居中卡片式，字段+按钮整体滚动） ===== */
@@ -172,15 +187,15 @@
   align-items: center;
   justify-content: center;
   padding: 32rpx;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .sheet {
   width: 100%;
   max-width: 600rpx;
   height: 80vh;
-  background: #FFFFFF;
-  border-radius: 16rpx;
+  background: #1B1B20;
+  border-radius: 20rpx;
   padding: 40rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
   display: flex;
@@ -204,7 +219,7 @@
   text-align: center;
   font-size: 34rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
   margin-bottom: 24rpx;
 }
 
@@ -214,7 +229,7 @@
   flex-wrap: wrap;
   gap: 20rpx;
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #26262C;
 }
 
 .f-row-top {
@@ -224,15 +239,15 @@
 .f-label {
   width: 96rpx;
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #FFFFFF;
   flex-shrink: 0;
 }
 
 .f-picker {
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #FF8A6E;
   padding: 8rpx 24rpx;
-  background: #F7F7F8;
+  background: rgba(255, 90, 54, 0.16);
   border-radius: 10rpx;
 }
 
@@ -241,12 +256,12 @@
   width: 100%;
   min-height: 180rpx;
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
   line-height: 1.6;
 }
 
 .ph {
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 /* 照片多选 */
@@ -287,8 +302,9 @@
   width: 140rpx;
   height: 140rpx;
   border-radius: 12rpx;
-  background: #F0F0F2;
-  color: #8C8C8C;
+  background: #17171B;
+  border: 2rpx dashed #3A3A42;
+  color: #8C8C94;
   font-size: 48rpx;
   display: flex;
   align-items: center;
@@ -302,13 +318,13 @@
 .f-tip {
   margin-top: 20rpx;
   font-size: 22rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
   text-align: center;
 }
 
 .f-save {
   margin-top: 32rpx;
-  background: #FF5A36;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 30rpx;
   font-weight: 600;

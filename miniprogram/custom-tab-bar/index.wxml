@@ -5,8 +5,13 @@
     class="tab-item {{selected === index ? 'active' : ''}}"
     data-path="{{item.path}}"
     bindtap="switchTab"
+    aria-role="tab"
+    aria-label="{{item.text}}"
   >
-    <image class="tab-icon" src="{{selected === index ? item.activeIcon : item.icon}}" mode="aspectFit" />
-    <text class="tab-label">{{item.text}}</text>
+    <!-- 激活：橙胶囊内 图标+文字横排；未激活：图标上、文字下（设计稿同款） -->
+    <view class="tab-pill">
+      <image class="tab-icon" src="{{selected === index ? item.activeIcon : item.icon}}" mode="aspectFit" />
+      <text class="tab-label">{{item.text}}</text>
+    </view>
   </view>
 </view>

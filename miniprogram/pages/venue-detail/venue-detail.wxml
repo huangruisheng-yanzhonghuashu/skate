@@ -1,5 +1,5 @@
 <view wx:if="{{venue}}" class="page">
-  <!-- 图片轮播 -->
+  <!-- 沉浸式轮播：标题/评分覆盖在图上（自定义导航，设计稿同款） -->
   <view class="carousel">
     <swiper
       class="swiper"
@@ -11,30 +11,46 @@
         <image class="photo photo-fade" src="{{item}}" mode="aspectFill" lazy-load />
       </swiper-item>
     </swiper>
+    <!-- 底部渐变 + 标题/评分 -->
+    <view class="hero-grad"></view>
+    <view class="hero-info">
+      <text class="hero-name">{{venue.name}}</text>
+      <!-- 聚合评分：五颗星双层裁剪（4星=4亮1灰）+ 分数，与店铺详情同款；可点击评分 -->
+      <view class="hero-rating" hover-class="rate-hover" bindtap="openRate" aria-role="button" aria-label="查看评分并评分">
+        <view class="stars">
+          <view class="stars-bg">
+            <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="hero-star" src="{{icons.starGray}}" mode="aspectFit" />
+          </view>
+          <view class="stars-fg" style="width: {{(rating || 0) / 5 * 100}}%">
+            <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="hero-star" src="{{icons.starOrange}}" mode="aspectFit" />
+          </view>
+        </view>
+        <text class="hero-rating-num">{{rating || '暂无'}}</text>
+      </view>
+    </view>
     <view wx:if="{{photos.length > 1}}" class="indicator">{{current + 1}}/{{photos.length}}</view>
   </view>
 
-  <!-- 名称 / 评分 / 地址 / 标签 -->
+  <!-- 返回按钮（自定义导航，悬浮在状态栏下） -->
+  <view
+    class="nav-back"
+    style="top: {{statusBarHeight + 8}}px"
+    hover-class="nav-back-hover"
+    bindtap="goBack"
+    aria-role="button"
+    aria-label="返回"
+  >
+    <image class="nav-back-icon" src="{{icons.back}}" mode="aspectFit" />
+  </view>
+
+  <!-- 地址 + 距离 / 标签 / 快评 -->
   <view class="info">
-    <view class="info-row">
-      <text class="name">{{venue.name}}</text>
-      <!-- 聚合评分（真实均值+人数，无评分用预设分）；点击弹评分弹窗 -->
-      <view class="rating" hover-class="rate-hover" bindtap="openRate" aria-role="button" aria-label="查看评分并评分">
-        <view class="stars">
-          <view class="stars-bg">
-            <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="rating-star" src="{{icons.starGray}}" mode="aspectFit" />
-          </view>
-          <view class="stars-fg" style="width: {{(rating || 0) / 5 * 100}}%">
-            <image wx:for="{{[0,1,2,3,4]}}" wx:key="*this" class="rating-star" src="{{icons.starOrange}}" mode="aspectFit" />
-          </view>
-        </view>
-        <text class="rating-num">{{rating || '暂无'}}</text>
-        <text wx:if="{{ratingCount}}" class="rating-count">{{ratingCount}}人</text>
+    <view class="address-row">
+      <view class="address">
+        <image class="address-pin" src="{{icons.pin}}" mode="aspectFit" />
+        <text>{{venue.address}}</text>
       </view>
-    </view>
-    <view class="address">
-      <image class="address-pin" src="{{icons.pin}}" mode="aspectFit" />
-      <text>{{venue.address}}</text>
+      <view wx:if="{{distanceText}}" class="dist-pill">距你 {{distanceText}}</view>
     </view>
     <view class="tags">
       <view wx:for="{{tags}}" wx:key="label" class="tag">
@@ -98,38 +114,63 @@
     <view wx:else class="checkin-empty">还没有打卡，点下方「签到」抢首条打卡</view>
   </view>
 
-  <!-- 底部固定操作栏 -->
+  <!-- 底部固定操作栏：导航 / 签到打卡 / 报错（设计稿：两侧窄块 + 中间大按钮） -->
   <view class="action-bar">
-    <view class="action-item" hover-class="action-hover" bindtap="openNav">
+    <view class="action-side" hover-class="action-hover" bindtap="openNav" aria-role="button" aria-label="导航到场地">
       <image class="action-icon" src="{{icons.send}}" mode="aspectFit" />
       <text class="action-label">导航</text>
     </view>
-    <view wx:if="{{checked}}" class="action-item action-checkin action-done" hover-class="action-hover" bindtap="openEditCheckin">
+    <view
+      wx:if="{{checked}}"
+      class="action-main action-done"
+      hover-class="action-hover"
+      bindtap="openEditCheckin"
+      aria-role="button"
+      aria-label="补充今日打卡"
+    >
       <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
-      <text class="action-label">已签到·补充</text>
+      <text class="action-label">已签到 · 补充</text>
     </view>
-    <view wx:else class="action-item action-checkin" hover-class="action-checkin-hover" bindtap="openCheckin">
+    <view
+      wx:else
+      class="action-main"
+      hover-class="action-main-hover"
+      bindtap="openCheckin"
+      aria-role="button"
+      aria-label="签到打卡"
+    >
       <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
-      <text class="action-label">签到</text>
+      <text class="action-label">签到打卡</text>
     </view>
-    <view class="action-item" hover-class="action-hover" bindtap="openReport">
+    <view class="action-side" hover-class="action-hover" bindtap="openReport" aria-role="button" aria-label="报错">
       <image class="action-icon" src="{{icons.flag}}" mode="aspectFit" />
       <text class="action-label">报错</text>
     </view>
   </view>
 
-  <!-- 签到弹窗 -->
-  <view wx:if="{{checkinOpen}}" class="modal-mask anim-fade-in" bindtap="closeCheckin" catchtouchmove="noop">
-    <view class="modal anim-modal-in" catchtap="noop">
-      <view class="modal-title-row">
-        <image class="modal-title-icon" src="{{icons.checkCircle}}" mode="aspectFit" />
-        <text class="modal-title">{{checkinMode === 'edit' ? '补充今日打卡' : '签到打卡'}}</text>
+  <!-- 签到弹窗（底部 sheet，键盘友好） -->
+  <view wx:if="{{checkinOpen}}" class="sheet-mask anim-fade-in" bindtap="closeCheckin" catchtouchmove="noop">
+    <view class="sheet anim-sheet-in" catchtap="noop">
+      <view class="sheet-handle"></view>
+      <view class="sheet-head">
+        <view class="sheet-head-badge">
+          <image class="sheet-head-badge-icon" src="{{icons.checkWhite}}" mode="aspectFit" />
+        </view>
+        <text class="sheet-title">{{checkinMode === 'edit' ? '补充今日打卡' : '签到打卡'}}</text>
+        <view class="sheet-close" hover-class="sheet-close-hover" bindtap="closeCheckin" aria-role="button" aria-label="关闭">
+          <image class="sheet-close-icon" src="{{icons.x}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="venue-chip">
+        <image class="venue-chip-icon" src="{{icons.pin}}" mode="aspectFit" />
+        <text class="venue-chip-text">{{venue.name}}</text>
       </view>
 
       <view class="field">
-        <view class="field-label">
-          <image class="field-label-icon" src="{{icons.edit}}" mode="aspectFit" />
-          <text>说点什么</text>
+        <view class="note-head">
+          <text class="note-label">说点什么</text>
+          <text class="note-count">{{note.length}}/200</text>
         </view>
         <textarea
           class="field-textarea"
@@ -151,29 +192,34 @@
           </view>
           <view wx:if="{{checkinPhotos.length < 9}}" class="photo-add" bindtap="chooseCheckinPhoto">
             <image class="photo-add-icon" src="{{icons.plus}}" mode="aspectFit" />
-            <text class="photo-add-text">添加照片</text>
-            <text class="photo-add-sub">(最多9张)</text>
+            <text class="photo-add-text">添加图片</text>
+            <text class="photo-add-sub">最多 9 张</text>
           </view>
         </view>
       </view>
 
-      <view class="modal-btn {{checkinSubmitting ? 'modal-btn-loading' : ''}}" bindtap="confirmCheckin">
-        {{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '签到中...') : (checkinMode === 'edit' ? '更新打卡' : '确认签到')}}
+      <view class="sheet-btn {{checkinSubmitting ? 'sheet-btn-loading' : ''}}" bindtap="confirmCheckin">
+        <image class="sheet-btn-icon" src="{{icons.check}}" mode="aspectFit" />
+        <text>{{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '签到中...') : (checkinMode === 'edit' ? '更新打卡' : '确认签到')}}</text>
       </view>
-      <view class="modal-cancel" bindtap="closeCheckin">取消</view>
+      <view class="sheet-cancel" bindtap="closeCheckin">取消</view>
     </view>
   </view>
 
-  <!-- 报错弹窗 -->
-  <view wx:if="{{reportOpen}}" class="modal-mask anim-fade-in" bindtap="closeReport" catchtouchmove="noop">
-    <view class="modal anim-modal-in" catchtap="noop">
-      <view class="modal-title-row">
-        <image class="modal-title-icon report-icon" src="{{icons.flag}}" mode="aspectFit" />
-        <text class="modal-title">场地报错</text>
+  <!-- 报错弹窗（底部 sheet） -->
+  <view wx:if="{{reportOpen}}" class="sheet-mask anim-fade-in" bindtap="closeReport" catchtouchmove="noop">
+    <view class="sheet anim-sheet-in" catchtap="noop">
+      <view class="sheet-handle"></view>
+      <view class="sheet-head">
+        <image class="sheet-head-icon report-icon" src="{{icons.flag}}" mode="aspectFit" />
+        <text class="sheet-title">场地报错</text>
+        <view class="sheet-close" hover-class="sheet-close-hover" bindtap="closeReport" aria-role="button" aria-label="关闭">
+          <image class="sheet-close-icon" src="{{icons.x}}" mode="aspectFit" />
+        </view>
       </view>
 
       <view class="field">
-        <text class="field-label-plain">问题类型：</text>
+        <text class="field-label-plain">问题类型</text>
         <view class="type-wrap">
           <view
             wx:for="{{reportTypes}}"
@@ -215,20 +261,30 @@
         </view>
       </view>
 
-      <view class="modal-btn {{reportSubmitting ? 'modal-btn-loading' : ''}}" bindtap="submitReport">
-        {{reportSubmitting ? '提交中...' : '提交报错'}}
+      <view class="sheet-btn {{reportSubmitting ? 'sheet-btn-loading' : ''}}" bindtap="submitReport">
+        <text>{{reportSubmitting ? '提交中...' : '提交报错'}}</text>
       </view>
-      <view class="modal-cancel" bindtap="closeReport">取消</view>
+      <view class="sheet-cancel" bindtap="closeReport">取消</view>
     </view>
   </view>
 </view>
 
-<!-- 签到成功轻庆祝（全屏轻提示，1.8s 自动消失） -->
+<!-- 签到成功庆祝（彩纸 + 连续打卡 + 徽章提示，2.6s 自动消失） -->
 <view wx:if="{{celebrate}}" class="celebrate" catchtouchmove="noop">
+  <view class="confetti">
+    <view
+      wx:for="{{confetti}}"
+      wx:key="index"
+      class="confetti-piece {{item.round ? 'confetti-round' : ''}}"
+      style="left: {{item.left}}%; background: {{item.color}}; animation-delay: {{item.delay}}ms; animation-duration: {{item.dur}}ms;"
+    ></view>
+  </view>
   <view class="celebrate-card">
-    <view class="celebrate-ring"></view>
-    <image class="celebrate-check" src="{{icons.checkCircle}}" mode="aspectFit" />
-    <text class="celebrate-title">{{celebrateText}}</text>
+    <view class="celebrate-badge">
+      <image class="celebrate-check" src="{{icons.checkWhite}}" mode="aspectFit" />
+    </view>
+    <text class="celebrate-title">签到成功</text>
+    <text class="celebrate-streak">已连续打卡 {{celebrateStreak}} 天</text>
     <text class="celebrate-sub">{{celebrateSub}}</text>
   </view>
 </view>

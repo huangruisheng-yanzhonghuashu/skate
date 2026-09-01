@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #F7F7F8;
+  background: #111114;
   padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
 }
 
@@ -30,7 +30,7 @@
 .name {
   font-size: 40rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
 }
 
 .status {
@@ -40,21 +40,21 @@
 }
 
 .status-open {
-  color: #00B578;
-  background: #EAF9F3;
+  color: #00D4AA;
+  background: rgba(0, 212, 170, 0.12);
 }
 
 .status-closed {
-  color: #8C8C8C;
-  background: #F0F0F2;
+  color: #8C8C94;
+  background: #26262C;
 }
 
 .hot-tag {
   display: inline-block;
   margin-top: 12rpx;
   font-size: 22rpx;
-  color: #FF5A36;
-  background: #FFF1EE;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
   padding: 6rpx 16rpx;
   border-radius: 8rpx;
 }
@@ -66,13 +66,13 @@
 .block-title {
   display: block;
   font-size: 26rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
   margin-bottom: 12rpx;
 }
 
 .block-text {
   font-size: 30rpx;
-  color: #1A1A1E;
+  color: #FFFFFF;
   line-height: 1.6;
 }
 
@@ -84,8 +84,8 @@
 
 .svc {
   font-size: 24rpx;
-  color: #FF9F2E;
-  background: #FFF9F0;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
   padding: 8rpx 20rpx;
   border-radius: 8rpx;
 }
@@ -93,7 +93,7 @@
 /* ===== 打卡动态 ===== */
 .feed {
   margin: 8rpx 32rpx 0;
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 20rpx;
   padding: 28rpx;
 }
@@ -108,7 +108,7 @@
 .feed-title {
   font-size: 30rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
 }
 
 .feed-more {
@@ -116,7 +116,7 @@
   align-items: center;
   gap: 4rpx;
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
 }
 
 .feed-more-arrow {
@@ -126,7 +126,7 @@
 
 .fcard {
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #26262C;
 }
 
 .fhead {
@@ -164,19 +164,19 @@
 .fname {
   font-size: 26rpx;
   font-weight: 600;
-  color: #1A1A1E;
+  color: #FFFFFF;
 }
 
 .ftime {
   font-size: 22rpx;
-  color: #B0B0B4;
+  color: #6E6E76;
 }
 
 .fnote {
   display: block;
   margin-top: 14rpx;
   font-size: 27rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
   line-height: 1.6;
   word-break: break-all;
 }
@@ -198,7 +198,7 @@
   padding: 32rpx 0;
   text-align: center;
   font-size: 26rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 /* ===== 底部操作 ===== */
@@ -210,8 +210,8 @@
   display: flex;
   gap: 16rpx;
   padding: 20rpx 32rpx calc(20rpx + env(safe-area-inset-bottom));
-  background: #FFFFFF;
-  box-shadow: 0 -4rpx 20rpx rgba(26, 26, 30, 0.06);
+  background: rgba(17, 17, 20, 0.96);
+  border-top: 1rpx solid #26262C;
 }
 
 .act {
@@ -230,26 +230,26 @@
 }
 
 .act-checkin {
-  background: #FF5A36;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   flex: 1.3;
 }
 
 .act-done {
-  background: #F0F0F2;
-  color: #8C8C8C;
+  background: #26262C;
+  color: #8C8C94;
   flex: 1.3;
 }
 
 .act-call {
-  background: #00B578;
-  color: #FFFFFF;
+  background: #26262C;
+  color: #00D4AA;
 }
 
 .act-nav {
-  background: #FFFFFF;
-  color: #1A1A1E;
-  border: 2rpx solid #E8E8EA;
+  background: transparent;
+  color: #D9D9DE;
+  border: 2rpx solid #2A2A30;
 }
 
 /* ===== 打卡弹窗（居中卡片式，避开自定义 tabBar） ===== */
@@ -261,7 +261,7 @@
   align-items: center;
   justify-content: center;
   padding: 32rpx;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .sheet {
@@ -269,18 +269,18 @@
   max-width: 600rpx;
   max-height: 80vh;
   overflow-y: auto;
-  background: #FFFFFF;
-  border-radius: 16rpx;
+  background: #1B1B20;
+  border-radius: 20rpx;
   padding: 40rpx;
   box-sizing: border-box;
-  box-shadow: 0 16rpx 48rpx rgba(26, 26, 30, 0.2);
+  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.5);
 }
 
 .sheet-title {
   text-align: center;
   font-size: 34rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
   margin-bottom: 32rpx;
 }
 
@@ -291,7 +291,7 @@
 .f-label {
   display: block;
   font-size: 26rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
   margin-bottom: 12rpx;
 }
 
@@ -299,15 +299,15 @@
   width: 100%;
   box-sizing: border-box;
   min-height: 160rpx;
-  background: #F7F7F8;
+  background: #17171B;
   border-radius: 12rpx;
   padding: 20rpx;
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
 }
 
 .ph {
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 .pgrid {
@@ -347,8 +347,9 @@
   width: 140rpx;
   height: 140rpx;
   border-radius: 12rpx;
-  background: #F0F0F2;
-  color: #8C8C8C;
+  background: #17171B;
+  border: 2rpx dashed #3A3A42;
+  color: #8C8C94;
   font-size: 22rpx;
   display: flex;
   align-items: center;
@@ -358,7 +359,7 @@
 
 .f-btn {
   margin-top: 16rpx;
-  background: #FF5A36;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 30rpx;
   font-weight: 600;
@@ -378,7 +379,7 @@
   margin-top: 20rpx;
   text-align: center;
   font-size: 26rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
 }
 
 /* 轮播图片渐显 */
@@ -391,7 +392,7 @@
   to { opacity: 1; }
 }
 
-/* ===== 打卡庆祝层 ===== */
+/* ===== 打卡庆祝层（设计稿同款：彩纸 + 橙徽章 + 连签提示） ===== */
 .celebrate {
   position: fixed;
   inset: 0;
@@ -399,7 +400,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.35);
+  background: rgba(0, 0, 0, 0.55);
   animation: cel-fade 0.25s ease;
 }
 
@@ -408,18 +409,49 @@
   to { opacity: 1; }
 }
 
+/* 彩纸层 */
+.confetti {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.confetti-piece {
+  position: absolute;
+  top: -40rpx;
+  width: 16rpx;
+  height: 24rpx;
+  border-radius: 4rpx;
+  opacity: 0;
+  animation: confetti-fall linear both;
+}
+
+.confetti-round {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+}
+
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(85vh) rotate(540deg); opacity: 0; }
+}
+
 .celebrate-card {
   position: relative;
-  width: 460rpx;
-  background: #FFFFFF;
+  width: 480rpx;
+  background: #1E1E23;
+  border: 1rpx solid rgba(255, 90, 54, 0.3);
   border-radius: 32rpx;
-  padding: 64rpx 40rpx 48rpx;
+  padding: 56rpx 44rpx 48rpx;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 16rpx;
+  align-items: flex-start;
+  gap: 12rpx;
   animation: cel-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 20rpx 60rpx rgba(26, 26, 30, 0.25);
+  box-shadow: 0 0 120rpx rgba(255, 90, 54, 0.25);
 }
 
 @keyframes cel-pop {
@@ -427,37 +459,47 @@
   to { opacity: 1; transform: scale(1); }
 }
 
-.celebrate-ring {
-  position: absolute;
-  top: 28rpx;
-  width: 128rpx;
-  height: 128rpx;
+/* 橙色圆形徽章 + 白色对勾（外圈深橙描边环，设计稿同款） */
+.celebrate-badge {
+  width: 104rpx;
+  height: 104rpx;
   border-radius: 50%;
-  border: 4rpx solid #FF5A36;
-  opacity: 0;
-  animation: cel-ring 1s ease-out 0.2s;
-}
-
-@keyframes cel-ring {
-  from { transform: scale(0.6); opacity: 0.8; }
-  to { transform: scale(1.6); opacity: 0; }
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 6rpx solid rgba(255, 90, 54, 0.35);
+  box-sizing: border-box;
+  box-shadow: 0 8rpx 32rpx rgba(255, 90, 54, 0.4);
 }
 
 .celebrate-check {
-  width: 96rpx;
-  height: 96rpx;
-  border-radius: 50%;
+  width: 52rpx;
+  height: 52rpx;
 }
 
+/* 内容左对齐（设计稿同款） */
 .celebrate-title {
-  font-size: 36rpx;
+  margin-top: 16rpx;
+  align-self: flex-start;
+  font-size: 38rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
+}
+
+.celebrate-streak {
+  align-self: flex-start;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #00D4AA;
 }
 
 .celebrate-sub {
+  align-self: flex-start;
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
+  line-height: 1.5;
+  text-align: left;
 }
 
 /* ===== 聚合评分行（可点击评分） ===== */
@@ -503,12 +545,7 @@
 .rating-num {
   font-size: 28rpx;
   font-weight: 700;
-  color: #FF9F2E;
-}
-
-.rating-count {
-  font-size: 22rpx;
-  color: #C0C0C4;
+  color: #FF5A36;
 }
 
 /* ===== 评分弹窗 ===== */
@@ -520,14 +557,14 @@
   align-items: center;
   justify-content: center;
   padding: 32rpx;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.6);
 }
 
 .rate-sheet {
   width: 100%;
   max-width: 600rpx;
-  background: #FFFFFF;
-  border-radius: 16rpx;
+  background: #1B1B20;
+  border-radius: 20rpx;
   padding: 48rpx 40rpx;
   box-sizing: border-box;
   text-align: center;
@@ -536,14 +573,14 @@
 .rate-title {
   font-size: 32rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
 }
 
 .rate-hint {
   display: block;
   margin-top: 12rpx;
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
 }
 
 .rate-stars-row {
@@ -566,13 +603,13 @@
 .rate-desc {
   display: block;
   font-size: 26rpx;
-  color: #8C8C8C;
+  color: #A6A6AD;
   min-height: 40rpx;
 }
 
 .rate-btn-submit {
   margin-top: 32rpx;
-  background: #FF5A36;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 30rpx;
   font-weight: 600;

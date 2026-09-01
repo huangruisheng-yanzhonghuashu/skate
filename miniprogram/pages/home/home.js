@@ -6,6 +6,14 @@ const { ICON } = require('../../utils/icons.js')
 const FIELD_FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
 const SHOP_FILTERS = ['全部', '卖板', '教学', '维修', '配件', '服装']
 
+/* HH:mm（今日已签到时间展示用） */
+function fmtHm(iso) {
+  const d = new Date(iso)
+  if (isNaN(d.getTime())) return ''
+  const pad = (n) => (n < 10 ? '0' + n : '' + n)
+  return pad(d.getHours()) + ':' + pad(d.getMinutes())
+}
+
 Page({
   data: {
     city: '嘉兴',
@@ -19,6 +27,7 @@ Page({
     list: [],
     empty: false,
     loaded: false,
+    mapCount: 0,
     locating: true,
     mapCollapsed: false,
     markers: [],
@@ -28,11 +37,12 @@ Page({
     scale: 13,
     icons: {
       pinWhite: ICON.pinWhite,
+      pinOrange: ICON.pinOrangeSmall,
       chevronDown: ICON.chevronDownWhite,
       search: ICON.searchPh,
       xWhite: ICON.xWhite,
       venueFog: ICON.venueFog,
-      locate: ICON.locateInk,
+      locate: ICON.locateWhite,
     },
   },
 
@@ -233,8 +243,9 @@ Page({
         latitude: v.latitude,
         longitude: v.longitude,
         iconPath: active ? '/images/marker.png' : '/images/marker-gray.png',
-        width: 44,
-        height: 52,
+        /* 设计稿 pin 尺寸适中；选中项略大突出 */
+        width: v.id === selected ? 42 : 36,
+        height: v.id === selected ? 49 : 42,
         anchor: { x: 0.5, y: 1 },
       }
       if (v.id === selected) {
@@ -270,7 +281,7 @@ Page({
     }
   },
 
-  /* 实体切换：场地 ⇄ 店铺（切筛选组、刷新列表与地图） */
+  /* 实体切换：场地 ⇄ 店铺（设计稿交互规则：保留搜索词，不打断搜索流） */
   switchEntity(e) {
     const entity = e.currentTarget.dataset.entity
     if (entity === this.data.entity) return
@@ -279,8 +290,6 @@ Page({
       filters: entity === 'shop' ? SHOP_FILTERS : FIELD_FILTERS,
       filter: '全部',
       selectedVenueId: '',
-      searchOpen: false,
-      query: '',
     })
     this.refresh()
     this.buildMarkers()
@@ -304,6 +313,7 @@ Page({
       /* 评分：有用户评分用真实均值（+人数），无则种子预设分 */
       list = arr.map((v) => {
         const st = this._venueRatings && this._venueRatings[v.id]
+        const today = store.getTodayCheckin(v.id)
         return {
           id: v.id,
           name: v.name,
@@ -314,8 +324,10 @@ Page({
           category: v.category,
           hot: v.hot,
           tags: v.tags,
+          photo: (v.photos && v.photos[0]) || '',
           online: this._online ? this._online[v.id] : v.online,
-          checked: store.checkedToday(v.id),
+          checked: !!today,
+          checkedTime: today ? fmtHm(today.at) : '',
         }
       })
     } else {
@@ -338,7 +350,11 @@ Page({
         }
       })
     }
-    this.setData({ list, empty: list.length === 0, city: city })
+    /* 地图计数 chip：当前城市该实体总数（不受筛选/搜索影响，与设计稿「嘉兴 · 12 个场地」一致） */
+    const cityTotal = this.data.entity === 'venue'
+      ? (this._venues || []).filter((v) => v.city === city).length
+      : (this._shops || []).filter((s) => s.city === city).length
+    this.setData({ list, empty: list.length === 0, city: city, mapCount: cityTotal })
     /* 列表与地图保持同口径（搜索/筛选/切城后 markers 跟随） */
     this.buildMarkers()
   },

@@ -4,6 +4,9 @@
     <view class="empty-btn" bindtap="goPlace">去打卡</view>
   </view>
 
+  <!-- 打卡总数（设计稿：共 N 条打卡） -->
+  <view wx:if="{{list.length}}" class="count-line">共 {{list.length}} 条打卡</view>
+
   <view wx:for="{{list}}" wx:key="id" class="card card-in" style="animation-delay: {{index < 10 ? index * 60 : 0}}ms">
     <view class="head">
       <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
@@ -27,11 +30,11 @@
         catchtap="preview"
       />
     </view>
-    <!-- 评论入口 + 内嵌评论区 -->
-    <view class="cmt-toggle" data-id="{{item.id}}" bindtap="toggleComments">
+    <!-- 评论入口（设计稿：💬 N 条评论 左 + 展开/收起 右，两端对齐） -->
+    <view class="cmt-toggle {{item.commentsOpen ? 'cmt-toggle-open' : ''}}" data-id="{{item.id}}" bindtap="toggleComments">
       <image class="cmt-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
       <text class="cmt-count">{{item.commentCount}} 条评论</text>
-      <text class="cmt-caret">{{item.commentsOpen ? '收起 ▴' : '展开 ▾'}}</text>
+      <text class="cmt-caret-text">{{item.commentsOpen ? '收起' : '展开'}}</text>
     </view>
     <comment-box
       wx:if="{{item.commentsOpen}}"
@@ -42,5 +45,6 @@
   </view>
 
   <view wx:if="{{loading}}" class="more">加载中...</view>
-  <view wx:if="{{finished && list.length}}" class="more">— 没有更多了 —</view>
+  <view wx:elif="{{!finished && list.length}}" class="more">上拉加载更多</view>
+  <view wx:elif="{{finished && list.length}}" class="more">— 没有更多了 —</view>
 </view>

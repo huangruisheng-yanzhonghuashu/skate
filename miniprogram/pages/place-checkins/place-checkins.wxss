@@ -1,6 +1,6 @@
 .page {
   min-height: 100vh;
-  background: #F7F7F8;
+  background: #111114;
   padding: 24rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
@@ -16,12 +16,12 @@
 
 .empty-text {
   font-size: 28rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
 }
 
 .empty-btn {
   padding: 16rpx 56rpx;
-  background: #FF5A36;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 28rpx;
   font-weight: 600;
@@ -30,7 +30,7 @@
 
 /* 打卡卡片 */
 .card {
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 20rpx;
   padding: 28rpx;
   margin-bottom: 20rpx;
@@ -63,7 +63,7 @@
   width: 80rpx;
   height: 80rpx;
   border-radius: 50%;
-  background: #FF5A36;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 30rpx;
   font-weight: 600;
@@ -82,19 +82,19 @@
 .name {
   font-size: 28rpx;
   font-weight: 600;
-  color: #1A1A1E;
+  color: #FFFFFF;
 }
 
 .time {
   font-size: 22rpx;
-  color: #B0B0B4;
+  color: #6E6E76;
 }
 
 .note {
   display: block;
   margin-top: 18rpx;
   font-size: 28rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
   line-height: 1.6;
   word-break: break-all;
 }
@@ -116,19 +116,30 @@
   text-align: center;
   padding: 32rpx 0;
   font-size: 24rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
-/* 评论入口 */
+/* 打卡总数行 */
+.count-line {
+  font-size: 24rpx;
+  color: #8C8C94;
+  margin-bottom: 20rpx;
+}
+
+/* 评论入口（设计稿：左右两端，展开态橙色高亮） */
 .cmt-toggle {
   display: flex;
   align-items: center;
   gap: 10rpx;
   margin-top: 18rpx;
   padding-top: 18rpx;
-  border-top: 1rpx solid #F5F5F5;
+  border-top: 1rpx solid #26262C;
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
+}
+
+.cmt-toggle-open {
+  color: #FF8A6E;
 }
 
 .cmt-icon {
@@ -140,7 +151,13 @@
   flex: 1;
 }
 
-.cmt-caret {
-  font-size: 22rpx;
-  color: #C0C0C4;
+/* 展开/收起（右侧文字，设计稿同款） */
+.cmt-caret-text {
+  flex-shrink: 0;
+  font-size: 24rpx;
+  color: #6E6E76;
+}
+
+.cmt-toggle-open .cmt-caret-text {
+  color: #FF8A6E;
 }

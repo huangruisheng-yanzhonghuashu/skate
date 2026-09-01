@@ -2,10 +2,9 @@
   display: flex;
   align-items: center;
   gap: 24rpx;
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 24rpx;
   padding: 28rpx;
-  box-shadow: 0 4rpx 20rpx rgba(26, 26, 30, 0.06);
   animation: shop-in 0.3s ease backwards;
 }
 
@@ -15,14 +14,14 @@
 }
 
 .shop-hover {
-  background: #FAFAFA;
+  background: #26262C;
 }
 
 .shop-icon {
   width: 88rpx;
   height: 88rpx;
   border-radius: 20rpx;
-  background: #FFF3E9;
+  background: rgba(255, 90, 54, 0.14);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,7 +31,7 @@
 .shop-icon-text {
   font-size: 40rpx;
   font-weight: 700;
-  color: #FF9F2E;
+  color: #FF8A6E;
 }
 
 .shop-info {
@@ -52,7 +51,7 @@
 .shop-name {
   font-size: 30rpx;
   font-weight: 600;
-  color: #1A1A1E;
+  color: #FFFFFF;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -66,13 +65,13 @@
 }
 
 .status-open {
-  color: #00B578;
-  background: #EAF9F3;
+  color: #00D4AA;
+  background: rgba(0, 212, 170, 0.12);
 }
 
 .status-closed {
-  color: #8C8C8C;
-  background: #F0F0F2;
+  color: #8C8C94;
+  background: #26262C;
 }
 
 .shop-svc {
@@ -83,8 +82,8 @@
 
 .svc-tag {
   font-size: 20rpx;
-  color: #FF9F2E;
-  background: #FFF9F0;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
   padding: 4rpx 14rpx;
   border-radius: 6rpx;
 }
@@ -127,17 +126,17 @@
 .rating-num {
   font-size: 26rpx;
   font-weight: 600;
-  color: #FF9F2E;
+  color: #FF5A36;
 }
 
 .rating-count {
   font-size: 20rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 .shop-addr {
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -147,8 +146,8 @@
   flex-shrink: 0;
   padding: 12rpx 24rpx;
   border-radius: 999rpx;
-  background: #EAF9F3;
-  color: #00B578;
+  background: rgba(0, 212, 170, 0.12);
+  color: #00D4AA;
   font-size: 24rpx;
   font-weight: 600;
   display: flex;

@@ -23,7 +23,6 @@
         </view>
       </view>
       <text class="rating-num">{{rating || '暂无评分，点此评分'}}</text>
-      <text wx:if="{{ratingCount}}" class="rating-count">{{ratingCount}}人评</text>
     </view>
     <text wx:if="{{shop.hot}}" class="hot-tag">热门店铺</text>
 
@@ -131,12 +130,22 @@
   </view>
 </view>
 
-<!-- 打卡成功轻庆祝 -->
+<!-- 打卡成功庆祝（设计稿同款：橙徽章 + 连签 + 彩纸） -->
 <view wx:if="{{celebrate}}" class="celebrate" catchtouchmove="noop">
+  <view class="confetti">
+    <view
+      wx:for="{{confetti}}"
+      wx:key="index"
+      class="confetti-piece {{item.round ? 'confetti-round' : ''}}"
+      style="left: {{item.left}}%; background: {{item.color}}; animation-delay: {{item.delay}}ms; animation-duration: {{item.dur}}ms;"
+    ></view>
+  </view>
   <view class="celebrate-card">
-    <view class="celebrate-ring"></view>
-    <image class="celebrate-check" src="/images/marker.png" mode="aspectFit" />
-    <text class="celebrate-title">{{celebrateText}}</text>
+    <view class="celebrate-badge">
+      <image class="celebrate-check" src="{{icons.checkWhite}}" mode="aspectFit" />
+    </view>
+    <text class="celebrate-title">打卡成功</text>
+    <text class="celebrate-streak">已连续打卡 {{celebrateStreak}} 天</text>
     <text class="celebrate-sub">{{celebrateSub}}</text>
   </view>
 </view>

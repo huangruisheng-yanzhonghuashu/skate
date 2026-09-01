@@ -1,8 +1,8 @@
 <view class="page">
-  <!-- 顶部说明 -->
+  <!-- 顶部说明（设计稿：大标题 + 副标题） -->
   <view class="hero">
-    <view class="hero-title">我的报错</view>
-    <view class="hero-desc">在场地详情页提交的报错会展示在这里，处理结果会回复在对应条目下</view>
+    <view class="hero-title">报错会在场地详情页提交</view>
+    <view class="hero-desc">处理结果会回复在对应条目下</view>
   </view>
 
   <!-- 列表 -->

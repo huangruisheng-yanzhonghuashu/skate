@@ -36,7 +36,17 @@
   },
   "simulatorPluginLibVersion": {},
   "packOptions": {
-    "ignore": [],
+    "ignore": [
+      { "type": "folder", "value": ".workbuddy" },
+      { "type": "folder", "value": "skatespot-ui-upgrade" },
+      { "type": "folder", "value": "codebuddy-plugin" },
+      { "type": "folder", "value": "rules" },
+      { "type": "folder", "value": "scripts" },
+      { "type": "file", "value": "README.md" },
+      { "type": "file", "value": "CODEBUDDY.md" },
+      { "type": "file", "value": "UIUX-分析报告.md" },
+      { "type": "file", "value": "cloudbaserc.json" }
+    ],
     "include": []
   }
 }

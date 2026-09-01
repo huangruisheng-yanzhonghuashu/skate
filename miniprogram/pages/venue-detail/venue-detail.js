@@ -9,12 +9,43 @@ const MAX_LIVE_AVATARS = 4
 
 const REPORT_TYPES = ['地址错误', '已关闭', '设施损坏', '信息变更', '其他']
 
+/* 连签徽章里程碑（签到成功弹层提示：再打 N 天解锁「M 日坚持」） */
+const STREAK_MILESTONES = [3, 7, 30, 100]
+
+/* 状态栏高度（自定义导航：返回按钮悬浮定位用） */
+function getStatusBarHeight() {
+  try {
+    const info = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync()
+    return info.statusBarHeight || 20
+  } catch (e) {
+    return 20
+  }
+}
+
+/* 庆祝彩纸：14 片随机位置/颜色/时序（左起百分比，从顶部飘落） */
+function buildConfetti() {
+  const colors = ['#FF5A36', '#00D4AA', '#FFB800', '#2A8CFF', '#A06BFF', '#FF8A6E']
+  const pieces = []
+  for (let i = 0; i < 14; i++) {
+    pieces.push({
+      left: Math.round(4 + Math.random() * 92),
+      delay: Math.round(Math.random() * 500),
+      dur: 1400 + Math.round(Math.random() * 900),
+      color: colors[i % colors.length],
+      round: i % 3 === 0,
+    })
+  }
+  return pieces
+}
+
 Page({
   data: {
     venue: null,
     photos: [],
     tags: [],
     current: 0,
+    statusBarHeight: 20,
+    distanceText: '',
     online: 0,
     presenceUsers: [],
     moreCount: 0,
@@ -40,17 +71,22 @@ Page({
       pin: ICON.pinOrangeSmall,
       send: ICON.sendOrange,
       check: ICON.checkWhite,
+      checkWhite: ICON.checkWhite,
       flag: ICON.flagAsh,
-      checkCircle: ICON.checkCircleSuccess,
+      checkCircle: ICON.checkCircleOrange,
       edit: ICON.editAsh,
       plus: ICON.plusAsh,
       x: ICON.xWhite,
       imagePlus: ICON.imagePlusAsh,
       chevron: ICON.chevronRightAsh,
+      back: ICON.chevronLeftWhite,
     },
   },
 
   onLoad(options) {
+    /* 首页卡片「快捷签到」直达：详情页加载完成后自动打开签到弹层（2 步内完成） */
+    this._autoCheckin = options.checkin === '1'
+    this.setData({ statusBarHeight: getStatusBarHeight() })
     cloud.getVenues().then((venues) => {
       const venue = venues.find((v) => v.id === options.id) || null
       if (!venue) {
@@ -66,9 +102,13 @@ Page({
         moreCount: 0,
         presenceUsers: [],
       })
-      wx.setNavigationBarTitle({ title: venue.name })
       this.refresh()
       this.loadFeed()
+      this.computeDistance()
+      if (this._autoCheckin) {
+        this._autoCheckin = false
+        if (!store.checkedToday(venue.id)) this.openCheckin()
+      }
     })
   },
 
@@ -150,6 +190,29 @@ Page({
         rating: st ? st.avg : venue.rating,
         ratingCount: st ? st.count : 0,
       })
+    })
+  },
+
+  /* ===== 返回（自定义导航无系统返回键） ===== */
+  goBack() {
+    wx.navigateBack({
+      fail: () => wx.switchTab({ url: '/pages/home/home' }),
+    })
+  },
+
+  /* 距离 pill：定位成功后算真实直线距离（失败静默隐藏） */
+  computeDistance() {
+    const v = this.data.venue
+    if (!v) return
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        const m = cloud.distanceM(res.latitude, res.longitude, v.latitude, v.longitude)
+        this.setData({
+          distanceText: m >= 1000 ? (m / 1000).toFixed(1) + 'km' : Math.round(m) + 'm',
+        })
+      },
+      fail: () => { /* 无定位权限/失败：不显示距离 */ },
     })
   },
 
@@ -319,7 +382,7 @@ Page({
       /* 新签到：本地立即生效，云端写入由 store 异步处理（失败自动排队重试） */
       store.addCheckin(v.id, v.name, note, fileIDs, 'venue')
       this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
-      this.showCelebrate('签到成功', v.name)
+      this.showCelebrate()
       this.refresh()
       this.loadFeed()
     }
@@ -343,18 +406,24 @@ Page({
     wx.navigateTo({ url: '/pages/place-checkins/place-checkins?id=' + v.id + '&kind=venue' })
   },
 
-  /* 签到成功轻庆祝：1.8s 自动消失 */
-  showCelebrate(title, placeName) {
+  /* 签到成功庆祝（设计稿：彩纸 + 连续天数 + 下一个徽章提示），2.6s 自动消失 */
+  showCelebrate() {
     const s = store.calcStats()
+    const streak = s.streak
+    const next = STREAK_MILESTONES.find((m) => m > streak)
+    const sub = next
+      ? '再打 ' + (next - streak) + ' 天解锁「' + next + ' 日坚持」徽章'
+      : '全部徽章已解锁，滑手榜样！'
     this.setData({
       celebrate: true,
-      celebrateText: title,
-      celebrateSub: placeName + ' · 连续打卡 ' + s.streak + ' 天',
+      celebrateStreak: streak,
+      celebrateSub: sub,
+      confetti: buildConfetti(),
     })
     if (this._celebrateTimer) clearTimeout(this._celebrateTimer)
     this._celebrateTimer = setTimeout(() => {
       this.setData({ celebrate: false })
-    }, 1800)
+    }, 2600)
   },
 
   /* 下拉刷新：重拉打卡流 + 在线数 + 签到态 */

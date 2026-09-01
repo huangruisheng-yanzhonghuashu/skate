@@ -1,6 +1,6 @@
 .cbox {
   margin-top: 16rpx;
-  background: #F7F7F8;
+  background: #17171B;
   border-radius: 12rpx;
   padding: 20rpx;
 }
@@ -55,17 +55,17 @@
 .cname {
   font-size: 24rpx;
   font-weight: 600;
-  color: #6B6B70;
+  color: #A6A6AD;
 }
 
 .ctime {
   font-size: 20rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 .cnote {
   font-size: 26rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
   line-height: 1.5;
   word-break: break-all;
 }
@@ -73,7 +73,7 @@
 .cdel {
   flex-shrink: 0;
   font-size: 22rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
   padding: 4rpx 8rpx;
 }
 
@@ -82,7 +82,7 @@
   text-align: center;
   padding: 16rpx 0;
   font-size: 22rpx;
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 /* 输入行 */
@@ -92,30 +92,30 @@
   gap: 14rpx;
   margin-top: 16rpx;
   padding-top: 16rpx;
-  border-top: 1rpx solid #EBEBEE;
+  border-top: 1rpx solid #26262C;
 }
 
 .cinput {
   flex: 1;
-  background: #FFFFFF;
+  background: #1E1E23;
   border-radius: 999rpx;
   padding: 12rpx 24rpx;
   font-size: 26rpx;
-  color: #1A1A1E;
+  color: #D9D9DE;
 }
 
 .cph {
-  color: #C0C0C4;
+  color: #6E6E76;
 }
 
 .csend {
   flex-shrink: 0;
   font-size: 24rpx;
   font-weight: 600;
-  color: #C0C0C4;
+  color: #6E6E76;
   padding: 10rpx 24rpx;
   border-radius: 999rpx;
-  background: #F0F0F2;
+  background: #26262C;
 }
 
 .csend-on {

@@ -4,6 +4,25 @@ const cloud = require('../../utils/cloud.js')
 const { fmtAgo } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
+/* 连签徽章里程碑（庆祝层提示用，与场地详情页一致） */
+const STREAK_MILESTONES = [3, 7, 30, 100]
+
+/* 庆祝彩纸：14 片随机位置/颜色/时序 */
+function buildConfetti() {
+  const colors = ['#FF5A36', '#00D4AA', '#FFB800', '#2A8CFF', '#A06BFF', '#FF8A6E']
+  const pieces = []
+  for (let i = 0; i < 14; i++) {
+    pieces.push({
+      left: Math.round(4 + Math.random() * 92),
+      delay: Math.round(Math.random() * 500),
+      dur: 1400 + Math.round(Math.random() * 900),
+      color: colors[i % colors.length],
+      round: i % 3 === 0,
+    })
+  }
+  return pieces
+}
+
 Page({
   data: {
     shop: null,
@@ -15,6 +34,7 @@ Page({
     icons: {
       starOrange: ICON.starOrange,
       starGray: ICON.starGray,
+      checkWhite: ICON.checkWhite,
     },
     feed: [],
     /* 打卡弹窗 */
@@ -144,16 +164,21 @@ Page({
   },
 
   /* 打卡成功轻庆祝：1.8s 自动消失 */
-  showCelebrate(title, placeName) {
+  /* 打卡成功庆祝（设计稿同款：橙徽章 + 连签 + 彩纸），2.6s 自动消失 */
+  showCelebrate(placeName) {
+    const s = store.calcStats()
+    const next = STREAK_MILESTONES.find((m) => m > s.streak)
+    const sub = placeName + (next ? ' · 再打 ' + (next - s.streak) + ' 天解锁「' + next + ' 日坚持」徽章' : '')
     this.setData({
       celebrate: true,
-      celebrateText: title,
-      celebrateSub: placeName,
+      celebrateStreak: s.streak,
+      celebrateSub: sub,
+      confetti: buildConfetti(),
     })
     if (this._celebrateTimer) clearTimeout(this._celebrateTimer)
     this._celebrateTimer = setTimeout(() => {
       this.setData({ celebrate: false })
-    }, 1800)
+    }, 2600)
   },
 
   /* 下拉刷新 */
@@ -269,7 +294,7 @@ Page({
       }
       store.addCheckin(s.id, s.name, note, fileIDs, 'shop')
       this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
-      this.showCelebrate('打卡成功', s.name)
+      this.showCelebrate(s.name)
       this.refresh()
       this.loadFeed()
     }

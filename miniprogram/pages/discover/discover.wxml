@@ -1,21 +1,24 @@
 <view class="page">
-  <!-- 最新/热门切换 -->
-  <view class="tabs">
-    <view
-      class="tab {{tab === 'latest' ? 'tab-active' : ''}}"
-      data-tab="latest"
-      bindtap="switchTab"
-    >
-      <text>最新</text>
-      <view wx:if="{{tab === 'latest'}}" class="tab-line"></view>
-    </view>
-    <view
-      class="tab {{tab === 'hot' ? 'tab-active' : ''}}"
-      data-tab="hot"
-      bindtap="switchTab"
-    >
-      <text>热门</text>
-      <view wx:if="{{tab === 'hot'}}" class="tab-line"></view>
+  <!-- 头部：大标题 + 右侧最新/热门切换（设计稿同款） -->
+  <view class="dis-header">
+    <text class="dis-title">发现</text>
+    <view class="dis-tabs">
+      <view
+        class="dis-tab {{tab === 'latest' ? 'dis-tab-active' : ''}}"
+        data-tab="latest"
+        bindtap="switchTab"
+      >
+        <text>最新</text>
+        <view wx:if="{{tab === 'latest'}}" class="dis-tab-line"></view>
+      </view>
+      <view
+        class="dis-tab {{tab === 'hot' ? 'dis-tab-active' : ''}}"
+        data-tab="hot"
+        bindtap="switchTab"
+      >
+        <text>热门</text>
+        <view wx:if="{{tab === 'hot'}}" class="dis-tab-line"></view>
+      </view>
     </view>
   </view>
 
@@ -26,13 +29,16 @@
         <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
         <view wx:else class="avatar">{{item.avatarText}}</view>
         <view class="feed-user">
+          <!-- 第一行：名字 + 时间（右对齐） -->
           <view class="feed-user-row">
             <text class="feed-name">{{item.user}}</text>
-            <text class="feed-dot">·</text>
+            <text class="feed-time">{{item.timeText}}</text>
+          </view>
+          <!-- 第二行：类型灰标 + 场地名橙色链接（跳转入口独立成行不被截断） -->
+          <view class="feed-place-row">
             <text class="feed-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
             <text class="feed-venue" data-id="{{item.venueId}}" data-kind="{{item.kind}}" bindtap="goPlace">{{item.venueName}}</text>
           </view>
-          <text class="feed-time">{{item.timeText}}</text>
         </view>
       </view>
 

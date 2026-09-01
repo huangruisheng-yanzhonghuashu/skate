@@ -1,12 +1,12 @@
-/* 场地卡片 — 高保真版设计稿结构 */
+/* 场地卡片 — 暗色街头风（左图通铺卡缘 + 内容 + 状态行居中，设计稿同款） */
 .card {
   position: relative;
   display: flex;
-  gap: 24rpx;
-  padding: 28rpx;
-  background: #FFFFFF;
-  border-radius: 24rpx;
-  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.04);
+  gap: 0;
+  padding: 0;
+  background: #1E1E23;
+  border-radius: 20rpx;
+  overflow: hidden;
   animation: card-in 0.4s ease-out backwards;
 }
 
@@ -20,12 +20,45 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== 角标（显式偏移，配套内容行留白） ===== */
+/* ===== 左图：正方形照片，通铺卡片左缘（左圆右直角，撑满卡高，设计稿同款） ===== */
+.thumb {
+  position: relative;
+  width: 200rpx;
+  min-height: 200rpx;
+  align-self: stretch;
+  border-radius: 20rpx 0 0 20rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: #17171B;
+}
+
+.thumb-img {
+  width: 100%;
+  height: 100%;
+}
+
+/* 无图回退：品牌色浅底 + 场地图标 */
+.thumb-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 90, 54, 0.10);
+}
+
+.thumb-icon {
+  width: 64rpx;
+  height: 64rpx;
+  opacity: 0.9;
+}
+
+/* 热门角标（压图左上） */
 .badge-hot {
   position: absolute;
-  top: 24rpx;
-  left: 136rpx; /* 卡片内边距28 + 图标88 + 间距24 */
-  padding: 6rpx 12rpx;
+  top: 12rpx;
+  left: 12rpx;
+  padding: 4rpx 12rpx;
   background: #FF5A36;
   color: #FFFFFF;
   font-size: 20rpx;
@@ -35,49 +68,13 @@
   white-space: nowrap;
 }
 
-.badge-checked {
-  position: absolute;
-  top: 24rpx;
-  right: 24rpx;
-  display: flex;
-  align-items: center;
-  gap: 6rpx;
-  padding: 6rpx 12rpx;
-  background: #E8F8F0;
-  color: #00B386;
-  font-size: 20rpx;
-  font-weight: 600;
-  line-height: 1;
-  border-radius: 8rpx;
-  white-space: nowrap;
-}
-
-.badge-check {
-  width: 20rpx;
-  height: 20rpx;
-}
-
-/* ===== 图标 ===== */
-.icon {
-  width: 88rpx;
-  height: 88rpx;
-  border-radius: 50%;
-  background: #FFF0ED;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.icon-img {
-  width: 44rpx;
-  height: 44rpx;
-}
-
 /* ===== 内容 ===== */
 .body {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx 24rpx;
 }
 
 .name-row {
@@ -87,71 +84,15 @@
   gap: 16rpx;
 }
 
-.name-row-checked {
-  padding-right: 116rpx;
-}
-
 .name {
   min-width: 0;
   font-size: 30rpx;
   font-weight: 700;
-  color: #1A1A1E;
+  color: #FFFFFF;
   line-height: 1.35;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-
-/* 热门角标占位：名称左侧留 72rpx */
-.name-hot {
-  padding-left: 72rpx;
-}
-
-.rating {
-  display: flex;
-  align-items: center;
-  gap: 8rpx;
-  flex-shrink: 0;
-}
-
-/* 星级可视化：底层 5 灰星，顶层 5 橙星按评分比例裁剪 */
-.stars {
-  position: relative;
-  width: 130rpx;
-  height: 24rpx;
-}
-
-.stars-bg {
-  display: flex;
-  gap: 2rpx;
-}
-
-.stars-fg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  gap: 2rpx;
-  white-space: nowrap;
-}
-
-.star {
-  width: 24rpx;
-  height: 24rpx;
-  flex-shrink: 0;
-}
-
-.rating-num {
-  font-size: 26rpx;
-  font-weight: 600;
-  color: #FF5A36;
-}
-
-.rating-count {
-  font-size: 20rpx;
-  color: #C0C0C4;
 }
 
 /* 地址 · 距离 */
@@ -159,9 +100,9 @@
   display: flex;
   align-items: center;
   gap: 8rpx;
-  margin-top: 8rpx;
+  margin-top: 6rpx;
   font-size: 24rpx;
-  color: #8C8C8C;
+  color: #8C8C94;
   line-height: 1.4;
   min-width: 0;
 }
@@ -179,41 +120,77 @@
   white-space: nowrap;
 }
 
-/* 标签行（与详情页一致显示全部，超过一行自动折行） */
+/* 标签行 */
 .tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8rpx;
-  margin-top: 12rpx;
+  margin-top: 10rpx;
 }
 
 .tag {
   flex-shrink: 0;
   padding: 6rpx 12rpx;
-  background: #F0F0F0;
-  color: #666666;
+  background: #26262C;
+  color: #A6A6AD;
   font-size: 22rpx;
   line-height: 1;
   border-radius: 8rpx;
   white-space: nowrap;
 }
 
-/* 此刻 N 人 */
-.live {
+/* ===== 状态行（绿点+绿字，靠左对齐） ===== */
+.foot {
   display: flex;
   align-items: center;
+  margin-top: auto;
+  padding-top: 12rpx;
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
   gap: 10rpx;
-  margin-top: 12rpx;
-  color: #00D4AA;
   font-size: 24rpx;
   font-weight: 500;
   line-height: 1;
+  min-width: 0;
 }
 
-.live-dot {
+.state-live {
+  color: #00D4AA;
+}
+
+/* 无人在场弱化态 */
+.state-quiet {
+  color: #6E6E76;
+  font-weight: 400;
+}
+
+.dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #3A3A42;
+  flex-shrink: 0;
+}
+
+/* 已签到：绿色（设计稿「今日已签到 · 14:20」为绿色 + 绿点） */
+.state-checked {
+  color: #00D4AA;
+}
+
+.dot-green {
   width: 12rpx;
   height: 12rpx;
   border-radius: 50%;
   background: #00D4AA;
+  flex-shrink: 0;
+}
+
+.state-icon {
+  width: 24rpx;
+  height: 24rpx;
   flex-shrink: 0;
 }

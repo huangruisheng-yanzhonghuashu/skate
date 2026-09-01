@@ -1,7 +1,6 @@
 <view class="page">
-  <!-- 顶部说明 -->
+  <!-- 顶部说明（设计稿：仅一行灰色说明） -->
   <view class="hero">
-    <view class="hero-title">你提我改</view>
     <view class="hero-desc">功能建议、场地信息纠错、体验问题都可以提，处理结果会回复在这里</view>
   </view>
 

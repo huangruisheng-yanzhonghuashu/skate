@@ -22,6 +22,8 @@ const P = {
   comment: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>',
   venue: '<path d="M3.5 17.2h17" stroke-width="2.6"/><path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/><path d="M12.1 12.3L13.5 11.85"/>',
   locate: '<circle cx="12" cy="12" r="7"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><circle cx="12" cy="12" r="1.2" fill="#1A1A1E" stroke="none"/>',
+  /* 定位准星（白色中心点版：深色按钮上中心点可见，与设计稿一致） */
+  locateW: '<circle cx="12" cy="12" r="7"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><circle cx="12" cy="12" r="1.6" fill="#FFFFFF" stroke="none"/>',
   send: '<path d="M3 11L22 2 13 21 11 13 3 11Z"/>',
   flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1Z"/><path d="M4 22V15"/>',
   check: '<path d="M20 6L9 17 4 12"/>',
@@ -31,6 +33,7 @@ const P = {
   plus: '<path d="M12 5L12 19"/><path d="M5 12L19 12"/>',
   x: '<path d="M18 6L6 18"/><path d="M6 6L18 18"/>',
   chevronRight: '<path d="M9 18l6-6-6-6"/>',
+  chevronLeft: '<path d="M15 18l-6-6 6-6"/>',
   chevronDown: '<path d="M6 9l6 6 6-6"/>',
   search: '<path d="M19 11a8 8 0 1 1-16 0a8 8 0 1 1 16 0Z"/><path d="M21 21l-4.3-4.3"/>',
   file: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/>',
@@ -42,6 +45,7 @@ const P = {
   tagCement: '<path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M3 9h18"/><path d="M9 21V9"/>',
   /* 签到统计 */
   trophy: '<path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>',
+  compass: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
   calendar: '<path d="M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
 }
 
@@ -51,15 +55,21 @@ const WHITE = '#FFFFFF'
 const FOG = '#E8E8E8'
 
 const ICON = {
-  /* TabBar（灰 / 橙） */
+  /* TabBar（灰 / 橙 / 白——白用于激活胶囊底） */
   homeAsh: svg(P.home, { stroke: ASH }),
   homeOrange: svg(P.home, { stroke: ORANGE }),
+  homeWhite: svg(P.home, { stroke: WHITE, sw: 2.2 }),
   flameAsh: svg(P.flame, { stroke: ASH }),
   flameOrange: svg(P.flame, { stroke: ORANGE }),
+  flameWhite: svg(P.flame, { stroke: WHITE, sw: 2.2 }),
+  compassAsh: svg(P.compass, { stroke: ASH }),
+  compassWhite: svg(P.compass, { stroke: WHITE, sw: 2.2 }),
   pinAsh: svg(P.pin, { stroke: ASH }),
   pinOrange: svg(P.pin, { stroke: ORANGE }),
+  pinWhite: svg(P.pin, { stroke: WHITE, sw: 2.2 }),
   userAsh: svg(P.user, { stroke: ASH }),
   userOrange: svg(P.user, { stroke: ORANGE }),
+  userWhite: svg(P.user, { stroke: WHITE, sw: 2.2 }),
 
   /* 评分星（橙实心 / 灰实心 / 琥珀，星级可视化用） */
   starOrange: svg(P.star, { fill: ORANGE, stroke: ORANGE }),
@@ -88,6 +98,7 @@ const ICON = {
 
   /* 弹窗 */
   checkCircleSuccess: svg(P.checkCircle, { stroke: '#00D4AA' }),
+  checkCircleOrange: svg(P.checkCircle, { stroke: ORANGE }),
   editAsh: svg(P.edit, { stroke: ASH }),
   plusAsh: svg(P.plus, { stroke: ASH }),
   xWhite: svg(P.x, { stroke: WHITE, sw: 2.5 }),
@@ -98,11 +109,14 @@ const ICON = {
   searchWhite: svg(P.search, { stroke: WHITE }),
   /* 深色胶囊内的搜索图标：与占位文字同色 #C7C7C7（同设计稿 currentColor） */
   searchPh: svg(P.search, { stroke: '#C7C7C7' }),
-  pinWhite: svg(P.pin, { stroke: WHITE }),
   chevronDownWhite: svg(P.chevronDown, { stroke: WHITE }),
   locateInk: svg(P.locate, { stroke: '#1A1A1E' }),
+  locateWhite: svg(P.locateW, { stroke: WHITE }),
   checkGreenBold: svg(P.check, { stroke: '#00B386', sw: 3 }),
+  checkOrangeBold: svg(P.check, { stroke: ORANGE, sw: 3 }),
   chevronRightAsh: svg(P.chevronRight, { stroke: ASH }),
+  chevronLeftWhite: svg(P.chevronLeft, { stroke: WHITE, sw: 2.5 }),
+  chevronDownAsh: svg(P.chevronDown, { stroke: ASH }),
   fileOrange: svg(P.file, { stroke: ORANGE }),
   settingsOrange: svg(P.settings, { stroke: ORANGE }),
 
