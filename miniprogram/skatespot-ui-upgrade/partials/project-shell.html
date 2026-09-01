@@ -1,0 +1,703 @@
+<!-- ============================================================
+  SkateSpot 小程序 · 项目共享外壳片段库（project-shell）
+  ------------------------------------------------------------
+  本文件是「片段库 + 逐字复制源」，不是可渲染的完整页面。
+  7 个叶子页面按 SECTION 编号逐字复制对应区块，不得改类名与结构。
+  品牌令牌唯一来源：colors_and_type.css（--sk8-* / --state-*）。
+  生成节点：gen-project-shell
+============================================================ -->
+
+
+<!-- ============================================================
+  SECTION 0 · 使用说明（叶子页面如何复制本片段）
+============================================================ -->
+<!--
+  复制纪律（对全部 SECTION 生效）：
+  1. 逐字复制：类名、DOM 结构、属性顺序、注释均不得改动；
+     唯一允许修改的内容位：
+       · SECTION 2 中 SLOT: pageTitle 注释之后的标题文本；
+       · SECTION 4 的 active 标记（见下）。
+  2. active 态规则（仅限 tabBar）：从 SECTION 4 的 4 个变体中逐字取用
+     与当前页面对应的那个变体；只允许 data-active="true" 与
+     .sk8-tab-item-on 落位不同，图标、文字、顺序、几何完全一致。
+     禁止自行增删 tab、改标签文字、换图标名。
+  3. CSS 注入：SECTION 5 / SECTION 6 / SECTION 7 的 <style> 内容逐字
+     并入叶子页 <style>（或 head 内联样式），三段顺序保持
+     5 → 6 → 7，不得删改任何声明。
+  4. 颜色纪律：本片段全部颜色仅来自 var(--sk8-*) / var(--state-*)；
+     叶子页复制后同样不得引入新的裸色值。
+  5. 页面组装顺序（tab 页）：
+       SECTION 1 状态栏 → SECTION 2 导航栏 → <main>…</main>
+       → SECTION 4 tabBar（含 .sk8-safe-bottom）
+     详情页：SECTION 1 状态栏（可选）→ 媒体区（内叠 SECTION 3 沉浸层）
+     → 内容区；详情页不渲染 SECTION 4 tabBar。
+  6. 安全区：tab 页内容区底部预留 tabBar(50px)+安全区(34px)=84px；
+     .sk8-safe-bottom 紧跟 .sk8-tabbar 之后，共同构成底部 chrome。
+  7. lucide：本片段仅以 data-lucide 属性声明图标，不写死 SVG path；
+     lucide 脚本注入由叶子页 head 负责，本片段不注入任何脚本。
+     线宽统一由 CSS 控制为 1.5px（stroke-width 覆写在 SECTION 5/7）。
+  8. 逐字复制的片段不得被二次包裹改样式；如需页面级定位
+     （如吸底），只允许在外层新增定位类，内部结构不动。
+-->
+
+
+<!-- ============================================================
+  SECTION 1 · 状态栏（44px）
+  【复制规则】tab 页与详情页均可用；背景透明，叠底色由页面容器决定。
+  时间固定 9:41；图标组 signal / wifi / battery 逐字保留，不得替换。
+============================================================ -->
+<div class="sk8-statusbar">
+  <span class="sk8-statusbar-time">9:41</span>
+  <span class="sk8-statusbar-icons" aria-hidden="true">
+    <i data-lucide="signal" class="sk8-statusbar-icon"></i>
+    <i data-lucide="wifi" class="sk8-statusbar-icon"></i>
+    <i data-lucide="battery" class="sk8-statusbar-icon"></i>
+  </span>
+</div>
+
+
+<!-- ============================================================
+  SECTION 2 · 标准导航栏（44px，tab 页与普通页用）
+  【复制规则】
+  · 仅允许替换 SLOT 注释后的标题文本（名词短语，≤8 汉字）；
+  · 左侧 .sk8-navbar-left 为配重空区，保持为空，不得塞入内容；
+    返回入口一律走 SECTION 3 沉浸层；
+  · 右侧系统胶囊逐字保留（more-horizontal + ellipsis 分隔点 + x，
+    仅描边风，禁止改用品牌色填充）。
+============================================================ -->
+<header class="sk8-navbar">
+  <div class="sk8-navbar-left" aria-hidden="true"></div>
+  <h1 class="sk8-navbar-title"><!-- SLOT: pageTitle -->页面标题</h1>
+  <div class="sk8-capsule" role="group" aria-label="小程序菜单">
+    <button class="sk8-capsule-btn" type="button" aria-label="更多">
+      <i data-lucide="more-horizontal" class="sk8-capsule-icon"></i>
+    </button>
+    <i data-lucide="ellipsis" class="sk8-capsule-divider" aria-hidden="true"></i>
+    <button class="sk8-capsule-btn" type="button" aria-label="关闭">
+      <i data-lucide="x" class="sk8-capsule-icon"></i>
+    </button>
+  </div>
+</header>
+
+
+<!-- ============================================================
+  SECTION 3 · 沉浸式导航层（88px，详情页媒体图上叠放）
+  【复制规则】
+  · 详情页专用：绝对定位叠在首屏媒体图之上（z-index 30），
+    页面媒体容器需为 position:relative 且高度 ≥ 88px 的图区；
+  · 左侧返回键 36×36 圆形半透明黑底 + blur；
+  · 右侧胶囊与 SECTION 2 逐字同款；叠层语境下由 CSS 自动加深底
+    并叠加 blur，保证深色/高亮图上可读；
+  · 本层不含标题文本，页面标题由内容区承载。
+============================================================ -->
+<div class="sk8-nav-overlay">
+  <button class="sk8-nav-back" type="button" aria-label="返回">
+    <i data-lucide="chevron-left" class="sk8-nav-back-icon"></i>
+  </button>
+  <div class="sk8-capsule" role="group" aria-label="小程序菜单">
+    <button class="sk8-capsule-btn" type="button" aria-label="更多">
+      <i data-lucide="more-horizontal" class="sk8-capsule-icon"></i>
+    </button>
+    <i data-lucide="ellipsis" class="sk8-capsule-divider" aria-hidden="true"></i>
+    <button class="sk8-capsule-btn" type="button" aria-label="关闭">
+      <i data-lucide="x" class="sk8-capsule-icon"></i>
+    </button>
+  </div>
+</div>
+
+
+<!-- ============================================================
+  SECTION 4 · 底部 tabBar（50px）+ 底部安全区（34px）
+  【复制规则】
+  · 仅 4 个 tab 页使用；详情页禁止渲染本 SECTION；
+  · 每页只取用与自身对应的 1 个 active 变体，整块逐字复制；
+  · 4 个变体的结构、顺序、图标、文字、几何完全一致，仅
+    data-active="true" 与 .sk8-tab-item-on 的落位不同；
+  · data-dom-id 固定为 nav-home / nav-discover / nav-checkins / nav-profile；
+  · .sk8-safe-bottom 紧跟 nav 之后一起复制，不得拆开；
+  · 默认置于文档流末尾；如叶子页需要吸底，仅允许在外层追加
+    定位容器，内部标记不动。
+============================================================ -->
+
+<!-- 变体 1/4 · nav-home active（首页 tab 页逐字复制） -->
+<nav class="sk8-tabbar" aria-label="底部导航">
+  <a data-nav-key="home" data-dom-id="nav-home" data-active="true" class="sk8-tab-item sk8-tab-item-on" href="javascript:void(0)" aria-label="首页">
+    <i data-lucide="home" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">首页</span>
+  </a>
+  <a data-nav-key="discover" data-dom-id="nav-discover" class="sk8-tab-item" href="javascript:void(0)" aria-label="发现">
+    <i data-lucide="compass" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">发现</span>
+  </a>
+  <a data-nav-key="checkins" data-dom-id="nav-checkins" class="sk8-tab-item" href="javascript:void(0)" aria-label="签到">
+    <i data-lucide="flame" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">签到</span>
+  </a>
+  <a data-nav-key="profile" data-dom-id="nav-profile" class="sk8-tab-item" href="javascript:void(0)" aria-label="我的">
+    <i data-lucide="user" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">我的</span>
+  </a>
+</nav>
+<div class="sk8-safe-bottom"></div>
+
+<!-- 变体 2/4 · nav-discover active（发现 tab 页逐字复制） -->
+<nav class="sk8-tabbar" aria-label="底部导航">
+  <a data-nav-key="home" data-dom-id="nav-home" class="sk8-tab-item" href="javascript:void(0)" aria-label="首页">
+    <i data-lucide="home" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">首页</span>
+  </a>
+  <a data-nav-key="discover" data-dom-id="nav-discover" data-active="true" class="sk8-tab-item sk8-tab-item-on" href="javascript:void(0)" aria-label="发现">
+    <i data-lucide="compass" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">发现</span>
+  </a>
+  <a data-nav-key="checkins" data-dom-id="nav-checkins" class="sk8-tab-item" href="javascript:void(0)" aria-label="签到">
+    <i data-lucide="flame" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">签到</span>
+  </a>
+  <a data-nav-key="profile" data-dom-id="nav-profile" class="sk8-tab-item" href="javascript:void(0)" aria-label="我的">
+    <i data-lucide="user" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">我的</span>
+  </a>
+</nav>
+<div class="sk8-safe-bottom"></div>
+
+<!-- 变体 3/4 · nav-checkins active（签到 tab 页逐字复制） -->
+<nav class="sk8-tabbar" aria-label="底部导航">
+  <a data-nav-key="home" data-dom-id="nav-home" class="sk8-tab-item" href="javascript:void(0)" aria-label="首页">
+    <i data-lucide="home" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">首页</span>
+  </a>
+  <a data-nav-key="discover" data-dom-id="nav-discover" class="sk8-tab-item" href="javascript:void(0)" aria-label="发现">
+    <i data-lucide="compass" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">发现</span>
+  </a>
+  <a data-nav-key="checkins" data-dom-id="nav-checkins" data-active="true" class="sk8-tab-item sk8-tab-item-on" href="javascript:void(0)" aria-label="签到">
+    <i data-lucide="flame" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">签到</span>
+  </a>
+  <a data-nav-key="profile" data-dom-id="nav-profile" class="sk8-tab-item" href="javascript:void(0)" aria-label="我的">
+    <i data-lucide="user" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">我的</span>
+  </a>
+</nav>
+<div class="sk8-safe-bottom"></div>
+
+<!-- 变体 4/4 · nav-profile active（我的 tab 页逐字复制） -->
+<nav class="sk8-tabbar" aria-label="底部导航">
+  <a data-nav-key="home" data-dom-id="nav-home" class="sk8-tab-item" href="javascript:void(0)" aria-label="首页">
+    <i data-lucide="home" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">首页</span>
+  </a>
+  <a data-nav-key="discover" data-dom-id="nav-discover" class="sk8-tab-item" href="javascript:void(0)" aria-label="发现">
+    <i data-lucide="compass" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">发现</span>
+  </a>
+  <a data-nav-key="checkins" data-dom-id="nav-checkins" class="sk8-tab-item" href="javascript:void(0)" aria-label="签到">
+    <i data-lucide="flame" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">签到</span>
+  </a>
+  <a data-nav-key="profile" data-dom-id="nav-profile" data-active="true" class="sk8-tab-item sk8-tab-item-on" href="javascript:void(0)" aria-label="我的">
+    <i data-lucide="user" class="sk8-tab-icon"></i>
+    <span class="sk8-tab-label">我的</span>
+  </a>
+</nav>
+<div class="sk8-safe-bottom"></div>
+
+
+<!-- ============================================================
+  SECTION 5 · 共享 chrome CSS（<style> 逐字复制进叶子页）
+  【复制规则】整段逐字并入叶子页 <style>，不得删改声明或改选择器名。
+  颜色唯一来源 var(--sk8-*)；仅有的透明层均为令牌基色加透明度：
+    · rgba(27,27,32,…) = --sk8-popover #1B1B20 的半透明形态（系统胶囊底）
+    · rgba(0,0,0,…) / rgba(255,255,255,…) = 沉浸层中性遮罩（保证深色图可读）
+============================================================ -->
+<style>
+  /* ===== 状态栏 44px：背景透明，叠底色由页面定 ===== */
+  .sk8-statusbar {
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px 0 26px;
+    background: transparent;
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+  }
+  .sk8-statusbar-time {
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .sk8-statusbar-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sk8-statusbar-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.5px;
+  }
+
+  /* ===== 标准导航栏 44px：居中标题 + 右侧系统胶囊 ===== */
+  .sk8-navbar {
+    position: relative;
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 0;
+    background: var(--sk8-background);
+    border-bottom: 1px solid var(--sk8-border);
+  }
+  .sk8-navbar-left {
+    width: 96px;
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+  }
+  .sk8-navbar-title {
+    position: absolute;
+    top: 0;
+    left: 96px;
+    right: 96px;
+    height: 44px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+  }
+
+  /* ===== 系统胶囊 88×32：1px 描边 + 半透明底，仅描边风 ===== */
+  .sk8-capsule {
+    width: 88px;
+    height: 32px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(27, 27, 32, 0.60); /* --sk8-popover #1B1B20 @60% */
+    color: var(--sk8-foreground);
+  }
+  .sk8-capsule-btn {
+    flex: 1 1 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sk8-foreground);
+    cursor: pointer;
+    transition: opacity 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-capsule-btn:active { opacity: 0.7; }
+  .sk8-capsule-btn:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; border-radius: var(--sk8-radius-pill); }
+  .sk8-capsule-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.5px;
+  }
+  /* ellipsis 分隔点：旋转 90° 成为竖向点列分隔 */
+  .sk8-capsule-divider {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-faint);
+    transform: rotate(90deg);
+  }
+
+  /* ===== 沉浸式导航层：叠在详情页媒体图上（44+44=88px） ===== */
+  .sk8-nav-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    height: 88px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 8px 4px 12px;
+    background: transparent;
+  }
+  .sk8-nav-back {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12); /* 中性白描边，深色图上界定轮廓 */
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(0, 0, 0, 0.36);              /* 中性黑遮罩 + blur，保证可读 */
+    color: var(--sk8-foreground);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: transform 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-nav-back:active { transform: scale(0.94); }
+  .sk8-nav-back:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-nav-back-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.5px;
+  }
+  /* 叠层语境下的胶囊：加深底 + blur，深色图上保持可读 */
+  .sk8-nav-overlay .sk8-capsule {
+    background: rgba(27, 27, 32, 0.72); /* --sk8-popover @72% */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* ===== 底部 tabBar 50px：--sk8-bar 底 + 顶部 1px --sk8-border ===== */
+  .sk8-tabbar {
+    height: 50px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    background: var(--sk8-bar);
+    border-top: 1px solid var(--sk8-border);
+    font-family: var(--sk8-font-sans);
+  }
+  .sk8-tab-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: var(--sk8-muted-foreground);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sk8-tab-item:active .sk8-tab-icon { transform: scale(0.92); }
+  .sk8-tab-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.5px;
+    transition: transform 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-tab-label {
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.2;
+    transition: color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  /* active：仅图标+文字变主色、文字 600 字重，几何不变 */
+  .sk8-tab-item[data-active="true"] { color: var(--sk8-primary); }
+  .sk8-tab-item[data-active="true"] .sk8-tab-label { font-weight: 600; }
+
+  /* ===== 底部安全区占位 34px（跟随 bar 底色） ===== */
+  .sk8-safe-bottom {
+    height: env(safe-area-inset-bottom, 34px);
+    background: var(--sk8-bar);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk8-tab-icon,
+    .sk8-tab-label,
+    .sk8-capsule-btn,
+    .sk8-nav-back { transition-duration: 0.01ms; }
+    .sk8-tab-item:active .sk8-tab-icon,
+    .sk8-nav-back:active { transform: none; }
+  }
+</style>
+
+
+<!-- ============================================================
+  SECTION 6 · 头像基元（CSS 渐变首字母头像，无图片依赖）
+  【复制规则】
+  · 尺寸档 24/32/40/48（.sk8-avatar-24/32/40/48）四选一；
+  · 渐变变体 a/b/c/d 四选一，按用户轮换分配，不承载语义；
+  · 文字为 1 个汉字或 ≤4 字符 Latin（24px 档建议单字）；
+  · 在场态 .sk8-avatar-live 可叠加在任一尺寸+渐变上，语义仅限
+    「在场」，对应 --state-success 外环；
+  · 渐变色为片段规范指定的中性暗阶（非新增品牌色相），逐字保留。
+============================================================ -->
+<span class="sk8-avatar sk8-avatar-24 sk8-avatar-a">楠</span>
+<span class="sk8-avatar sk8-avatar-32 sk8-avatar-b">鹿</span>
+<span class="sk8-avatar sk8-avatar-40 sk8-avatar-c">凯</span>
+<span class="sk8-avatar sk8-avatar-48 sk8-avatar-d">Yui</span>
+<span class="sk8-avatar sk8-avatar-40 sk8-avatar-b sk8-avatar-live">鹿</span>
+
+<style>
+  /* ===== 头像基元：胶囊圆 + 白字首字母居中 ===== */
+  .sk8-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .sk8-avatar-24 { width: 24px; height: 24px; font-size: var(--sk8-fs-caption); }
+  .sk8-avatar-32 { width: 32px; height: 32px; font-size: var(--sk8-fs-body-s); }
+  .sk8-avatar-40 { width: 40px; height: 40px; font-size: var(--sk8-fs-body); }
+  .sk8-avatar-48 { width: 48px; height: 48px; font-size: var(--sk8-fs-body); }
+  /* 中性暗阶渐变（规范指定值，非品牌色相） */
+  .sk8-avatar-a { background: linear-gradient(135deg, #2A2A30 0%, #3A3A44 100%); }
+  .sk8-avatar-b { background: linear-gradient(135deg, #33302B 0%, #443F35 100%); }
+  .sk8-avatar-c { background: linear-gradient(135deg, #2B3033 0%, #353C40 100%); }
+  .sk8-avatar-d { background: linear-gradient(135deg, #302B33 0%, #3B3540 100%); }
+  /* 在场态：2px --state-success 外环（不占布局空间） */
+  .sk8-avatar-live { box-shadow: 0 0 0 2px var(--state-success); }
+</style>
+
+
+<!-- ============================================================
+  SECTION 7 · 基础组件 CSS（<style> 逐字复制进叶子页）
+  【复制规则】整段逐字并入叶子页 <style>；类名语义固定，页面级
+  覆盖只允许加外层工具类，不得改写本段声明。
+============================================================ -->
+<style>
+  /* ===== 主按钮：48px 高，品牌底白字 16px/600，每屏 ≤1 个 ===== */
+  .sk8-btn-primary {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: var(--sk8-radius-medium);
+    background: var(--sk8-primary);
+    color: var(--sk8-primary-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), opacity 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-btn-primary:active { background: var(--sk8-primary-strong); }
+  .sk8-btn-primary:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-btn-primary:disabled { background: var(--sk8-surface-2); color: var(--sk8-text-faint); cursor: not-allowed; }
+
+  /* ===== 次按钮：1px 描边 --sk8-border，字 --sk8-text-secondary ===== */
+  .sk8-btn-ghost {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 20px;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-btn-ghost:active { background: var(--sk8-surface-2); }
+  .sk8-btn-ghost:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-btn-ghost:disabled { color: var(--sk8-text-faint); cursor: not-allowed; opacity: 0.6; }
+
+  /* ===== 卡片：--sk8-card 底 + 10px 圆角 + 1px 描边，无深阴影 ===== */
+  .sk8-card {
+    box-sizing: border-box;
+    padding: 16px;
+    background: var(--sk8-card);
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    color: var(--sk8-card-foreground);
+  }
+
+  /* ===== 徽标：12px 字胶囊，弱调用 14% 橙底 + 亮橙字 ===== */
+  .sk8-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 22px;
+    padding: 0 8px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-primary-soft);
+    color: var(--sk8-primary-bright);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* ===== 分段控件：内嵌底 --sk8-inset，高 32px，圆角 8px =====
+     用法：<div class="sk8-seg"><button class="sk8-seg-item sk8-seg-item-on" type="button">…</button><button class="sk8-seg-item" type="button">…</button></div> */
+  .sk8-seg {
+    box-sizing: border-box;
+    height: 32px;
+    display: flex;
+    align-items: stretch;
+    padding: 2px;
+    border-radius: 8px;
+    background: var(--sk8-inset);
+  }
+  .sk8-seg-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--sk8-text-tertiary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 160ms cubic-bezier(.2, .8, .2, 1), color 160ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-seg-item:active { color: var(--sk8-text-secondary); }
+  .sk8-seg-item:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 1px; }
+  .sk8-seg-item-on {
+    background: var(--sk8-surface-2);
+    color: var(--sk8-foreground);
+    font-weight: 600;
+  }
+
+  /* ===== 状态点：8px 圆点 + 三语义变体（success/warning/error） ===== */
+  .sk8-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-text-faint);
+  }
+  .sk8-dot-success { background: var(--state-success); }
+  .sk8-dot-warning { background: var(--state-warning); }
+  .sk8-dot-error   { background: var(--state-error); }
+
+  /* ===== 标签 chip：26px 胶囊 + 12px 字，选中态橙字橙底 14% ===== */
+  .sk8-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 12px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-surface-2);
+    color: var(--sk8-text-tertiary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-chip:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-chip-on {
+    background: var(--sk8-primary-soft);
+    color: var(--sk8-primary-bright);
+    font-weight: 600;
+  }
+
+  /* ===== 信息行：20px 图标 + 14px 文本 + 右侧箭头，行高 48px =====
+     用法：<button class="sk8-info-row" type="button"><i data-lucide="map-pin" class="sk8-info-row-icon"></i><span class="sk8-info-row-text">…</span><i data-lucide="chevron-right" class="sk8-info-row-arrow"></i></button> */
+  .sk8-info-row {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 2px;
+    border: 0;
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+  }
+  .sk8-info-row:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; border-radius: var(--sk8-radius-small); }
+  .sk8-info-row-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-tertiary);
+  }
+  .sk8-info-row-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sk8-info-row-arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-faint);
+  }
+
+  /* ===== 统计数字：20px/700 tabular-nums + 11px 单位 ===== */
+  .sk8-stat-num {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h1);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+  .sk8-stat-unit {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--sk8-text-faint);
+    margin-left: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk8-btn-primary,
+    .sk8-btn-ghost,
+    .sk8-seg-item,
+    .sk8-chip { transition-duration: 0.01ms; }
+  }
+</style>

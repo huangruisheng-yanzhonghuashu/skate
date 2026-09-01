@@ -1,0 +1,1379 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>场地签到面板 · P0P1 升级稿</title>
+    <style id="theme-vars">
+/* ============================================================
+   SkateSpot 小程序 · 品牌令牌（暗色街头风）
+   单一品牌主色：霓虹橘红 #FF5A36；状态色仅用于语义状态。
+   默认暗色（:root），.light 提供亮色兜底。
+   ============================================================ */
+
+:root {
+  /* Surfaces（暗色层级：底 → 卡片 → 浮层） */
+  --sk8-background: #111114;
+  --sk8-card: #1E1E23;
+  --sk8-inset: #17171B;
+  --sk8-surface-2: #26262C;
+  --sk8-popover: #1B1B20;
+  --sk8-bar: #1A1A1E;
+
+  /* Foreground 文本层级：白 → 次级 → 弱化 → 占位 */
+  --sk8-foreground: #FFFFFF;
+  --sk8-card-foreground: #FFFFFF;
+  --sk8-popover-foreground: #FFFFFF;
+  --sk8-text-secondary: #D9D9DE;
+  --sk8-text-tertiary: #A6A6AD;
+  --sk8-muted-foreground: #8C8C94;
+  --sk8-text-faint: #6E6E76;
+
+  /* Primary（唯一品牌色相） */
+  --sk8-primary: #FF5A36;
+  --sk8-primary-foreground: #FFFFFF;
+  --sk8-primary-strong: #E64A26;
+  --sk8-primary-bright: #FF8A6E;
+  --sk8-primary-soft: rgba(255, 90, 54, 0.14);
+  --sk8-primary-soft-strong: rgba(255, 90, 54, 0.24);
+
+  /* Lines / Inputs / Ring */
+  --sk8-border: #26262C;
+  --sk8-border-strong: #2A2A30;
+  --sk8-input: #17171B;
+  --sk8-ring: #FF5A36;
+
+  /* Muted */
+  --sk8-muted: #26262C;
+
+  /* 语义状态色（仅状态语义，不做装饰） */
+  --state-success: #00D4AA;
+  --state-success-soft: rgba(0, 212, 170, 0.12);
+  --state-success-ink: #003B30;
+  --state-warning: #FFB800;
+  --state-warning-soft: rgba(255, 184, 0, 0.12);
+  --state-error: #FF3B30;
+  --state-error-soft: rgba(255, 59, 48, 0.14);
+  --state-info: #2A8CFF;
+  --state-info-soft: rgba(42, 140, 255, 0.12);
+
+  /* Radius（收敛三档 + 胶囊） */
+  --sk8-radius-small: 6px;
+  --sk8-radius-medium: 10px;
+  --sk8-radius-large: 16px;
+  --sk8-radius-pill: 999px;
+
+  /* 深度：静态面用描边/分层，浮层可用深阴影 */
+  --sk8-shadow-float: 0 -8px 32px rgba(0, 0, 0, 0.5);
+  --sk8-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  /* Typography scale（小程序基准 14px） */
+  --sk8-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --sk8-fs-caption: 11px;
+  --sk8-fs-body-s: 12px;
+  --sk8-fs-body: 14px;
+  --sk8-fs-h3: 16px;
+  --sk8-fs-h2: 18px;
+  --sk8-fs-h1: 20px;
+}
+
+/* 本项目为纯暗色小程序设计：:root 即暗色令牌，无亮色覆盖（脚本输出的主题类不改变取值） */
+
+/* ===== 字体类 ===== */
+.sk8-type-h1 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h1); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+.sk8-type-h2 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h2); font-weight: 600; line-height: 1.35; }
+.sk8-type-h3 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h3); font-weight: 600; line-height: 1.4; }
+.sk8-type-body { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-body); font-weight: 400; line-height: 1.6; }
+.sk8-type-body-s { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-body-s); font-weight: 400; line-height: 1.5; }
+.sk8-type-caption { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-caption); font-weight: 400; line-height: 1.45; }
+.sk8-num { font-variant-numeric: tabular-nums; }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--sk8-background);
+    --color-foreground: var(--sk8-foreground);
+    --color-card: var(--sk8-card);
+    --color-card-foreground: var(--sk8-card-foreground);
+    --color-popover: var(--sk8-popover);
+    --color-popover-foreground: var(--sk8-popover-foreground);
+    --color-primary: var(--sk8-primary);
+    --color-primary-foreground: var(--sk8-primary-foreground);
+    --color-muted: var(--sk8-muted);
+    --color-muted-foreground: var(--sk8-muted-foreground);
+    --color-border: var(--sk8-border);
+    --color-input: var(--sk8-input);
+    --color-ring: var(--sk8-ring);
+    --radius-sm: var(--sk8-radius-small);
+    --radius-md: var(--sk8-radius-medium);
+    --radius-lg: var(--sk8-radius-large);
+  }
+  @layer base {
+    body { background: var(--sk8-background); color: var(--sk8-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--sk8-background); }
+      .text-background { color: var(--sk8-background); }
+      .border-background { border-color: var(--sk8-background); }
+      .ring-background { --tw-ring-color: var(--sk8-background); }
+      .bg-foreground { background-color: var(--sk8-foreground); }
+      .text-foreground { color: var(--sk8-foreground); }
+      .border-foreground { border-color: var(--sk8-foreground); }
+      .ring-foreground { --tw-ring-color: var(--sk8-foreground); }
+      .bg-card { background-color: var(--sk8-card); }
+      .text-card { color: var(--sk8-card); }
+      .border-card { border-color: var(--sk8-card); }
+      .ring-card { --tw-ring-color: var(--sk8-card); }
+      .bg-card-foreground { background-color: var(--sk8-card-foreground); }
+      .text-card-foreground { color: var(--sk8-card-foreground); }
+      .border-card-foreground { border-color: var(--sk8-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--sk8-card-foreground); }
+      .bg-popover { background-color: var(--sk8-popover); }
+      .text-popover { color: var(--sk8-popover); }
+      .border-popover { border-color: var(--sk8-popover); }
+      .ring-popover { --tw-ring-color: var(--sk8-popover); }
+      .bg-popover-foreground { background-color: var(--sk8-popover-foreground); }
+      .text-popover-foreground { color: var(--sk8-popover-foreground); }
+      .border-popover-foreground { border-color: var(--sk8-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--sk8-popover-foreground); }
+      .bg-primary { background-color: var(--sk8-primary); }
+      .text-primary { color: var(--sk8-primary); }
+      .border-primary { border-color: var(--sk8-primary); }
+      .ring-primary { --tw-ring-color: var(--sk8-primary); }
+      .bg-primary-foreground { background-color: var(--sk8-primary-foreground); }
+      .text-primary-foreground { color: var(--sk8-primary-foreground); }
+      .border-primary-foreground { border-color: var(--sk8-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--sk8-primary-foreground); }
+      .bg-muted { background-color: var(--sk8-muted); }
+      .text-muted { color: var(--sk8-muted); }
+      .border-muted { border-color: var(--sk8-muted); }
+      .ring-muted { --tw-ring-color: var(--sk8-muted); }
+      .bg-muted-foreground { background-color: var(--sk8-muted-foreground); }
+      .text-muted-foreground { color: var(--sk8-muted-foreground); }
+      .border-muted-foreground { border-color: var(--sk8-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--sk8-muted-foreground); }
+      .bg-border { background-color: var(--sk8-border); }
+      .text-border { color: var(--sk8-border); }
+      .border-border { border-color: var(--sk8-border); }
+      .ring-border { --tw-ring-color: var(--sk8-border); }
+      .bg-input { background-color: var(--sk8-input); }
+      .text-input { color: var(--sk8-input); }
+      .border-input { border-color: var(--sk8-input); }
+      .ring-input { --tw-ring-color: var(--sk8-input); }
+      .bg-ring { background-color: var(--sk8-ring); }
+      .text-ring { color: var(--sk8-ring); }
+      .border-ring { border-color: var(--sk8-ring); }
+      .ring-ring { --tw-ring-color: var(--sk8-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <style id="critical-layout">
+  /* ============================================================
+     以下三段逐字复制自 partials/project-shell.html（顺序 5 → 6 → 7）
+  ============================================================ */
+
+  /* ===== SECTION 5 · 共享 chrome CSS（逐字复制） ===== */
+  /* ===== 状态栏 44px：背景透明，叠底色由页面定 ===== */
+  .sk8-statusbar {
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px 0 26px;
+    background: transparent;
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+  }
+  .sk8-statusbar-time {
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .sk8-statusbar-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sk8-statusbar-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.5px;
+  }
+
+  /* ===== 标准导航栏 44px：居中标题 + 右侧系统胶囊 ===== */
+  .sk8-navbar {
+    position: relative;
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 0;
+    background: var(--sk8-background);
+    border-bottom: 1px solid var(--sk8-border);
+  }
+  .sk8-navbar-left {
+    width: 96px;
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+  }
+  .sk8-navbar-title {
+    position: absolute;
+    top: 0;
+    left: 96px;
+    right: 96px;
+    height: 44px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+  }
+
+  /* ===== 系统胶囊 88×32：1px 描边 + 半透明底，仅描边风 ===== */
+  .sk8-capsule {
+    width: 88px;
+    height: 32px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(27, 27, 32, 0.60); /* --sk8-popover #1B1B20 @60% */
+    color: var(--sk8-foreground);
+  }
+  .sk8-capsule-btn {
+    flex: 1 1 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sk8-foreground);
+    cursor: pointer;
+    transition: opacity 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-capsule-btn:active { opacity: 0.7; }
+  .sk8-capsule-btn:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; border-radius: var(--sk8-radius-pill); }
+  .sk8-capsule-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.5px;
+  }
+  /* ellipsis 分隔点：旋转 90° 成为竖向点列分隔 */
+  .sk8-capsule-divider {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-faint);
+    transform: rotate(90deg);
+  }
+
+  /* ===== 沉浸式导航层：叠在详情页媒体图上（44+44=88px） ===== */
+  .sk8-nav-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    height: 88px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 8px 4px 12px;
+    background: transparent;
+  }
+  .sk8-nav-back {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12); /* 中性白描边，深色图上界定轮廓 */
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(0, 0, 0, 0.36);              /* 中性黑遮罩 + blur，保证可读 */
+    color: var(--sk8-foreground);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: transform 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-nav-back:active { transform: scale(0.94); }
+  .sk8-nav-back:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-nav-back-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.5px;
+  }
+  /* 叠层语境下的胶囊：加深底 + blur，深色图上保持可读 */
+  .sk8-nav-overlay .sk8-capsule {
+    background: rgba(27, 27, 32, 0.72); /* --sk8-popover @72% */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  
+  /* 详情页胶囊：从 overlay 拆出为顶层 div，仍绝对定位在媒体区右上角 */
+  .sk8-capsule-overlay {
+    position: absolute;
+    top: 44px;
+    right: 8px;
+    z-index: 31;
+    background: rgba(27, 27, 32, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+/* ===== 底部 tabBar 50px：--sk8-bar 底 + 顶部 1px --sk8-border ===== */
+  .sk8-tabbar {
+    height: 50px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    background: var(--sk8-bar);
+    border-top: 1px solid var(--sk8-border);
+    font-family: var(--sk8-font-sans);
+  }
+  .sk8-tab-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: var(--sk8-muted-foreground);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sk8-tab-item:active .sk8-tab-icon { transform: scale(0.92); }
+  .sk8-tab-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.5px;
+    transition: transform 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-tab-label {
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.2;
+    transition: color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  /* active：仅图标+文字变主色、文字 600 字重，几何不变 */
+  .sk8-tab-item[data-active="true"] { color: var(--sk8-primary); }
+  .sk8-tab-item[data-active="true"] .sk8-tab-label { font-weight: 600; }
+
+  /* ===== 底部安全区占位 34px（跟随 bar 底色） ===== */
+  .sk8-safe-bottom {
+    height: env(safe-area-inset-bottom, 34px);
+    background: var(--sk8-bar);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk8-tab-icon,
+    .sk8-tab-label,
+    .sk8-capsule-btn,
+    .sk8-nav-back { transition-duration: 0.01ms; }
+    .sk8-tab-item:active .sk8-tab-icon,
+    .sk8-nav-back:active { transform: none; }
+  }
+
+  /* ===== SECTION 6 · 头像基元 CSS（逐字复制） ===== */
+  .sk8-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .sk8-avatar-24 { width: 24px; height: 24px; font-size: var(--sk8-fs-caption); }
+  .sk8-avatar-32 { width: 32px; height: 32px; font-size: var(--sk8-fs-body-s); }
+  .sk8-avatar-40 { width: 40px; height: 40px; font-size: var(--sk8-fs-body); }
+  .sk8-avatar-48 { width: 48px; height: 48px; font-size: var(--sk8-fs-body); }
+  /* 中性暗阶渐变（规范指定值，非品牌色相） */
+  .sk8-avatar-a { background: linear-gradient(135deg, #2A2A30 0%, #3A3A44 100%); }
+  .sk8-avatar-b { background: linear-gradient(135deg, #33302B 0%, #443F35 100%); }
+  .sk8-avatar-c { background: linear-gradient(135deg, #2B3033 0%, #353C40 100%); }
+  .sk8-avatar-d { background: linear-gradient(135deg, #302B33 0%, #3B3540 100%); }
+  /* 在场态：2px --state-success 外环（不占布局空间） */
+  .sk8-avatar-live { box-shadow: 0 0 0 2px var(--state-success); }
+
+  /* ===== SECTION 7 · 基础组件 CSS（逐字复制） ===== */
+  /* ===== 主按钮：48px 高，品牌底白字 16px/600，每屏 ≤1 个 ===== */
+  .sk8-btn-primary {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: var(--sk8-radius-medium);
+    background: var(--sk8-primary);
+    color: var(--sk8-primary-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), opacity 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-btn-primary:active { background: var(--sk8-primary-strong); }
+  .sk8-btn-primary:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-btn-primary:disabled { background: var(--sk8-surface-2); color: var(--sk8-text-faint); cursor: not-allowed; }
+
+  /* ===== 次按钮：1px 描边 --sk8-border，字 --sk8-text-secondary ===== */
+  .sk8-btn-ghost {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 20px;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-btn-ghost:active { background: var(--sk8-surface-2); }
+  .sk8-btn-ghost:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-btn-ghost:disabled { color: var(--sk8-text-faint); cursor: not-allowed; opacity: 0.6; }
+
+  /* ===== 卡片：--sk8-card 底 + 10px 圆角 + 1px 描边，无深阴影 ===== */
+  .sk8-card {
+    box-sizing: border-box;
+    padding: 16px;
+    background: var(--sk8-card);
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    color: var(--sk8-card-foreground);
+  }
+
+  /* ===== 徽标：12px 字胶囊，弱调用 14% 橙底 + 亮橙字 ===== */
+  .sk8-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 22px;
+    padding: 0 8px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-primary-soft);
+    color: var(--sk8-primary-bright);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* ===== 分段控件：内嵌底 --sk8-inset，高 32px，圆角 8px ===== */
+  .sk8-seg {
+    box-sizing: border-box;
+    height: 32px;
+    display: flex;
+    align-items: stretch;
+    padding: 2px;
+    border-radius: 8px;
+    background: var(--sk8-inset);
+  }
+  .sk8-seg-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--sk8-text-tertiary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 160ms cubic-bezier(.2, .8, .2, 1), color 160ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-seg-item:active { color: var(--sk8-text-secondary); }
+  .sk8-seg-item:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 1px; }
+  .sk8-seg-item-on {
+    background: var(--sk8-surface-2);
+    color: var(--sk8-foreground);
+    font-weight: 600;
+  }
+
+  /* ===== 状态点：8px 圆点 + 三语义变体（success/warning/error） ===== */
+  .sk8-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-text-faint);
+  }
+  .sk8-dot-success { background: var(--state-success); }
+  .sk8-dot-warning { background: var(--state-warning); }
+  .sk8-dot-error   { background: var(--state-error); }
+
+  /* ===== 标签 chip：26px 胶囊 + 12px 字，选中态橙字橙底 14% ===== */
+  .sk8-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 12px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-surface-2);
+    color: var(--sk8-text-tertiary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-chip:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-chip-on {
+    background: var(--sk8-primary-soft);
+    color: var(--sk8-primary-bright);
+    font-weight: 600;
+  }
+
+  /* ===== 信息行：20px 图标 + 14px 文本 + 右侧箭头，行高 48px ===== */
+  .sk8-info-row {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 2px;
+    border: 0;
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+  }
+  .sk8-info-row:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; border-radius: var(--sk8-radius-small); }
+  .sk8-info-row-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-tertiary);
+  }
+  .sk8-info-row-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sk8-info-row-arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-faint);
+  }
+
+  /* ===== 统计数字：20px/700 tabular-nums + 11px 单位 ===== */
+  .sk8-stat-num {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h1);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+  .sk8-stat-unit {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--sk8-text-faint);
+    margin-left: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk8-btn-primary,
+    .sk8-btn-ghost,
+    .sk8-seg-item,
+    .sk8-chip { transition-duration: 0.01ms; }
+  }
+
+  /* ============================================================
+     页面级布局（venue-detail 私有 · vd-*）
+     本页无 tabBar、无标准导航栏；document-scroll，body 持底色。
+  ============================================================ */
+  body { background: var(--sk8-background); }
+
+  /* ===== 媒体头：通顶 280px 视觉锚 ===== */
+  .vd-media {
+    position: relative;
+    height: 280px;
+    overflow: hidden;
+    background: var(--sk8-inset);
+  }
+  .vd-carousel {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .vd-carousel::-webkit-scrollbar { display: none; }
+  .vd-slide {
+    flex: 0 0 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    scroll-snap-align: center;
+  }
+  /* 竖排浮钮组：与 SECTION 3 .sk8-nav-back 同款中性遮罩（黑底+blur+白描边）；
+     底部位避开信息卡 -16px 压叠区与页码指示 */
+  .vd-media-actions {
+    position: absolute;
+    right: 12px;
+    bottom: 56px;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .vd-fab {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12); /* 中性白描边，同 SECTION 3 */
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(0, 0, 0, 0.36);              /* 中性黑遮罩，同 SECTION 3 */
+    color: var(--sk8-foreground);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: transform 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .vd-fab:active { transform: scale(0.94); }
+  .vd-fab:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .vd-fab-icon { width: 20px; height: 20px; stroke-width: 1.5px; }
+  /* 页码指示：半透明黑底胶囊，11px 白字 tabular-nums；
+     底部位避开信息卡 -16px 压叠区 */
+  .vd-page-indicator {
+    position: absolute;
+    right: 12px;
+    bottom: 22px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 10px;
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(0, 0, 0, 0.45); /* 中性黑遮罩，同 SECTION 3 语义 */
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* ===== 内容区：上压媒体图 -16px；底部留白 = 操作栏+安全区 132px ===== */
+  .vd-content {
+    position: relative;
+    z-index: 10;
+    margin-top: -16px;
+    padding: 0 16px 132px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ===== 信息卡：顶部圆角 16，压在媒体图上 ===== */
+  .vd-hero-card {
+    border-radius: var(--sk8-radius-large) var(--sk8-radius-large) var(--sk8-radius-medium) var(--sk8-radius-medium);
+  }
+  .vd-hero-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .vd-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h1);
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--sk8-foreground);
+    text-wrap: balance;
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  .vd-rating {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    margin-top: 3px;
+  }
+  .vd-star {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    align-self: center;
+    stroke-width: 1.5px;
+    color: var(--state-warning);  /* 评分金星（规范指定 warning 金） */
+    fill: var(--state-warning);
+  }
+  .vd-rating-num {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--sk8-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+  .vd-rating-count {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    line-height: 1;
+    color: var(--sk8-text-faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .vd-chips {
+    display: flex;
+    gap: 8px;
+    margin-top: 14px;
+    overflow: hidden;
+  }
+  .vd-address {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.4;
+    color: var(--sk8-text-tertiary);
+  }
+  .vd-address-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-tertiary);
+  }
+
+  /* ===== 实时在场卡：标题行 + 头像墙 + 刷新 ===== */
+  .vd-live-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .vd-live-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+  .vd-live-name {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    white-space: nowrap;
+  }
+  .vd-live-count {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.2;
+    color: var(--sk8-text-secondary);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .vd-ghost-mini {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 32px;
+    padding: 0 12px;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-pill);
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .vd-ghost-mini:active { background: var(--sk8-surface-2); }
+  .vd-ghost-mini:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .vd-ghost-mini-icon { width: 14px; height: 14px; stroke-width: 1.5px; }
+  .vd-avatars {
+    display: flex;
+    align-items: center;
+    margin-top: 14px;
+  }
+  /* 前 3 枚：2px 卡底描边 + 重叠 -8px */
+  .vd-avatar-stack {
+    box-sizing: border-box;
+    border: 2px solid var(--sk8-card);
+    border-radius: var(--sk8-radius-pill);
+  }
+  .vd-avatars .vd-avatar-stack + .vd-avatar-stack { margin-left: -8px; }
+  /* 第 4 枚正常间距、无描边 */
+  .vd-avatar-tail { margin-left: 8px; }
+  .vd-avatar-more {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    margin-left: 8px;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-surface-2);
+    color: var(--sk8-text-tertiary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  /* ===== 打卡动态卡：分隔线分组，无嵌套子卡 ===== */
+  .vd-feed-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .vd-feed-title {
+    margin: 0;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--sk8-foreground);
+  }
+  .vd-feed-all {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.2;
+    color: var(--sk8-text-faint);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .vd-feed-item { margin-top: 14px; }
+  .vd-feed-item + .vd-feed-item {
+    padding-top: 14px;
+    border-top: 1px solid var(--sk8-border);
+  }
+  .vd-feed-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .vd-feed-nick {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    white-space: nowrap;
+  }
+  .vd-feed-time {
+    margin-left: auto;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    line-height: 1.2;
+    color: var(--sk8-text-faint);
+    white-space: nowrap;
+  }
+  .vd-feed-text {
+    margin: 8px 0 0;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.6;
+    color: var(--sk8-foreground);
+    overflow-wrap: break-word;
+  }
+  .vd-feed-thumb {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin-top: 10px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--sk8-inset);
+  }
+
+  /* ===== 底部固定操作栏：--sk8-bar 底 + 顶部 1px 描边 + 安全区 ===== */
+  .vd-action-bar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    background: var(--sk8-bar);
+    border-top: 1px solid var(--sk8-border);
+    box-shadow: var(--sk8-shadow-float);
+  }
+  .vd-action-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 12px 16px;
+  }
+  /* 次按钮页面级收窄：88px 宽 / 12px 字（几何覆盖，不改共享声明） */
+  .vd-action-ghost {
+    flex: 0 0 88px;
+    width: 88px;
+    padding: 0;
+    font-size: var(--sk8-fs-body-s);
+  }
+  /* 主按钮占满剩余宽 */
+  .vd-action-primary {
+    flex: 1 1 0;
+    width: auto;
+  }
+  .vd-action-icon { width: 20px; height: 20px; stroke-width: 1.5px; }
+  .vd-safe-bottom {
+    height: env(safe-area-inset-bottom, 34px);
+    background: var(--sk8-bar);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vd-fab,
+    .vd-ghost-mini { transition-duration: 0.01ms; }
+    .vd-fab:active { transform: none; }
+  }
+
+  /* ===== 签到面板 CSS（P0P1 升级：底部滑出、输入置顶、快捷标签、统一照片网格） ===== */
+  .sheet-mask {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    background: rgba(0, 0, 0, 0.56);
+    pointer-events: auto;
+  }
+  .sheet-panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 41;
+    background: var(--sk8-popover);
+    border-radius: var(--sk8-radius-large) var(--sk8-radius-large) 0 0;
+    padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 34px));
+    box-shadow: var(--sk8-shadow-float);
+    animation: sheet-slide-up 320ms cubic-bezier(.16, 1, .3, 1) forwards;
+  }
+  @keyframes sheet-slide-up {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .sheet-handle {
+    width: 40px;
+    height: 5px;
+    margin: 0 auto 8px;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-surface-2);
+  }
+  .sheet-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: transparent;
+    color: var(--sk8-foreground);
+    cursor: pointer;
+    transition: opacity 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sheet-close:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sheet-close-icon { width: 20px; height: 20px; stroke-width: 1.5px; }
+  .sheet-textarea {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 88px;
+    padding: 14px;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    background: var(--sk8-input);
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.6;
+    resize: none;
+  }
+  .sheet-textarea::placeholder { color: var(--sk8-text-faint); }
+  .sheet-quick-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .sheet-photo-section { margin-top: 16px; }
+  .sheet-section-title {
+    margin: 0 0 8px;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sk8-text-secondary);
+  }
+  .sheet-photo-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .sheet-photo-cell {
+    position: relative;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border: 0;
+    border-radius: 8px;
+    background: var(--sk8-inset);
+    color: var(--sk8-text-faint);
+    padding: 0;
+  }
+  .sheet-photo-cell img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  .sheet-photo-add {
+    background: var(--sk8-primary-soft);
+    color: var(--sk8-primary);
+    cursor: pointer;
+  }
+  .sheet-photo-add-icon { width: 20px; height: 20px; stroke-width: 1.5px; }
+  .sheet-photo-delete {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 20px;
+    height: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(0, 0, 0, 0.5);
+    color: var(--sk8-foreground);
+    cursor: pointer;
+  }
+  .sheet-photo-delete:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 1px; }
+  .sheet-photo-delete-icon { width: 12px; height: 12px; stroke-width: 2px; }
+  .sheet-primary { margin-top: 16px; }
+  .sheet-cancel { margin-top: 10px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sheet-panel { animation: none; }
+    .sheet-close,
+    .sheet-primary,
+    .sheet-cancel { transition-duration: 0.01ms; }
+  }
+    </style>
+    <main class="vd-page">
+
+      <!-- ===== 媒体头：通顶 280px，3 图轮播（第一张呈现） ===== -->
+      <section class="vd-media" aria-label="场地照片">
+        <div class="vd-carousel">
+          <img class="vd-slide" src="../assets/venue-bowl.jpg" alt="滨江碗池公园碗池全景">
+          <img class="vd-slide" src="../assets/venue-street.jpg" alt="街道式障碍街区">
+          <img class="vd-slide" src="../assets/venue-plaza.jpg" alt="滑板广场开阔区">
+        </div>
+
+        <!-- SECTION 3 · 沉浸式导航层（逐字复制，仅按派发要求追加 data-dom-id） -->
+        <div class="sk8-nav-overlay">
+          <button class="sk8-nav-back" type="button" data-dom-id="nav-back" aria-label="返回">
+            <i data-lucide="chevron-left" class="sk8-nav-back-icon"></i>
+          </button>
+          </div>
+          <div class="sk8-capsule sk8-capsule-overlay w-[88px] h-8" role="group" aria-label="小程序菜单">
+            <button class="sk8-capsule-btn" type="button" aria-label="更多">
+              <i data-lucide="more-horizontal" class="sk8-capsule-icon"></i>
+            </button>
+            <i data-lucide="ellipsis" class="sk8-capsule-divider w-px" aria-hidden="true"></i>
+            <button class="sk8-capsule-btn" type="button" aria-label="关闭">
+              <i data-lucide="x" class="sk8-capsule-icon"></i>
+            </button>
+          </div>
+        
+
+        <!-- 媒体区右下浮钮组：收藏 / 分享 / 报错（报错为低频入口，收进浮钮） -->
+        <div class="vd-media-actions">
+          <button class="vd-fab" type="button" data-dom-id="action-fav" aria-label="收藏场地">
+            <i data-lucide="heart" class="vd-fab-icon"></i>
+          </button>
+          <button class="vd-fab" type="button" data-dom-id="action-share" aria-label="分享场地">
+            <i data-lucide="share-2" class="vd-fab-icon"></i>
+          </button>
+          <button class="vd-fab" type="button" data-dom-id="action-report" aria-label="报错反馈">
+            <i data-lucide="flag" class="vd-fab-icon"></i>
+          </button>
+        </div>
+
+        <!-- 页码指示：当前第 1 张 / 共 3 张 -->
+        <div class="vd-page-indicator" aria-label="第 1 张，共 3 张">1 / 3</div>
+      </section>
+
+      <!-- ===== 内容区：上压媒体图 16px ===== -->
+      <div class="vd-content">
+
+        <!-- 信息卡 -->
+        <section class="sk8-card vd-hero-card" aria-label="场地信息">
+          <div class="vd-hero-head">
+            <h1 class="vd-title">滨江碗池公园</h1>
+            <div class="vd-rating">
+              <i data-lucide="star" class="vd-star" aria-hidden="true"></i>
+              <span class="vd-rating-num">4.8</span>
+              <span class="vd-rating-count">24 条</span>
+            </div>
+          </div>
+          <div class="vd-chips">
+            <span class="sk8-chip sk8-chip-on">碗池</span>
+            <span class="sk8-chip">免费入场</span>
+            <span class="sk8-chip">有夜灯</span>
+            <span class="sk8-chip">新手友好</span>
+          </div>
+          <div class="vd-address">
+            <i data-lucide="map-pin" class="vd-address-icon" aria-hidden="true"></i>
+            <span>滨江区江南大道 88 号 · 距你 1.2km</span>
+          </div>
+        </section>
+
+        <!-- 实时在场卡 -->
+        <section class="sk8-card" aria-label="实时在场">
+          <div class="vd-live-head">
+            <div class="vd-live-title">
+              <span class="sk8-dot sk8-dot-success" aria-hidden="true"></span>
+              <span class="vd-live-name">现在在场</span>
+              <span class="vd-live-count">6 人</span>
+            </div>
+            <button class="vd-ghost-mini" type="button" data-dom-id="action-refresh">
+              <i data-lucide="refresh-cw" class="vd-ghost-mini-icon" aria-hidden="true"></i>
+              <span>刷新</span>
+            </button>
+          </div>
+          <div class="vd-avatars" aria-label="在场 6 人，展示前 4 人">
+            <span class="sk8-avatar sk8-avatar-32 sk8-avatar-a vd-avatar-stack">楠</span>
+            <span class="sk8-avatar sk8-avatar-32 sk8-avatar-b vd-avatar-stack">鹿</span>
+            <span class="sk8-avatar sk8-avatar-32 sk8-avatar-c vd-avatar-stack">凯</span>
+            <span class="sk8-avatar sk8-avatar-32 sk8-avatar-d vd-avatar-tail">Yui</span>
+            <span class="vd-avatar-more">+2</span>
+          </div>
+        </section>
+
+        <!-- 打卡动态卡 -->
+        <section class="sk8-card" aria-label="场地动态">
+          <div class="vd-feed-head">
+            <h2 class="vd-feed-title">场地动态</h2>
+            <span class="vd-feed-all">全部 12 条</span>
+          </div>
+
+          <article class="vd-feed-item">
+            <div class="vd-feed-meta">
+              <span class="sk8-avatar sk8-avatar-24 sk8-avatar-a">楠</span>
+              <span class="vd-feed-nick">楠哥</span>
+              <span class="vd-feed-time">2 小时前</span>
+            </div>
+            <p class="vd-feed-text">今晚 session 六个新招全成了</p>
+            <img class="vd-feed-thumb" src="../assets/venue-bowl.jpg" alt="楠哥的碗池打卡照片">
+          </article>
+
+          <article class="vd-feed-item">
+            <div class="vd-feed-meta">
+              <span class="sk8-avatar sk8-avatar-24 sk8-avatar-b">鹿</span>
+              <span class="vd-feed-nick">鹿</span>
+              <span class="vd-feed-time">昨天</span>
+            </div>
+            <p class="vd-feed-text">碗壁提速终于稳了</p>
+            <img class="vd-feed-thumb" src="../assets/venue-plaza.jpg" alt="鹿的广场打卡照片">
+          </article>
+        </section>
+
+      </div>
+
+      <!-- ===== 底部固定操作栏：导航 / 收藏 / 在此签到（唯一主行动） ===== -->
+      <div class="vd-action-bar">
+        <div class="vd-action-row">
+          <button class="sk8-btn-ghost vd-action-ghost" type="button" data-dom-id="action-nav">
+            <i data-lucide="navigation" class="vd-action-icon" aria-hidden="true"></i>
+            <span>导航</span>
+          </button>
+          <button class="sk8-btn-ghost vd-action-ghost" type="button" data-dom-id="action-fav-bar">
+            <i data-lucide="heart" class="vd-action-icon" aria-hidden="true"></i>
+            <span>收藏</span>
+          </button>
+          <button class="sk8-btn-primary vd-action-primary" type="button" data-dom-id="action-checkin">在此签到</button>
+        </div>
+        <div class="vd-safe-bottom"></div>
+      </div>
+
+    </main>
+    <!-- ===== 签到面板（P0P1 升级稿）：默认打开态，叠在操作栏之上 ===== -->
+    <div class="sheet-mask" data-dom-id="sheet-backdrop"></div>
+    <div class="sheet-panel">
+      <div class="sheet-handle" data-dom-id="sheet-handle"></div>
+      <button class="sheet-close" type="button" data-dom-id="sheet-close-x" aria-label="关闭">
+        <i data-lucide="x" class="sheet-close-icon"></i>
+      </button>
+
+      <!-- 评论输入置顶：键盘弹出时推动整个 sheet 上移 -->
+      <textarea class="sheet-textarea" data-dom-id="sheet-comment-input" placeholder="说说今天练了什么招…"></textarea>
+
+      <!-- 快捷签到标签 -->
+      <div class="sheet-quick-tags" data-dom-id="quick-tags-group" role="group" aria-label="快捷签到标签">
+        <button class="sk8-chip" type="button" data-dom-id="quick-tag-not-crowded">今天人不多</button>
+        <button class="sk8-chip" type="button" data-dom-id="quick-tag-terrain-great">地形超棒</button>
+        <button class="sk8-chip" type="button" data-dom-id="quick-tag-good-for-tricks">适合练招</button>
+        <button class="sk8-chip" type="button" data-dom-id="quick-tag-lights-bright">灯光够亮</button>
+      </div>
+
+      <!-- 统一 3 列照片网格 -->
+      <div class="sheet-photo-section">
+        <p class="sheet-section-title">添加照片</p>
+        <div class="sheet-photo-grid">
+          <button class="sheet-photo-cell sheet-photo-add" type="button" data-dom-id="photo-add-button" aria-label="添加照片">
+            <i data-lucide="plus" class="sheet-photo-add-icon"></i>
+          </button>
+          <div class="sheet-photo-cell" data-dom-id="photo-thumbnail-1">
+            <img src="../assets/venue-bowl.jpg" alt="打卡照片 1">
+            <button class="sheet-photo-delete" type="button" data-dom-id="photo-delete-1" aria-label="删除照片 1">
+              <i data-lucide="x" class="sheet-photo-delete-icon"></i>
+            </button>
+          </div>
+          <div class="sheet-photo-cell" data-dom-id="photo-thumbnail-2">
+            <img src="../assets/venue-street.jpg" alt="打卡照片 2">
+            <button class="sheet-photo-delete" type="button" data-dom-id="photo-delete-2" aria-label="删除照片 2">
+              <i data-lucide="x" class="sheet-photo-delete-icon"></i>
+            </button>
+          </div>
+          <div class="sheet-photo-cell" data-dom-id="photo-thumbnail-3">
+            <img src="../assets/venue-plaza.jpg" alt="打卡照片 3">
+            <button class="sheet-photo-delete" type="button" data-dom-id="photo-delete-3" aria-label="删除照片 3">
+              <i data-lucide="x" class="sheet-photo-delete-icon"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <button class="sk8-btn-primary sheet-primary" type="button" data-dom-id="sheet-submit">发布签到</button>
+      <button class="sk8-btn-ghost sheet-cancel" type="button" data-dom-id="sheet-cancel">取消</button>
+    </div>
+
+    <script>
+      // 快捷标签选中切换
+      document.querySelectorAll('[data-dom-id^="quick-tag-"]').forEach(function (btn) {
+        btn.addEventListener('click', function () { btn.classList.toggle('sk8-chip-on'); });
+      });
+      // 照片删除
+      document.querySelectorAll('[data-dom-id^="photo-delete-"]').forEach(function (btn) {
+        btn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          var cell = btn.closest('.sheet-photo-cell');
+          if (cell) cell.remove();
+        });
+      });
+    </script>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

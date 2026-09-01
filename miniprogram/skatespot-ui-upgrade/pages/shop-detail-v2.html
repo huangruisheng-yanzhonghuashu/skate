@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>店铺详情 · P0P1 升级稿</title>
+    <style id="theme-vars">
+/* ============================================================
+   SkateSpot 小程序 · 品牌令牌（暗色街头风）
+   单一品牌主色：霓虹橘红 #FF5A36；状态色仅用于语义状态。
+   默认暗色（:root），.light 提供亮色兜底。
+   ============================================================ */
+
+:root {
+  /* Surfaces（暗色层级：底 → 卡片 → 浮层） */
+  --sk8-background: #111114;
+  --sk8-card: #1E1E23;
+  --sk8-inset: #17171B;
+  --sk8-surface-2: #26262C;
+  --sk8-popover: #1B1B20;
+  --sk8-bar: #1A1A1E;
+
+  /* Foreground 文本层级：白 → 次级 → 弱化 → 占位 */
+  --sk8-foreground: #FFFFFF;
+  --sk8-card-foreground: #FFFFFF;
+  --sk8-popover-foreground: #FFFFFF;
+  --sk8-text-secondary: #D9D9DE;
+  --sk8-text-tertiary: #A6A6AD;
+  --sk8-muted-foreground: #8C8C94;
+  --sk8-text-faint: #6E6E76;
+
+  /* Primary（唯一品牌色相） */
+  --sk8-primary: #FF5A36;
+  --sk8-primary-foreground: #FFFFFF;
+  --sk8-primary-strong: #E64A26;
+  --sk8-primary-bright: #FF8A6E;
+  --sk8-primary-soft: rgba(255, 90, 54, 0.14);
+  --sk8-primary-soft-strong: rgba(255, 90, 54, 0.24);
+
+  /* Lines / Inputs / Ring */
+  --sk8-border: #26262C;
+  --sk8-border-strong: #2A2A30;
+  --sk8-input: #17171B;
+  --sk8-ring: #FF5A36;
+
+  /* Muted */
+  --sk8-muted: #26262C;
+
+  /* 语义状态色（仅状态语义，不做装饰） */
+  --state-success: #00D4AA;
+  --state-success-soft: rgba(0, 212, 170, 0.12);
+  --state-success-ink: #003B30;
+  --state-warning: #FFB800;
+  --state-warning-soft: rgba(255, 184, 0, 0.12);
+  --state-error: #FF3B30;
+  --state-error-soft: rgba(255, 59, 48, 0.14);
+  --state-info: #2A8CFF;
+  --state-info-soft: rgba(42, 140, 255, 0.12);
+
+  /* Radius（收敛三档 + 胶囊） */
+  --sk8-radius-small: 6px;
+  --sk8-radius-medium: 10px;
+  --sk8-radius-large: 16px;
+  --sk8-radius-pill: 999px;
+
+  /* 深度：静态面用描边/分层，浮层可用深阴影 */
+  --sk8-shadow-float: 0 -8px 32px rgba(0, 0, 0, 0.5);
+  --sk8-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  /* Typography scale（小程序基准 14px） */
+  --sk8-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --sk8-fs-caption: 11px;
+  --sk8-fs-body-s: 12px;
+  --sk8-fs-body: 14px;
+  --sk8-fs-h3: 16px;
+  --sk8-fs-h2: 18px;
+  --sk8-fs-h1: 20px;
+}
+
+/* 本项目为纯暗色小程序设计：:root 即暗色令牌，无亮色覆盖（脚本输出的主题类不改变取值） */
+
+/* ===== 字体类 ===== */
+.sk8-type-h1 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h1); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+.sk8-type-h2 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h2); font-weight: 600; line-height: 1.35; }
+.sk8-type-h3 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h3); font-weight: 600; line-height: 1.4; }
+.sk8-type-body { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-body); font-weight: 400; line-height: 1.6; }
+.sk8-type-body-s { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-body-s); font-weight: 400; line-height: 1.5; }
+.sk8-type-caption { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-caption); font-weight: 400; line-height: 1.45; }
+.sk8-num { font-variant-numeric: tabular-nums; }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--sk8-background);
+    --color-foreground: var(--sk8-foreground);
+    --color-card: var(--sk8-card);
+    --color-card-foreground: var(--sk8-card-foreground);
+    --color-popover: var(--sk8-popover);
+    --color-popover-foreground: var(--sk8-popover-foreground);
+    --color-primary: var(--sk8-primary);
+    --color-primary-foreground: var(--sk8-primary-foreground);
+    --color-muted: var(--sk8-muted);
+    --color-muted-foreground: var(--sk8-muted-foreground);
+    --color-border: var(--sk8-border);
+    --color-input: var(--sk8-input);
+    --color-ring: var(--sk8-ring);
+    --radius-sm: var(--sk8-radius-small);
+    --radius-md: var(--sk8-radius-medium);
+    --radius-lg: var(--sk8-radius-large);
+  }
+  @layer base {
+    body { background: var(--sk8-background); color: var(--sk8-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--sk8-background); }
+      .text-background { color: var(--sk8-background); }
+      .border-background { border-color: var(--sk8-background); }
+      .ring-background { --tw-ring-color: var(--sk8-background); }
+      .bg-foreground { background-color: var(--sk8-foreground); }
+      .text-foreground { color: var(--sk8-foreground); }
+      .border-foreground { border-color: var(--sk8-foreground); }
+      .ring-foreground { --tw-ring-color: var(--sk8-foreground); }
+      .bg-card { background-color: var(--sk8-card); }
+      .text-card { color: var(--sk8-card); }
+      .border-card { border-color: var(--sk8-card); }
+      .ring-card { --tw-ring-color: var(--sk8-card); }
+      .bg-card-foreground { background-color: var(--sk8-card-foreground); }
+      .text-card-foreground { color: var(--sk8-card-foreground); }
+      .border-card-foreground { border-color: var(--sk8-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--sk8-card-foreground); }
+      .bg-popover { background-color: var(--sk8-popover); }
+      .text-popover { color: var(--sk8-popover); }
+      .border-popover { border-color: var(--sk8-popover); }
+      .ring-popover { --tw-ring-color: var(--sk8-popover); }
+      .bg-popover-foreground { background-color: var(--sk8-popover-foreground); }
+      .text-popover-foreground { color: var(--sk8-popover-foreground); }
+      .border-popover-foreground { border-color: var(--sk8-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--sk8-popover-foreground); }
+      .bg-primary { background-color: var(--sk8-primary); }
+      .text-primary { color: var(--sk8-primary); }
+      .border-primary { border-color: var(--sk8-primary); }
+      .ring-primary { --tw-ring-color: var(--sk8-primary); }
+      .bg-primary-foreground { background-color: var(--sk8-primary-foreground); }
+      .text-primary-foreground { color: var(--sk8-primary-foreground); }
+      .border-primary-foreground { border-color: var(--sk8-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--sk8-primary-foreground); }
+      .bg-muted { background-color: var(--sk8-muted); }
+      .text-muted { color: var(--sk8-muted); }
+      .border-muted { border-color: var(--sk8-muted); }
+      .ring-muted { --tw-ring-color: var(--sk8-muted); }
+      .bg-muted-foreground { background-color: var(--sk8-muted-foreground); }
+      .text-muted-foreground { color: var(--sk8-muted-foreground); }
+      .border-muted-foreground { border-color: var(--sk8-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--sk8-muted-foreground); }
+      .bg-border { background-color: var(--sk8-border); }
+      .text-border { color: var(--sk8-border); }
+      .border-border { border-color: var(--sk8-border); }
+      .ring-border { --tw-ring-color: var(--sk8-border); }
+      .bg-input { background-color: var(--sk8-input); }
+      .text-input { color: var(--sk8-input); }
+      .border-input { border-color: var(--sk8-input); }
+      .ring-input { --tw-ring-color: var(--sk8-input); }
+      .bg-ring { background-color: var(--sk8-ring); }
+      .text-ring { color: var(--sk8-ring); }
+      .border-ring { border-color: var(--sk8-ring); }
+      .ring-ring { --tw-ring-color: var(--sk8-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <style id="sk8-page-style">
+  /* ============================================================
+     以下三段为 project-shell.html SECTION 5 / 6 / 7 <style> 逐字复制
+     （顺序 5 → 6 → 7，声明未做任何删改）
+  ============================================================ */
+
+  /* ===== [project-shell SECTION 5 · 共享 chrome CSS] 逐字复制开始 ===== */
+  /* ===== 状态栏 44px：背景透明，叠底色由页面定 ===== */
+  .sk8-statusbar {
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px 0 26px;
+    background: transparent;
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+  }
+  .sk8-statusbar-time {
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .sk8-statusbar-icons {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .sk8-statusbar-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.5px;
+  }
+
+  /* ===== 标准导航栏 44px：居中标题 + 右侧系统胶囊 ===== */
+  .sk8-navbar {
+    position: relative;
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 0 0;
+    background: var(--sk8-background);
+    border-bottom: 1px solid var(--sk8-border);
+  }
+  .sk8-navbar-left {
+    width: 96px;
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding-left: 16px;
+  }
+  .sk8-navbar-title {
+    position: absolute;
+    top: 0;
+    left: 96px;
+    right: 96px;
+    height: 44px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+  }
+
+  /* ===== 系统胶囊 88×32：1px 描边 + 半透明底，仅描边风 ===== */
+  .sk8-capsule {
+    width: 88px;
+    height: 32px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(27, 27, 32, 0.60); /* --sk8-popover #1B1B20 @60% */
+    color: var(--sk8-foreground);
+  }
+  .sk8-capsule-btn {
+    flex: 1 1 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--sk8-foreground);
+    cursor: pointer;
+    transition: opacity 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-capsule-btn:active { opacity: 0.7; }
+  .sk8-capsule-btn:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; border-radius: var(--sk8-radius-pill); }
+  .sk8-capsule-icon {
+    width: 16px;
+    height: 16px;
+    stroke-width: 1.5px;
+  }
+  /* ellipsis 分隔点：旋转 90° 成为竖向点列分隔 */
+  .sk8-capsule-divider {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-faint);
+    transform: rotate(90deg);
+  }
+
+  /* ===== 沉浸式导航层：叠在详情页媒体图上（44+44=88px） ===== */
+  .sk8-nav-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    height: 88px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 8px 4px 12px;
+    background: transparent;
+  }
+  .sk8-nav-back {
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12); /* 中性白描边，深色图上界定轮廓 */
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(0, 0, 0, 0.36);              /* 中性黑遮罩 + blur，保证可读 */
+    color: var(--sk8-foreground);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: transform 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-nav-back:active { transform: scale(0.94); }
+  .sk8-nav-back:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-nav-back-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.5px;
+  }
+  /* 叠层语境下的胶囊：加深底 + blur，深色图上保持可读 */
+  .sk8-nav-overlay .sk8-capsule {
+    background: rgba(27, 27, 32, 0.72); /* --sk8-popover @72% */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  
+  /* 详情页胶囊：从 overlay 拆出为顶层 div，仍绝对定位在媒体区右上角 */
+  .sk8-capsule-overlay {
+    position: absolute;
+    top: 44px;
+    right: 8px;
+    z-index: 31;
+    background: rgba(27, 27, 32, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+/* ===== 底部 tabBar 50px：--sk8-bar 底 + 顶部 1px --sk8-border ===== */
+  .sk8-tabbar {
+    height: 50px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    background: var(--sk8-bar);
+    border-top: 1px solid var(--sk8-border);
+    font-family: var(--sk8-font-sans);
+  }
+  .sk8-tab-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    color: var(--sk8-muted-foreground);
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .sk8-tab-item:active .sk8-tab-icon { transform: scale(0.92); }
+  .sk8-tab-icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 1.5px;
+    transition: transform 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-tab-label {
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.2;
+    transition: color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  /* active：仅图标+文字变主色、文字 600 字重，几何不变 */
+  .sk8-tab-item[data-active="true"] { color: var(--sk8-primary); }
+  .sk8-tab-item[data-active="true"] .sk8-tab-label { font-weight: 600; }
+
+  /* ===== 底部安全区占位 34px（跟随 bar 底色） ===== */
+  .sk8-safe-bottom {
+    height: env(safe-area-inset-bottom, 34px);
+    background: var(--sk8-bar);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk8-tab-icon,
+    .sk8-tab-label,
+    .sk8-capsule-btn,
+    .sk8-nav-back { transition-duration: 0.01ms; }
+    .sk8-tab-item:active .sk8-tab-icon,
+    .sk8-nav-back:active { transform: none; }
+  }
+  /* ===== [project-shell SECTION 5 · 逐字复制结束] ===== */
+
+  /* ===== [project-shell SECTION 6 · 头像基元 CSS] 逐字复制开始 ===== */
+  /* ===== 头像基元：胶囊圆 + 白字首字母居中 ===== */
+  .sk8-avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .sk8-avatar-24 { width: 24px; height: 24px; font-size: var(--sk8-fs-caption); }
+  .sk8-avatar-32 { width: 32px; height: 32px; font-size: var(--sk8-fs-body-s); }
+  .sk8-avatar-40 { width: 40px; height: 40px; font-size: var(--sk8-fs-body); }
+  .sk8-avatar-48 { width: 48px; height: 48px; font-size: var(--sk8-fs-body); }
+  /* 中性暗阶渐变（规范指定值，非品牌色相） */
+  .sk8-avatar-a { background: linear-gradient(135deg, #2A2A30 0%, #3A3A44 100%); }
+  .sk8-avatar-b { background: linear-gradient(135deg, #33302B 0%, #443F35 100%); }
+  .sk8-avatar-c { background: linear-gradient(135deg, #2B3033 0%, #353C40 100%); }
+  .sk8-avatar-d { background: linear-gradient(135deg, #302B33 0%, #3B3540 100%); }
+  /* 在场态：2px --state-success 外环（不占布局空间） */
+  .sk8-avatar-live { box-shadow: 0 0 0 2px var(--state-success); }
+  /* ===== [project-shell SECTION 6 · 逐字复制结束] ===== */
+
+  /* ===== [project-shell SECTION 7 · 基础组件 CSS] 逐字复制开始 ===== */
+  /* ===== 主按钮：48px 高，品牌底白字 16px/600，每屏 ≤1 个 ===== */
+  .sk8-btn-primary {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: var(--sk8-radius-medium);
+    background: var(--sk8-primary);
+    color: var(--sk8-primary-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), opacity 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-btn-primary:active { background: var(--sk8-primary-strong); }
+  .sk8-btn-primary:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-btn-primary:disabled { background: var(--sk8-surface-2); color: var(--sk8-text-faint); cursor: not-allowed; }
+
+  /* ===== 次按钮：1px 描边 --sk8-border，字 --sk8-text-secondary ===== */
+  .sk8-btn-ghost {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 0 20px;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h3);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-btn-ghost:active { background: var(--sk8-surface-2); }
+  .sk8-btn-ghost:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-btn-ghost:disabled { color: var(--sk8-text-faint); cursor: not-allowed; opacity: 0.6; }
+
+  /* ===== 卡片：--sk8-card 底 + 10px 圆角 + 1px 描边，无深阴影 ===== */
+  .sk8-card {
+    box-sizing: border-box;
+    padding: 16px;
+    background: var(--sk8-card);
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    color: var(--sk8-card-foreground);
+  }
+
+  /* ===== 徽标：12px 字胶囊，弱调用 14% 橙底 + 亮橙字 ===== */
+  .sk8-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 22px;
+    padding: 0 8px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-primary-soft);
+    color: var(--sk8-primary-bright);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* ===== 分段控件：内嵌底 --sk8-inset，高 32px，圆角 8px =====
+     用法：<div class="sk8-seg"><button class="sk8-seg-item sk8-seg-item-on" type="button">…</button><button class="sk8-seg-item" type="button">…</button></div> */
+  .sk8-seg {
+    box-sizing: border-box;
+    height: 32px;
+    display: flex;
+    align-items: stretch;
+    padding: 2px;
+    border-radius: 8px;
+    background: var(--sk8-inset);
+  }
+  .sk8-seg-item {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 10px;
+    border: 0;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--sk8-text-tertiary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 160ms cubic-bezier(.2, .8, .2, 1), color 160ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-seg-item:active { color: var(--sk8-text-secondary); }
+  .sk8-seg-item:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 1px; }
+  .sk8-seg-item-on {
+    background: var(--sk8-surface-2);
+    color: var(--sk8-foreground);
+    font-weight: 600;
+  }
+
+  /* ===== 状态点：8px 圆点 + 三语义变体（success/warning/error） ===== */
+  .sk8-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-text-faint);
+  }
+  .sk8-dot-success { background: var(--state-success); }
+  .sk8-dot-warning { background: var(--state-warning); }
+  .sk8-dot-error   { background: var(--state-error); }
+
+  /* ===== 标签 chip：26px 胶囊 + 12px 字，选中态橙字橙底 14% ===== */
+  .sk8-chip {
+    display: inline-flex;
+    align-items: center;
+    height: 26px;
+    padding: 0 12px;
+    flex-shrink: 0;
+    border: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-surface-2);
+    color: var(--sk8-text-tertiary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-chip:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-chip-on {
+    background: var(--sk8-primary-soft);
+    color: var(--sk8-primary-bright);
+    font-weight: 600;
+  }
+
+  /* ===== 信息行：20px 图标 + 14px 文本 + 右侧箭头，行高 48px =====
+     用法：<button class="sk8-info-row" type="button"><i data-lucide="map-pin" class="sk8-info-row-icon"></i><span class="sk8-info-row-text">…</span><i data-lucide="chevron-right" class="sk8-info-row-arrow"></i></button> */
+  .sk8-info-row {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 2px;
+    border: 0;
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.4;
+    text-align: left;
+    cursor: pointer;
+  }
+  .sk8-info-row:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; border-radius: var(--sk8-radius-small); }
+  .sk8-info-row-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-tertiary);
+  }
+  .sk8-info-row-text {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sk8-info-row-arrow {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-faint);
+  }
+
+  /* ===== 统计数字：20px/700 tabular-nums + 11px 单位 ===== */
+  .sk8-stat-num {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-h1);
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+  .sk8-stat-unit {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--sk8-text-faint);
+    margin-left: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk8-btn-primary,
+    .sk8-btn-ghost,
+    .sk8-seg-item,
+    .sk8-chip { transition-duration: 0.01ms; }
+  }
+  /* ===== [project-shell SECTION 7 · 逐字复制结束] ===== */
+
+
+  /* ============================================================
+     以下为本页（pages/shop-detail-v2.html）页面级布局 CSS
+     颜色仅 var(--sk8-*)/var(--state-*)；rgba 黑/白仅作中性遮罩
+     （与外壳沉浸层同一例外）；不覆写上方共享片段任何声明，
+     仅新增本页专属类与工具修饰类。
+  ============================================================ */
+
+  /* ===== 页面根：document-scroll，自然文档流，背景覆盖整页 ===== */
+  .sk8-page {
+    position: relative;
+    min-height: 100vh;
+    background: var(--sk8-background);
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+  }
+
+  /* ===== 媒体头：通顶 260px 双图轮播 + 沉浸导航层 ===== */
+  .sk8-media {
+    position: relative;
+    z-index: 0;
+    height: 260px;
+    overflow: hidden;
+    background: var(--sk8-inset); /* 图片加载前的兜底底色 */
+  }
+  .sk8-media-track {
+    display: flex;
+    height: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .sk8-media-track::-webkit-scrollbar { display: none; }
+  .sk8-media-slide {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
+    scroll-snap-align: center;
+  }
+  /* 顶部中性遮罩：保证状态栏白字与返回键在亮图上可读 */
+  .sk8-media-scrim {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0) 100%);
+    pointer-events: none;
+    z-index: 20;
+  }
+  /* 状态栏外层定位容器：仅定位，不改 SECTION 1 内部结构 */
+  .sk8-media-status {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 31;
+  }
+  /* 页码胶囊：半透明黑底 + 白字 11px（抬高于信息卡压边之上） */
+  .sk8-media-pager {
+    position: absolute;
+    right: 12px;
+    bottom: 28px;
+    z-index: 20;
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 9px;
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(0, 0, 0, 0.55); /* 中性黑遮罩，同外壳沉浸层例外 */
+    color: var(--sk8-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+
+  /* ===== P0P1 升级：空图轮播占位（品牌橙渐变 + 店铺首字） ===== */
+  .sk8-media-empty {
+    position: absolute;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--sk8-primary-strong) 0%, var(--sk8-primary) 100%);
+  }
+  .sk8-media-empty-initial {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 72px;
+    height: 72px;
+    border-radius: var(--sk8-radius-large);
+    background: rgba(255, 255, 255, 0.16);
+    color: var(--sk8-primary-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  .sk8-media.is-empty .sk8-media-track { display: none; }
+  .sk8-media.is-empty .sk8-media-pager { display: none; }
+  .sk8-media.is-empty .sk8-media-empty { display: flex; }
+
+  /* ===== P0P1 升级：沉浸导航右侧操作组 ===== */
+  .sk8-nav-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .sk8-nav-fav {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: var(--sk8-radius-pill);
+    background: rgba(0, 0, 0, 0.36);
+    color: var(--sk8-foreground);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    cursor: pointer;
+    transition: transform 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-nav-fav:active { transform: scale(0.94); }
+  .sk8-nav-fav:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-nav-fav-icon { width: 20px; height: 20px; stroke-width: 1.5px; }
+
+  /* ===== 内容区：信息卡上压 -16px，底部为固定操作栏留白 132px ===== */
+  .sk8-content {
+    position: relative;
+    z-index: 1;
+    margin-top: -16px;
+    padding: 0 16px 132px;
+  }
+  .sk8-content > section + section { margin-top: 12px; }
+
+  /* ===== 店铺信息卡：--sk8-card 底 + 16px 圆角上压媒体图 ===== */
+  .sk8-shop-card {
+    box-sizing: border-box;
+    padding: 16px;
+    background: var(--sk8-card);
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-large);
+    color: var(--sk8-card-foreground);
+  }
+  .sk8-shop-name { margin: 0 0 10px; }
+
+  /* ===== P0P1 升级：营业状态卡片 ===== */
+  .sk8-shop-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    margin-bottom: 12px;
+  }
+  .sk8-status-card {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-inset);
+    border: 1px solid var(--sk8-border);
+  }
+  .sk8-status-card-open { color: var(--state-success); }
+  .sk8-status-card-closed { color: var(--state-error); }
+  .sk8-status-card-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: var(--sk8-radius-pill);
+    flex-shrink: 0;
+  }
+  .sk8-status-card-open .sk8-status-card-dot {
+    background: var(--state-success);
+    box-shadow: 0 0 6px var(--state-success);
+  }
+  .sk8-status-card-closed .sk8-status-card-dot { background: var(--state-error); }
+  .sk8-status-card-label {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .sk8-shop-hint {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.2;
+    color: var(--state-warning);
+  }
+  .sk8-shop-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* ===== 图标信息行卡：行间用 1px 分隔线分组（非子卡） ===== */
+  .sk8-info-rows .sk8-info-row + .sk8-info-row {
+    border-top: 1px solid var(--sk8-border);
+  }
+  .sk8-info-rows .sk8-info-row {
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-info-rows .sk8-info-row:active {
+    background: var(--sk8-inset);
+  }
+  /* 一键拨打胶囊：仅样式示意（不注册跳转），行级 data-dom-id 承载交互 */
+  .sk8-call-pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+    padding: 0 16px;
+    flex-shrink: 0;
+    border-radius: var(--sk8-radius-pill);
+    background: var(--sk8-primary);
+    color: var(--sk8-primary-foreground);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  /* ===== P0P1 升级：信息小卡网格 ===== */
+  .sk8-info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .sk8-info-cell {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    background: var(--sk8-card);
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-info-cell:active { background: var(--sk8-inset); }
+  .sk8-info-cell:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; border-radius: var(--sk8-radius-medium); }
+  .sk8-info-cell-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sk8-info-cell-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+    color: var(--sk8-primary-bright);
+  }
+  .sk8-info-cell-label {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    line-height: 1;
+    color: var(--sk8-text-tertiary);
+  }
+  .sk8-info-cell-value {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.4;
+    color: var(--sk8-text-secondary);
+  }
+  .sk8-info-cell-arrow {
+    width: 14px;
+    height: 14px;
+    margin-left: auto;
+    stroke-width: 1.5px;
+    color: var(--sk8-text-faint);
+  }
+
+  /* ===== 店铺动态卡（到店打卡） ===== */
+  .sk8-feed-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 2px;
+  }
+  .sk8-feed-title { margin: 0; }
+  .sk8-feed-more {
+    flex-shrink: 0;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.2;
+    color: var(--sk8-text-faint);
+  }
+  .sk8-feed-item + .sk8-feed-item {
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px solid var(--sk8-border);
+  }
+  .sk8-feed-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+  }
+  .sk8-feed-author {
+    flex-shrink: 0;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sk8-text-secondary);
+    white-space: nowrap;
+  }
+  .sk8-feed-sep {
+    flex-shrink: 0;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.2;
+    color: var(--sk8-text-faint);
+  }
+  .sk8-feed-time {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    line-height: 1.2;
+    color: var(--sk8-text-faint);
+  }
+  .sk8-feed-text {
+    margin: 8px 0 0;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.6;
+    color: var(--sk8-card-foreground);
+    word-break: keep-all;
+    overflow-wrap: break-word;
+  }
+  .sk8-feed-thumb {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin-top: 10px;
+    object-fit: cover;
+    border-radius: var(--sk8-radius-small);
+  }
+
+  /* ===== P0P1 升级：打卡动态卡片（venue-detail-v2 同款） ===== */
+  .sk8-feed-card {
+    display: flex;
+    gap: 12px;
+  }
+  .sk8-feed-card-avatar { flex-shrink: 0; }
+  .sk8-feed-card-body {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .sk8-feed-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .sk8-feed-card-nick {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--sk8-foreground);
+    white-space: nowrap;
+  }
+  .sk8-feed-card-time {
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-caption);
+    line-height: 1.2;
+    color: var(--sk8-text-faint);
+    white-space: nowrap;
+  }
+  .sk8-feed-card-text {
+    margin: 6px 0 0;
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    line-height: 1.6;
+    color: var(--sk8-card-foreground);
+    overflow-wrap: break-word;
+  }
+  .sk8-feed-card-thumb {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin-top: 10px;
+    border-radius: var(--sk8-radius-small);
+    object-fit: cover;
+    background: var(--sk8-inset);
+  }
+
+  /* ===== P0P1 升级：动态头部打卡按钮 ===== */
+  .sk8-feed-checkin {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    height: 28px;
+    padding: 0 10px;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-pill);
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-feed-checkin:active { background: var(--sk8-surface-2); }
+  .sk8-feed-checkin:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-feed-checkin-icon { width: 14px; height: 14px; stroke-width: 1.5px; }
+
+  /* ===== 底部固定操作栏：--sk8-bar + 1px 顶边 + 安全区 + 浮层阴影 ===== */
+  .sk8-actionbar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 40;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    background: var(--sk8-bar);
+    border-top: 1px solid var(--sk8-border);
+    box-shadow: var(--sk8-shadow-float);
+  }
+  /* 工具修饰类：操作栏次按钮收窄为 88px、字级 12px（本页需求指定） */
+  .sk8-bar-ghost {
+    width: 88px;
+    flex: 0 0 88px;
+    gap: 6px;
+    padding: 0 8px;
+    font-size: var(--sk8-fs-body-s);
+    font-weight: 600;
+  }
+  .sk8-bar-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    stroke-width: 1.5px;
+  }
+  .sk8-bar-primary {
+    flex: 1 1 auto;
+    width: auto;
+  }
+
+  /* ===== P0P1 升级：底部操作栏双组布局 ===== */
+  .sk8-actionbar-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sk8-actionbar-right {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+  .sk8-actionbar-icon-btn {
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1), color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-actionbar-icon-btn:active { background: var(--sk8-surface-2); }
+  .sk8-actionbar-icon-btn:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-actionbar-icon { width: 20px; height: 20px; stroke-width: 1.5px; }
+
+  /* ===== P0P1 升级：更多菜单底 sheet ===== */
+  .sk8-more-sheet {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: flex-end;
+    background: rgba(0, 0, 0, 0.6);
+  }
+  .sk8-more-sheet.is-open { display: flex; }
+  .sk8-more-sheet-panel {
+    width: 100%;
+    padding: 16px;
+    padding-bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    background: var(--sk8-popover);
+    border-top: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-large) var(--sk8-radius-large) 0 0;
+    box-shadow: var(--sk8-shadow-pop);
+    animation: sk8-sheet-in 220ms cubic-bezier(.2, .8, .2, 1);
+  }
+  @keyframes sk8-sheet-in {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+  .sk8-more-sheet-item {
+    box-sizing: border-box;
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: var(--sk8-radius-medium);
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-more-sheet-item:active { background: var(--sk8-surface-2); }
+  .sk8-more-sheet-item:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+  .sk8-more-sheet-icon { width: 20px; height: 20px; stroke-width: 1.5px; color: var(--sk8-text-tertiary); }
+  .sk8-more-sheet-cancel {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--sk8-border);
+    border-radius: var(--sk8-radius-medium);
+    background: transparent;
+    color: var(--sk8-text-secondary);
+    font-family: var(--sk8-font-sans);
+    font-size: var(--sk8-fs-body);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 120ms cubic-bezier(.2, .8, .2, 1);
+  }
+  .sk8-more-sheet-cancel:active { background: var(--sk8-surface-2); }
+  .sk8-more-sheet-cancel:focus-visible { outline: 2px solid var(--sk8-ring); outline-offset: 2px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sk8-info-rows .sk8-info-row,
+    .sk8-nav-fav,
+    .sk8-info-cell,
+    .sk8-actionbar-icon-btn,
+    .sk8-feed-checkin,
+    .sk8-more-sheet-item,
+    .sk8-more-sheet-cancel { transition-duration: 0.01ms; }
+    .sk8-nav-fav:active,
+    .sk8-actionbar-icon-btn:active { transform: none; }
+    .sk8-more-sheet-panel { animation: none; }
+  }
+    </style>
+    <main class="sk8-page">
+      <!-- ============================================================
+           媒体头：通顶 260px 双图轮播（第一张 object-fit:cover 呈现）
+           内叠 SECTION 1 状态栏（外层定位类）与 SECTION 3 沉浸导航层
+      ============================================================ -->
+      <section class="sk8-media" aria-label="店铺照片轮播">
+        <div class="sk8-media-track">
+          <img class="sk8-media-slide" src="../assets/shop-interior.jpg" alt="火箭滑板店店内实景：滑板装备墙与维修台">
+          <img class="sk8-media-slide" src="../assets/shop-front.jpg" alt="火箭滑板店临街门头">
+        </div>
+        <!-- 空图兜底：品牌橙渐变 + 店铺首字 -->
+        <div class="sk8-media-empty" aria-hidden="true">
+          <span class="sk8-media-empty-initial">火</span>
+        </div>
+        <div class="sk8-media-scrim" aria-hidden="true"></div>
+        <div class="sk8-media-status">
+          <div class="sk8-statusbar">
+            <span class="sk8-statusbar-time">9:41</span>
+            <span class="sk8-statusbar-icons" aria-hidden="true">
+              <i data-lucide="signal" class="sk8-statusbar-icon"></i>
+              <i data-lucide="wifi" class="sk8-statusbar-icon"></i>
+              <i data-lucide="battery" class="sk8-statusbar-icon"></i>
+            </span>
+          </div>
+        </div>
+        <div class="sk8-nav-overlay">
+          <button class="sk8-nav-back" type="button" data-dom-id="nav-back" aria-label="返回">
+            <i data-lucide="chevron-left" class="sk8-nav-back-icon"></i>
+          </button>
+          <div class="sk8-nav-actions">
+            <button class="sk8-nav-fav" type="button" data-dom-id="action-favorite-top" aria-label="收藏店铺">
+              <i data-lucide="heart" class="sk8-nav-fav-icon"></i>
+            </button>
+          </div>
+        </div>
+        <div class="sk8-capsule sk8-capsule-overlay w-[88px] h-8" role="group" aria-label="小程序菜单">
+          <button class="sk8-capsule-btn" type="button" data-dom-id="action-more" aria-label="更多">
+            <i data-lucide="more-horizontal" class="sk8-capsule-icon"></i>
+          </button>
+          <i data-lucide="ellipsis" class="sk8-capsule-divider w-px" aria-hidden="true"></i>
+          <button class="sk8-capsule-btn" type="button" aria-label="关闭">
+            <i data-lucide="x" class="sk8-capsule-icon"></i>
+          </button>
+        </div>
+        <span class="sk8-media-pager sk8-num" aria-hidden="true">1 / 2</span>
+      </section>
+
+      <div class="sk8-content">
+        <!-- 店铺信息卡：上压媒体图 -16px -->
+        <section class="sk8-shop-card" aria-label="店铺信息">
+          <h1 class="sk8-shop-name sk8-type-h1">火箭滑板店</h1>
+          <div class="sk8-shop-status">
+            <span class="sk8-status-card sk8-status-card-open" data-dom-id="shop-status-label">
+              <span class="sk8-status-card-dot" aria-hidden="true"></span>
+              <span class="sk8-status-card-label">营业中</span>
+            </span>
+            <span class="sk8-shop-hint sk8-num">22:00 打烊，还剩 2 小时 12 分</span>
+          </div>
+          <div class="sk8-shop-chips">
+            <span class="sk8-chip">板面维修</span>
+            <span class="sk8-chip">装备售卖</span>
+            <span class="sk8-chip">教学课程</span>
+          </div>
+        </section>
+
+        <!-- P0P1 升级：信息小卡网格（营业 / 地址 / 电话 / 配送） -->
+        <section class="sk8-info-grid" aria-label="营业信息与联系方式">
+          <button class="sk8-info-cell" type="button" data-dom-id="info-hours">
+            <div class="sk8-info-cell-head">
+              <i data-lucide="clock" class="sk8-info-cell-icon"></i>
+              <span class="sk8-info-cell-label">营业时间</span>
+              <i data-lucide="chevron-right" class="sk8-info-cell-arrow"></i>
+            </div>
+            <span class="sk8-info-cell-value sk8-num">10:00 - 22:00</span>
+          </button>
+          <button class="sk8-info-cell" type="button" data-dom-id="info-address">
+            <div class="sk8-info-cell-head">
+              <i data-lucide="map-pin" class="sk8-info-cell-icon"></i>
+              <span class="sk8-info-cell-label">地址</span>
+              <i data-lucide="chevron-right" class="sk8-info-cell-arrow"></i>
+            </div>
+            <span class="sk8-info-cell-value sk8-num">滨江区江南大道 88 号 · 1.4km</span>
+          </button>
+          <button class="sk8-info-cell" type="button" data-dom-id="action-call">
+            <div class="sk8-info-cell-head">
+              <i data-lucide="phone" class="sk8-info-cell-icon"></i>
+              <span class="sk8-info-cell-label">电话</span>
+              <i data-lucide="chevron-right" class="sk8-info-cell-arrow"></i>
+            </div>
+            <span class="sk8-info-cell-value sk8-num">0571-8668 xxxx</span>
+          </button>
+          <button class="sk8-info-cell" type="button" data-dom-id="info-services">
+            <div class="sk8-info-cell-head">
+              <i data-lucide="bike" class="sk8-info-cell-icon"></i>
+              <span class="sk8-info-cell-label">服务</span>
+              <i data-lucide="chevron-right" class="sk8-info-cell-arrow"></i>
+            </div>
+            <span class="sk8-info-cell-value">到店自提 / 闪送同城</span>
+          </button>
+        </section>
+
+        <!-- 店铺动态卡：到店打卡（venue-detail-v2 同款 feed card） -->
+        <section class="sk8-card sk8-feed" aria-label="到店打卡动态">
+          <header class="sk8-feed-head">
+            <h2 class="sk8-feed-title sk8-type-h3">到店打卡</h2>
+            <div style="display:flex;align-items:center;gap:10px;margin-left:auto;">
+              <span class="sk8-feed-more sk8-num">全部 28 条</span>
+              <button class="sk8-feed-checkin" type="button" data-dom-id="action-checkin-shop" aria-label="我要打卡">
+                <i data-lucide="plus" class="sk8-feed-checkin-icon"></i>
+                <span>打卡</span>
+              </button>
+            </div>
+          </header>
+
+          <article class="sk8-feed-card" data-dom-id="feed-item-1">
+            <span class="sk8-avatar sk8-avatar-40 sk8-avatar-b sk8-feed-card-avatar" aria-hidden="true">鹿</span>
+            <div class="sk8-feed-card-body">
+              <div class="sk8-feed-card-head">
+                <span class="sk8-feed-card-nick">鹿</span>
+                <span class="sk8-feed-card-time sk8-num">3 小时前</span>
+              </div>
+              <p class="sk8-feed-card-text">换了两块新轴承，老板帮忙调的桥</p>
+              <img class="sk8-feed-card-thumb" src="../assets/shop-interior.jpg" alt="新轴承与调整后的桥特写" width="64" height="64">
+            </div>
+          </article>
+
+          <article class="sk8-feed-card" data-dom-id="feed-item-2">
+            <span class="sk8-avatar sk8-avatar-40 sk8-avatar-d sk8-feed-card-avatar" aria-hidden="true">Yui</span>
+            <div class="sk8-feed-card-body">
+              <div class="sk8-feed-card-head">
+                <span class="sk8-feed-card-nick">Yui</span>
+                <span class="sk8-feed-card-time">昨天</span>
+              </div>
+              <p class="sk8-feed-card-text">新手板在这里入的，送了一次教学</p>
+              <img class="sk8-feed-card-thumb" src="../assets/shop-front.jpg" alt="店铺门头与入门滑板" width="64" height="64">
+            </div>
+          </article>
+        </section>
+      </div>
+
+      <!-- P0P1 升级：底部固定操作栏（左：收藏 + 分享 / 右：电话 + 导航） -->
+      <div class="sk8-actionbar" role="group" aria-label="店铺操作">
+        <div class="sk8-actionbar-left">
+          <button class="sk8-actionbar-icon-btn" type="button" data-dom-id="action-favorite-bar" aria-label="收藏店铺">
+            <i data-lucide="heart" class="sk8-actionbar-icon"></i>
+          </button>
+          <button class="sk8-actionbar-icon-btn" type="button" data-dom-id="action-share-bar" aria-label="分享店铺">
+            <i data-lucide="share-2" class="sk8-actionbar-icon"></i>
+          </button>
+        </div>
+        <div class="sk8-actionbar-right">
+          <button class="sk8-btn-ghost sk8-bar-ghost" type="button" data-dom-id="action-call-bar">
+            <i data-lucide="phone" class="sk8-bar-icon"></i>
+            <span>拨打</span>
+          </button>
+          <button class="sk8-btn-ghost sk8-bar-ghost" type="button" data-dom-id="action-nav">
+            <i data-lucide="navigation" class="sk8-bar-icon"></i>
+            <span>导航</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- P0P1 升级：更多菜单 sheet（报错入口） -->
+      <div class="sk8-more-sheet" id="more-sheet" aria-hidden="true" role="dialog" aria-modal="true" aria-label="更多操作">
+        <div class="sk8-more-sheet-panel">
+          <button class="sk8-more-sheet-item" type="button" data-dom-id="action-report" aria-label="报错反馈">
+            <i data-lucide="flag" class="sk8-more-sheet-icon"></i>
+            <span>报错</span>
+          </button>
+          <button class="sk8-more-sheet-cancel" type="button" id="more-sheet-cancel">取消</button>
+        </div>
+      </div>
+    </main>
+    <script>
+      lucide.createIcons();
+      (function(){
+        const moreBtn = document.querySelector('[data-dom-id="action-more"]');
+        const sheet = document.getElementById('more-sheet');
+        const cancel = document.getElementById('more-sheet-cancel');
+        if (moreBtn && sheet) {
+          moreBtn.addEventListener('click', function() {
+            sheet.classList.add('is-open');
+            sheet.setAttribute('aria-hidden', 'false');
+          });
+        }
+        if (cancel && sheet) {
+          cancel.addEventListener('click', function() {
+            sheet.classList.remove('is-open');
+            sheet.setAttribute('aria-hidden', 'true');
+          });
+        }
+        if (sheet) {
+          sheet.addEventListener('click', function(e) {
+            if (e.target === sheet) {
+              sheet.classList.remove('is-open');
+              sheet.setAttribute('aria-hidden', 'true');
+            }
+          });
+        }
+      })();
+    </script>
+</body>
+</html>

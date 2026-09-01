@@ -1,0 +1,140 @@
+{
+  "root": {
+    "nodeId": "gen-project-shell",
+    "kind": "project-shell",
+    "pageIds": [
+      "page-home",
+      "page-discover",
+      "page-checkins",
+      "page-profile",
+      "page-venue-detail",
+      "page-venue-checkin-sheet",
+      "page-shop-detail"
+    ],
+    "output": "partials/project-shell.html",
+    "sharedRegions": [
+      "html-head",
+      "mini-program-chrome",
+      "body-frame",
+      "tab-bar-frame"
+    ],
+    "privateRegions": [],
+    "mutableSlots": [
+      "tabBarSlot",
+      "pageTitleSlot",
+      "mainContentSlot"
+    ],
+    "status": "generated",
+    "children": [
+      {
+        "nodeId": "gen-page-home",
+        "kind": "page-leaf",
+        "pageIds": ["page-home"],
+        "output": "pages/home.html",
+        "sharedRegions": [
+          "html-head",
+          "mini-program-chrome",
+          "body-frame",
+          "tab-bar-frame"
+        ],
+        "privateRegions": ["main-content"],
+        "mutableSlots": ["tabBarSlot"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-discover",
+        "kind": "page-leaf",
+        "pageIds": ["page-discover"],
+        "output": "pages/discover.html",
+        "sharedRegions": [
+          "html-head",
+          "mini-program-chrome",
+          "body-frame",
+          "tab-bar-frame"
+        ],
+        "privateRegions": ["main-content"],
+        "mutableSlots": ["tabBarSlot"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-checkins",
+        "kind": "page-leaf",
+        "pageIds": ["page-checkins"],
+        "output": "pages/checkins.html",
+        "sharedRegions": [
+          "html-head",
+          "mini-program-chrome",
+          "body-frame",
+          "tab-bar-frame"
+        ],
+        "privateRegions": ["main-content"],
+        "mutableSlots": ["tabBarSlot"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-profile",
+        "kind": "page-leaf",
+        "pageIds": ["page-profile"],
+        "output": "pages/profile.html",
+        "sharedRegions": [
+          "html-head",
+          "mini-program-chrome",
+          "body-frame",
+          "tab-bar-frame"
+        ],
+        "privateRegions": ["main-content"],
+        "mutableSlots": ["tabBarSlot"],
+        "status": "planned",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-venue-detail",
+        "kind": "page-leaf",
+        "pageIds": ["page-venue-detail"],
+        "output": "pages/venue-detail.html",
+        "sharedRegions": [
+          "html-head",
+          "mini-program-chrome",
+          "body-frame"
+        ],
+        "privateRegions": ["main-content"],
+        "mutableSlots": [],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-venue-checkin-sheet",
+        "kind": "page-leaf",
+        "pageIds": ["page-venue-checkin-sheet"],
+        "output": "pages/venue-checkin-sheet.html",
+        "sharedRegions": [
+          "html-head",
+          "mini-program-chrome",
+          "body-frame"
+        ],
+        "privateRegions": ["main-content", "bottom-sheet"],
+        "mutableSlots": [],
+        "status": "generated",
+        "children": []
+      },
+      {
+        "nodeId": "gen-page-shop-detail",
+        "kind": "page-leaf",
+        "pageIds": ["page-shop-detail"],
+        "output": "pages/shop-detail.html",
+        "sharedRegions": [
+          "html-head",
+          "mini-program-chrome",
+          "body-frame"
+        ],
+        "privateRegions": ["main-content"],
+        "mutableSlots": [],
+        "status": "planned",
+        "children": []
+      }
+    ]
+  }
+}

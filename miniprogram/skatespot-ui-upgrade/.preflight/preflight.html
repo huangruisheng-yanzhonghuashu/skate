@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preflight</title>
+    <style id="theme-vars">
+/* ============================================================
+   SkateSpot 小程序 · 品牌令牌（暗色街头风）
+   单一品牌主色：霓虹橘红 #FF5A36；状态色仅用于语义状态。
+   默认暗色（:root），.light 提供亮色兜底。
+   ============================================================ */
+
+:root {
+  /* Surfaces（暗色层级：底 → 卡片 → 浮层） */
+  --sk8-background: #111114;
+  --sk8-card: #1E1E23;
+  --sk8-inset: #17171B;
+  --sk8-surface-2: #26262C;
+  --sk8-popover: #1B1B20;
+  --sk8-bar: #1A1A1E;
+
+  /* Foreground 文本层级：白 → 次级 → 弱化 → 占位 */
+  --sk8-foreground: #FFFFFF;
+  --sk8-card-foreground: #FFFFFF;
+  --sk8-popover-foreground: #FFFFFF;
+  --sk8-text-secondary: #D9D9DE;
+  --sk8-text-tertiary: #A6A6AD;
+  --sk8-muted-foreground: #8C8C94;
+  --sk8-text-faint: #6E6E76;
+
+  /* Primary（唯一品牌色相） */
+  --sk8-primary: #FF5A36;
+  --sk8-primary-foreground: #FFFFFF;
+  --sk8-primary-strong: #E64A26;
+  --sk8-primary-bright: #FF8A6E;
+  --sk8-primary-soft: rgba(255, 90, 54, 0.14);
+  --sk8-primary-soft-strong: rgba(255, 90, 54, 0.24);
+
+  /* Lines / Inputs / Ring */
+  --sk8-border: #26262C;
+  --sk8-border-strong: #2A2A30;
+  --sk8-input: #17171B;
+  --sk8-ring: #FF5A36;
+
+  /* Muted */
+  --sk8-muted: #26262C;
+
+  /* 语义状态色（仅状态语义，不做装饰） */
+  --state-success: #00D4AA;
+  --state-success-soft: rgba(0, 212, 170, 0.12);
+  --state-success-ink: #003B30;
+  --state-warning: #FFB800;
+  --state-warning-soft: rgba(255, 184, 0, 0.12);
+  --state-error: #FF3B30;
+  --state-error-soft: rgba(255, 59, 48, 0.14);
+  --state-info: #2A8CFF;
+  --state-info-soft: rgba(42, 140, 255, 0.12);
+
+  /* Radius（收敛三档 + 胶囊） */
+  --sk8-radius-small: 6px;
+  --sk8-radius-medium: 10px;
+  --sk8-radius-large: 16px;
+  --sk8-radius-pill: 999px;
+
+  /* 深度：静态面用描边/分层，浮层可用深阴影 */
+  --sk8-shadow-float: 0 -8px 32px rgba(0, 0, 0, 0.5);
+  --sk8-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  /* Typography scale（小程序基准 14px） */
+  --sk8-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --sk8-fs-caption: 11px;
+  --sk8-fs-body-s: 12px;
+  --sk8-fs-body: 14px;
+  --sk8-fs-h3: 16px;
+  --sk8-fs-h2: 18px;
+  --sk8-fs-h1: 20px;
+}
+
+/* 本项目为纯暗色小程序设计：:root 即暗色令牌，无亮色覆盖（脚本输出的主题类不改变取值） */
+
+/* ===== 字体类 ===== */
+.sk8-type-h1 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h1); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+.sk8-type-h2 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h2); font-weight: 600; line-height: 1.35; }
+.sk8-type-h3 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h3); font-weight: 600; line-height: 1.4; }
+.sk8-type-body { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-body); font-weight: 400; line-height: 1.6; }
+.sk8-type-body-s { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-body-s); font-weight: 400; line-height: 1.5; }
+.sk8-type-caption { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-caption); font-weight: 400; line-height: 1.45; }
+.sk8-num { font-variant-numeric: tabular-nums; }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--sk8-background);
+    --color-foreground: var(--sk8-foreground);
+    --color-card: var(--sk8-card);
+    --color-card-foreground: var(--sk8-card-foreground);
+    --color-popover: var(--sk8-popover);
+    --color-popover-foreground: var(--sk8-popover-foreground);
+    --color-primary: var(--sk8-primary);
+    --color-primary-foreground: var(--sk8-primary-foreground);
+    --color-muted: var(--sk8-muted);
+    --color-muted-foreground: var(--sk8-muted-foreground);
+    --color-border: var(--sk8-border);
+    --color-input: var(--sk8-input);
+    --color-ring: var(--sk8-ring);
+    --radius-sm: var(--sk8-radius-small);
+    --radius-md: var(--sk8-radius-medium);
+    --radius-lg: var(--sk8-radius-large);
+  }
+  @layer base {
+    body { background: var(--sk8-background); color: var(--sk8-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--sk8-background); }
+      .text-background { color: var(--sk8-background); }
+      .border-background { border-color: var(--sk8-background); }
+      .ring-background { --tw-ring-color: var(--sk8-background); }
+      .bg-foreground { background-color: var(--sk8-foreground); }
+      .text-foreground { color: var(--sk8-foreground); }
+      .border-foreground { border-color: var(--sk8-foreground); }
+      .ring-foreground { --tw-ring-color: var(--sk8-foreground); }
+      .bg-card { background-color: var(--sk8-card); }
+      .text-card { color: var(--sk8-card); }
+      .border-card { border-color: var(--sk8-card); }
+      .ring-card { --tw-ring-color: var(--sk8-card); }
+      .bg-card-foreground { background-color: var(--sk8-card-foreground); }
+      .text-card-foreground { color: var(--sk8-card-foreground); }
+      .border-card-foreground { border-color: var(--sk8-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--sk8-card-foreground); }
+      .bg-popover { background-color: var(--sk8-popover); }
+      .text-popover { color: var(--sk8-popover); }
+      .border-popover { border-color: var(--sk8-popover); }
+      .ring-popover { --tw-ring-color: var(--sk8-popover); }
+      .bg-popover-foreground { background-color: var(--sk8-popover-foreground); }
+      .text-popover-foreground { color: var(--sk8-popover-foreground); }
+      .border-popover-foreground { border-color: var(--sk8-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--sk8-popover-foreground); }
+      .bg-primary { background-color: var(--sk8-primary); }
+      .text-primary { color: var(--sk8-primary); }
+      .border-primary { border-color: var(--sk8-primary); }
+      .ring-primary { --tw-ring-color: var(--sk8-primary); }
+      .bg-primary-foreground { background-color: var(--sk8-primary-foreground); }
+      .text-primary-foreground { color: var(--sk8-primary-foreground); }
+      .border-primary-foreground { border-color: var(--sk8-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--sk8-primary-foreground); }
+      .bg-muted { background-color: var(--sk8-muted); }
+      .text-muted { color: var(--sk8-muted); }
+      .border-muted { border-color: var(--sk8-muted); }
+      .ring-muted { --tw-ring-color: var(--sk8-muted); }
+      .bg-muted-foreground { background-color: var(--sk8-muted-foreground); }
+      .text-muted-foreground { color: var(--sk8-muted-foreground); }
+      .border-muted-foreground { border-color: var(--sk8-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--sk8-muted-foreground); }
+      .bg-border { background-color: var(--sk8-border); }
+      .text-border { color: var(--sk8-border); }
+      .border-border { border-color: var(--sk8-border); }
+      .ring-border { --tw-ring-color: var(--sk8-border); }
+      .bg-input { background-color: var(--sk8-input); }
+      .text-input { color: var(--sk8-input); }
+      .border-input { border-color: var(--sk8-input); }
+      .ring-input { --tw-ring-color: var(--sk8-input); }
+      .bg-ring { background-color: var(--sk8-ring); }
+      .text-ring { color: var(--sk8-ring); }
+      .border-ring { border-color: var(--sk8-ring); }
+      .ring-ring { --tw-ring-color: var(--sk8-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body class="min-h-screen font-sans antialiased">
+    <main>
+    </main>
+    <script>lucide.createIcons();</script>
+</body>
+</html>

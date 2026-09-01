@@ -1,0 +1,2508 @@
+{
+  "schemaVersion": "2026.08.06",
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.08.06.19.15.08",
+    "version_source": "skill-release-manifest.json",
+    "schema_version": "1.0",
+    "release": "prompt-base-cloud-ssot-migration",
+    "read_status": "ok"
+  },
+  "project": {
+    "operation": "mutation",
+    "resolvedLane": "existing_edit_add_comparison",
+    "imageAssetPolicy": {
+      "generated": [
+        "assets/map-dark.jpg",
+        "assets/venue-bowl.jpg",
+        "assets/venue-street.jpg",
+        "assets/venue-plaza.jpg",
+        "assets/shop-front.jpg",
+        "assets/shop-interior.jpg"
+      ],
+      "avatars": "CSS 渐变首字母头像（复用小程序现有方案），不使用头像图片文件",
+      "feedPhotos": "发现页/动态流照片复用以上 6 张生成资产"
+    },
+    "generationTree": {
+      "root": {
+        "nodeId": "gen-project-shell",
+        "kind": "project-shell",
+        "pageIds": [
+          "page-home",
+          "page-discover",
+          "page-checkins",
+          "page-profile",
+          "page-venue-detail",
+          "page-venue-checkin-sheet",
+          "page-shop-detail"
+        ],
+        "output": "partials/project-shell.html",
+        "sharedRegions": [
+          "html-head",
+          "mini-program-chrome",
+          "body-frame",
+          "tab-bar-frame"
+        ],
+        "privateRegions": [],
+        "mutableSlots": [
+          "tabBarSlot",
+          "pageTitleSlot",
+          "mainContentSlot"
+        ],
+        "status": "generated",
+        "children": [
+          {
+            "nodeId": "gen-page-home",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-home"
+            ],
+            "output": "pages/home.html",
+            "sharedRegions": [
+              "html-head",
+              "mini-program-chrome",
+              "body-frame",
+              "tab-bar-frame"
+            ],
+            "privateRegions": [
+              "main-content"
+            ],
+            "mutableSlots": [
+              "tabBarSlot"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-discover",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-discover"
+            ],
+            "output": "pages/discover.html",
+            "sharedRegions": [
+              "html-head",
+              "mini-program-chrome",
+              "body-frame",
+              "tab-bar-frame"
+            ],
+            "privateRegions": [
+              "main-content"
+            ],
+            "mutableSlots": [
+              "tabBarSlot"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-checkins",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-checkins"
+            ],
+            "output": "pages/checkins.html",
+            "sharedRegions": [
+              "html-head",
+              "mini-program-chrome",
+              "body-frame",
+              "tab-bar-frame"
+            ],
+            "privateRegions": [
+              "main-content"
+            ],
+            "mutableSlots": [
+              "tabBarSlot"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-profile",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-profile"
+            ],
+            "output": "pages/profile.html",
+            "sharedRegions": [
+              "html-head",
+              "mini-program-chrome",
+              "body-frame",
+              "tab-bar-frame"
+            ],
+            "privateRegions": [
+              "main-content"
+            ],
+            "mutableSlots": [
+              "tabBarSlot"
+            ],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-venue-detail",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-venue-detail"
+            ],
+            "output": "pages/venue-detail.html",
+            "sharedRegions": [
+              "html-head",
+              "mini-program-chrome",
+              "body-frame"
+            ],
+            "privateRegions": [
+              "main-content"
+            ],
+            "mutableSlots": [],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-venue-checkin-sheet",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-venue-checkin-sheet"
+            ],
+            "output": "pages/venue-checkin-sheet.html",
+            "sharedRegions": [
+              "html-head",
+              "mini-program-chrome",
+              "body-frame"
+            ],
+            "privateRegions": [
+              "main-content",
+              "bottom-sheet"
+            ],
+            "mutableSlots": [],
+            "status": "generated",
+            "children": []
+          },
+          {
+            "nodeId": "gen-page-shop-detail",
+            "kind": "page-leaf",
+            "pageIds": [
+              "page-shop-detail"
+            ],
+            "output": "pages/shop-detail.html",
+            "sharedRegions": [
+              "html-head",
+              "mini-program-chrome",
+              "body-frame"
+            ],
+            "privateRegions": [
+              "main-content"
+            ],
+            "mutableSlots": [],
+            "status": "generated",
+            "children": []
+          }
+        ]
+      }
+    },
+    "intentProfile": {
+      "workflowFile": "intent-workflows/intent-project-mutation/INTENT_WORKFLOW.md",
+      "mode": "Quick Path A1: comparison-page change",
+      "notes": "基于现有 7 页设计稿生成 P0/P1 升级对比稿"
+    },
+    "selectedIntentWorkflowRead": true,
+    "contextRequirementsLoaded": [
+      {
+        "path": "shared-runtime/runtime-boundaries/lane-runtime-contracts.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "shared-runtime/agent-dispatch-runtime/lane-dispatch-index.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "delivery-quality/page-rendering-quality-gate.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "delivery-quality/design-artifact-validation.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "delivery-quality/delivery-evidence-contract.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "intent-workflows/intent-project-mutation/INTENT_WORKFLOW.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "intent-workflows/intent-project-mutation/edit-existing-project.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "intent-workflows/intent-project-mutation/existing-edit-page-runtime.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "intent-workflows/intent-project-mutation/existing-edit-dispatch-contract.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      },
+      {
+        "path": "intent-workflows/intent-project-mutation/comparison-page-contract.md",
+        "readStatus": "loaded",
+        "bodyRead": true
+      }
+    ],
+    "contextReadScope": {
+      "primary": "existing-edit-add-comparison",
+      "supplementary": [
+        "shared-page-rendering-kernel",
+        "comparison-page-contract"
+      ]
+    },
+    "deviceType": "mobile",
+    "designRead": "滑板场地/店铺发现小程序 / 年轻滑手 / 暗色街头-霓虹橘 / 中高密度信息流 / 避免模板化卡片墙、花哨渐变与假数据感",
+    "designDials": {
+      "layoutVariance": 3,
+      "motionIntensity": 2,
+      "visualDensity": 4
+    },
+    "styleDefinitionBrief": "暗色街头小程序：#111114 底 + #1E1E23 卡片 + 霓虹橘 #FF5A36 单主色，lucide 线性图标，绿/琥珀/红仅作在场/打烊/删除等状态语义。",
+    "styleContinuityAnchors": {
+      "surfaceModel": "三层暗色面 #111114 底 / #1E1E23 卡片 / #1B1B20 浮层，静态面 1px #26262C 描边，静态卡不用深阴影；浮层（底部弹层）可用 --sk8-shadow-float",
+      "primaryUsage": "唯一品牌色 #FF5A36 用于主按钮/选中态/强调数字；弱调用 14% 橙底 + #FF8A6E 字；每屏主行动不超过 1 个",
+      "typographySystem": "PingFang SC/Noto Sans SC 栈，基准 14px，字阶 11/12/14/16/18/20px，数字 tabular-nums，每屏字号档 ≤ 4",
+      "radiusScale": "6/10/16px 三档；胶囊仅限标签、头像、分段控件；中文 >4 字不用胶囊",
+      "miniProgramChrome": "状态栏 44px + 导航栏 44px（标题居中 + 右侧 88×32 系统胶囊含更多/分隔/关闭）；底部 tabBar 50px 仅 4 个 tab 页；详情页无 tabBar、显示返回键",
+      "iconLanguage": "lucide 线性图标 1.5px stroke，16/20/24px 三档；不用 emoji 作功能图标",
+      "stateColorSemantics": "success #00D4AA 仅在场/营业中/已签；warning #FFB800 仅即将打烊；error #FF3B30 仅删除/报错；不做装饰用色"
+    },
+    "sharedProjectShellContract": {
+      "radiusScale": {
+        "small": 6,
+        "medium": 10,
+        "large": 16,
+        "pill": 999
+      },
+      "surfaceDepthModel": "border/surface-led；阴影仅浮层",
+      "typographySystem": {
+        "stack": "-apple-system, PingFang SC, Noto Sans SC, sans-serif",
+        "base": "14px",
+        "scale": [
+          11,
+          12,
+          14,
+          16,
+          18,
+          20
+        ]
+      },
+      "mobileNavigation": {
+        "applies": true,
+        "type": "bottom-tab",
+        "items": [
+          {
+            "key": "home",
+            "label": "首页",
+            "icon": "home"
+          },
+          {
+            "key": "discover",
+            "label": "发现",
+            "icon": "compass"
+          },
+          {
+            "key": "checkins",
+            "label": "签到",
+            "icon": "flame"
+          },
+          {
+            "key": "profile",
+            "label": "我的",
+            "icon": "user"
+          }
+        ],
+        "heightPx": 50,
+        "position": "flow-bottom",
+        "activeState": "仅图标+文字变主色并加粗，几何（顺序/高度/字号）完全不变",
+        "structure": {
+          "navTag": "nav",
+          "navClass": "sk8-tabbar border-t",
+          "innerClass": "sk8-tabbar-inner",
+          "itemTag": "a",
+          "itemClass": "sk8-tab-item",
+          "iconClass": "sk8-tab-icon",
+          "labelClass": "sk8-tab-label",
+          "activeRule": "仅 data-active/颜色/字重可变，不得改变布局类",
+          "markerAttr": "data-mobile-nav=\"global\"",
+          "canonicalHtmlByKey": {
+            "home": "<nav data-mobile-nav=\"global\" class=\"sk8-tabbar grid grid-cols-4 h-[50px]\"><a href=\"#\" data-nav-key=\"home\" data-active=\"true\" class=\"sk8-tab-item\"><i data-lucide=\"home\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">首页</span></a><a href=\"#\" data-nav-key=\"discover\" data-dom-id=\"nav-discover\" class=\"sk8-tab-item\"><i data-lucide=\"compass\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">发现</span></a><a href=\"#\" data-nav-key=\"checkins\" data-dom-id=\"nav-checkins\" class=\"sk8-tab-item\"><i data-lucide=\"flame\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">签到</span></a><a href=\"#\" data-nav-key=\"profile\" data-dom-id=\"nav-profile\" class=\"sk8-tab-item\"><i data-lucide=\"user\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">我的</span></a></nav>",
+            "discover": "<nav data-mobile-nav=\"global\" class=\"sk8-tabbar grid grid-cols-4 h-[50px]\"><a href=\"#\" data-nav-key=\"home\" data-dom-id=\"nav-home\" class=\"sk8-tab-item\"><i data-lucide=\"home\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">首页</span></a><a href=\"#\" data-nav-key=\"discover\" data-active=\"true\" class=\"sk8-tab-item\"><i data-lucide=\"compass\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">发现</span></a><a href=\"#\" data-nav-key=\"checkins\" data-dom-id=\"nav-checkins\" class=\"sk8-tab-item\"><i data-lucide=\"flame\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">签到</span></a><a href=\"#\" data-nav-key=\"profile\" data-dom-id=\"nav-profile\" class=\"sk8-tab-item\"><i data-lucide=\"user\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">我的</span></a></nav>",
+            "checkins": "<nav data-mobile-nav=\"global\" class=\"sk8-tabbar grid grid-cols-4 h-[50px]\"><a href=\"#\" data-nav-key=\"home\" data-dom-id=\"nav-home\" class=\"sk8-tab-item\"><i data-lucide=\"home\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">首页</span></a><a href=\"#\" data-nav-key=\"discover\" data-dom-id=\"nav-discover\" class=\"sk8-tab-item\"><i data-lucide=\"compass\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">发现</span></a><a href=\"#\" data-nav-key=\"checkins\" data-active=\"true\" class=\"sk8-tab-item\"><i data-lucide=\"flame\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">签到</span></a><a href=\"#\" data-nav-key=\"profile\" data-dom-id=\"nav-profile\" class=\"sk8-tab-item\"><i data-lucide=\"user\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">我的</span></a></nav>",
+            "profile": "<nav data-mobile-nav=\"global\" class=\"sk8-tabbar grid grid-cols-4 h-[50px]\"><a href=\"#\" data-nav-key=\"home\" data-dom-id=\"nav-home\" class=\"sk8-tab-item\"><i data-lucide=\"home\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">首页</span></a><a href=\"#\" data-nav-key=\"discover\" data-dom-id=\"nav-discover\" class=\"sk8-tab-item\"><i data-lucide=\"compass\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">发现</span></a><a href=\"#\" data-nav-key=\"checkins\" data-dom-id=\"nav-checkins\" class=\"sk8-tab-item\"><i data-lucide=\"flame\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">签到</span></a><a href=\"#\" data-nav-key=\"profile\" data-active=\"true\" class=\"sk8-tab-item\"><i data-lucide=\"user\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">我的</span></a></nav>"
+          }
+        }
+      }
+    },
+    "visualQualityCheckpoints": [
+      {
+        "checkpointId": "vq-anchor",
+        "dimension": "visual-anchor",
+        "expected": "首页以暗色地图+marker 速览卡为视觉锚；详情页以轮播大图为锚；签到页以大数字统计+日历为锚，1 秒内可识别页面主题",
+        "evidenceTarget": "pages/home.html#map-region"
+      },
+      {
+        "checkpointId": "vq-hierarchy",
+        "dimension": "information-hierarchy",
+        "expected": "每屏唯一主行动（首页=找场地、发现=看动态、签到=日历回顾、详情=签到/打卡），标题/正文/辅助信息靠字阶与颜色分层，不靠加粗堆叠",
+        "evidenceTarget": "pages/venue-detail.html#content"
+      },
+      {
+        "checkpointId": "vq-structure",
+        "dimension": "composition-structure",
+        "expected": "列表流 + 底部固定操作的结构；卡片嵌套 ≤2 层；相邻区块结构不重复；间距走 4/8/12/16 节奏",
+        "evidenceTarget": "pages/checkins.html#layout"
+      },
+      {
+        "checkpointId": "vq-implementation",
+        "dimension": "implementation-strategy",
+        "expected": "全部颜色走 --sk8-* 令牌；图标 lucide；大图区用生成图片资产；mini 程序 chrome（状态栏/导航/胶囊/tabBar）按 SSOT 复现",
+        "evidenceTarget": "pages/shop-detail.html#implementation"
+      }
+    ],
+    "expectedDispatches": [
+      {
+        "nodeId": "page-home-v2",
+        "packetType": "ExistingEditPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/home-v2.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "02bcd9e4971ba74716007bcbe9e1bd04c71674c4259442d708b1e5c06b33fb5d",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-discover-v2",
+        "packetType": "ExistingEditPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/discover-v2.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "cfa97b61942009bf75e4d953d82966f2a958e88c39b88368d508159eb9480231",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-checkins-v2",
+        "packetType": "ExistingEditPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/checkins-v2.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "3cb9fa2af58828b5c32b9b214b2faeef803e22249b999f4c5eb5cafb9c450122",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-profile-v2",
+        "packetType": "ExistingEditPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/profile-v2.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "4b61d40981f5d7d90bd788ed82daaea5bc812408d863346b7f614223dd6a4509",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-venue-detail-v2",
+        "packetType": "ExistingEditPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/venue-detail-v2.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "3b6b177b4accc101c675a4dd3916332fc48682ff0dd4e207977f484d963e3191",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-venue-checkin-sheet-v2",
+        "packetType": "ExistingEditPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/venue-checkin-sheet-v2.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "3f36f538dc73133bd906e2a2f646a7e1d839a33e938fc4727e410bff3bf8cd02",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-shop-detail-v2",
+        "packetType": "ExistingEditPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/shop-detail-v2.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "c5353d10f22394f409630ee86f784bbb700de8ef1872ae315e8a0cb8c2115517",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "gen-project-shell",
+        "packetType": "ProjectShellPacket",
+        "status": "completed",
+        "changedFiles": [
+          "partials/project-shell.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "27baa0d7d2a678b8e78bc0d89711f81db8dc56287f596400da5e08bf604c7795",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-home",
+        "packetType": "ComplexPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/home.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "d173fc363c4ebde5f1995d2e7ceb0b7f2940e3455bf5cdcd4b07170f99cb2a90",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-discover",
+        "packetType": "ComplexPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/discover.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "6a803c7db5bcfeecdcbb892f98fa2ad39aefd3dc26670f6b74642644cc74eb5c",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-checkins",
+        "packetType": "ComplexPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/checkins.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "00faf78ef2f1c91c4763fe1bf69708898d438b301ea51bddaa16eec495e7a4b8",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-profile",
+        "packetType": "ComplexPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/profile.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "f66315baec0f7f97195897daf455392f95620489b836b533fa14e0d4c58faa6a",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-venue-detail",
+        "packetType": "ComplexPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/venue-detail.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "2d6cf44719da3b54af328220ce96dd742b357b8d8e07dfa83a8daff9493e2cfc",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-venue-checkin-sheet",
+        "packetType": "ComplexPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/venue-checkin-sheet.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "f17c48297a37cda67f141994f6ac9185fecc4fe67ea5f68025f8bde408777d3f",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      },
+      {
+        "nodeId": "page-shop-detail",
+        "packetType": "ComplexPagePacket",
+        "status": "completed",
+        "changedFiles": [
+          "pages/shop-detail.html"
+        ],
+        "toolCallLedger": {
+          "source": "main-agent-runtime-trace",
+          "traceDigest": "7544e8b77d0cc75d6fb1cbd724468c2c299269734210d9c27a7542e76972b934",
+          "todoWriteCalls": 0,
+          "previewCalls": 0,
+          "validationScriptCalls": 0,
+          "helperScriptWrites": 0
+        }
+      }
+    ],
+    "validationRunDiscipline": "validate-design-workspace.mjs",
+    "lowValueCallWatchdog": {
+      "noProgressNextAction": "如果 Sub-Agent 返回失败或阻塞，缩小单页范围或改为 Main Agent 直接生成该页"
+    },
+    "cssPreflightEvidence": {
+      "command": "node apply-html-head-contract.mjs colors_and_type.css .preflight/preflight.html --title=Preflight --lang=zh-CN --prefix=sk8",
+      "exitCode": 0,
+      "generatedMarkers": [
+        "id=theme-vars",
+        "id=semantic-token-fallback",
+        "@theme inline",
+        "Tailwind CDN",
+        "lucide",
+        "html class=light"
+      ],
+      "note": "纯暗色项目：CSS 仅 :root 暗色值，无亮色覆盖，主题类不改变取值"
+    },
+    "dispatchPreflightManifest": [
+      {
+        "nodeId": "page-home-v2",
+        "htmlSrc": "pages/home-v2.html",
+        "laneContract": {
+          "resolvedLane": "existing_edit_add_comparison",
+          "packetType": "ExistingEditPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-mutation/existing-edit-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-mutation/existing-edit-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/home-v2.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/home-v2.html"
+          ]
+        },
+        "canonicalNavHtml": "<nav data-mobile-nav=\"global\" class=\"sk8-tabbar grid grid-cols-4 h-[50px]\"><a href=\"#\" data-nav-key=\"home\" data-active=\"true\" class=\"sk8-tab-item\"><i data-lucide=\"home\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">首页</span></a><a href=\"#\" data-nav-key=\"discover\" data-dom-id=\"nav-discover\" class=\"sk8-tab-item\"><i data-lucide=\"compass\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">发现</span></a><a href=\"#\" data-nav-key=\"checkins\" data-dom-id=\"nav-checkins\" class=\"sk8-tab-item\"><i data-lucide=\"flame\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">签到</span></a><a href=\"#\" data-nav-key=\"profile\" data-dom-id=\"nav-profile\" class=\"sk8-tab-item\"><i data-lucide=\"user\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">我的</span></a></nav>",
+        "mobileNavigation": {
+          "required": true,
+          "appliesToThisPage": true,
+          "canonicalHtmlIncluded": true,
+          "activeKey": "home"
+        }
+      },
+      {
+        "nodeId": "page-discover-v2",
+        "htmlSrc": "pages/discover-v2.html",
+        "laneContract": {
+          "resolvedLane": "existing_edit_add_comparison",
+          "packetType": "ExistingEditPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-mutation/existing-edit-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-mutation/existing-edit-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/discover-v2.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/discover-v2.html"
+          ]
+        },
+        "canonicalNavHtml": "<nav data-mobile-nav=\"global\" class=\"sk8-tabbar grid grid-cols-4 h-[50px]\"><a href=\"#\" data-nav-key=\"home\" data-dom-id=\"nav-home\" class=\"sk8-tab-item\"><i data-lucide=\"home\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">首页</span></a><a href=\"#\" data-nav-key=\"discover\" data-active=\"true\" class=\"sk8-tab-item\"><i data-lucide=\"compass\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">发现</span></a><a href=\"#\" data-nav-key=\"checkins\" data-dom-id=\"nav-checkins\" class=\"sk8-tab-item\"><i data-lucide=\"flame\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">签到</span></a><a href=\"#\" data-nav-key=\"profile\" data-dom-id=\"nav-profile\" class=\"sk8-tab-item\"><i data-lucide=\"user\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">我的</span></a></nav>",
+        "mobileNavigation": {
+          "required": true,
+          "appliesToThisPage": true,
+          "canonicalHtmlIncluded": true,
+          "activeKey": "discover"
+        }
+      },
+      {
+        "nodeId": "page-checkins-v2",
+        "htmlSrc": "pages/checkins-v2.html",
+        "laneContract": {
+          "resolvedLane": "existing_edit_add_comparison",
+          "packetType": "ExistingEditPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-mutation/existing-edit-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-mutation/existing-edit-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/checkins-v2.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/checkins-v2.html"
+          ]
+        },
+        "canonicalNavHtml": "<nav data-mobile-nav=\"global\" class=\"sk8-tabbar grid grid-cols-4 h-[50px]\"><a href=\"#\" data-nav-key=\"home\" data-dom-id=\"nav-home\" class=\"sk8-tab-item\"><i data-lucide=\"home\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">首页</span></a><a href=\"#\" data-nav-key=\"discover\" data-dom-id=\"nav-discover\" class=\"sk8-tab-item\"><i data-lucide=\"compass\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">发现</span></a><a href=\"#\" data-nav-key=\"checkins\" data-active=\"true\" class=\"sk8-tab-item\"><i data-lucide=\"flame\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">签到</span></a><a href=\"#\" data-nav-key=\"profile\" data-dom-id=\"nav-profile\" class=\"sk8-tab-item\"><i data-lucide=\"user\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">我的</span></a></nav>",
+        "mobileNavigation": {
+          "required": true,
+          "appliesToThisPage": true,
+          "canonicalHtmlIncluded": true,
+          "activeKey": "checkins"
+        }
+      },
+      {
+        "nodeId": "page-profile-v2",
+        "htmlSrc": "pages/profile-v2.html",
+        "laneContract": {
+          "resolvedLane": "existing_edit_add_comparison",
+          "packetType": "ExistingEditPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-mutation/existing-edit-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-mutation/existing-edit-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/profile-v2.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/profile-v2.html"
+          ]
+        },
+        "canonicalNavHtml": "<nav data-mobile-nav=\"global\" class=\"sk8-tabbar grid grid-cols-4 h-[50px]\"><a href=\"#\" data-nav-key=\"home\" data-dom-id=\"nav-home\" class=\"sk8-tab-item\"><i data-lucide=\"home\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">首页</span></a><a href=\"#\" data-nav-key=\"discover\" data-dom-id=\"nav-discover\" class=\"sk8-tab-item\"><i data-lucide=\"compass\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">发现</span></a><a href=\"#\" data-nav-key=\"checkins\" data-dom-id=\"nav-checkins\" class=\"sk8-tab-item\"><i data-lucide=\"flame\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">签到</span></a><a href=\"#\" data-nav-key=\"profile\" data-active=\"true\" class=\"sk8-tab-item\"><i data-lucide=\"user\" class=\"sk8-tab-icon\"></i><span class=\"sk8-tab-label whitespace-nowrap\">我的</span></a></nav>",
+        "mobileNavigation": {
+          "required": true,
+          "appliesToThisPage": true,
+          "canonicalHtmlIncluded": true,
+          "activeKey": "profile"
+        }
+      },
+      {
+        "nodeId": "page-venue-detail-v2",
+        "htmlSrc": "pages/venue-detail-v2.html",
+        "laneContract": {
+          "resolvedLane": "existing_edit_add_comparison",
+          "packetType": "ExistingEditPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-mutation/existing-edit-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-mutation/existing-edit-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/venue-detail-v2.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/venue-detail-v2.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false
+        }
+      },
+      {
+        "nodeId": "page-venue-checkin-sheet-v2",
+        "htmlSrc": "pages/venue-checkin-sheet-v2.html",
+        "laneContract": {
+          "resolvedLane": "existing_edit_add_comparison",
+          "packetType": "ExistingEditPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-mutation/existing-edit-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-mutation/existing-edit-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/venue-checkin-sheet-v2.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/venue-checkin-sheet-v2.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false
+        }
+      },
+      {
+        "nodeId": "page-shop-detail-v2",
+        "htmlSrc": "pages/shop-detail-v2.html",
+        "laneContract": {
+          "resolvedLane": "existing_edit_add_comparison",
+          "packetType": "ExistingEditPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-mutation/existing-edit-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-mutation/existing-edit-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/shop-detail-v2.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/shop-detail-v2.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false
+        }
+      },
+      {
+        "nodeId": "page-home",
+        "htmlSrc": "pages/home.html",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/home.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/home.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": true,
+          "appliesToThisPage": true,
+          "canonicalHtmlIncluded": true,
+          "activeKey": "home"
+        }
+      },
+      {
+        "nodeId": "page-discover",
+        "htmlSrc": "pages/discover.html",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/discover.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/discover.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": true,
+          "appliesToThisPage": true,
+          "canonicalHtmlIncluded": true,
+          "activeKey": "discover"
+        }
+      },
+      {
+        "nodeId": "page-checkins",
+        "htmlSrc": "pages/checkins.html",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/checkins.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/checkins.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": true,
+          "appliesToThisPage": true,
+          "canonicalHtmlIncluded": true,
+          "activeKey": "checkins"
+        }
+      },
+      {
+        "nodeId": "page-profile",
+        "htmlSrc": "pages/profile.html",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/profile.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/profile.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": true,
+          "appliesToThisPage": true,
+          "canonicalHtmlIncluded": true,
+          "activeKey": "profile"
+        }
+      },
+      {
+        "nodeId": "page-venue-detail",
+        "htmlSrc": "pages/venue-detail.html",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/venue-detail.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/venue-detail.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false
+        }
+      },
+      {
+        "nodeId": "page-venue-checkin-sheet",
+        "htmlSrc": "pages/venue-checkin-sheet.html",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/venue-checkin-sheet.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/venue-checkin-sheet.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false
+        }
+      },
+      {
+        "nodeId": "page-shop-detail",
+        "htmlSrc": "pages/shop-detail.html",
+        "laneContract": {
+          "resolvedLane": "complex_html_page",
+          "packetType": "ComplexPagePacket",
+          "pageRuntimeGuide": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+          "dispatchContract": "intent-workflows/intent-project-complex-build/complex-dispatch-contract.md"
+        },
+        "sharedTemplate": "shared-runtime/agent-dispatch-runtime/shared-page-rendering-kernel.md",
+        "supplementaryReads": [],
+        "allowedWritePaths": [
+          "pages/shop-detail.html"
+        ],
+        "forbiddenWriteRoots": [
+          "*.design",
+          "runtime-orchestration-summary.json",
+          "validation-report.json",
+          "finish-readiness-report.json"
+        ],
+        "toolPolicy": {
+          "todoWriteAllowed": false,
+          "validationScriptsAllowed": false,
+          "previewAllowed": false,
+          "helperScriptsAllowed": false,
+          "designFileWriteAllowed": false,
+          "allowedWritePaths": [
+            "pages/shop-detail.html"
+          ]
+        },
+        "mobileNavigation": {
+          "required": false,
+          "appliesToThisPage": false,
+          "canonicalHtmlIncluded": false
+        }
+      }
+    ],
+    "readScopeLedger": [
+      {
+        "actor": "page-sub-agent",
+        "lane": "complex_html_page",
+        "path": "intent-workflows/intent-project-complex-build/complex-page-runtime.md",
+        "reason": "page runtime guide",
+        "scopeClass": "page-runtime",
+        "declaredBeforeRead": true,
+        "recordedAt": "2026-08-31T14:38:40.264Z",
+        "nodeId": "page-home",
+        "htmlSrc": "pages/home.html"
+      },
+      {
+        "actor": "page-sub-agent",
+        "lane": "complex_html_page",
+        "path": "intent-workflows/intent-project-complex-build/complex-page-dispatch-contract.md",
+        "reason": "dispatch contract",
+        "scopeClass": "dispatch-contract",
+        "declaredBeforeRead": true,
+        "recordedAt": "2026-08-31T14:38:40.264Z",
+        "nodeId": "page-home",
+        "htmlSrc": "pages/home.html"
+      }
+    ],
+    "mainAgentPostDispatchMutations": [
+      {
+        "owner": "main-agent",
+        "relPath": "skatespot-ui-upgrade.design",
+        "reason": "registered generated image assets and page nodes after page dispatch",
+        "recordedAt": "2026-09-01T00:09:39.101Z"
+      }
+    ],
+    "sourceProjectLaneHeritage": {
+      "originalLane": "complex_html_page",
+      "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+    },
+    "mutation": {
+      "mode": "comparison-pages",
+      "affectedSourcePageIds": [
+        "page-home",
+        "page-discover",
+        "page-checkins",
+        "page-profile",
+        "page-venue-detail",
+        "page-venue-checkin-sheet",
+        "page-shop-detail"
+      ],
+      "newComparisonPageIds": [
+        "page-home-v2",
+        "page-discover-v2",
+        "page-checkins-v2",
+        "page-profile-v2",
+        "page-venue-detail-v2",
+        "page-venue-checkin-sheet-v2",
+        "page-shop-detail-v2"
+      ],
+      "rationale": "将 UIUX 分析报告中的 P0/P1 改进点落成为可直接比对的升级设计稿",
+      "comparisonPages": [
+        {
+          "nodeId": "page-home-v2",
+          "slug": "home-v2",
+          "title": "首页 · P0P1 升级稿",
+          "htmlSrc": "pages/home-v2.html",
+          "pageType": "screen",
+          "businessScenario": "mini-program-screen-upgrade",
+          "derivationType": "comparison-page",
+          "inPlaceEditAllowed": false,
+          "sourcePageId": "page-home",
+          "sourceHtmlSrc": "pages/home.html",
+          "sourceProjectLaneHeritage": {
+            "originalLane": "complex_html_page",
+            "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+          },
+          "improvements": [
+            "搜索栏增加搜索历史/热门搜索下拉浮层",
+            "地图 marker 首次显示轻提示：\"点击 marker 查看场地\"",
+            "店铺/场地 marker 用不同图标色区分",
+            "筛选 chips 右缘加渐隐，提示可横向滑动",
+            "卡片列表显示真实距离（mock 数据）和排序入口",
+            "统一空态/骨架屏组件语言"
+          ],
+          "componentPlan": [
+            {
+              "slug": "mini-program-chrome",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "tab-bar",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "feed-card",
+              "contractKind": "page-local"
+            },
+            {
+              "slug": "bottom-sheet",
+              "contractKind": "page-local"
+            }
+          ],
+          "imagePlan": {
+            "strategy": "reuse-existing",
+            "reusedAssets": [
+              "assets/map-dark.jpg",
+              "assets/venue-bowl.jpg",
+              "assets/venue-street.jpg",
+              "assets/venue-plaza.jpg",
+              "assets/shop-front.jpg",
+              "assets/shop-interior.jpg"
+            ]
+          },
+          "qualityRisks": [
+            "bottom-sheet keyboard handling",
+            "tabBar consistency across comparison pages"
+          ],
+          "mobileNavigationActiveKey": "home"
+        },
+        {
+          "nodeId": "page-discover-v2",
+          "slug": "discover-v2",
+          "title": "发现 · P0P1 升级稿",
+          "htmlSrc": "pages/discover-v2.html",
+          "pageType": "screen",
+          "businessScenario": "mini-program-screen-upgrade",
+          "derivationType": "comparison-page",
+          "inPlaceEditAllowed": false,
+          "sourcePageId": "page-discover",
+          "sourceHtmlSrc": "pages/discover.html",
+          "sourceProjectLaneHeritage": {
+            "originalLane": "complex_html_page",
+            "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+          },
+          "improvements": [
+            "头部作者信息换行：头像/昵称一行，场地名单独一行并截断友好",
+            "热门 tab 增加服务端排序提示或改为本地热度标识",
+            "点赞按钮加 scale 动效反馈",
+            "评论入口集中到悬浮评论面板按钮，避免每条卡片都展开键盘",
+            "统一 feed 卡片组件与 venue-detail 动态卡"
+          ],
+          "componentPlan": [
+            {
+              "slug": "mini-program-chrome",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "tab-bar",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "feed-card",
+              "contractKind": "page-local"
+            },
+            {
+              "slug": "bottom-sheet",
+              "contractKind": "page-local"
+            }
+          ],
+          "imagePlan": {
+            "strategy": "reuse-existing",
+            "reusedAssets": [
+              "assets/map-dark.jpg",
+              "assets/venue-bowl.jpg",
+              "assets/venue-street.jpg",
+              "assets/venue-plaza.jpg",
+              "assets/shop-front.jpg",
+              "assets/shop-interior.jpg"
+            ]
+          },
+          "qualityRisks": [
+            "bottom-sheet keyboard handling",
+            "tabBar consistency across comparison pages"
+          ],
+          "mobileNavigationActiveKey": "discover"
+        },
+        {
+          "nodeId": "page-checkins-v2",
+          "slug": "checkins-v2",
+          "title": "签到 · P0P1 升级稿",
+          "htmlSrc": "pages/checkins-v2.html",
+          "pageType": "screen",
+          "businessScenario": "mini-program-screen-upgrade",
+          "derivationType": "comparison-page",
+          "inPlaceEditAllowed": false,
+          "sourcePageId": "page-checkins",
+          "sourceHtmlSrc": "pages/checkins.html",
+          "sourceProjectLaneHeritage": {
+            "originalLane": "complex_html_page",
+            "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+          },
+          "improvements": [
+            "删除记录改为左滑出现删除按钮，常驻红色块移除",
+            "统计数字与单位分级：数字大字号，单位小字号",
+            "日历增加月份切换",
+            "未来日期置灰，过去未签日期显示默认态",
+            "排行榜前三加金银铜奖牌与 podium 视觉",
+            "本周打卡进度条改为环形/条形结合"
+          ],
+          "componentPlan": [
+            {
+              "slug": "mini-program-chrome",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "tab-bar",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "feed-card",
+              "contractKind": "page-local"
+            },
+            {
+              "slug": "bottom-sheet",
+              "contractKind": "page-local"
+            }
+          ],
+          "imagePlan": {
+            "strategy": "reuse-existing",
+            "reusedAssets": [
+              "assets/map-dark.jpg",
+              "assets/venue-bowl.jpg",
+              "assets/venue-street.jpg",
+              "assets/venue-plaza.jpg",
+              "assets/shop-front.jpg",
+              "assets/shop-interior.jpg"
+            ]
+          },
+          "qualityRisks": [
+            "bottom-sheet keyboard handling",
+            "tabBar consistency across comparison pages"
+          ],
+          "mobileNavigationActiveKey": "checkins"
+        },
+        {
+          "nodeId": "page-profile-v2",
+          "slug": "profile-v2",
+          "title": "我的 · P0P1 升级稿",
+          "htmlSrc": "pages/profile-v2.html",
+          "pageType": "screen",
+          "businessScenario": "mini-program-screen-upgrade",
+          "derivationType": "comparison-page",
+          "inPlaceEditAllowed": false,
+          "sourcePageId": "page-profile",
+          "sourceHtmlSrc": "pages/profile.html",
+          "sourceProjectLaneHeritage": {
+            "originalLane": "complex_html_page",
+            "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+          },
+          "improvements": [
+            "非管理员隐藏\"场地管理\"入口；管理员身份加角标",
+            "\"设置\"改为真实入口：隐私协议/清理缓存/关于",
+            "编辑资料改为底部 sheet，含昵称/板龄/风格标签",
+            "最近签到与\"我的签到\"去重，只保留最近 3 条并加\"查看全部\"",
+            "资料页增加等级/勋章预览入口"
+          ],
+          "componentPlan": [
+            {
+              "slug": "mini-program-chrome",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "tab-bar",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "feed-card",
+              "contractKind": "page-local"
+            },
+            {
+              "slug": "bottom-sheet",
+              "contractKind": "page-local"
+            }
+          ],
+          "imagePlan": {
+            "strategy": "reuse-existing",
+            "reusedAssets": [
+              "assets/map-dark.jpg",
+              "assets/venue-bowl.jpg",
+              "assets/venue-street.jpg",
+              "assets/venue-plaza.jpg",
+              "assets/shop-front.jpg",
+              "assets/shop-interior.jpg"
+            ]
+          },
+          "qualityRisks": [
+            "bottom-sheet keyboard handling",
+            "tabBar consistency across comparison pages"
+          ],
+          "mobileNavigationActiveKey": "profile"
+        },
+        {
+          "nodeId": "page-venue-detail-v2",
+          "slug": "venue-detail-v2",
+          "title": "场地详情 · P0P1 升级稿",
+          "htmlSrc": "pages/venue-detail-v2.html",
+          "pageType": "screen",
+          "businessScenario": "mini-program-screen-upgrade",
+          "derivationType": "comparison-page",
+          "inPlaceEditAllowed": false,
+          "sourcePageId": "page-venue-detail",
+          "sourceHtmlSrc": "pages/venue-detail.html",
+          "sourceProjectLaneHeritage": {
+            "originalLane": "complex_html_page",
+            "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+          },
+          "improvements": [
+            "顶部操作栏增加收藏/想去按钮",
+            "底部操作栏重排：左侧收藏+分享，右侧签到+导航；报错进 ⋯ 菜单",
+            "\"已签到\"改为深色背景+成功绿点，修复对比度",
+            "评分行增加可点击视觉（右箭头）",
+            "在场人数用脉冲点+数字卡片化",
+            "服务/设施/营业时间信息用图标行+卡片分组"
+          ],
+          "componentPlan": [
+            {
+              "slug": "mini-program-chrome",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "tab-bar",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "feed-card",
+              "contractKind": "page-local"
+            },
+            {
+              "slug": "bottom-sheet",
+              "contractKind": "page-local"
+            }
+          ],
+          "imagePlan": {
+            "strategy": "reuse-existing",
+            "reusedAssets": [
+              "assets/map-dark.jpg",
+              "assets/venue-bowl.jpg",
+              "assets/venue-street.jpg",
+              "assets/venue-plaza.jpg",
+              "assets/shop-front.jpg",
+              "assets/shop-interior.jpg"
+            ]
+          },
+          "qualityRisks": [
+            "bottom-sheet keyboard handling",
+            "tabBar consistency across comparison pages"
+          ],
+          "mobileNavigationApplies": false,
+          "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层"
+        },
+        {
+          "nodeId": "page-venue-checkin-sheet-v2",
+          "slug": "venue-checkin-sheet-v2",
+          "title": "场地签到面板 · P0P1 升级稿",
+          "htmlSrc": "pages/venue-checkin-sheet-v2.html",
+          "pageType": "screen",
+          "businessScenario": "mini-program-screen-upgrade",
+          "derivationType": "comparison-page",
+          "inPlaceEditAllowed": false,
+          "sourcePageId": "page-venue-checkin-sheet",
+          "sourceHtmlSrc": "pages/venue-checkin-sheet.html",
+          "sourceProjectLaneHeritage": {
+            "originalLane": "complex_html_page",
+            "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+          },
+          "improvements": [
+            "居中弹窗改为底部 sheet",
+            "评论输入框置顶，键盘弹出时整体上推",
+            "增加快捷标签：\"今天人不多\"/\"地形超棒\"/\"适合练招\"",
+            "图片选择区改为宫格+删除图标统一为 SVG ×"
+          ],
+          "componentPlan": [
+            {
+              "slug": "mini-program-chrome",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "tab-bar",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "feed-card",
+              "contractKind": "page-local"
+            },
+            {
+              "slug": "bottom-sheet",
+              "contractKind": "page-local"
+            }
+          ],
+          "imagePlan": {
+            "strategy": "reuse-existing",
+            "reusedAssets": [
+              "assets/map-dark.jpg",
+              "assets/venue-bowl.jpg",
+              "assets/venue-street.jpg",
+              "assets/venue-plaza.jpg",
+              "assets/shop-front.jpg",
+              "assets/shop-interior.jpg"
+            ]
+          },
+          "qualityRisks": [
+            "bottom-sheet keyboard handling",
+            "tabBar consistency across comparison pages"
+          ],
+          "mobileNavigationApplies": false,
+          "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层"
+        },
+        {
+          "nodeId": "page-shop-detail-v2",
+          "slug": "shop-detail-v2",
+          "title": "店铺详情 · P0P1 升级稿",
+          "htmlSrc": "pages/shop-detail-v2.html",
+          "pageType": "screen",
+          "businessScenario": "mini-program-screen-upgrade",
+          "derivationType": "comparison-page",
+          "inPlaceEditAllowed": false,
+          "sourcePageId": "page-shop-detail",
+          "sourceHtmlSrc": "pages/shop-detail.html",
+          "sourceProjectLaneHeritage": {
+            "originalLane": "complex_html_page",
+            "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+          },
+          "improvements": [
+            "顶部操作栏增加收藏按钮",
+            "底部操作栏：收藏+分享 / 电话+导航；报错进 ⋯",
+            "营业状态卡片化，用绿/红点标识",
+            "店铺信息区图标化（电话、地址、营业时间、服务）",
+            "轮播无图时显示品牌色占位图而非灰块",
+            "打卡动态复用 venue-detail 的 feed 卡片组件"
+          ],
+          "componentPlan": [
+            {
+              "slug": "mini-program-chrome",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "tab-bar",
+              "contractKind": "shared-shell"
+            },
+            {
+              "slug": "feed-card",
+              "contractKind": "page-local"
+            },
+            {
+              "slug": "bottom-sheet",
+              "contractKind": "page-local"
+            }
+          ],
+          "imagePlan": {
+            "strategy": "reuse-existing",
+            "reusedAssets": [
+              "assets/map-dark.jpg",
+              "assets/venue-bowl.jpg",
+              "assets/venue-street.jpg",
+              "assets/venue-plaza.jpg",
+              "assets/shop-front.jpg",
+              "assets/shop-interior.jpg"
+            ]
+          },
+          "qualityRisks": [
+            "bottom-sheet keyboard handling",
+            "tabBar consistency across comparison pages"
+          ],
+          "mobileNavigationApplies": false,
+          "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层"
+        }
+      ]
+    }
+  },
+  "designSource": {
+    "operatingMode": "free-explore",
+    "cssFilePath": "colors_and_type.css",
+    "brandPrefix": "sk8",
+    "styleConstraints": {
+      "radiusMax": 16,
+      "staticShadowAlphaMax": 0.05,
+      "brandHueCount": 1
+    },
+    "iconLibrary": "lucide",
+    "designLibrary": null
+  },
+  "pages": [
+    {
+      "nodeId": "page-home",
+      "htmlSrc": "pages/home.html",
+      "title": "首页",
+      "deviceType": "mobile",
+      "viewportMode": "document-scroll",
+      "pageType": "task-driven",
+      "miniProgramStyle": true,
+      "isTabPage": true,
+      "mobileNavigationActiveKey": "home",
+      "visualNorthStar": "暗色地图+可折叠列表的找场地工作台：地图锚点速览卡解决『点两次才能进详情』，真实距离与在场人数营造社区活度",
+      "compositionPattern": "地图工作台（上：地图+速览卡；中：分段+筛选；下：场地卡列表+tabBar）",
+      "continuityAnchors": [
+        "surfaceModel",
+        "primaryUsage",
+        "typographySystem",
+        "miniProgramChrome",
+        "iconLanguage"
+      ],
+      "componentPlan": [
+        "mini-nav",
+        "tab-bar",
+        "segment-control",
+        "filter-chips",
+        "venue-card",
+        "quick-preview-card"
+      ],
+      "imagePlan": [
+        "assets/map-dark.jpg",
+        "assets/venue-street.jpg"
+      ],
+      "chartsRequired": false,
+      "qualityRisks": [
+        "地图区高度与列表密度平衡",
+        "速览卡不遮地图关键区",
+        "筛选 chips 横滑渐隐"
+      ]
+    },
+    {
+      "nodeId": "page-discover",
+      "htmlSrc": "pages/discover.html",
+      "title": "发现",
+      "deviceType": "mobile",
+      "viewportMode": "document-scroll",
+      "pageType": "information-dense",
+      "miniProgramStyle": true,
+      "isTabPage": true,
+      "mobileNavigationActiveKey": "discover",
+      "visualNorthStar": "滑板打卡社区流：场地名独立成行成为可点跳转锚，照片墙+点赞评论构成街头手记氛围",
+      "compositionPattern": "社区动态流（吸顶 tab + 卡片信息流）",
+      "continuityAnchors": [
+        "surfaceModel",
+        "primaryUsage",
+        "typographySystem",
+        "miniProgramChrome",
+        "iconLanguage"
+      ],
+      "componentPlan": [
+        "mini-nav",
+        "tab-bar",
+        "feed-card",
+        "photo-grid",
+        "like-comment-row"
+      ],
+      "imagePlan": [
+        "assets/avatar-1.jpg",
+        "assets/avatar-2.jpg",
+        "assets/avatar-3.jpg",
+        "assets/avatar-4.jpg",
+        "assets/action-ollie.jpg",
+        "assets/action-bowl.jpg"
+      ],
+      "chartsRequired": false,
+      "qualityRisks": [
+        "场地名行不被头像挤压",
+        "照片网格 1/2/3+ 布局正确",
+        "点赞态与默认态区分"
+      ]
+    },
+    {
+      "nodeId": "page-checkins",
+      "htmlSrc": "pages/checkins.html",
+      "title": "签到",
+      "deviceType": "mobile",
+      "viewportMode": "document-scroll",
+      "pageType": "information-dense",
+      "miniProgramStyle": true,
+      "isTabPage": true,
+      "mobileNavigationActiveKey": "checkins",
+      "visualNorthStar": "打卡成就页：大数字统计（数字大单位小）、可切月日历（未来日置灰、今日橙圈）、金银铜排行榜、左滑删除的记录列表",
+      "compositionPattern": "数据总览流（统计带 + 日历卡 + 排行卡 + 记录列表）",
+      "continuityAnchors": [
+        "surfaceModel",
+        "primaryUsage",
+        "typographySystem",
+        "miniProgramChrome",
+        "iconLanguage"
+      ],
+      "componentPlan": [
+        "mini-nav",
+        "tab-bar",
+        "stats-band",
+        "calendar-card",
+        "leaderboard",
+        "record-row"
+      ],
+      "imagePlan": [
+        "assets/avatar-1.jpg",
+        "assets/avatar-2.jpg",
+        "assets/avatar-3.jpg"
+      ],
+      "chartsRequired": false,
+      "qualityRisks": [
+        "日历 7 列网格对齐",
+        "删除操作收进左滑态不常驻",
+        "前三名差异化不破坏对齐轴"
+      ]
+    },
+    {
+      "nodeId": "page-profile",
+      "htmlSrc": "pages/profile.html",
+      "title": "我的",
+      "deviceType": "mobile",
+      "viewportMode": "document-scroll",
+      "pageType": "task-driven",
+      "miniProgramStyle": true,
+      "isTabPage": true,
+      "mobileNavigationActiveKey": "profile",
+      "visualNorthStar": "滑手个人中心：资料卡+签到数据带+菜单（含新增『我的收藏』，管理员入口对普通用户隐藏，去掉假设置入口）",
+      "compositionPattern": "个人中心流（身份卡 + 数据带 + 设置列表）",
+      "continuityAnchors": [
+        "surfaceModel",
+        "primaryUsage",
+        "typographySystem",
+        "miniProgramChrome",
+        "iconLanguage"
+      ],
+      "componentPlan": [
+        "mini-nav",
+        "tab-bar",
+        "profile-card",
+        "stats-band",
+        "menu-list"
+      ],
+      "imagePlan": [
+        "assets/avatar-1.jpg"
+      ],
+      "chartsRequired": false,
+      "qualityRisks": [
+        "身份区纵向分层不挤压",
+        "菜单行计数徽标右对齐",
+        "无管理员入口与假入口"
+      ]
+    },
+    {
+      "nodeId": "page-venue-detail",
+      "htmlSrc": "pages/venue-detail.html",
+      "title": "场地详情",
+      "deviceType": "mobile",
+      "viewportMode": "document-scroll",
+      "pageType": "information-dense",
+      "miniProgramStyle": true,
+      "isTabPage": false,
+      "mobileNavigationApplies": false,
+      "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层",
+      "visualNorthStar": "沉浸式场地页：通顶轮播+悬浮导航/收藏，实时在场头像墙，底部操作栏=导航/收藏/签到三键，报错与分享收进图片区浮钮",
+      "compositionPattern": "沉浸详情（媒体头 + 信息卡流 + 固定操作栏）",
+      "continuityAnchors": [
+        "surfaceModel",
+        "primaryUsage",
+        "typographySystem",
+        "miniProgramChrome",
+        "iconLanguage"
+      ],
+      "componentPlan": [
+        "mini-nav-overlay",
+        "photo-carousel",
+        "rating-row",
+        "live-presence",
+        "checkin-feed",
+        "action-bar"
+      ],
+      "imagePlan": [
+        "assets/venue-bowl.jpg",
+        "assets/venue-street.jpg",
+        "assets/venue-plaza.jpg",
+        "assets/avatar-1.jpg",
+        "assets/avatar-2.jpg",
+        "assets/avatar-3.jpg",
+        "assets/avatar-4.jpg"
+      ],
+      "chartsRequired": false,
+      "qualityRisks": [
+        "透明导航叠图可读性",
+        "评分行含『写评价』暗示",
+        "操作栏三键层级清晰"
+      ]
+    },
+    {
+      "nodeId": "page-venue-checkin-sheet",
+      "htmlSrc": "pages/venue-checkin-sheet.html",
+      "title": "场地详情 · 签到面板",
+      "deviceType": "mobile",
+      "viewportMode": "document-scroll",
+      "pageType": "task-driven",
+      "miniProgramStyle": true,
+      "isTabPage": false,
+      "mobileNavigationApplies": false,
+      "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层",
+      "stateGroupId": "venue-detail-states",
+      "stateRole": "derived",
+      "baseStatePageId": "page-venue-detail",
+      "sharedShellContract": "与场地详情基础页完全一致的外壳：状态栏/导航/轮播/信息区/在场卡/动态流/底部操作栏逐字节保留；仅新增底部签到面板浮层与遮罩",
+      "mutableRegions": [
+        "body 末尾追加 .sheet-mask 浮层（遮罩+底部面板：标题/textarea/照片九宫格/主按钮/安全区）",
+        "遮罩与取消键注册隐藏返回交互"
+      ],
+      "visualNorthStar": "底部 sheet 签到面板：解决居中弹窗键盘遮挡问题，拖拽条+自动增高输入框+九宫格照片",
+      "compositionPattern": "浮层状态页（基础页上下文 + 底部 sheet）",
+      "continuityAnchors": [
+        "surfaceModel",
+        "primaryUsage",
+        "typographySystem",
+        "miniProgramChrome",
+        "iconLanguage"
+      ],
+      "componentPlan": [
+        "bottom-sheet",
+        "textarea",
+        "photo-grid",
+        "primary-btn"
+      ],
+      "imagePlan": [],
+      "chartsRequired": false,
+      "qualityRisks": [
+        "必须复制基础页后仅改浮层区",
+        "面板含明确取消/遮罩关闭路径"
+      ]
+    },
+    {
+      "nodeId": "page-shop-detail",
+      "htmlSrc": "pages/shop-detail.html",
+      "title": "店铺详情",
+      "deviceType": "mobile",
+      "viewportMode": "document-scroll",
+      "pageType": "information-dense",
+      "miniProgramStyle": true,
+      "isTabPage": false,
+      "mobileNavigationApplies": false,
+      "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层",
+      "visualNorthStar": "店铺信息页：轮播+营业状态（含 22:00 打烊琥珀提醒），服务/时间/地址/电话做成图标信息行（电话行=一键拨打），底部=拨打/导航/打卡",
+      "compositionPattern": "信息详情（媒体头 + 图标信息行卡 + 动态流 + 固定操作栏）",
+      "continuityAnchors": [
+        "surfaceModel",
+        "primaryUsage",
+        "typographySystem",
+        "miniProgramChrome",
+        "iconLanguage"
+      ],
+      "componentPlan": [
+        "mini-nav",
+        "photo-carousel",
+        "status-badge",
+        "info-rows",
+        "checkin-feed",
+        "action-bar"
+      ],
+      "imagePlan": [
+        "assets/shop-interior.jpg",
+        "assets/shop-front.jpg",
+        "assets/avatar-2.jpg",
+        "assets/avatar-4.jpg"
+      ],
+      "chartsRequired": false,
+      "qualityRisks": [
+        "信息行图标统一 20px",
+        "打烊提醒用 warning 语义色",
+        "操作栏主次分明"
+      ]
+    },
+    {
+      "nodeId": "page-home-v2",
+      "slug": "home-v2",
+      "title": "首页 · P0P1 升级稿",
+      "htmlSrc": "pages/home-v2.html",
+      "pageType": "screen",
+      "businessScenario": "mini-program-screen-upgrade",
+      "derivationType": "comparison-page",
+      "inPlaceEditAllowed": false,
+      "sourcePageId": "page-home",
+      "sourceHtmlSrc": "pages/home.html",
+      "sourceProjectLaneHeritage": {
+        "originalLane": "complex_html_page",
+        "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+      },
+      "improvements": [
+        "搜索栏增加搜索历史/热门搜索下拉浮层",
+        "地图 marker 首次显示轻提示：\"点击 marker 查看场地\"",
+        "店铺/场地 marker 用不同图标色区分",
+        "筛选 chips 右缘加渐隐，提示可横向滑动",
+        "卡片列表显示真实距离（mock 数据）和排序入口",
+        "统一空态/骨架屏组件语言"
+      ],
+      "componentPlan": [
+        {
+          "slug": "mini-program-chrome",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "tab-bar",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "feed-card",
+          "contractKind": "page-local"
+        },
+        {
+          "slug": "bottom-sheet",
+          "contractKind": "page-local"
+        }
+      ],
+      "imagePlan": {
+        "strategy": "reuse-existing",
+        "reusedAssets": [
+          "assets/map-dark.jpg",
+          "assets/venue-bowl.jpg",
+          "assets/venue-street.jpg",
+          "assets/venue-plaza.jpg",
+          "assets/shop-front.jpg",
+          "assets/shop-interior.jpg"
+        ]
+      },
+      "qualityRisks": [
+        "bottom-sheet keyboard handling",
+        "tabBar consistency across comparison pages"
+      ],
+      "mobileNavigationActiveKey": "home"
+    },
+    {
+      "nodeId": "page-discover-v2",
+      "slug": "discover-v2",
+      "title": "发现 · P0P1 升级稿",
+      "htmlSrc": "pages/discover-v2.html",
+      "pageType": "screen",
+      "businessScenario": "mini-program-screen-upgrade",
+      "derivationType": "comparison-page",
+      "inPlaceEditAllowed": false,
+      "sourcePageId": "page-discover",
+      "sourceHtmlSrc": "pages/discover.html",
+      "sourceProjectLaneHeritage": {
+        "originalLane": "complex_html_page",
+        "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+      },
+      "improvements": [
+        "头部作者信息换行：头像/昵称一行，场地名单独一行并截断友好",
+        "热门 tab 增加服务端排序提示或改为本地热度标识",
+        "点赞按钮加 scale 动效反馈",
+        "评论入口集中到悬浮评论面板按钮，避免每条卡片都展开键盘",
+        "统一 feed 卡片组件与 venue-detail 动态卡"
+      ],
+      "componentPlan": [
+        {
+          "slug": "mini-program-chrome",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "tab-bar",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "feed-card",
+          "contractKind": "page-local"
+        },
+        {
+          "slug": "bottom-sheet",
+          "contractKind": "page-local"
+        }
+      ],
+      "imagePlan": {
+        "strategy": "reuse-existing",
+        "reusedAssets": [
+          "assets/map-dark.jpg",
+          "assets/venue-bowl.jpg",
+          "assets/venue-street.jpg",
+          "assets/venue-plaza.jpg",
+          "assets/shop-front.jpg",
+          "assets/shop-interior.jpg"
+        ]
+      },
+      "qualityRisks": [
+        "bottom-sheet keyboard handling",
+        "tabBar consistency across comparison pages"
+      ],
+      "mobileNavigationActiveKey": "discover"
+    },
+    {
+      "nodeId": "page-checkins-v2",
+      "slug": "checkins-v2",
+      "title": "签到 · P0P1 升级稿",
+      "htmlSrc": "pages/checkins-v2.html",
+      "pageType": "screen",
+      "businessScenario": "mini-program-screen-upgrade",
+      "derivationType": "comparison-page",
+      "inPlaceEditAllowed": false,
+      "sourcePageId": "page-checkins",
+      "sourceHtmlSrc": "pages/checkins.html",
+      "sourceProjectLaneHeritage": {
+        "originalLane": "complex_html_page",
+        "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+      },
+      "improvements": [
+        "删除记录改为左滑出现删除按钮，常驻红色块移除",
+        "统计数字与单位分级：数字大字号，单位小字号",
+        "日历增加月份切换",
+        "未来日期置灰，过去未签日期显示默认态",
+        "排行榜前三加金银铜奖牌与 podium 视觉",
+        "本周打卡进度条改为环形/条形结合"
+      ],
+      "componentPlan": [
+        {
+          "slug": "mini-program-chrome",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "tab-bar",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "feed-card",
+          "contractKind": "page-local"
+        },
+        {
+          "slug": "bottom-sheet",
+          "contractKind": "page-local"
+        }
+      ],
+      "imagePlan": {
+        "strategy": "reuse-existing",
+        "reusedAssets": [
+          "assets/map-dark.jpg",
+          "assets/venue-bowl.jpg",
+          "assets/venue-street.jpg",
+          "assets/venue-plaza.jpg",
+          "assets/shop-front.jpg",
+          "assets/shop-interior.jpg"
+        ]
+      },
+      "qualityRisks": [
+        "bottom-sheet keyboard handling",
+        "tabBar consistency across comparison pages"
+      ],
+      "mobileNavigationActiveKey": "checkins"
+    },
+    {
+      "nodeId": "page-profile-v2",
+      "slug": "profile-v2",
+      "title": "我的 · P0P1 升级稿",
+      "htmlSrc": "pages/profile-v2.html",
+      "pageType": "screen",
+      "businessScenario": "mini-program-screen-upgrade",
+      "derivationType": "comparison-page",
+      "inPlaceEditAllowed": false,
+      "sourcePageId": "page-profile",
+      "sourceHtmlSrc": "pages/profile.html",
+      "sourceProjectLaneHeritage": {
+        "originalLane": "complex_html_page",
+        "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+      },
+      "improvements": [
+        "非管理员隐藏\"场地管理\"入口；管理员身份加角标",
+        "\"设置\"改为真实入口：隐私协议/清理缓存/关于",
+        "编辑资料改为底部 sheet，含昵称/板龄/风格标签",
+        "最近签到与\"我的签到\"去重，只保留最近 3 条并加\"查看全部\"",
+        "资料页增加等级/勋章预览入口"
+      ],
+      "componentPlan": [
+        {
+          "slug": "mini-program-chrome",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "tab-bar",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "feed-card",
+          "contractKind": "page-local"
+        },
+        {
+          "slug": "bottom-sheet",
+          "contractKind": "page-local"
+        }
+      ],
+      "imagePlan": {
+        "strategy": "reuse-existing",
+        "reusedAssets": [
+          "assets/map-dark.jpg",
+          "assets/venue-bowl.jpg",
+          "assets/venue-street.jpg",
+          "assets/venue-plaza.jpg",
+          "assets/shop-front.jpg",
+          "assets/shop-interior.jpg"
+        ]
+      },
+      "qualityRisks": [
+        "bottom-sheet keyboard handling",
+        "tabBar consistency across comparison pages"
+      ],
+      "mobileNavigationActiveKey": "profile"
+    },
+    {
+      "nodeId": "page-venue-detail-v2",
+      "slug": "venue-detail-v2",
+      "title": "场地详情 · P0P1 升级稿",
+      "htmlSrc": "pages/venue-detail-v2.html",
+      "pageType": "screen",
+      "businessScenario": "mini-program-screen-upgrade",
+      "derivationType": "comparison-page",
+      "inPlaceEditAllowed": false,
+      "sourcePageId": "page-venue-detail",
+      "sourceHtmlSrc": "pages/venue-detail.html",
+      "sourceProjectLaneHeritage": {
+        "originalLane": "complex_html_page",
+        "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+      },
+      "improvements": [
+        "顶部操作栏增加收藏/想去按钮",
+        "底部操作栏重排：左侧收藏+分享，右侧签到+导航；报错进 ⋯ 菜单",
+        "\"已签到\"改为深色背景+成功绿点，修复对比度",
+        "评分行增加可点击视觉（右箭头）",
+        "在场人数用脉冲点+数字卡片化",
+        "服务/设施/营业时间信息用图标行+卡片分组"
+      ],
+      "componentPlan": [
+        {
+          "slug": "mini-program-chrome",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "tab-bar",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "feed-card",
+          "contractKind": "page-local"
+        },
+        {
+          "slug": "bottom-sheet",
+          "contractKind": "page-local"
+        }
+      ],
+      "imagePlan": {
+        "strategy": "reuse-existing",
+        "reusedAssets": [
+          "assets/map-dark.jpg",
+          "assets/venue-bowl.jpg",
+          "assets/venue-street.jpg",
+          "assets/venue-plaza.jpg",
+          "assets/shop-front.jpg",
+          "assets/shop-interior.jpg"
+        ]
+      },
+      "qualityRisks": [
+        "bottom-sheet keyboard handling",
+        "tabBar consistency across comparison pages"
+      ],
+      "mobileNavigationApplies": false,
+      "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层"
+    },
+    {
+      "nodeId": "page-venue-checkin-sheet-v2",
+      "slug": "venue-checkin-sheet-v2",
+      "title": "场地签到面板 · P0P1 升级稿",
+      "htmlSrc": "pages/venue-checkin-sheet-v2.html",
+      "pageType": "screen",
+      "businessScenario": "mini-program-screen-upgrade",
+      "derivationType": "comparison-page",
+      "inPlaceEditAllowed": false,
+      "sourcePageId": "page-venue-checkin-sheet",
+      "sourceHtmlSrc": "pages/venue-checkin-sheet.html",
+      "sourceProjectLaneHeritage": {
+        "originalLane": "complex_html_page",
+        "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+      },
+      "improvements": [
+        "居中弹窗改为底部 sheet",
+        "评论输入框置顶，键盘弹出时整体上推",
+        "增加快捷标签：\"今天人不多\"/\"地形超棒\"/\"适合练招\"",
+        "图片选择区改为宫格+删除图标统一为 SVG ×"
+      ],
+      "componentPlan": [
+        {
+          "slug": "mini-program-chrome",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "tab-bar",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "feed-card",
+          "contractKind": "page-local"
+        },
+        {
+          "slug": "bottom-sheet",
+          "contractKind": "page-local"
+        }
+      ],
+      "imagePlan": {
+        "strategy": "reuse-existing",
+        "reusedAssets": [
+          "assets/map-dark.jpg",
+          "assets/venue-bowl.jpg",
+          "assets/venue-street.jpg",
+          "assets/venue-plaza.jpg",
+          "assets/shop-front.jpg",
+          "assets/shop-interior.jpg"
+        ]
+      },
+      "qualityRisks": [
+        "bottom-sheet keyboard handling",
+        "tabBar consistency across comparison pages"
+      ],
+      "mobileNavigationApplies": false,
+      "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层"
+    },
+    {
+      "nodeId": "page-shop-detail-v2",
+      "slug": "shop-detail-v2",
+      "title": "店铺详情 · P0P1 升级稿",
+      "htmlSrc": "pages/shop-detail-v2.html",
+      "pageType": "screen",
+      "businessScenario": "mini-program-screen-upgrade",
+      "derivationType": "comparison-page",
+      "inPlaceEditAllowed": false,
+      "sourcePageId": "page-shop-detail",
+      "sourceHtmlSrc": "pages/shop-detail.html",
+      "sourceProjectLaneHeritage": {
+        "originalLane": "complex_html_page",
+        "originalWorkflow": "intent-workflows/intent-project-complex-build/INTENT_WORKFLOW.md"
+      },
+      "improvements": [
+        "顶部操作栏增加收藏按钮",
+        "底部操作栏：收藏+分享 / 电话+导航；报错进 ⋯",
+        "营业状态卡片化，用绿/红点标识",
+        "店铺信息区图标化（电话、地址、营业时间、服务）",
+        "轮播无图时显示品牌色占位图而非灰块",
+        "打卡动态复用 venue-detail 的 feed 卡片组件"
+      ],
+      "componentPlan": [
+        {
+          "slug": "mini-program-chrome",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "tab-bar",
+          "contractKind": "shared-shell"
+        },
+        {
+          "slug": "feed-card",
+          "contractKind": "page-local"
+        },
+        {
+          "slug": "bottom-sheet",
+          "contractKind": "page-local"
+        }
+      ],
+      "imagePlan": {
+        "strategy": "reuse-existing",
+        "reusedAssets": [
+          "assets/map-dark.jpg",
+          "assets/venue-bowl.jpg",
+          "assets/venue-street.jpg",
+          "assets/venue-plaza.jpg",
+          "assets/shop-front.jpg",
+          "assets/shop-interior.jpg"
+        ]
+      },
+      "qualityRisks": [
+        "bottom-sheet keyboard handling",
+        "tabBar consistency across comparison pages"
+      ],
+      "mobileNavigationApplies": false,
+      "mobileNavigationOmitReason": "沉浸式详情页无 tabBar，顶部导航为透明返回层"
+    }
+  ],
+  "assets": [
+    {
+      "file": "assets/map-dark.jpg",
+      "purpose": "首页地图区",
+      "prompt": "dark city map top-down view, night navigation style, deep charcoal #17171B ground, thin #2A2A30 road lines, subtle #26262C blocks, one orange route accent, minimal, no text, no labels",
+      "size": "landscape 4:3"
+    },
+    {
+      "file": "assets/venue-bowl.jpg",
+      "purpose": "场地详情轮播1/碗池",
+      "prompt": "concrete skatepark bowl at dusk, empty, dramatic side light, orange sunset rim, street culture mood, photorealistic",
+      "size": "landscape 4:3"
+    },
+    {
+      "file": "assets/venue-street.jpg",
+      "purpose": "场地详情轮播2/街式",
+      "prompt": "street style skate plaza with stairs rails and ledges, late afternoon, clean concrete, urban, photorealistic",
+      "size": "landscape 4:3"
+    },
+    {
+      "file": "assets/venue-plaza.jpg",
+      "purpose": "场地详情轮播3/广场",
+      "prompt": "outdoor skate plaza panorama at golden hour, quarter pipes and flatground, city skyline far, photorealistic",
+      "size": "landscape 4:3"
+    },
+    {
+      "file": "assets/shop-interior.jpg",
+      "purpose": "店铺详情轮播1",
+      "prompt": "skateboard shop interior, decks wall display, warm lighting, sneakers and hardware shelves, street retail vibe, photorealistic",
+      "size": "landscape 4:3"
+    },
+    {
+      "file": "assets/shop-front.jpg",
+      "purpose": "店铺详情轮播2",
+      "prompt": "skate shop storefront at night, glowing sign board without readable text, skateboards by the door, urban street, photorealistic",
+      "size": "landscape 4:3"
+    },
+    {
+      "file": "assets/avatar-1.jpg",
+      "purpose": "滑手头像（男）",
+      "prompt": "young asian male skater portrait, cap, streetwear, neutral dark background, headshot, photorealistic",
+      "size": "square 1:1"
+    },
+    {
+      "file": "assets/avatar-2.jpg",
+      "purpose": "滑手头像（女）",
+      "prompt": "young asian female skater portrait, beanie, oversized tee, neutral dark background, headshot, photorealistic",
+      "size": "square 1:1"
+    },
+    {
+      "file": "assets/avatar-3.jpg",
+      "purpose": "滑手头像（男2）",
+      "prompt": "young male skateboarder portrait, curly hair, hoodie, dark studio background, headshot, photorealistic",
+      "size": "square 1:1"
+    },
+    {
+      "file": "assets/avatar-4.jpg",
+      "purpose": "滑手头像（女2）",
+      "prompt": "young female skater portrait, sunglasses on head, windbreaker, dark background, headshot, photorealistic",
+      "size": "square 1:1"
+    },
+    {
+      "file": "assets/action-ollie.jpg",
+      "purpose": "发现页动态照1",
+      "prompt": "skater mid-air ollie over stair, motion energy, urban plaza, warm evening light, photorealistic action shot",
+      "size": "square 1:1"
+    },
+    {
+      "file": "assets/action-bowl.jpg",
+      "purpose": "发现页动态照2",
+      "prompt": "skater carving concrete bowl, dust spray, low angle, dramatic light, photorealistic action shot",
+      "size": "square 1:1"
+    }
+  ],
+  "wiringPlan": [
+    {
+      "source": "page-home",
+      "domId": "venue-card-0",
+      "target": "page-venue-detail",
+      "label": "查看场地详情"
+    },
+    {
+      "source": "page-discover",
+      "domId": "feed-venue-0",
+      "target": "page-venue-detail",
+      "label": "查看场地"
+    },
+    {
+      "source": "page-checkins",
+      "domId": "record-0",
+      "target": "page-venue-detail",
+      "label": "查看场地"
+    },
+    {
+      "source": "page-profile",
+      "domId": "menu-checkins",
+      "target": "page-checkins",
+      "label": "我的签到"
+    },
+    {
+      "source": "page-venue-detail",
+      "domId": "action-checkin",
+      "target": "page-venue-checkin-sheet",
+      "hideEdge": true,
+      "label": "打开签到面板"
+    },
+    {
+      "source": "page-shop-detail",
+      "domId": "action-call",
+      "target": "page-shop-detail",
+      "label": "拨打",
+      "noNav": true,
+      "note": "仅样式示意，不注册跳转"
+    }
+  ],
+  "hiddenInteractionPlan": [
+    {
+      "source": "page-home",
+      "domIds": [
+        "nav-discover",
+        "nav-checkins",
+        "nav-profile"
+      ],
+      "hideEdge": true,
+      "label": "全局 tab 切换"
+    },
+    {
+      "source": "page-discover",
+      "domIds": [
+        "nav-home",
+        "nav-checkins",
+        "nav-profile"
+      ],
+      "hideEdge": true,
+      "label": "全局 tab 切换"
+    },
+    {
+      "source": "page-checkins",
+      "domIds": [
+        "nav-home",
+        "nav-discover",
+        "nav-profile"
+      ],
+      "hideEdge": true,
+      "label": "全局 tab 切换"
+    },
+    {
+      "source": "page-profile",
+      "domIds": [
+        "nav-home",
+        "nav-discover",
+        "nav-checkins"
+      ],
+      "hideEdge": true,
+      "label": "全局 tab 切换"
+    },
+    {
+      "source": "page-venue-detail",
+      "domIds": [
+        "nav-back",
+        "sheet-close-x"
+      ],
+      "hideEdge": true,
+      "label": "返回"
+    },
+    {
+      "source": "page-venue-checkin-sheet",
+      "domIds": [
+        "sheet-backdrop",
+        "sheet-cancel"
+      ],
+      "hideEdge": true,
+      "label": "关闭签到面板"
+    },
+    {
+      "source": "page-shop-detail",
+      "domIds": [
+        "nav-back"
+      ],
+      "hideEdge": true,
+      "label": "返回"
+    }
+  ]
+}

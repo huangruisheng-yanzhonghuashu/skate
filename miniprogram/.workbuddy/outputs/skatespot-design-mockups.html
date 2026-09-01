@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkateSpot 设计稿总览 · 街头/自由/年轻/活力</title>
+<style>
+  :root{
+    --bg:#111114; --card:#1E1E23; --inset:#17171B; --line:#26262C;
+    --orange:#FF5A36; --orange-lt:#FF8A6E; --green:#00D4AA;
+    --t1:#FFFFFF; --t2:#D9D9DE; --t3:#A6A6AD; --t4:#8C8C94; --t5:#6E6E76;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:#0B0B0D;color:var(--t2);font-family:"Noto Sans SC","PingFang SC","Microsoft YaHei",-apple-system,sans-serif;padding:36px 40px 80px}
+  h1{color:#fff;font-size:26px;font-weight:900;letter-spacing:1px}
+  h1 em{font-style:normal;color:var(--orange)}
+  .sub{color:var(--t4);font-size:13px;margin-top:6px}
+  .tokenbar{display:flex;gap:10px;margin:18px 0 8px;flex-wrap:wrap}
+  .tok{display:flex;align-items:center;gap:6px;background:#1A1A1E;border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:11px;color:var(--t3)}
+  .tok i{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .principles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:14px 0 8px;max-width:1100px}
+  .pr{background:var(--card);border-radius:12px;padding:12px 14px;border-left:3px solid var(--orange)}
+  .pr b{color:#fff;font-size:13px;display:block;margin-bottom:3px}
+  .pr span{color:var(--t4);font-size:11px;line-height:1.5}
+  .sec{margin-top:44px}
+  .sec h2{color:#fff;font-size:16px;font-weight:800;margin-bottom:4px}
+  .sec h2 small{color:var(--t5);font-weight:400;font-size:12px;margin-left:8px}
+  .grid{display:flex;flex-wrap:wrap;gap:30px;margin-top:16px}
+  .shot{display:flex;flex-direction:column;gap:10px}
+  .shot-label{font-size:12px;color:var(--t3)}
+  .shot-label b{color:#fff;margin-right:6px}
+  .shot-label .tag{color:var(--orange-lt);font-size:10px;margin-left:6px}
+  .phone{width:330px;height:700px;background:var(--bg);border-radius:26px;border:1px solid #2A2A30;overflow:hidden;display:flex;flex-direction:column;position:relative;flex-shrink:0;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+  .status{height:26px;display:flex;justify-content:space-between;align-items:center;padding:0 16px;font-size:10px;color:var(--t4);flex-shrink:0}
+  .body{flex:1;overflow:hidden;padding:0 14px;display:flex;flex-direction:column;gap:10px}
+  .tabbar{height:56px;border-top:1px solid var(--line);display:flex;flex-shrink:0;background:rgba(17,17,20,.96)}
+  .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--t5);font-size:10px}
+  .tab .ic{width:20px;height:20px;border-radius:6px;background:#2A2A30}
+  .tab.on{color:var(--orange)}
+  .tab.on .ic{background:var(--orange)}
+  .navtop{display:flex;justify-content:space-between;align-items:center;padding:8px 0 0}
+  .logo{color:#fff;font-weight:900;font-size:17px;letter-spacing:.5px}
+  .logo em{font-style:normal;color:var(--orange)}
+  .city{font-size:11px;color:var(--t4)}
+  .search{background:var(--card);border-radius:12px;padding:9px 12px;color:var(--t5);font-size:12px;display:flex;justify-content:space-between}
+  .chips{display:flex;gap:7px}
+  .chip{padding:4px 11px;border-radius:999px;background:#222228;color:var(--t3);font-size:10.5px;white-space:nowrap}
+  .chip.on{background:rgba(255,90,54,.16);color:var(--orange-lt);font-weight:700}
+  .chip.gn{background:rgba(0,212,170,.12);color:var(--green)}
+  .vcard{background:var(--card);border-radius:14px;overflow:hidden;position:relative}
+  .vimg{height:96px;background:linear-gradient(135deg,#3A2A28,#6E3A2C 55%,#8A4636)}
+  .vimg.b{background:linear-gradient(135deg,#23272E,#31404C 60%,#3E5A6E)}
+  .vbody{padding:10px 12px}
+  .vname{color:#fff;font-size:15px;font-weight:800;display:flex;align-items:center;gap:6px}
+  .vmeta{display:flex;gap:10px;align-items:center;color:var(--t4);font-size:10.5px;margin-top:5px}
+  .star{color:var(--orange);font-weight:800}
+  .vrow{display:flex;justify-content:space-between;align-items:center;margin-top:9px}
+  .here{font-size:10.5px;color:var(--green);display:flex;align-items:center;gap:4px}
+  .dot{width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block}
+  .qbtn{background:linear-gradient(135deg,var(--orange),var(--orange-lt));color:#fff;font-size:11px;font-weight:700;padding:6px 14px;border-radius:10px}
+  .corner{position:absolute;top:10px;left:10px;background:rgba(0,212,170,.9);color:#04211B;font-size:10px;font-weight:800;padding:3px 9px;border-radius:8px}
+  .corner::before{content:"✓ "}
+  .hero{height:150px;background:linear-gradient(160deg,#4A3430,#7A4030 50%,#9A5638);position:relative;flex-shrink:0;margin:-14px -14px 0}
+  .hero.b{background:linear-gradient(160deg,#252B33,#33465A 55%,#46627E)}
+  .bk{position:absolute;top:12px;left:12px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+  .shr{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.35);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px}
+  .dname{color:#fff;font-size:21px;font-weight:900;margin-top:2px}
+  .dsub{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap}
+  .rate{background:var(--card);border-radius:14px;padding:12px;display:flex;justify-content:space-between;align-items:center}
+  .rate .num{color:var(--orange);font-size:22px;font-weight:900}
+  .rate .cnt{color:var(--t4);font-size:10.5px;margin-left:6px}
+  .stars{color:var(--orange);letter-spacing:2px;font-size:13px}
+  .info{background:var(--card);border-radius:14px;padding:12px;display:flex;flex-direction:column;gap:8px}
+  .irow{display:flex;gap:8px;font-size:11px;color:var(--t3);align-items:flex-start}
+  .irow .k{color:var(--t5);flex-shrink:0;width:52px}
+  .feed{background:var(--card);border-radius:14px;padding:12px}
+  .fh{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:#fff;font-weight:700}
+  .fh span{color:var(--t4);font-weight:400;font-size:10.5px}
+  .fitem{display:flex;gap:9px;margin-top:10px}
+  .ava{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#8A4636,#C46A44);flex-shrink:0;font-size:11px;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700}
+  .ava.g{background:linear-gradient(135deg,#2C5A50,#3E8A74)}
+  .fmsg{font-size:11px;color:var(--t2);line-height:1.5}
+  .ftime{font-size:9.5px;color:var(--t5);margin-top:2px}
+  .more{color:var(--orange-lt);font-size:10.5px;text-align:center;margin-top:8px}
+  .actbar{height:58px;border-top:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 12px;flex-shrink:0;background:rgba(17,17,20,.96)}
+  .abtn{flex:1;height:38px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700}
+  .abtn.ghost{background:#26262C;color:var(--t2)}
+  .abtn.cta{flex:1.6;background:linear-gradient(135deg,var(--orange),var(--orange-lt));color:#fff}
+  .abtn.txt{flex:.7;background:transparent;color:var(--t4);font-weight:400;font-size:11px}
+  .ph{background:var(--card);border-radius:14px;padding:12px}
+  .ph h4{color:#fff;font-size:13px;font-weight:800}
+  .stat{display:flex;gap:8px;margin-top:10px}
+  .st{flex:1;background:var(--inset);border-radius:10px;padding:9px 0;text-align:center}
+  .st b{color:#fff;font-size:16px;font-weight:900;display:block}
+  .st b.o{color:var(--orange)}
+  .st span{color:var(--t5);font-size:9.5px}
+  .rank{display:flex;flex-direction:column;gap:7px;margin-top:10px}
+  .rrow{display:flex;align-items:center;gap:9px;background:var(--inset);border-radius:10px;padding:8px 10px}
+  .rno{width:18px;text-align:center;color:var(--t5);font-size:11px;font-weight:800}
+  .rno.t1{color:var(--orange)}.rno.t2{color:var(--orange-lt)}.rno.t3{color:#C4906A}
+  .rname{flex:1;color:var(--t2);font-size:11px}
+  .rnum{color:var(--t4);font-size:10.5px}
+  .menu{background:var(--card);border-radius:14px;overflow:hidden;margin-top:2px}
+  .mrow{display:flex;justify-content:space-between;align-items:center;padding:13px 14px;border-bottom:1px solid #1A1A1E;font-size:12.5px;color:var(--t2)}
+  .mrow:last-child{border-bottom:none}
+  .mrow .arr{color:var(--t5);font-size:11px}
+  .mrow .lft{display:flex;align-items:center;gap:9px}
+  .mico{width:22px;height:22px;border-radius:7px;background:rgba(255,90,54,.14);display:flex;align-items:center;justify-content:center;font-size:11px}
+  .phead{display:flex;align-items:center;gap:11px;padding:6px 0 2px}
+  .pava{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#8A4636,#D4784C);color:#fff;font-size:20px;font-weight:900;display:flex;align-items:center;justify-content:center}
+  .pname{color:#fff;font-size:16px;font-weight:900}
+  .psub{color:var(--t4);font-size:10.5px;margin-top:3px}
+  .list{display:flex;flex-direction:column;gap:9px;overflow:hidden}
+  .rep{background:var(--card);border-radius:12px;padding:11px 12px}
+  .rep .top{display:flex;justify-content:space-between;align-items:center}
+  .rep .type{font-size:11px;color:var(--orange-lt);font-weight:700}
+  .rep .stt{font-size:10px;padding:2px 8px;border-radius:6px}
+  .stt.done{background:rgba(0,212,170,.12);color:var(--green)}
+  .stt.wait{background:#26262C;color:var(--t4)}
+  .rep .obj{color:#fff;font-size:12px;font-weight:700;margin-top:6px}
+  .rep .desc{color:var(--t4);font-size:10.5px;margin-top:4px;line-height:1.5}
+  .addbtn{height:40px;border-radius:12px;border:1px dashed #3A3A42;color:var(--orange-lt);font-size:12px;display:flex;align-items:center;justify-content:center;gap:6px}
+  .admintabs{display:flex;background:var(--inset);border-radius:10px;padding:3px}
+  .atab{flex:1;text-align:center;padding:7px 0;font-size:11px;color:var(--t4);border-radius:8px}
+  .atab.on{background:var(--card);color:#fff;font-weight:700}
+  .form{display:flex;flex-direction:column;gap:11px}
+  .flabel{font-size:11px;color:var(--t4);margin-bottom:5px;display:block}
+  .finput{background:var(--inset);border:1px solid #2A2A30;border-radius:10px;padding:10px 12px;font-size:12px;color:var(--t3)}
+  .finput.ph2{color:var(--t5)}
+  .photos{display:flex;gap:8px}
+  .photo{width:64px;height:64px;border-radius:10px;flex-shrink:0}
+  .photo.fill{background:linear-gradient(135deg,#8A4636,#B25E42)}
+  .photo.empty{background:var(--inset);border:1px dashed #3A3A42;display:flex;align-items:center;justify-content:center;color:var(--t5);font-size:20px}
+  .fchips{display:flex;gap:7px;flex-wrap:wrap}
+  .overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end}
+  .overlay.center{align-items:center;justify-content:center}
+  .modal{background:#1B1B20;border-radius:20px 20px 0 0;width:100%;padding:18px 16px 20px;display:flex;flex-direction:column;gap:11px}
+  .modal.mid{border-radius:20px;width:280px}
+  .mh{display:flex;justify-content:space-between;align-items:center}
+  .mh b{color:#fff;font-size:15px;font-weight:800}
+  .mh .x{color:var(--t5);font-size:13px}
+  .ta{background:var(--inset);border-radius:10px;padding:10px 12px;font-size:11.5px;color:var(--t5);height:64px}
+  .big{height:44px;border-radius:13px;background:linear-gradient(135deg,var(--orange),var(--orange-lt));color:#fff;font-size:14px;font-weight:800;display:flex;align-items:center;justify-content:center;letter-spacing:2px}
+  .stars5{font-size:34px;text-align:center;letter-spacing:8px;color:#3A3A42}
+  .stars5 .lit{color:var(--orange)}
+  .celebrate{background:radial-gradient(circle at 50% 30%,#2A1E1A,#111114 70%)}
+  .cel{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .celcard{background:#1E1E23;border-radius:20px;padding:26px 30px;text-align:center;width:220px;box-shadow:0 0 60px rgba(255,90,54,.25);border:1px solid rgba(255,90,54,.3)}
+  .celcheck{width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-lt));color:#fff;font-size:24px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px}
+  .celcard b{color:#fff;font-size:18px;font-weight:900;display:block}
+  .celcard .days{color:var(--orange-lt);font-size:12px;margin-top:8px}
+  .celcard .note{color:var(--t5);font-size:9.5px;margin-top:12px}
+  .rowflex{display:flex;gap:10px}
+  .half{flex:1;background:var(--card);border-radius:12px;padding:11px}
+  .half b{color:#fff;font-size:13px;display:block}
+  .half span{color:var(--t4);font-size:10px;display:block;margin-top:4px;line-height:1.5}
+  .switchrow{display:flex;justify-content:space-between;align-items:center;background:var(--card);border-radius:12px;padding:12px;font-size:12px;color:var(--t2)}
+  .sw{width:34px;height:19px;border-radius:999px;background:var(--orange);position:relative}
+  .sw::after{content:"";position:absolute;right:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff}
+</style>
+</head>
+<body>
+
+<h1>SkateSpot <em>·</em> 设计稿总览</h1>
+<div class="sub">街头 / 自由 / 年轻 / 活力 —— 粗粝中有态度，简洁中有能量 · 本页为审计定稿版的本地高保真重建（含全部修正）</div>
+
+<div class="tokenbar">
+  <span class="tok"><i style="background:#111114"></i>背景 #111114</span>
+  <span class="tok"><i style="background:#1E1E23"></i>卡片 #1E1E23</span>
+  <span class="tok"><i style="background:#FF5A36"></i>品牌橙 #FF5A36</span>
+  <span class="tok"><i style="background:#00D4AA"></i>在场绿 #00D4AA（仅在场/已签到）</span>
+  <span class="tok"><i style="background:#D9D9DE"></i>正文 #D9D9DE</span>
+</div>
+
+<div class="principles">
+  <div class="pr"><b>信息层级清晰</b><span>户外快速扫读：字号大、对比度高</span></div>
+  <div class="pr"><b>视觉有态度</b><span>深色/水泥灰底 + 高饱和荧光点缀</span></div>
+  <div class="pr"><b>操作便捷</b><span>签到/导航/筛选 1-2 步完成</span></div>
+  <div class="pr"><b>轻量化</b><span>用完即走，微动效 ≤250ms</span></div>
+  <div class="pr"><b>内容克制</b><span>无营销文案，结果态只报真实数据</span></div>
+</div>
+
+<!-- ================= 核心页面 ================= -->
+<div class="sec">
+  <h2>核心页面 <small>Tab 四页 + 两个详情</small></h2>
+  <div class="grid">
+
+    <!-- 1 首页 -->
+    <div class="shot">
+      <div class="shot-label"><b>① 首页</b>场地列表 · 快捷签到 · 已签到角标</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo">SKATE<em>SPOT</em></span><span class="city">嘉兴 ▾</span></div>
+          <div class="search"><span>搜索场地 / 店铺</span><span>⌕</span></div>
+          <div class="chips"><span class="chip on">全部</span><span class="chip">滑板场</span><span class="chip">泵道</span><span class="chip">店铺</span></div>
+          <div class="vcard">
+            <div class="vimg"></div>
+            <div class="vbody">
+              <div class="vname">城南极限滑板场</div>
+              <div class="vmeta"><span class="star">★ 4.8</span><span>1.2km</span><span>户外 · 免费 · 碗池</span></div>
+              <div class="vrow"><span class="here"><i class="dot"></i>12 人在场</span><span class="qbtn">快捷签到</span></div>
+            </div>
+          </div>
+          <div class="vcard">
+            <span class="corner">已签到</span>
+            <div class="vimg b"></div>
+            <div class="vbody">
+              <div class="vname">凌公塘泵道</div>
+              <div class="vmeta"><span class="star">★ 4.6</span><span>3.5km</span><span>户外 · 泵道</span></div>
+              <div class="vrow"><span class="here"><i class="dot"></i>5 人在场</span><span class="qbtn" style="background:#26262C;color:var(--t4)">已签到</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tab on"><span class="ic"></span>首页</div>
+          <div class="tab"><span class="ic"></span>发现</div>
+          <div class="tab"><span class="ic"></span>签到</div>
+          <div class="tab"><span class="ic"></span>我的</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 场地详情 -->
+    <div class="shot">
+      <div class="shot-label"><b>② 场地详情</b>三键操作栏 · 打卡动态</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body" style="gap:9px">
+          <div class="hero"><span class="bk">‹</span><span class="shr">⇪</span></div>
+          <div class="dname">城南极限滑板场</div>
+          <div class="dsub"><span class="chip on">户外</span><span class="chip">免费</span><span class="chip">碗池</span><span class="chip gn">营业中</span></div>
+          <div class="rate"><span style="display:flex;align-items:baseline"><span class="num">4.8</span><span class="cnt">128 条评分 ›</span></span><span class="stars">★★★★★</span></div>
+          <div class="info">
+            <div class="irow"><span class="k">地址</span>嘉兴市南湖区城南街道 XX 路 88 号</div>
+            <div class="irow"><span class="k">开放时间</span>全天 · 灯光至 22:00</div>
+            <div class="irow"><span class="k">在场</span><span style="color:var(--green)">● 12 人正在滑</span></div>
+          </div>
+          <div class="feed">
+            <div class="fh">打卡动态 <span>23 次 · 查看全部 ›</span></div>
+            <div class="fitem"><div class="ava">凯</div><div><div class="fmsg">今天碗池状态拉满，来了就不想走 🔥</div><div class="ftime">凯kai · 2 小时前</div></div></div>
+            <div class="fitem"><div class="ava g">阿</div><div><div class="fmsg">傍晚人少，适合练新动作</div><div class="ftime">阿豪 · 昨天</div></div></div>
+          </div>
+        </div>
+        <div class="actbar"><span class="abtn ghost">⌖ 导航</span><span class="abtn cta">签到打卡</span><span class="abtn txt">⚠ 报错</span></div>
+      </div>
+    </div>
+
+    <!-- 3 店铺详情 -->
+    <div class="shot">
+      <div class="shot-label"><b>③ 店铺详情</b>与场地对称 · 报错入口为建议新增</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body" style="gap:9px">
+          <div class="hero b"><span class="bk">‹</span><span class="shr">⇪</span></div>
+          <div class="dname">Soulparks 滑板店</div>
+          <div class="dsub"><span class="chip on">板店</span><span class="chip">教学</span><span class="chip gn">营业中 · 10:00-22:00</span></div>
+          <div class="rate"><span style="display:flex;align-items:baseline"><span class="num">4.9</span><span class="cnt">86 条评分 ›</span></span><span class="stars">★★★★★</span></div>
+          <div class="info">
+            <div class="irow"><span class="k">地址</span>嘉兴市南湖区月河历史街区 XX 号</div>
+            <div class="irow"><span class="k">主营</span>整板 / 配件 / 维修 / 教学</div>
+          </div>
+          <div class="feed">
+            <div class="fh">打卡动态 <span>15 次 · 查看全部 ›</span></div>
+            <div class="fitem"><div class="ava">小</div><div><div class="fmsg">老板人很好，帮我换了桥</div><div class="ftime">小北 · 3 小时前</div></div></div>
+          </div>
+        </div>
+        <div class="actbar"><span class="abtn ghost">⌖ 导航</span><span class="abtn cta">签到打卡</span><span class="abtn txt">⚠ 报错</span></div>
+      </div>
+    </div>
+
+    <!-- 4 发现 -->
+    <div class="shot">
+      <div class="shot-label"><b>④ 发现</b>场地/店铺双 Tab · 筛选</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo">发现</span></div>
+          <div class="search"><span>搜索</span><span>⌕</span></div>
+          <div class="admintabs"><span class="atab on">场地</span><span class="atab">店铺</span></div>
+          <div class="chips"><span class="chip on">距离优先</span><span class="chip">免费</span><span class="chip">夜灯</span><span class="chip">碗池</span></div>
+          <div class="list">
+            <div class="vcard"><div class="vimg" style="height:64px"></div><div class="vbody" style="padding:9px 12px">
+              <div class="vname" style="font-size:13.5px">城南极限滑板场 <span style="font-weight:400;color:var(--t4);font-size:10.5px;margin-left:4px">1.2km</span></div>
+              <div class="vmeta"><span class="star">★ 4.8</span><span>户外 · 免费 · 碗池</span></div>
+            </div></div>
+            <div class="vcard"><div class="vimg b" style="height:64px"></div><div class="vbody" style="padding:9px 12px">
+              <div class="vname" style="font-size:13.5px">凌公塘泵道 <span style="font-weight:400;color:var(--t4);font-size:10.5px;margin-left:4px">3.5km</span></div>
+              <div class="vmeta"><span class="star">★ 4.6</span><span>户外 · 泵道</span></div>
+            </div></div>
+            <div class="vcard"><div class="vimg" style="height:64px;filter:hue-rotate(30deg)"></div><div class="vbody" style="padding:9px 12px">
+              <div class="vname" style="font-size:13.5px">体育中心滑板区 <span style="font-weight:400;color:var(--t4);font-size:10.5px;margin-left:4px">4.8km</span></div>
+              <div class="vmeta"><span class="star">★ 4.4</span><span>户外 · 街式</span></div>
+            </div></div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tab"><span class="ic"></span>首页</div>
+          <div class="tab on"><span class="ic"></span>发现</div>
+          <div class="tab"><span class="ic"></span>签到</div>
+          <div class="tab"><span class="ic"></span>我的</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 签到 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑤ 签到</b>统计 + 打卡排行榜（累计）</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo">签到打卡</span></div>
+          <div class="ph">
+            <h4>我的签到</h4>
+            <div class="stat">
+              <div class="st"><b class="o">28</b><span>累计签到</span></div>
+              <div class="st"><b>3</b><span>连续天数</span></div>
+              <div class="st"><b>6</b><span>去过的场地</span></div>
+            </div>
+          </div>
+          <div class="ph" style="flex:1">
+            <h4>打卡排行榜<span style="color:var(--t5);font-weight:400;font-size:10px;margin-left:6px">（累计）</span></h4>
+            <div class="rank">
+              <div class="rrow"><span class="rno t1">1</span><div class="ava">豪</div><span class="rname">阿豪</span><span class="rnum">52 次</span></div>
+              <div class="rrow"><span class="rno t2">2</span><div class="ava g">凯</div><span class="rname">凯kai</span><span class="rnum">41 次</span></div>
+              <div class="rrow"><span class="rno t3">3</span><div class="ava" style="background:linear-gradient(135deg,#3E5A6E,#6E8AA4)">北</div><span class="rname">小北</span><span class="rnum">37 次</span></div>
+              <div class="rrow"><span class="rno">4</span><div class="ava" style="background:linear-gradient(135deg,#5A4A2C,#8A744A)">米</div><span class="rname">米粒</span><span class="rnum">29 次</span></div>
+              <div class="rrow"><span class="rno">5</span><div class="ava" style="background:linear-gradient(135deg,#4A2C5A,#744A8A)">桃</div><span class="rname">桃子</span><span class="rnum">25 次</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tab"><span class="ic"></span>首页</div>
+          <div class="tab"><span class="ic"></span>发现</div>
+          <div class="tab on"><span class="ic"></span>签到</div>
+          <div class="tab"><span class="ic"></span>我的</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6 我的 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑥ 我的</b>仅代码已有功能 · 无多余模块</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="phead">
+            <div class="pava">凯</div>
+            <div><div class="pname">凯kai</div><div class="psub">滑龄 3 年 · 嘉兴</div></div>
+          </div>
+          <div class="stat">
+            <div class="st"><b class="o">28</b><span>签到次数</span></div>
+            <div class="st"><b>3</b><span>连续天数</span></div>
+            <div class="st"><b>4</b><span>报错提交</span></div>
+          </div>
+          <div class="menu">
+            <div class="mrow"><span class="lft"><span class="mico">✎</span>编辑资料</span><span class="arr">›</span></div>
+            <div class="mrow"><span class="lft"><span class="mico">✓</span>我的签到</span><span class="arr">›</span></div>
+            <div class="mrow"><span class="lft"><span class="mico">⚠</span>我的报错</span><span class="arr">›</span></div>
+            <div class="mrow"><span class="lft"><span class="mico">✉</span>你提我改</span><span class="arr">›</span></div>
+            <div class="mrow"><span class="lft"><span class="mico">▦</span>场地管理</span><span class="arr">›</span></div>
+          </div>
+        </div>
+        <div class="tabbar">
+          <div class="tab"><span class="ic"></span>首页</div>
+          <div class="tab"><span class="ic"></span>发现</div>
+          <div class="tab"><span class="ic"></span>签到</div>
+          <div class="tab on"><span class="ic"></span>我的</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 子页面 ================= -->
+<div class="sec">
+  <h2>子页面 <small>从「我的」进入 + 管理向</small></h2>
+  <div class="grid">
+
+    <!-- 7 全部打卡 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑦ 全部打卡</b>场地打卡流 · 点卡片回详情</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 城南极限滑板场</span></div>
+          <div class="ph"><h4>全部打卡 <span style="color:var(--t5);font-weight:400;font-size:10.5px">共 23 次</span></h4></div>
+          <div class="list">
+            <div class="rep"><div class="fitem" style="margin:0"><div class="ava">凯</div><div style="flex:1"><div class="fmsg">今天碗池状态拉满，来了就不想走 🔥<div style="height:52px;border-radius:8px;margin-top:7px;background:linear-gradient(135deg,#6E3A2C,#8A4636)"></div></div><div class="ftime">凯kai · 今天 14:32 · ♡ 12</div></div></div></div>
+            <div class="rep"><div class="fitem" style="margin:0"><div class="ava g">阿</div><div style="flex:1"><div class="fmsg">傍晚人少，适合练新动作</div><div class="ftime">阿豪 · 昨天 18:05 · ♡ 8</div></div></div></div>
+            <div class="rep"><div class="fitem" style="margin:0"><div class="ava" style="background:linear-gradient(135deg,#3E5A6E,#6E8AA4)">北</div><div style="flex:1"><div class="fmsg">第一次来，场地比想象的大</div><div class="ftime">小北 · 前天 16:20 · ♡ 5</div></div></div></div>
+            <div class="more">上拉加载更多</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 8 我的报错 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑧ 我的报错</b>提交记录 + 处理状态</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 我的报错</span></div>
+          <div class="list">
+            <div class="rep"><div class="top"><span class="type">地址错误</span><span class="stt done">已处理</span></div><div class="obj">城南极限滑板场</div><div class="desc">实际入口在路东侧，地图定位偏了</div></div>
+            <div class="rep"><div class="top"><span class="type">设施损坏</span><span class="stt done">已处理</span></div><div class="obj">凌公塘泵道</div><div class="desc">泵道中段有一处板面开裂</div></div>
+            <div class="rep"><div class="top"><span class="type">信息变更</span><span class="stt wait">待处理</span></div><div class="obj">体育中心滑板区</div><div class="desc">夜间灯光已延长到 22:30</div></div>
+            <div class="rep"><div class="top"><span class="type">已关闭</span><span class="stt wait">待处理</span></div><div class="obj">老五金城野场</div><div class="desc">场地已围挡施工，无法进入</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9 你提我改 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑨ 你提我改</b>建议反馈列表</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 你提我改</span></div>
+          <div class="addbtn">＋ 提一条建议</div>
+          <div class="list">
+            <div class="rep"><div class="top"><span class="obj" style="margin:0">希望增加「夜场」筛选</span><span class="stt done">已采纳</span></div><div class="desc">很多场地只有晚上有空，想按灯光筛<span style="color:var(--t5)"> · ♡ 34</span></div></div>
+            <div class="rep"><div class="top"><span class="obj" style="margin:0">打卡加个天气记录</span><span class="stt wait">评估中</span></div><div class="desc">回头翻打卡记录想知道当天天气<span style="color:var(--t5)"> · ♡ 21</span></div></div>
+            <div class="rep"><div class="top"><span class="obj" style="margin:0">店铺页想看价格表</span><span class="stt wait">待处理</span></div><div class="desc">板店服务和价格不透明<span style="color:var(--t5)"> · ♡ 9</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 场地管理 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑩ 场地管理</b>我的场地 + 报错处理双 Tab</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 场地管理</span></div>
+          <div class="admintabs"><span class="atab on">我的场地</span><span class="atab">报错处理</span></div>
+          <div class="list">
+            <div class="rep"><div class="top"><span class="obj" style="margin:0">城南极限滑板场</span><span class="stt done">已上线</span></div><div class="desc">★ 4.8 · 23 次打卡 · 我维护的场地</div></div>
+            <div class="rep"><div class="top"><span class="obj" style="margin:0">凌公塘泵道</span><span class="stt done">已上线</span></div><div class="desc">★ 4.6 · 17 次打卡 · 我维护的场地</div></div>
+            <div class="rep"><div class="top"><span class="obj" style="margin:0">城东新碗池（待审核）</span><span class="stt wait">审核中</span></div><div class="desc">提交于 08-29 · 补充照片后加快审核</div></div>
+          </div>
+          <div class="addbtn" style="margin-top:auto">＋ 新增场地</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 新增场地 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑪ 新增场地</b>表单 · 照片/类型/设施</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 新增场地</span></div>
+          <div class="form">
+            <div><span class="flabel">场地名称</span><div class="finput">例如：城东体育公园碗池</div></div>
+            <div><span class="flabel">场地照片（第一张为封面）</span>
+              <div class="photos"><div class="photo fill"></div><div class="photo empty">＋</div><div class="photo empty">＋</div></div>
+            </div>
+            <div><span class="flabel">场地类型</span><div class="fchips"><span class="chip on">滑板场</span><span class="chip">泵道</span><span class="chip">街式</span><span class="chip">野场</span></div></div>
+            <div><span class="flabel">地址（可在地图上选点）</span><div class="finput ph2">⌖ 选择位置或输入地址</div></div>
+            <div><span class="flabel">设施（多选）</span><div class="fchips"><span class="chip on">碗池</span><span class="chip on">灯光</span><span class="chip">免费</span><span class="chip">休息区</span></div></div>
+          </div>
+          <div class="big" style="margin-top:auto">提交审核</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 弹窗与状态 ================= -->
+<div class="sec">
+  <h2>弹窗与状态 <small>签到流 + 评分 / 报错 / 资料</small></h2>
+  <div class="grid">
+
+    <!-- 12 签到弹窗 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑫ 签到弹窗</b>留言 + 照片 · 1 步确认</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 城南极限滑板场</span></div>
+        </div>
+        <div class="overlay">
+          <div class="modal">
+            <div class="mh"><b>签到 · 城南极限滑板场</b><span class="x">✕</span></div>
+            <div class="ta">说点什么…（今日状态 / 收获）</div>
+            <div class="photos"><div class="photo empty">＋</div><div class="photo empty">＋</div><div class="photo empty">＋</div></div>
+            <div class="big">确认签到</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 13 庆祝态 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑬ 庆祝态</b>只报真实数据 · 1.8s 自动消失</div>
+      <div class="phone celebrate">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="cel"><div class="celcard">
+          <div class="celcheck">✓</div>
+          <b>签到成功</b>
+          <div class="days">连续打卡 3 天</div>
+          <div class="note">稍后自动返回</div>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- 14 场地报错弹窗 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑭ 场地报错弹窗</b>五类 chips · wrap 布局</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 城南极限滑板场</span></div>
+        </div>
+        <div class="overlay">
+          <div class="modal">
+            <div class="mh"><b>报错 · 城南极限滑板场</b><span class="x">✕</span></div>
+            <div class="fchips"><span class="chip on">地址错误</span><span class="chip">已关闭</span><span class="chip">设施损坏</span><span class="chip">信息变更</span><span class="chip">其他</span></div>
+            <div class="ta">补充说明（选填）：具体哪里有问题…</div>
+            <div class="big">提交报错</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 15 评分弹窗 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑮ 评分弹窗</b>星级 + 一句话评价</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 城南极限滑板场</span></div>
+        </div>
+        <div class="overlay center">
+          <div class="modal mid">
+            <div class="mh"><b>为场地评分</b><span class="x">✕</span></div>
+            <div class="stars5"><span class="lit">★</span><span class="lit">★</span><span class="lit">★</span>★★</div>
+            <div class="ta" style="height:44px">一句话说说体验（选填）</div>
+            <div class="big">提交评分</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 16 编辑资料弹窗 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑯ 编辑资料弹窗</b>头像 / 昵称 / 滑龄</div>
+      <div class="phone">
+        <div class="status"><span>9:41</span><span>●●●</span></div>
+        <div class="body">
+          <div class="navtop"><span class="logo" style="font-size:15px">‹ 编辑资料</span></div>
+        </div>
+        <div class="overlay">
+          <div class="modal">
+            <div class="mh"><b>编辑资料</b><span class="x">✕</span></div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div class="pava" style="width:46px;height:46px;font-size:17px">凯</div>
+              <span style="color:var(--orange-lt);font-size:11.5px">更换头像</span>
+            </div>
+            <div><span class="flabel">昵称</span><div class="finput">凯kai</div></div>
+            <div><span class="flabel">滑龄</span><div class="fchips"><span class="chip">&lt;1 年</span><span class="chip">1-2 年</span><span class="chip on">3-5 年</span><span class="chip">5 年+</span></div></div>
+            <div class="big">保存</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 17 交互规范卡 -->
+    <div class="shot">
+      <div class="shot-label"><b>⑰ 交互规范卡</b>全站交互约定（画布旁注）</div>
+      <div class="phone" style="height:auto;min-height:420px">
+        <div class="body" style="padding-top:20px;gap:12px">
+          <div class="rowflex">
+            <div class="half"><b>签到动线</b><span>详情/快捷签到 → 弹窗 → 庆祝态(1.8s) → 按钮变「已签到·补充」+ 角标点亮</span></div>
+            <div class="half"><b>评分动线</b><span>详情评分区 → 星级弹窗 → 回写聚合分，不打断浏览</span></div>
+          </div>
+          <div class="rowflex">
+            <div class="half"><b>报错动线</b><span>详情底部「报错」→ 类型 chips → 提交 → 我的报错可追踪状态</span></div>
+            <div class="half"><b>返回策略</b><span>子页统一左上返回；全部打卡点卡片回详情（叠栈可接受）</span></div>
+          </div>
+          <div class="rowflex">
+            <div class="half"><b>数据刷新</b><span>所有子页 onShow 刷新，返回即最新</span></div>
+            <div class="half"><b>状态色纪律</b><span>绿 #00D4AA 仅「在场/营业中/已签到/已处理」语义，不作装饰</span></div>
+          </div>
+          <div class="rowflex">
+            <div class="half"><b>内容纪律</b><span>无营销文案、无凑数模块；庆祝态只报「成功+连续天数」</span></div>
+            <div class="half"><b>动效纪律</b><span>微动效 ≤250ms；庆祝态 1.8s 自动消失，可点击跳过</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sub" style="margin-top:56px">待办备注：① 店铺详情「报错」入口为建议新增（代码尚未实现，与场地对称）；② 首页「快捷签到」为已确认保留的待开发项。 · 原 Ardot 画布文件：ardot.tencent.com/file/720508756716625</div>
+
+</body>
+</html>

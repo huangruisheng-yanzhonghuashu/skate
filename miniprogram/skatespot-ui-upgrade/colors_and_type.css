@@ -1,0 +1,82 @@
+/* ============================================================
+   SkateSpot 小程序 · 品牌令牌（暗色街头风）
+   单一品牌主色：霓虹橘红 #FF5A36；状态色仅用于语义状态。
+   默认暗色（:root），.light 提供亮色兜底。
+   ============================================================ */
+
+:root {
+  /* Surfaces（暗色层级：底 → 卡片 → 浮层） */
+  --sk8-background: #111114;
+  --sk8-card: #1E1E23;
+  --sk8-inset: #17171B;
+  --sk8-surface-2: #26262C;
+  --sk8-popover: #1B1B20;
+  --sk8-bar: #1A1A1E;
+
+  /* Foreground 文本层级：白 → 次级 → 弱化 → 占位 */
+  --sk8-foreground: #FFFFFF;
+  --sk8-card-foreground: #FFFFFF;
+  --sk8-popover-foreground: #FFFFFF;
+  --sk8-text-secondary: #D9D9DE;
+  --sk8-text-tertiary: #A6A6AD;
+  --sk8-muted-foreground: #8C8C94;
+  --sk8-text-faint: #6E6E76;
+
+  /* Primary（唯一品牌色相） */
+  --sk8-primary: #FF5A36;
+  --sk8-primary-foreground: #FFFFFF;
+  --sk8-primary-strong: #E64A26;
+  --sk8-primary-bright: #FF8A6E;
+  --sk8-primary-soft: rgba(255, 90, 54, 0.14);
+  --sk8-primary-soft-strong: rgba(255, 90, 54, 0.24);
+
+  /* Lines / Inputs / Ring */
+  --sk8-border: #26262C;
+  --sk8-border-strong: #2A2A30;
+  --sk8-input: #17171B;
+  --sk8-ring: #FF5A36;
+
+  /* Muted */
+  --sk8-muted: #26262C;
+
+  /* 语义状态色（仅状态语义，不做装饰） */
+  --state-success: #00D4AA;
+  --state-success-soft: rgba(0, 212, 170, 0.12);
+  --state-success-ink: #003B30;
+  --state-warning: #FFB800;
+  --state-warning-soft: rgba(255, 184, 0, 0.12);
+  --state-error: #FF3B30;
+  --state-error-soft: rgba(255, 59, 48, 0.14);
+  --state-info: #2A8CFF;
+  --state-info-soft: rgba(42, 140, 255, 0.12);
+
+  /* Radius（收敛三档 + 胶囊） */
+  --sk8-radius-small: 6px;
+  --sk8-radius-medium: 10px;
+  --sk8-radius-large: 16px;
+  --sk8-radius-pill: 999px;
+
+  /* 深度：静态面用描边/分层，浮层可用深阴影 */
+  --sk8-shadow-float: 0 -8px 32px rgba(0, 0, 0, 0.5);
+  --sk8-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.4);
+
+  /* Typography scale（小程序基准 14px） */
+  --sk8-font-sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --sk8-fs-caption: 11px;
+  --sk8-fs-body-s: 12px;
+  --sk8-fs-body: 14px;
+  --sk8-fs-h3: 16px;
+  --sk8-fs-h2: 18px;
+  --sk8-fs-h1: 20px;
+}
+
+/* 本项目为纯暗色小程序设计：:root 即暗色令牌，无亮色覆盖（脚本输出的主题类不改变取值） */
+
+/* ===== 字体类 ===== */
+.sk8-type-h1 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h1); font-weight: 700; line-height: 1.3; letter-spacing: -0.01em; }
+.sk8-type-h2 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h2); font-weight: 600; line-height: 1.35; }
+.sk8-type-h3 { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-h3); font-weight: 600; line-height: 1.4; }
+.sk8-type-body { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-body); font-weight: 400; line-height: 1.6; }
+.sk8-type-body-s { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-body-s); font-weight: 400; line-height: 1.5; }
+.sk8-type-caption { font-family: var(--sk8-font-sans); font-size: var(--sk8-fs-caption); font-weight: 400; line-height: 1.45; }
+.sk8-num { font-variant-numeric: tabular-nums; }

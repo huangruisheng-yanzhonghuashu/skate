@@ -1,0 +1,140 @@
+{
+  "success": true,
+  "outcome": "passed",
+  "repairable": true,
+  "terminalViolations": [],
+  "terminalBlockingSummary": null,
+  "skillProvenance": {
+    "name": "solo-design",
+    "version": "2026.08.06.19.15.08",
+    "version_source": "skill-release-manifest.json",
+    "runtime_skill_dir": null,
+    "recorded_at": null,
+    "expected_version": "2026.08.06.19.15.08",
+    "status": "matched",
+    "read_status": "ok"
+  },
+  "operatingMode": "free-explore",
+  "renderBlockingErrorCount": 0,
+  "softWarningCount": 7,
+  "renderBlockingErrors": [],
+  "errorSignatures": [],
+  "softWarnings": [
+    "[html-head-style] checkins-v2.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] discover-v2.html: found 4 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] discover.html: found 4 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] profile-v2.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[mobile-navigation-consistency] 6 mobile page(s) do not expose a 3+ item data-nav-key nav cluster while sibling pages do. This is acceptable for detail/reward/modal pages only when planned explicitly.",
+    "[html-quality] colors_and_type.css: ordinary/static shadow tokens must keep every shadow alpha <= 0.05; deeper shadows are allowed only for floating-layer tokens such as modal/popover/dropdown/drawer/overlay (--sk8-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.4)).",
+    "[html-quality] checkins-v2.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference."
+  ],
+  "repairPlanHints": [
+    {
+      "errorClass": "hardcoded-color-in-body",
+      "owner": "sub-agent",
+      "repairScope": "targeted-token-replace",
+      "strategy": "targeted_token_replace_once",
+      "affectedFiles": [
+        "checkins-v2.html"
+      ],
+      "repairReportPath": null,
+      "repairAlreadyAttempted": false,
+      "allowSourceRead": "no-full-html-read",
+      "maxValidationRuns": 2
+    }
+  ],
+  "repairActionTable": [],
+  "errorCount": 0,
+  "warningCount": 7,
+  "errors": [],
+  "warnings": [
+    "[html-head-style] checkins-v2.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] discover-v2.html: found 4 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] discover.html: found 4 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[html-head-style] profile-v2.html: found 1 custom <style> block(s) in <head>. The <head> is owned by apply-html-head-contract.mjs; move custom styles before </body> or re-run apply-html-head-contract.mjs <css-path> <html-file> --replace-head to relocate them.",
+    "[mobile-navigation-consistency] 6 mobile page(s) do not expose a 3+ item data-nav-key nav cluster while sibling pages do. This is acceptable for detail/reward/modal pages only when planned explicitly.",
+    "[html-quality] colors_and_type.css: ordinary/static shadow tokens must keep every shadow alpha <= 0.05; deeper shadows are allowed only for floating-layer tokens such as modal/popover/dropdown/drawer/overlay (--sk8-shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.4)).",
+    "[html-quality] checkins-v2.html: hardcoded colors are forbidden outside <style id=\"theme-vars\">. Use brand CSS variables from the token reference."
+  ],
+  "validationRunDisciplineStatus": {
+    "declared": true,
+    "restoreMode": false,
+    "maxFullValidationRuns": null,
+    "validationHistoryCount": 0,
+    "repairLedgerCount": 0,
+    "softWarningsTriggerRepair": null,
+    "terminalState": null,
+    "nextAction": null,
+    "violations": [],
+    "success": true
+  },
+  "terminalState": null,
+  "nextCheck": {
+    "type": "finish-readiness",
+    "command": "node \"c:\\Users\\ruish\\.trae-cn\\builtin\\design\\default\\skills\\solo-design\\shared-runtime\\deterministic-tooling\\validate-finish-readiness.mjs\" \"d:\\myProjects\\skate\\miniprogram\\skatespot-ui-upgrade\" --check=all",
+    "fullValidationAllowed": false,
+    "reason": "workspace validation passed; run complete finish readiness before final delivery"
+  },
+  "repairBatch": [],
+  "repairContextPacket": {
+    "schema_version": "1.0",
+    "purpose": "small-context repair packet; read this before full validation-report.json",
+    "success": true,
+    "terminalState": null,
+    "skillProvenance": {
+      "name": "solo-design",
+      "version": "2026.08.06.19.15.08",
+      "version_source": "skill-release-manifest.json",
+      "runtime_skill_dir": null,
+      "recorded_at": null,
+      "expected_version": "2026.08.06.19.15.08",
+      "status": "matched",
+      "read_status": "ok"
+    },
+    "renderBlockingErrorCount": 0,
+    "softWarningCount": 7,
+    "renderBlockingErrors": [],
+    "repairActionTable": [],
+    "nextCheck": {
+      "type": "finish-readiness",
+      "command": "node \"c:\\Users\\ruish\\.trae-cn\\builtin\\design\\default\\skills\\solo-design\\shared-runtime\\deterministic-tooling\\validate-finish-readiness.mjs\" \"d:\\myProjects\\skate\\miniprogram\\skatespot-ui-upgrade\" --check=all",
+      "fullValidationAllowed": false,
+      "reason": "workspace validation passed; run complete finish readiness before final delivery"
+    },
+    "forbidden": [
+      "do not read validator source",
+      "do not rerun full validation when nextCheck.fullValidationAllowed=false",
+      "do not start preview/browser unless user explicitly asks",
+      "do not hand-edit repair ledger fields"
+    ]
+  },
+  "projectFileHashes": {
+    "skatespot-ui-upgrade.design": "5230103fe9be70004f92800977d24c1c92e3a8d06175310b9bfd64da8ba9a522",
+    "colors_and_type.css": "5a65e8938b912e6caeaf7608b7f6e2786a2c7c39000f15bcd0bbda6d6efec6dc",
+    "runtime-orchestration-summary.json": "e746826a35c74c3d5f36e3ba4a5eb78f859e3749ed720c034873f919f1ca80e7",
+    "pages/checkins-v2.html": "dd4c05eb42706633b9f2b239ab59d4bda1ff67fd10ca53ef779f141ed95891a2",
+    "pages/checkins.html": "17e278f99c3c276e5d6a174bddb9eb0088e55b6c875c9aee3f68b7b9c2a9df99",
+    "pages/discover-v2.html": "c5c4bc2d4dbf4fa65369d892f8c6aa4dfae4778b97302ae77f621a57771fca6a",
+    "pages/discover.html": "1e81541bda8ce084b83ab10231661ae9aa91f133e3be58c2853e83bbf9579cf7",
+    "pages/home-v2.html": "45b7d89f340710095a71d3303675fc937bf9beb5848c41b118ce22a700d5540e",
+    "pages/home.html": "186694d8448cf16a3f1ab7927a898d973042f908ff9ec01598d8a105a02681c1",
+    "pages/profile-v2.html": "1ee1309f8d0e283f99ad69c79a7ff7a3040360fa7fc923cbaee872463fd12c13",
+    "pages/profile.html": "1880b37a385867c47ad10804a335609346a898550a6a501b21fc1d4d52e5c31a",
+    "pages/shop-detail-v2.html": "1c8e92e1244bd27a894929ae6a773895ac99a43339623ebc94ddf2f611aec468",
+    "pages/shop-detail.html": "fb1974410de480647a3dd373e5b898de0d97c1150d5c272bbd411fa199258bb5",
+    "pages/venue-checkin-sheet-v2.html": "6db8d517ea4cda5eb68951bc0d92307d0d7b8f2bc4744158c328751df4e9797f",
+    "pages/venue-checkin-sheet.html": "2e1e30dea38dc07620a001664b388b8a432df34c3fa7c79cff4aa36a9960b9d2",
+    "pages/venue-detail-v2.html": "9229a1c0d474159f422b1102ea187f4ad95b98af691667e9a3ecd3aa7e081eec",
+    "pages/venue-detail.html": "1dfd7261cc843aa8e2eaf550509a754799dcb5bb1dbbe1dc4083f9a5dfe2b356",
+    "assets/map-dark.jpg": "0a97df56a0acc8102df35f32189648b2f01752b6e1049f94d5d9c85bf9fa9d6d",
+    "assets/shop-front.jpg": "1049c3ccf1d9928045c2208aa83cfd4e6ac83d3377040ba4dc990210e5b4a5cd",
+    "assets/shop-interior.jpg": "354729432b5a0aeb57c54aae11d0a1b8d8bba65e49823c13394e6c728b5c4a2b",
+    "assets/venue-bowl.jpg": "d918a6ff7297aa7b5b1893cb0336d81f23fc8da35c6c188854036d8f8dc3b669",
+    "assets/venue-plaza.jpg": "f2e9bc8ec23acd253c0681027c42554cd0f00188fd74f46c53c5d9a771d80662",
+    "assets/venue-street.jpg": "b135a5a3a47a8147febd1bae594f9c951eb906efeeb8fe6ec85e5f115f96bf43"
+  },
+  "designDir": "d:\\myProjects\\skate\\miniprogram\\skatespot-ui-upgrade",
+  "expectedPages": 14,
+  "requireInteractions": null,
+  "checkedAt": "2026-09-01T00:34:04.168Z"
+}
