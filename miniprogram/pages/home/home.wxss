@@ -260,27 +260,49 @@
   padding: 24rpx 20rpx 8rpx;
 }
 
-/* ===== 实体切换（面板内嵌轨道：深一档底色 + 橙渐变 active 半区） ===== */
+/* ===== 一级切换（文字 Tab + 橙色短指示条：靠左杂志式，与筛选/列表同轴） ===== */
 .entity-seg {
   display: flex;
-  padding: 8rpx;
-  background: #17171B;
-  border-radius: 999rpx;
+  gap: 24rpx;
+  /* 抵消项内边距：首项文字精确落 20rpx 左轴（与列表行对齐） */
+  margin: 0 -16rpx;
 }
 
 .entity-item {
-  flex: 1;
-  text-align: center;
-  padding: 20rpx 0;
-  border-radius: 999rpx;
-  color: #8C8C94;
-  font-size: 28rpx;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 96rpx;
+  padding: 0 16rpx;
+  color: #6E6E76;
+  font-size: 26rpx;
+  transition: font-size 0.2s ease, color 0.2s ease;
 }
 
 .entity-active {
-  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
-  font-weight: 600;
+  font-size: 32rpx;
+  font-weight: 700;
+}
+
+/* 橙色短指示条：仅 active 显示，切换时透明度+缩放过渡 */
+.entity-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 2rpx;
+  width: 48rpx;
+  height: 6rpx;
+  margin-left: -24rpx;
+  border-radius: 999rpx;
+  background: linear-gradient(90deg, #FF5A36, #FF8A6E);
+  opacity: 0;
+  transform: scaleX(0.4);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.entity-active .entity-bar {
+  opacity: 1;
+  transform: scaleX(1);
 }
 
 /* ===== 地图折叠 ===== */

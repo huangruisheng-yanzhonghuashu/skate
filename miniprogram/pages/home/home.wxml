@@ -20,7 +20,7 @@
       </view>
       <view class="search-pill" bindtap="openSearch">
         <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
-        <text class="search-pill-text">搜索场地、店铺...</text>
+        <text class="search-pill-text">搜索场地、俱乐部...</text>
       </view>
     </view>
 
@@ -32,7 +32,7 @@
           value="{{query}}"
           focus
           confirm-type="search"
-          placeholder="搜索场地、店铺..."
+          placeholder="搜索场地、俱乐部..."
           placeholder-class="search-ph"
           bindinput="onQueryInput"
         />
@@ -57,7 +57,7 @@
       bindmarkertap="onMarkerTap"
     >
       <!-- 城市场地计数（设计稿：绿点 + 深色胶囊；折叠态隐藏避免溢出）。真机 cover-view flex/gap 会截断文字，文本直接撑开 -->
-      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">{{city}} · {{mapCount}} 个{{entity === 'shop' ? '店铺' : '场地'}}<cover-view class="map-chip-dot"></cover-view></cover-view>
+      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">{{city}} · {{mapCount}} 个{{entity === 'shop' ? '俱乐部' : '滑板场地'}}<cover-view class="map-chip-dot"></cover-view></cover-view>
       <!-- 定位中提示 -->
       <cover-view wx:if="{{locating}}" class="locating-tip">正在定位当前位置...</cover-view>
       <!-- 定位按钮：回到当前位置并匹配城市（设计稿：地图右上白底圆钮；准星用 cover-view 原生绘制，真机 cover-image 不支持 SVG） -->
@@ -78,10 +78,16 @@
   <view class="panel">
     <!-- 一级 + 二级（面板内控制区） -->
     <view class="control-panel">
-      <!-- 实体切换：滑板场地 / 滑板店铺（内嵌分段轨道） -->
+      <!-- 实体切换：场地 / 俱乐部（文字 Tab + 橙色短指示条，轻导航让位内容） -->
       <view class="entity-seg" aria-role="tablist">
-        <view class="entity-item {{entity === 'venue' ? 'entity-active' : ''}}" aria-role="tab" data-entity="venue" bindtap="switchEntity">滑板场地</view>
-        <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" aria-role="tab" data-entity="shop" bindtap="switchEntity">滑板店铺</view>
+        <view class="entity-item {{entity === 'venue' ? 'entity-active' : ''}}" aria-role="tab" data-entity="venue" bindtap="switchEntity">
+          <text>滑板场地</text>
+          <view class="entity-bar"></view>
+        </view>
+        <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" aria-role="tab" data-entity="shop" bindtap="switchEntity">
+          <text>俱乐部</text>
+          <view class="entity-bar"></view>
+        </view>
       </view>
 
       <!-- 快捷筛选（场地=类型，店铺=服务） -->
@@ -142,10 +148,10 @@
         </view>
         <view wx:if="{{empty}}" class="empty">
           <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
-          <text class="empty-text">{{query ? '没有找到「' + query + '」相关的店铺' : '暂无提供「' + filter + '」服务的店铺'}}</text>
+          <text class="empty-text">{{query ? '没有找到「' + query + '」相关的俱乐部' : '暂无提供「' + filter + '」服务的俱乐部'}}</text>
         </view>
         <view wx:if="{{!empty}}" class="loadmore">
-          <text>已展示{{city}}全部 {{list.length}} 家店铺</text>
+          <text>已展示{{city}}全部 {{list.length}} 家俱乐部</text>
         </view>
       </block>
     </view>

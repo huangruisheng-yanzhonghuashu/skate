@@ -147,7 +147,7 @@ Page({
         if (msg.indexOf('auth') >= 0 || msg.indexOf('deny') >= 0) {
           wx.showModal({
             title: '需要位置权限',
-            content: '用于展示附近滑板场地与当前位置',
+            content: '用于展示附近场地与当前位置',
             confirmText: '去设置',
             success: (r) => {
               if (r.confirm) wx.openSetting()
@@ -249,7 +249,7 @@ Page({
       }
       if (v.id === selected) {
         marker.callout = {
-          content: (isVenue ? '' : '[店铺] ') + v.name,
+          content: (isVenue ? '' : '[俱乐部] ') + v.name,
           display: 'ALWAYS',
           color: '#1A1A1E',
           fontSize: 12,
