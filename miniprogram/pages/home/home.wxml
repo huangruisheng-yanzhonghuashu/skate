@@ -74,75 +74,80 @@
     </map>
   </view>
 
-  <!-- 控制面板：一级轨道 + 二级筛选打包同卡（解决层次脱节） -->
-  <view class="control-panel">
-    <!-- 实体切换：滑板场地 / 滑板店铺（内嵌分段轨道） -->
-    <view class="entity-seg" aria-role="tablist">
-      <view class="entity-item {{entity === 'venue' ? 'entity-active' : ''}}" aria-role="tab" data-entity="venue" bindtap="switchEntity">滑板场地</view>
-      <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" aria-role="tab" data-entity="shop" bindtap="switchEntity">滑板店铺</view>
+  <!-- 整合面板：一级轨道 + 二级筛选 + 三级列表同底一体（分隔线划层次） -->
+  <view class="panel">
+    <!-- 一级 + 二级（面板内控制区） -->
+    <view class="control-panel">
+      <!-- 实体切换：滑板场地 / 滑板店铺（内嵌分段轨道） -->
+      <view class="entity-seg" aria-role="tablist">
+        <view class="entity-item {{entity === 'venue' ? 'entity-active' : ''}}" aria-role="tab" data-entity="venue" bindtap="switchEntity">滑板场地</view>
+        <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" aria-role="tab" data-entity="shop" bindtap="switchEntity">滑板店铺</view>
+      </view>
+
+      <!-- 快捷筛选（场地=类型，店铺=服务） -->
+      <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
+        <view
+          wx:for="{{filters}}"
+          wx:key="*this"
+          class="filter-chip {{filter === item ? 'filter-chip-active' : ''}}"
+          data-filter="{{item}}"
+          bindtap="pickFilter"
+        >{{item}}</view>
+      </scroll-view>
     </view>
 
-    <!-- 快捷筛选（场地=类型，店铺=服务） -->
-    <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
-      <view
-        wx:for="{{filters}}"
-        wx:key="*this"
-        class="filter-chip {{filter === item ? 'filter-chip-active' : ''}}"
-        data-filter="{{item}}"
-        bindtap="pickFilter"
-      >{{item}}</view>
-    </scroll-view>
-  </view>
-
-  <!-- 列表：骨架屏 → 场地卡片 / 店铺卡片 -->
-  <view class="list">
-    <!-- 骨架屏（云数据返回前，按真实卡片结构：左图 + 4 行） -->
-    <block wx:if="{{!loaded}}">
-      <view wx:for="{{[0,1,2]}}" wx:key="*this" class="skel-card">
-        <view class="skel-thumb"></view>
-        <view class="skel-body">
-          <view class="skel-line skel-w60"></view>
-          <view class="skel-line skel-w80"></view>
-          <view class="skel-line skel-w40"></view>
-          <view class="skel-line skel-w50"></view>
+    <!-- 三级列表（行化：去卡融入面板，行间分隔线） -->
+    <view class="list">
+      <!-- 骨架屏（云数据返回前，按真实卡片结构：左图 + 4 行） -->
+      <block wx:if="{{!loaded}}">
+        <view wx:for="{{[0,1,2]}}" wx:key="*this" class="list-item">
+          <view class="skel-card">
+            <view class="skel-thumb"></view>
+            <view class="skel-body">
+              <view class="skel-line skel-w60"></view>
+              <view class="skel-line skel-w80"></view>
+              <view class="skel-line skel-w40"></view>
+              <view class="skel-line skel-w50"></view>
+            </view>
+          </view>
         </view>
-      </view>
-    </block>
+      </block>
 
-    <block wx:elif="{{entity === 'venue'}}">
-      <venue-card
-        wx:for="{{list}}"
-        wx:key="id"
-        venue="{{item}}"
-        online="{{item.online}}"
-        checked="{{item.checked}}"
-        checked-time="{{item.checkedTime}}"
-        index="{{index}}"
-      />
-      <view wx:if="{{empty}}" class="empty">
-        <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
-        <text class="empty-text">{{query ? '没有找到「' + query + '」相关的场地' : '暂无' + filter + '类型的场地'}}</text>
-      </view>
-      <view wx:if="{{!empty}}" class="loadmore">
-        <text>已展示{{city}}全部 {{list.length}} 个场地</text>
-      </view>
-    </block>
+      <block wx:elif="{{entity === 'venue'}}">
+        <view wx:for="{{list}}" wx:key="id" class="list-item">
+          <venue-card
+            venue="{{item}}"
+            online="{{item.online}}"
+            checked="{{item.checked}}"
+            checked-time="{{item.checkedTime}}"
+            index="{{index}}"
+          />
+        </view>
+        <view wx:if="{{empty}}" class="empty">
+          <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
+          <text class="empty-text">{{query ? '没有找到「' + query + '」相关的场地' : '暂无' + filter + '类型的场地'}}</text>
+        </view>
+        <view wx:if="{{!empty}}" class="loadmore">
+          <text>已展示{{city}}全部 {{list.length}} 个场地</text>
+        </view>
+      </block>
 
-    <block wx:else>
-      <shop-card
-        wx:for="{{list}}"
-        wx:key="id"
-        shop="{{item}}"
-        index="{{index}}"
-        bind:go="goDetail"
-      />
-      <view wx:if="{{empty}}" class="empty">
-        <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
-        <text class="empty-text">{{query ? '没有找到「' + query + '」相关的店铺' : '暂无提供「' + filter + '」服务的店铺'}}</text>
-      </view>
-      <view wx:if="{{!empty}}" class="loadmore">
-        <text>已展示{{city}}全部 {{list.length}} 家店铺</text>
-      </view>
-    </block>
+      <block wx:else>
+        <view wx:for="{{list}}" wx:key="id" class="list-item">
+          <shop-card
+            shop="{{item}}"
+            index="{{index}}"
+            bind:go="goDetail"
+          />
+        </view>
+        <view wx:if="{{empty}}" class="empty">
+          <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
+          <text class="empty-text">{{query ? '没有找到「' + query + '」相关的店铺' : '暂无提供「' + filter + '」服务的店铺'}}</text>
+        </view>
+        <view wx:if="{{!empty}}" class="loadmore">
+          <text>已展示{{city}}全部 {{list.length}} 家店铺</text>
+        </view>
+      </block>
+    </view>
   </view>
 </view>

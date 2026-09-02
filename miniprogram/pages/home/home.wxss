@@ -248,12 +248,16 @@
 .locate-tick-w { left: 3rpx; top: 16.5rpx; width: 4rpx; height: 3rpx; }
 .locate-tick-e { left: 29rpx; top: 16.5rpx; width: 4rpx; height: 3rpx; }
 
-/* ===== 控制面板（一级轨道 + 二级筛选同卡打包，解决层次脱节） ===== */
-.control-panel {
+/* ===== 整合面板：一级 + 二级 + 三级列表同底一体（分隔线划层次） ===== */
+.panel {
   margin: 32rpx 32rpx 0;
-  padding: 24rpx 20rpx 8rpx;
   background: #1E1E23;
   border-radius: 24rpx;
+}
+
+/* 面板内控制区：左右内边距 20rpx，与列表行左缘对齐 */
+.control-panel {
+  padding: 24rpx 20rpx 8rpx;
 }
 
 /* ===== 实体切换（面板内嵌轨道：深一档底色 + 橙渐变 active 半区） ===== */
@@ -302,21 +306,18 @@
   border-radius: 999rpx;
 }
 
-/* ===== 骨架屏（按真实卡片结构：左图通铺 + 内容区） ===== */
+/* ===== 骨架屏（按真实卡片结构：左图通铺 + 内容区；行化透明底融入面板） ===== */
 .skel-card {
   display: flex;
   gap: 0;
   padding: 0;
-  background: #1E1E23;
-  border-radius: 20rpx;
-  margin-bottom: 20rpx;
+  background: transparent;
   overflow: hidden;
 }
 
 .skel-thumb {
   width: 200rpx;
   height: 200rpx;
-  border-radius: 20rpx 0 0 20rpx;
   flex-shrink: 0;
 }
 
@@ -380,16 +381,31 @@
   font-weight: 500;
 }
 
-/* ===== 列表 ===== */
-.list {
-  flex: 1;
-  padding: 24rpx 32rpx 32rpx;
-  display: flex;
-  flex-direction: column;
-  gap: 24rpx;
+/* ===== 列表（面板内行化：去卡融入，分隔线划行，左缘与筛选区对齐） ===== */
+
+/* 行：透明底 + 1rpx 分隔线（首行分隔线即二级/三级分组线）；左右 20rpx 与控制区对齐 */
+.list-item {
+  margin: 0 20rpx;
+  padding: 20rpx 0;
+  border-top: 1rpx solid #2A2A31;
 }
 
-/* 三级列表首卡与面板适度衔接（既同宽对齐，又有分组呼吸感） */
+/* 去卡化覆盖（卡片组件 apply-shared 且仅首页使用）：透明底融入面板 */
+.panel .card,
+.panel .shop-card {
+  background: transparent;
+  border-radius: 0;
+}
+
+/* venue 左图随行去「左圆右直角」（贴卡缘改为贴行缘方角） */
+.panel .card .thumb {
+  border-radius: 0;
+}
+
+/* 店铺行按压态：整行提亮（提升 specificity 覆盖，避免被去卡透明底压掉） */
+.panel .shop-card.shop-hover {
+  background: #26262C;
+}
 
 /* 列表收尾提示 */
 .loadmore {
@@ -397,7 +413,7 @@
   align-items: center;
   justify-content: center;
   gap: 16rpx;
-  padding: 24rpx 0 8rpx;
+  padding: 24rpx 0 20rpx;
   color: #8C8C94;
   font-size: 24rpx;
 }
