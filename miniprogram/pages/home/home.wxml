@@ -56,16 +56,20 @@
       show-location
       bindmarkertap="onMarkerTap"
     >
-      <!-- 城市场地计数（设计稿：绿点 + 深色胶囊；折叠态隐藏避免溢出） -->
-      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">
-        <cover-view class="map-chip-dot"></cover-view>
-        <cover-view class="map-chip-text">{{city}} · {{mapCount}} 个{{entity === 'shop' ? '店铺' : '场地'}}</cover-view>
-      </cover-view>
+      <!-- 城市场地计数（设计稿：绿点 + 深色胶囊；折叠态隐藏避免溢出）。真机 cover-view flex/gap 会截断文字，文本直接撑开 -->
+      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">{{city}} · {{mapCount}} 个{{entity === 'shop' ? '店铺' : '场地'}}<cover-view class="map-chip-dot"></cover-view></cover-view>
       <!-- 定位中提示 -->
       <cover-view wx:if="{{locating}}" class="locating-tip">正在定位当前位置...</cover-view>
-      <!-- 定位按钮：回到当前位置并匹配城市（设计稿：右下） -->
+      <!-- 定位按钮：回到当前位置并匹配城市（设计稿：地图右上白底圆钮；准星用 cover-view 原生绘制，真机 cover-image 不支持 SVG） -->
       <cover-view wx:if="{{!mapCollapsed}}" class="locate-btn" aria-role="button" aria-label="回到当前定位" bindtap="onTapLocate">
-        <cover-image class="locate-icon" src="{{icons.locate}}" />
+        <cover-view class="locate-ico">
+          <cover-view class="locate-ring"></cover-view>
+          <cover-view class="locate-dot"></cover-view>
+          <cover-view class="locate-tick locate-tick-n"></cover-view>
+          <cover-view class="locate-tick locate-tick-s"></cover-view>
+          <cover-view class="locate-tick locate-tick-w"></cover-view>
+          <cover-view class="locate-tick locate-tick-e"></cover-view>
+        </cover-view>
       </cover-view>
     </map>
   </view>

@@ -42,7 +42,6 @@ Page({
       search: ICON.searchPh,
       xWhite: ICON.xWhite,
       venueFog: ICON.venueFog,
-      locate: ICON.locateWhite,
     },
   },
 
