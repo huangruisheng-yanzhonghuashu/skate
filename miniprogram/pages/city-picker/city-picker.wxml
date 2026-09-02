@@ -1,0 +1,96 @@
+<view class="page">
+  <!-- 自定义导航：返回 + 搜索城市（与设计稿同排布局） -->
+  <view class="nav" style="padding-top: {{statusBarHeight}}px;">
+    <view class="nav-back" aria-role="button" aria-label="返回" bindtap="goBack">
+      <image class="nav-back-ico" src="{{icons.chevronLeftWhite}}" mode="aspectFit" />
+    </view>
+    <view class="search-wrap">
+      <image class="search-ico" src="{{icons.search}}" mode="aspectFit" />
+      <input
+        class="search-input"
+        value="{{query}}"
+        focus
+        confirm-type="search"
+        placeholder="搜索城市"
+        placeholder-class="search-ph"
+        bindinput="onQueryInput"
+      />
+      <view wx:if="{{query}}" class="search-clear" bindtap="clearQuery">
+        <image class="search-clear-ico" src="{{icons.xWhite}}" mode="aspectFit" />
+      </view>
+    </view>
+  </view>
+
+  <!-- 城市列表（搜索时直接展示匹配结果，否则按分区展示） -->
+  <scroll-view
+    class="body"
+    scroll-y
+    scroll-into-view="{{intoView}}"
+    scroll-with-animation
+    enhanced
+    show-scrollbar="{{false}}"
+  >
+    <!-- 搜索结果 -->
+    <block wx:if="{{query}}">
+      <view class="section-title">搜索结果</view>
+      <view
+        wx:for="{{results}}"
+        wx:key="*this"
+        class="city-row {{item === city ? 'city-row-active' : ''}}"
+        data-city="{{item}}"
+        bindtap="pick"
+      >{{item}}</view>
+      <view wx:if="{{!results.length}}" class="empty">
+        <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
+        <text class="empty-text">没有找到「{{query}}」对应的城市</text>
+      </view>
+    </block>
+
+    <!-- 定位/当前选中城市 + 热门 + 字母分组 -->
+    <block wx:else>
+      <view class="section-title">定位/当前选中城市</view>
+      <view class="chip-row">
+        <view class="loc-chip" data-city="{{city}}" bindtap="pick">{{city}}</view>
+      </view>
+
+      <view class="section-title">热门城市</view>
+      <view class="hot-grid">
+        <view
+          wx:for="{{hot}}"
+          wx:key="*this"
+          class="hot-chip {{item === city ? 'hot-chip-active' : ''}}"
+          data-city="{{item}}"
+          bindtap="pick"
+        >{{item}}</view>
+      </view>
+
+      <block wx:for="{{groups}}" wx:key="letter">
+        <view class="letter" id="L{{item.letter}}">{{item.letter}}</view>
+        <view
+          wx:for="{{item.cities}}"
+          wx:key="*this"
+          class="city-row {{item === city ? 'city-row-active' : ''}}"
+          data-city="{{item}}"
+          bindtap="pick"
+        >{{item}}</view>
+      </block>
+      <view class="body-pad"></view>
+    </block>
+  </scroll-view>
+
+  <!-- 右侧字母导航条：点按/滑动快速定位 -->
+  <view
+    wx:if="{{!query}}"
+    class="alpha"
+    bindtouchstart="onAlphaTouch"
+    bindtouchmove="onAlphaTouch"
+  >
+    <view
+      wx:for="{{letters}}"
+      wx:key="*this"
+      class="alpha-item {{intoView === 'L' + item ? 'alpha-item-active' : ''}}"
+      data-letter="{{item}}"
+      bindtap="jumpLetter"
+    >{{item}}</view>
+  </view>
+</view>

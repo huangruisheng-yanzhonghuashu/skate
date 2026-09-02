@@ -14,11 +14,20 @@ function fmtHm(iso) {
   return pad(d.getHours()) + ':' + pad(d.getMinutes())
 }
 
+/* 两坐标球面距离（米）：最近场地推断城市用 */
+function haversine(lat1, lng1, lat2, lng2) {
+  const R = 6371000
+  const rad = Math.PI / 180
+  const dLat = (lat2 - lat1) * rad
+  const dLng = (lng2 - lng1) * rad
+  const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) * Math.sin(dLng / 2)
+  return 2 * R * Math.asin(Math.sqrt(a))
+}
+
 Page({
   data: {
     city: '嘉兴',
-    cityOpen: false,
-    cities: [],
     entity: 'venue',
     filters: FIELD_FILTERS,
     filter: '全部',
@@ -38,7 +47,7 @@ Page({
     icons: {
       pinWhite: ICON.pinWhite,
       pinOrange: ICON.pinOrangeSmall,
-      chevronDown: ICON.chevronDownWhite,
+      swap: ICON.swapWhite,
       search: ICON.searchPh,
       xWhite: ICON.xWhite,
       venueFog: ICON.venueFog,
@@ -53,12 +62,10 @@ Page({
     this._located = false
     this._venuesLoaded = false
     this._shopsLoaded = false
+    this._loc = null
+    this._geoDone = false
     this.loadVenues()
     this.loadShops()
-    /* 城市列表来自场地集合聚合 */
-    cloud.getCities().then((cities) => {
-      this.setData({ cities })
-    })
     /* 用户评分统计 */
     this.refreshRatings()
     /* 手机定位：设置地图中心 + 自动匹配城市 */
@@ -68,10 +75,13 @@ Page({
   onShow() {
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
     if (tb) tb.setData({ selected: 0 })
+    /* 城市选择页返回：检测城市变化，地图中心移到新城市（refresh 内会同步 data.city） */
+    const cityChanged = store.getCity() !== this.data.city
     /* 数据 onLoad 已加载（云数据会话内不变，管理页改动会刷新 cloud 缓存），这里只刷新渲染 */
     this.refresh()
     this.buildMarkers()
     this.refreshOnline()
+    if (cityChanged) this.centerOnCity()
   },
 
   /* 云端场地列表（数据全部来源于云数据库） */
@@ -83,6 +93,8 @@ Page({
       this._venuesLoaded = true
       this.setData({ loaded: this._venuesLoaded && this._shopsLoaded })
       this.centerOnCityIfNeeded(venues)
+      /* 定位先于数据完成：场地就位后补做最近场地城市推断（无 Key/逆地理失败时的兜底） */
+      if (this._loc && !this._geoDone) this.inferNearestCity()
       this.refresh()
       this.buildMarkers()
       this.refreshOnline()
@@ -136,6 +148,7 @@ Page({
       type: 'gcj02',
       success: (res) => {
         this._located = true
+        this._loc = { latitude: res.latitude, longitude: res.longitude }
         this.setData({ latitude: res.latitude, longitude: res.longitude, scale: 14, locating: false })
         this.autoMatchCity(res.latitude, res.longitude)
       },
@@ -158,9 +171,14 @@ Page({
     })
   },
 
-  /* 逆地理编码：经纬度 → 城市名（需腾讯位置服务 Key，未配置时跳过） */
+  /* 经纬度 → 城市名，两级策略：
+   * 1) 配置了腾讯位置服务 Key 时走逆地理编码（精确到城市）
+   * 2) 无 Key 或请求失败时，用「最近的场地/店铺」所在城市兜底（零配置可用） */
   autoMatchCity(latitude, longitude) {
-    if (!QQ_MAP_KEY) return
+    if (!QQ_MAP_KEY) {
+      this.inferNearestCity()
+      return
+    }
     wx.request({
       url: 'https://apis.map.qq.com/ws/geocoder/v1/',
       data: {
@@ -171,11 +189,13 @@ Page({
       success: (r) => {
         const ad = r.data && r.data.result && r.data.result.ad_info
         const city = ad && ad.city
-        if (!city) return
+        if (!city) {
+          this.inferNearestCity()
+          return
+        }
+        this._geoDone = true
         const name = city.replace(/市$/, '')
-        /* 只自动切换到云端有场地数据的城市；无数据城市保持当前选择（地图仍定位到真实位置） */
-        const known = this.data.cities || []
-        if (name && name !== store.getCity() && known.indexOf(name) >= 0) {
+        if (name && name !== store.getCity()) {
           store.setCity(name)
           this.refresh()
           this.buildMarkers()
@@ -183,9 +203,36 @@ Page({
         }
       },
       fail: (e) => {
-        console.warn('[home] 逆地理编码失败', (e && e.errMsg) || e)
+        console.warn('[home] 逆地理编码失败，回退最近场地推断', (e && e.errMsg) || e)
+        this.inferNearestCity()
       },
     })
+  },
+
+  /* 最近场地/店铺推断城市：定位成功后取球面距离最近实体所在城市
+   * 场地数据未就位时跳过（loadVenues 完成后会补做一次） */
+  inferNearestCity() {
+    const loc = this._loc
+    if (!loc || this._geoDone) return
+    const all = (this._venues || []).concat(this._shops || [])
+      .filter((v) => v.latitude && v.longitude && v.city)
+    if (!all.length) return
+    let best = null
+    let bestD = Infinity
+    all.forEach((v) => {
+      const d = haversine(loc.latitude, loc.longitude, v.latitude, v.longitude)
+      if (d < bestD) {
+        bestD = d
+        best = v
+      }
+    })
+    this._geoDone = true
+    if (best.city !== store.getCity()) {
+      store.setCity(best.city)
+      this.refresh()
+      this.buildMarkers()
+      wx.showToast({ title: '已定位到' + best.city, icon: 'none' })
+    }
   },
 
   onHide() {},
@@ -358,26 +405,21 @@ Page({
     this.buildMarkers()
   },
 
-  /* 城市选择 */
-  toggleCity() {
-    this.setData({ cityOpen: !this.data.cityOpen })
+  /* 城市选择：跳转城市选择页（搜索/热门/字母索引，选中后写入 store 返回） */
+  goCityPicker() {
+    wx.navigateTo({ url: '/pages/city-picker/city-picker' })
   },
 
-  pickCity(e) {
-    const c = e.currentTarget.dataset.city
-    store.setCity(c)
-    /* 地图中心移到新城市第一个实体位置（当前实体优先，另一实体兜底） */
+  /* 城市切换后：地图中心移到新城市第一个实体（当前实体优先，另一实体兜底）
+   * 无场地的城市保持当前地图中心，列表按城市过滤自然呈现空态 */
+  centerOnCity() {
+    const c = this.data.city
     const first = this.data.entity === 'shop'
       ? ((this._shops || []).find((v) => v.city === c) || (this._venues || []).find((v) => v.city === c))
       : ((this._venues || []).find((v) => v.city === c) || (this._shops || []).find((v) => v.city === c))
-    if (first) this._located = false
-    this.setData({ cityOpen: false })
-    this.refresh()
-    this.buildMarkers()
-    if (first) {
-      this.setData({ latitude: first.latitude, longitude: first.longitude, scale: 13, selectedVenueId: '' })
-    }
-    wx.showToast({ title: '已切换到' + c, icon: 'none' })
+    if (!first) return
+    this._located = false
+    this.setData({ latitude: first.latitude, longitude: first.longitude, scale: 13, selectedVenueId: '' })
   },
 
   /* 搜索 */

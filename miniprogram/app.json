@@ -9,7 +9,8 @@
     "pages/place-checkins/place-checkins",
     "pages/admin/admin",
     "pages/feedback/feedback",
-    "pages/reports/reports"
+    "pages/reports/reports",
+    "pages/city-picker/city-picker"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1A1A1E",

@@ -1,0 +1,206 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #111114;
+}
+
+/* ===== 自定义导航：返回 + 搜索 ===== */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 16rpx 32rpx 16rpx;
+  background: #111114;
+}
+
+.nav-back {
+  flex-shrink: 0;
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-back-ico {
+  width: 40rpx;
+  height: 40rpx;
+}
+
+.search-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  height: 72rpx;
+  padding: 0 24rpx;
+  background: #1E1E23;
+  border: 1rpx solid #26262C;
+  border-radius: 36rpx;
+}
+
+.search-ico {
+  width: 32rpx;
+  height: 32rpx;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  height: 100%;
+  font-size: 28rpx;
+  color: #FFFFFF;
+}
+
+.search-ph {
+  color: #6E6E76;
+}
+
+.search-clear {
+  flex-shrink: 0;
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  background: #3A3A42;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-clear-ico {
+  width: 20rpx;
+  height: 20rpx;
+}
+
+/* ===== 列表主体 ===== */
+.body {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.section-title {
+  padding: 32rpx 32rpx 20rpx;
+  font-size: 26rpx;
+  color: #8C8C94;
+}
+
+/* 定位/当前选中城市 chip（设计稿：浅底描边胶囊，深色主题下同语义） */
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  padding: 0 32rpx;
+}
+
+.loc-chip {
+  padding: 16rpx 40rpx;
+  font-size: 28rpx;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
+  border: 1rpx solid rgba(255, 90, 54, 0.4);
+  border-radius: 16rpx;
+}
+
+/* 热门城市宫格（4 列） */
+.hot-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20rpx;
+  padding: 0 32rpx;
+}
+
+.hot-chip {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  color: #D9D9DE;
+  background: #1E1E23;
+  border: 1rpx solid #26262C;
+  border-radius: 16rpx;
+}
+
+.hot-chip-active {
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
+  border-color: rgba(255, 90, 54, 0.4);
+  font-weight: 500;
+}
+
+/* 字母分组 */
+.letter {
+  padding: 24rpx 32rpx 12rpx;
+  font-size: 24rpx;
+  color: #6E6E76;
+  background: #111114;
+}
+
+.city-row {
+  padding: 26rpx 32rpx;
+  font-size: 30rpx;
+  color: #D9D9DE;
+  border-bottom: 1rpx solid #1A1A1E;
+}
+
+.city-row-active {
+  color: #FF8A6E;
+  font-weight: 500;
+}
+
+/* 搜索结果同样式 */
+.body .section-title + .city-row {
+  border-top: 1rpx solid #1A1A1E;
+}
+
+.body-pad {
+  height: calc(60rpx + env(safe-area-inset-bottom));
+}
+
+/* 搜索空态 */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24rpx;
+  padding: 120rpx 0;
+}
+
+.empty-icon {
+  width: 96rpx;
+  height: 96rpx;
+  opacity: 0.5;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #8C8C94;
+}
+
+/* ===== 右侧字母导航条 ===== */
+.alpha {
+  position: fixed;
+  right: 8rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8rpx 4rpx;
+  border-radius: 20rpx;
+}
+
+.alpha-item {
+  padding: 3rpx 12rpx;
+  font-size: 22rpx;
+  line-height: 1.4;
+  color: #8C8C94;
+}
+
+.alpha-item-active {
+  color: #FF5A36;
+  font-weight: 600;
+}

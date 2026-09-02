@@ -23,12 +23,8 @@
   height: 88rpx;
 }
 
-.city-wrap {
-  position: relative;
-  flex-shrink: 0;
-}
-
 .city {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 8rpx;
@@ -42,36 +38,11 @@
   height: 28rpx;
 }
 
-/* 城市下拉箭头：与 pin 同尺寸（设计稿 14×14px，白色） */
-.city-chevron {
+/* 城市切换图标（⇌）：与 pin 同尺寸（设计稿 14×14px，白色） */
+.city-swap {
   width: 28rpx;
   height: 28rpx;
   flex-shrink: 0;
-}
-
-.city-pop {
-  position: absolute;
-  left: 0;
-  top: 64rpx;
-  z-index: 30;
-  width: 224rpx;
-  background: #1E1E23;
-  border: 1rpx solid #26262C;
-  border-radius: 16rpx;
-  overflow: hidden;
-  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.5);
-}
-
-.city-item {
-  padding: 20rpx 32rpx;
-  font-size: 28rpx;
-  color: #D9D9DE;
-}
-
-.city-item-active {
-  background: rgba(255, 90, 54, 0.16);
-  color: #FF8A6E;
-  font-weight: 500;
 }
 
 .search-pill {

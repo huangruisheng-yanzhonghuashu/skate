@@ -2,21 +2,10 @@
   <!-- 头部：定位 + 搜索 -->
   <view class="header">
     <view wx:if="{{!searchOpen}}" class="header-row">
-      <view class="city-wrap">
-        <view class="city" bindtap="toggleCity">
-          <image class="city-pin" src="{{icons.pinOrange}}" mode="aspectFit" />
-          <text>{{city}}</text>
-          <image class="city-chevron" src="{{icons.chevronDown}}" mode="aspectFit" />
-        </view>
-        <view wx:if="{{cityOpen}}" class="city-pop anim-fade-in">
-          <view
-            wx:for="{{cities}}"
-            wx:key="*this"
-            class="city-item {{item === city ? 'city-item-active' : ''}}"
-            data-city="{{item}}"
-            bindtap="pickCity"
-          >{{item}}</view>
-        </view>
+      <view class="city" bindtap="goCityPicker" aria-role="button" aria-label="选择城市">
+        <image class="city-pin" src="{{icons.pinOrange}}" mode="aspectFit" />
+        <text>{{city}}</text>
+        <image class="city-swap" src="{{icons.swap}}" mode="aspectFit" />
       </view>
       <view class="search-pill" bindtap="openSearch">
         <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />

@@ -2,7 +2,10 @@
 module.exports = {
   /* 腾讯位置服务 Key（用于逆地理编码：经纬度 → 城市名）
    * 申请地址：https://lbs.qq.com/dev/console/application/mine （免费，选"WebService API"）
-   * 留空时的行为：地图仍会定位到当前位置，但不会自动切换城市 */
+   * 申请后还需在小程序后台（mp.weixin.qq.com → 开发管理 → 开发设置 → 服务器域名）
+   * 把 https://apis.map.qq.com 加入 request 合法域名，真机才可请求
+   * 留空时的行为：定位成功后用「最近的场地/店铺」所在城市兜底（零配置可用，
+   * 精度取决于场地分布），城市仍可手动切换 */
   QQ_MAP_KEY: '',
 
   /* ===== 场地实时在线人数（方案 B：位置心跳） ===== */
