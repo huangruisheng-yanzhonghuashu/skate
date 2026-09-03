@@ -134,7 +134,7 @@
   flex-shrink: 0;
   padding: 6rpx 12rpx;
   background: #26262C;
-  color: #A6A6AD;
+  color: #8C8C94;
   font-size: 22rpx;
   line-height: 1;
   border-radius: 8rpx;
@@ -166,7 +166,7 @@
 
 /* 无人在场弱化态 */
 .state-quiet {
-  color: #6E6E76;
+  color: #8C8C94;
   font-weight: 400;
 }
 

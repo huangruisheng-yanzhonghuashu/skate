@@ -250,7 +250,7 @@
   height: 96rpx;
   padding: 0 16rpx;
   font-size: 30rpx;
-  color: #8C8C94;
+  color: #A6A6AD;
   transition: color 0.2s ease;
 }
 
