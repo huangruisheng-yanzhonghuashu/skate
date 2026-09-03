@@ -50,7 +50,7 @@
 
 .shop-name {
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: 700;
   color: #FFFFFF;
   overflow: hidden;
   text-overflow: ellipsis;
