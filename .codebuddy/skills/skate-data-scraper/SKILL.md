@@ -80,6 +80,7 @@ site:huodong.com {city} 滑板场馆（垂直场馆目录站，效率高）
 - 用 web_fetch 抓原文页提取 `<img>` 直链（新闻页、百科页、目录站详情页通常有直链 URL）
 - 每实体收 1-6 张：**第 1 张即封面（cover），必须是最能识别场地/门店全貌的横图**；有明确封面图的来源（百科头图、点评封面）优先放第 1 位
 - 每张图记录来源 URL 进 `sources`；确认图片 URL 是公网可直连的 https（小程序 `<image>` 组件可直接渲染远程 https，无需域名白名单）
+- **⚠️ 实测结论（2026-09 杭州）：web_fetch 管道会过滤 `img` 标签，百科 403，新闻页图片 JS 懒加载——真实图片直链基本抓不到**。落地路径改为：image_gen 生成实景风格封面图（prompt 按实体定制）→ `tcb storage upload` 传云存储 → **fileID** 写入 photos/cover（fileID 永久有效，无防盗链；bucket 前缀可从 checkins 集合现存 fileID 抽样解析）。直链抓取仅作为锦上添花，不作为主路径
 
 ### Phase 3 — 清洗规则（硬规则，逐条执行）
 

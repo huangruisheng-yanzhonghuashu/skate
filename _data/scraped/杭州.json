@@ -2,11 +2,11 @@
   "city": "杭州",
   "scrapedAt": "2026-09-03",
   "summary": {
-    "venues": 9,
-    "orgs": 12,
+    "venues": 12,
+    "orgs": 16,
     "relations": 4,
     "dropped": 2,
-    "needVerify": 8
+    "needVerify": 22
   },
   "venues": [
     {
@@ -14,7 +14,16 @@
       "name": "钱塘轮滑中心滑板公园",
       "city": "杭州",
       "category": "混合",
-      "tags": [{ "label": "免费", "icon": "tagFree" }, { "label": "水泥", "icon": "tagCement" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "水泥",
+          "icon": "tagCement"
+        }
+      ],
       "address": "杭州市钱塘区拾里路100号（钱塘轮滑中心北侧）",
       "shortAddr": "钱塘区拾里路100号",
       "latitude": null,
@@ -22,9 +31,17 @@
       "indoor": false,
       "lighting": true,
       "fee": "免费",
-      "features": ["亚运会滑板比赛场地", "街式区+碗池区", "862座观众席", "健身房/淋浴间", "2025年焕新开园"],
+      "features": [
+        "亚运会滑板比赛场地",
+        "街式区+碗池区",
+        "862座观众席",
+        "健身房/淋浴间",
+        "2025年焕新开园"
+      ],
       "operator": "",
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/qiantang-wheel-park.png"
+      ],
       "hot": true,
       "status": "营业中",
       "confidence": "高",
@@ -32,14 +49,28 @@
       "sources": [
         "https://baike.baidu.com/item/钱塘轮滑中心滑板公园/63062662",
         "https://www.hzzx.gov.cn/cshz/content/2025-03/18/content_8896448.htm"
-      ]
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/qiantang-wheel-park.png"
     },
     {
       "kind": "venue",
       "name": "滨江陆冲双翘滑板场地",
       "city": "杭州",
       "category": "街式",
-      "tags": [{ "label": "免费", "icon": "tagFree" }, { "label": "水泥", "icon": "tagCement" }, { "label": "无灯", "icon": "tagLight" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "水泥",
+          "icon": "tagCement"
+        },
+        {
+          "label": "无灯",
+          "icon": "tagLight"
+        }
+      ],
       "address": "杭州市滨江区闻涛路与扬帆路交叉口西南100米（钱塘江畔滨江跑道旁）",
       "shortAddr": "滨江区闻涛路与扬帆路",
       "latitude": null,
@@ -47,44 +78,42 @@
       "indoor": false,
       "lighting": false,
       "fee": "免费",
-      "features": ["约300㎡防滑混凝土", "1.2米mini ramp", "矮扶手栏/三阶台阶/跳台", "新手区+进阶区", "禁止电动滑板车与平衡车"],
+      "features": [
+        "约300㎡防滑混凝土",
+        "1.2米mini ramp",
+        "矮扶手栏/三阶台阶/跳台",
+        "新手区+进阶区",
+        "禁止电动滑板车与平衡车"
+      ],
       "operator": "",
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/binjiang-luchong.png"
+      ],
       "hot": true,
       "status": "营业中",
       "confidence": "高",
       "needVerify": false,
-      "sources": ["https://huodong.com/venue/detail/ey6sc"],
-      "_merge_note": "抖音「滨江闻涛路停车场旁碗池」为同一场地，已合并"
-    },
-    {
-      "kind": "venue",
-      "name": "50滑板俱乐部（杭州大厦中央商城店）",
-      "city": "杭州",
-      "category": "街式",
-      "tags": [{ "label": "收费", "icon": "tagFree" }, { "label": "木质", "icon": "tagMixed" }],
-      "address": "杭州市拱墅区展览西路杭州大厦中央商城B2楼B239",
-      "shortAddr": "拱墅区杭州大厦中央商城",
-      "latitude": null,
-      "longitude": null,
-      "indoor": true,
-      "lighting": true,
-      "fee": "付费",
-      "features": ["室内街式100-150㎡", "台阶/扶手/坡道/Manual Pad/Box", "装备租赁30-50元", "单次约80-120元/小时"],
-      "operator": "50滑板",
-      "photos": [],
-      "hot": false,
-      "status": "营业中",
-      "confidence": "高",
-      "needVerify": false,
-      "sources": ["https://huodong.com/venue/detail/ey6sn"]
+      "sources": [
+        "https://huodong.com/venue/detail/ey6sc"
+      ],
+      "_merge_note": "抖音「滨江闻涛路停车场旁碗池」为同一场地，已合并",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/binjiang-luchong.png"
     },
     {
       "kind": "venue",
       "name": "天天滑板（萧山福尔特体育公园店）",
       "city": "杭州",
       "category": "混合",
-      "tags": [{ "label": "收费", "icon": "tagFree" }, { "label": "木质", "icon": "tagMixed" }],
+      "tags": [
+        {
+          "label": "收费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "木质",
+          "icon": "tagMixed"
+        }
+      ],
       "address": "杭州市萧山区加贸路230号福尔特体育公园内",
       "shortAddr": "萧山区加贸路230号",
       "latitude": null,
@@ -92,9 +121,15 @@
       "indoor": true,
       "lighting": true,
       "fee": "付费",
-      "features": ["室内场地含碗池", "日卡58元", "地形丰富"],
+      "features": [
+        "室内场地含碗池",
+        "日卡58元",
+        "地形丰富"
+      ],
       "operator": "天天滑板",
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/tiantian-xiaoshan.png"
+      ],
       "hot": false,
       "status": "营业中",
       "confidence": "中",
@@ -102,14 +137,20 @@
       "sources": [
         "https://www.douyin.com/video/7570903249075886053",
         "http://www.iecity.com/hangzhou/life/Detail66487485706584539084.html"
-      ]
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/tiantian-xiaoshan.png"
     },
     {
       "kind": "venue",
       "name": "FIGHTING时尚运动公园",
       "city": "杭州",
       "category": "混合",
-      "tags": [{ "label": "收费", "icon": "tagFree" }],
+      "tags": [
+        {
+          "label": "收费",
+          "icon": "tagFree"
+        }
+      ],
       "address": "杭州市萧山区友佳路与金鸡路交叉口西南120米",
       "shortAddr": "萧山区友佳路金鸡路",
       "latitude": null,
@@ -117,21 +158,33 @@
       "indoor": true,
       "lighting": true,
       "fee": "付费",
-      "features": ["以滑板为核心的都市青年潮流运动空间"],
+      "features": [
+        "以滑板为核心的都市青年潮流运动空间"
+      ],
       "operator": "",
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fighting.png"
+      ],
       "hot": false,
       "status": "营业中",
       "confidence": "中",
       "needVerify": true,
-      "sources": ["http://huodong.com/venue/detail/ey6sC"]
+      "sources": [
+        "http://huodong.com/venue/detail/ey6sC"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fighting.png"
     },
     {
       "kind": "venue",
       "name": "TTSKATEPARK进来滑板",
       "city": "杭州",
       "category": "混合",
-      "tags": [{ "label": "收费", "icon": "tagFree" }],
+      "tags": [
+        {
+          "label": "收费",
+          "icon": "tagFree"
+        }
+      ],
       "address": "杭州市萧山区市心北路（详细门牌待核）",
       "shortAddr": "萧山区市心北路",
       "latitude": null,
@@ -141,12 +194,17 @@
       "fee": "付费",
       "features": [],
       "operator": "",
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/tts.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/hangzhou/skateboarding"]
+      "sources": [
+        "https://huodong.com/venue/hangzhou/skateboarding"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/tts.png"
     },
     {
       "kind": "venue",
@@ -163,20 +221,30 @@
       "fee": "未知",
       "features": [],
       "operator": "",
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/jujidi.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://www.sohu.com/a/324205764_226668"],
-      "_merge_note": "2019年报道源，时效存疑"
+      "sources": [
+        "https://www.sohu.com/a/324205764_226668"
+      ],
+      "_merge_note": "2019年报道源，时效存疑",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/jujidi.png"
     },
     {
       "kind": "venue",
       "name": "湖滨滑板场",
       "city": "杭州",
       "category": "街式",
-      "tags": [{ "label": "免费", "icon": "tagFree" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        }
+      ],
       "address": "杭州市上城区湖滨步行街（湖滨银泰in77 E区旁，详细点位待核）",
       "shortAddr": "上城区湖滨步行街",
       "latitude": null,
@@ -184,9 +252,14 @@
       "indoor": false,
       "lighting": true,
       "fee": "免费",
-      "features": ["闹市街头板场", "湖滨商圈人流密集"],
+      "features": [
+        "闹市街头板场",
+        "湖滨商圈人流密集"
+      ],
       "operator": "",
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/hubin.png"
+      ],
       "hot": true,
       "status": "待核实",
       "confidence": "中",
@@ -195,14 +268,20 @@
         "https://zjnews.zjol.com.cn/zjnews/hznews/202005/t20200519_11976551.shtml",
         "https://www.toutiao.com/a6828354636437520904"
       ],
-      "_merge_note": "2020年报道源，场地可能随商圈调整变动"
+      "_merge_note": "2020年报道源，场地可能随商圈调整变动",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/hubin.png"
     },
     {
       "kind": "venue",
       "name": "千岛湖沪马探险乐园泵道",
       "city": "杭州",
       "category": "泵道",
-      "tags": [{ "label": "收费", "icon": "tagFree" }],
+      "tags": [
+        {
+          "label": "收费",
+          "icon": "tagFree"
+        }
+      ],
       "address": "杭州市淳安县沪马探险乐园内（详细点位待核）",
       "shortAddr": "淳安县沪马探险乐园",
       "latitude": null,
@@ -210,14 +289,177 @@
       "indoor": false,
       "lighting": false,
       "fee": "付费",
-      "features": ["景区配套运动项目"],
+      "features": [
+        "景区配套运动项目"
+      ],
       "operator": "",
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/qiandaohu.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/hangzhou/skateboarding"]
+      "sources": [
+        "https://huodong.com/venue/hangzhou/skateboarding"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/qiandaohu.png"
+    },
+    {
+      "kind": "venue",
+      "name": "亚运滑板公园",
+      "city": "杭州",
+      "category": "混合",
+      "tags": [
+        {
+          "label": "混合",
+          "icon": "tagMixed"
+        },
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "无灯",
+          "icon": "tagLight"
+        }
+      ],
+      "address": "钱塘区东部湾总部基地，22号大街与之江东路交叉口",
+      "shortAddr": "东部湾（之江东路）",
+      "latitude": 30.3095,
+      "longitude": 120.3925,
+      "indoor": false,
+      "lighting": false,
+      "fee": "免费",
+      "features": [],
+      "operator": "",
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/asiad-park.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/asiad-park.png",
+      "hot": false,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [],
+      "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
+    },
+    {
+      "kind": "venue",
+      "name": "BAC 社区滑板场（MOREPRK）",
+      "city": "杭州",
+      "category": "街式",
+      "tags": [
+        {
+          "label": "街式",
+          "icon": "tagMixed"
+        },
+        {
+          "label": "收费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "有灯",
+          "icon": "tagLight"
+        }
+      ],
+      "address": "滨江区 MOREPRK 滑板公园",
+      "shortAddr": "滨江区（MOREPRK）",
+      "latitude": 30.2075,
+      "longitude": 120.205,
+      "indoor": false,
+      "lighting": true,
+      "fee": "付费",
+      "features": [],
+      "operator": "",
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/bac.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/bac.png",
+      "hot": false,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [],
+      "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
+    },
+    {
+      "kind": "venue",
+      "name": "奥体“大莲花”极限广场",
+      "city": "杭州",
+      "category": "平地",
+      "tags": [
+        {
+          "label": "平地",
+          "icon": "tagMixed"
+        },
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "有灯",
+          "icon": "tagLight"
+        }
+      ],
+      "address": "滨江区飞虹路3号奥体博览城",
+      "shortAddr": "奥体博览城（飞虹路）",
+      "latitude": 30.228,
+      "longitude": 120.226,
+      "indoor": false,
+      "lighting": true,
+      "fee": "免费",
+      "features": [],
+      "operator": "",
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/olotus.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/olotus.png",
+      "hot": true,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [],
+      "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
+    },
+    {
+      "kind": "venue",
+      "name": "黄龙体育中心室外广场",
+      "city": "杭州",
+      "category": "平地",
+      "tags": [
+        {
+          "label": "平地",
+          "icon": "tagMixed"
+        },
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "有灯",
+          "icon": "tagLight"
+        }
+      ],
+      "address": "西湖区黄龙路1号黄龙体育中心",
+      "shortAddr": "黄龙体育中心",
+      "latitude": 30.2665,
+      "longitude": 120.1335,
+      "indoor": false,
+      "lighting": true,
+      "fee": "免费",
+      "features": [],
+      "operator": "",
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/huanglong.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/huanglong.png",
+      "hot": false,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [],
+      "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
     }
   ],
   "orgs": [
@@ -227,16 +469,35 @@
       "legalName": "",
       "city": "杭州",
       "category": "俱乐部",
-      "services": ["教学", "零售", "组织活动", "场地运营"],
+      "services": [
+        "教学",
+        "零售",
+        "组织活动",
+        "场地运营"
+      ],
       "address": "杭州市拱墅区展览西路杭州大厦中央商城B2楼B239（主点）",
       "shortAddr": "拱墅区杭州大厦中央商城",
       "latitude": null,
       "longitude": null,
       "phone": "18758551949",
-      "hours": { "open": "10:00", "close": "22:00" },
-      "partnerVenues": ["钱塘轮滑中心滑板公园", "50滑板俱乐部（杭州大厦中央商城店）"],
-      "courses": ["少儿/成人零基础", "1对1私教", "4-6人小班", "体验课约150-200元/节"],
-      "social": { "douyin": "", "wechat": "" },
+      "hours": {
+        "open": "10:00",
+        "close": "22:00"
+      },
+      "partnerVenues": [
+        "钱塘轮滑中心滑板公园",
+        "50滑板俱乐部（杭州大厦中央商城店）"
+      ],
+      "courses": [
+        "少儿/成人零基础",
+        "1对1私教",
+        "4-6人小班",
+        "体验课约150-200元/节"
+      ],
+      "social": {
+        "douyin": "",
+        "wechat": ""
+      },
       "photos": [],
       "hot": true,
       "status": "营业中",
@@ -256,23 +517,47 @@
       "legalName": "",
       "city": "杭州",
       "category": "培训机构",
-      "services": ["教学", "场地运营", "装备租赁"],
+      "services": [
+        "教学",
+        "场地运营",
+        "装备租赁"
+      ],
       "address": "杭州市上城区钱潮路14号（上城体育中心内，主点）",
       "shortAddr": "上城区钱潮路14号",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "10:00", "close": "22:00" },
-      "partnerVenues": ["天天滑板（萧山福尔特体育公园店）"],
-      "courses": ["少儿/成人", "1对1私教", "4-6人小班", "单节约150-200元", "10节课包约1500元"],
-      "social": { "douyin": "", "wechat": "" },
-      "photos": [],
+      "hours": {
+        "open": "10:00",
+        "close": "22:00"
+      },
+      "partnerVenues": [
+        "天天滑板（萧山福尔特体育公园店）"
+      ],
+      "courses": [
+        "少儿/成人",
+        "1对1私教",
+        "4-6人小班",
+        "单节约150-200元",
+        "10节课包约1500元"
+      ],
+      "social": {
+        "douyin": "",
+        "wechat": ""
+      },
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/tiantian-main.png"
+      ],
       "hot": true,
       "status": "营业中",
       "confidence": "高",
       "needVerify": false,
-      "sources": ["https://huodong.com/venue/detail/ey6sv", "https://m.map.360.cn/m/search/detail/pid=30f4c57f662345fc"],
-      "_merge_note": "连锁品牌，其他点位：奥体印象城店（萧山飞虹路汇德隆印象城7层K02）、颐高店。教练持中国轮滑协会认证"
+      "sources": [
+        "https://huodong.com/venue/detail/ey6sv",
+        "https://m.map.360.cn/m/search/detail/pid=30f4c57f662345fc"
+      ],
+      "_merge_note": "连锁品牌，其他点位：奥体印象城店（萧山飞虹路汇德隆印象城7层K02）、颐高店。教练持中国轮滑协会认证",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/tiantian-main.png"
     },
     {
       "kind": "shop",
@@ -280,17 +565,28 @@
       "legalName": "杭州逆山体育用品有限公司",
       "city": "杭州",
       "category": "板店",
-      "services": ["零售"],
+      "services": [
+        "零售"
+      ],
       "address": "杭州市钱塘区金沙大道450号自由港广场4楼",
       "shortAddr": "钱塘区金沙大道450号",
       "latitude": null,
       "longitude": null,
       "phone": "18624596621",
-      "hours": { "open": "10:00", "close": "22:00" },
+      "hours": {
+        "open": "10:00",
+        "close": "22:00"
+      },
       "partnerVenues": [],
       "courses": [],
-      "social": { "douyin": "", "wechat": "", "weibo": "逆山长板滑板陆冲" },
-      "photos": [],
+      "social": {
+        "douyin": "",
+        "wechat": "",
+        "weibo": "逆山长板滑板陆冲"
+      },
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/nishan-port.png"
+      ],
       "hot": false,
       "status": "营业中",
       "confidence": "高",
@@ -299,7 +595,8 @@
         "https://m.city8.com/hz/leisure/8c78m0786rmtb1459e",
         "https://baike.baidu.com/item/杭州逆山体育用品有限公司/54953124"
       ],
-      "_merge_note": "自主品牌（2014年成立，注册资本120万，经营状态存续，近两年纳税信用A级）；其他点位：23号大街505D区店（钱塘）、绿城吉祥里店（拱墅祥符路5栋1层102号）。参与杭州世界滑板日活动"
+      "_merge_note": "自主品牌（2014年成立，注册资本120万，经营状态存续，近两年纳税信用A级）；其他点位：23号大街505D区店（钱塘）、绿城吉祥里店（拱墅祥符路5栋1层102号）。参与杭州世界滑板日活动",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/nishan-port.png"
     },
     {
       "kind": "shop",
@@ -307,23 +604,33 @@
       "legalName": "杭州逆山体育用品有限公司",
       "city": "杭州",
       "category": "板店",
-      "services": ["零售"],
+      "services": [
+        "零售"
+      ],
       "address": "杭州市钱塘区23号大街联承钱塘505D区1楼D113",
       "shortAddr": "钱塘区23号大街505D区",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/nishan-23rd.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "中",
       "needVerify": true,
-      "sources": ["https://m.city8.com/hz/shopping/8c861b786kncb48d61_address"],
-      "_merge_note": "与公司注册地（23号大街505号4幢113室）同址片区，信息2023年更新"
+      "sources": [
+        "https://m.city8.com/hz/shopping/8c861b786kncb48d61_address"
+      ],
+      "_merge_note": "与公司注册地（23号大街505号4幢113室）同址片区，信息2023年更新",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/nishan-23rd.png"
     },
     {
       "kind": "shop",
@@ -331,23 +638,33 @@
       "legalName": "",
       "city": "杭州",
       "category": "板店",
-      "services": ["零售"],
+      "services": [
+        "零售"
+      ],
       "address": "杭州市西湖区西溪路庆丰新村9号",
       "shortAddr": "西湖区西溪路庆丰新村",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/freedom.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "中",
       "needVerify": true,
-      "sources": ["https://zhidao.baidu.com/question/1767530206301871868.html"],
-      "_merge_note": "2024年问答源，单一来源"
+      "sources": [
+        "https://zhidao.baidu.com/question/1767530206301871868.html"
+      ],
+      "_merge_note": "2024年问答源，单一来源",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/freedom.png"
     },
     {
       "kind": "shop",
@@ -355,22 +672,32 @@
       "legalName": "",
       "city": "杭州",
       "category": "培训机构",
-      "services": ["教学"],
+      "services": [
+        "教学"
+      ],
       "address": "杭州市西湖区（详细地址待核）",
       "shortAddr": "西湖区",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/guosu.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "中",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/hangzhou/skateboarding"]
+      "sources": [
+        "https://huodong.com/venue/hangzhou/skateboarding"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/guosu.png"
     },
     {
       "kind": "shop",
@@ -378,22 +705,33 @@
       "legalName": "",
       "city": "杭州",
       "category": "培训机构",
-      "services": ["教学", "零售"],
+      "services": [
+        "教学",
+        "零售"
+      ],
       "address": "杭州市上城区彭埠港龙悠乐城（详细铺位待核）",
       "shortAddr": "上城区彭埠港龙悠乐城",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/94club.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "中",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/hangzhou/skateboarding"]
+      "sources": [
+        "https://huodong.com/venue/hangzhou/skateboarding"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/94club.png"
     },
     {
       "kind": "shop",
@@ -401,22 +739,33 @@
       "legalName": "",
       "city": "杭州",
       "category": "俱乐部",
-      "services": ["场地运营", "教学"],
+      "services": [
+        "场地运营",
+        "教学"
+      ],
       "address": "杭州市上城区九堡街道金海百货A馆（详细铺位待核）",
       "shortAddr": "上城区九堡金海百货",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/wheelpark.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/hangzhou/skateboarding"]
+      "sources": [
+        "https://huodong.com/venue/hangzhou/skateboarding"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/wheelpark.png"
     },
     {
       "kind": "shop",
@@ -424,23 +773,34 @@
       "legalName": "",
       "city": "杭州",
       "category": "培训机构",
-      "services": ["教学", "装备租赁"],
+      "services": [
+        "教学",
+        "装备租赁"
+      ],
       "address": "杭州市临平区上环桥（详细地址待核）",
       "shortAddr": "临平区上环桥",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/xuanmove.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/detail/ey6ss"],
-      "_merge_note": "轮滑为主兼滑板，提供滑板及全套护具租赁（含门票内）"
+      "sources": [
+        "https://huodong.com/venue/detail/ey6ss"
+      ],
+      "_merge_note": "轮滑为主兼滑板，提供滑板及全套护具租赁（含门票内）",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/xuanmove.png"
     },
     {
       "kind": "shop",
@@ -448,23 +808,33 @@
       "legalName": "",
       "city": "杭州",
       "category": "培训机构",
-      "services": ["教学"],
+      "services": [
+        "教学"
+      ],
       "address": "杭州市临安区青山湖宝龙广场（详细铺位待核）",
       "shortAddr": "临安区青山湖宝龙广场",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/ailu.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/hangzhou/skateboarding"],
-      "_merge_note": "轮滑为主兼滑板"
+      "sources": [
+        "https://huodong.com/venue/hangzhou/skateboarding"
+      ],
+      "_merge_note": "轮滑为主兼滑板",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/ailu.png"
     },
     {
       "kind": "shop",
@@ -472,23 +842,39 @@
       "legalName": "",
       "city": "杭州",
       "category": "俱乐部",
-      "services": ["组织活动", "教学"],
+      "services": [
+        "组织活动",
+        "教学"
+      ],
       "address": "",
       "shortAddr": "",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
-      "partnerVenues": ["滨江陆冲双翘滑板场地"],
-      "courses": ["公益教学/付费课程", "儿童及成人1对1或小班"],
+      "hours": {
+        "open": "",
+        "close": ""
+      },
+      "partnerVenues": [
+        "滨江陆冲双翘滑板场地"
+      ],
+      "courses": [
+        "公益教学/付费课程",
+        "儿童及成人1对1或小班"
+      ],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/skate-crew.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/detail/ey6sc"],
-      "_merge_note": "本地滑板社群，在滨江陆冲场地组织公益教学"
+      "sources": [
+        "https://huodong.com/venue/detail/ey6sc"
+      ],
+      "_merge_note": "本地滑板社群，在滨江陆冲场地组织公益教学",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/skate-crew.png"
     },
     {
       "kind": "shop",
@@ -496,33 +882,208 @@
       "legalName": "",
       "city": "杭州",
       "category": "俱乐部",
-      "services": ["组织活动"],
+      "services": [
+        "组织活动"
+      ],
       "address": "杭州市拱墅区祥符街（详细地址待核）",
       "shortAddr": "拱墅区祥符街",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/popo.png"
+      ],
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://huodong.com/venue/hangzhou/skateboarding"],
-      "_merge_note": "被场馆目录收录，疑似板友聚集酒馆/文化空间，滑板相关度待核"
+      "sources": [
+        "https://huodong.com/venue/hangzhou/skateboarding"
+      ],
+      "_merge_note": "被场馆目录收录，疑似板友聚集酒馆/文化空间，滑板相关度待核",
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/popo.png"
+    },
+    {
+      "kind": "shop",
+      "name": "50滑板俱乐部（杭州大厦中央商城店）",
+      "legalName": "",
+      "city": "杭州",
+      "category": "俱乐部",
+      "services": [
+        "卖板",
+        "教学",
+        "维修",
+        "服装"
+      ],
+      "address": "拱墅区杭州大厦购物城中央商城",
+      "shortAddr": "杭州大厦中央商城",
+      "latitude": 30.274,
+      "longitude": 120.161,
+      "phone": "18758551949",
+      "hours": {
+        "open": "10:00",
+        "close": "22:00"
+      },
+      "partnerVenues": [
+        "钱塘轮滑中心滑板公园"
+      ],
+      "courses": [],
+      "social": {},
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fifty-central.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fifty-central.png",
+      "hot": true,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [],
+      "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
+    },
+    {
+      "kind": "shop",
+      "name": "50滑板俱乐部（运河体育公园店）",
+      "legalName": "",
+      "city": "杭州",
+      "category": "俱乐部",
+      "services": [
+        "卖板",
+        "教学"
+      ],
+      "address": "拱墅区丰潭路690号运河体育公园",
+      "shortAddr": "丰潭路690号",
+      "latitude": 30.287,
+      "longitude": 120.106,
+      "phone": "",
+      "hours": {
+        "open": "09:00",
+        "close": "21:00"
+      },
+      "partnerVenues": [],
+      "courses": [],
+      "social": {},
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fifty-canal.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fifty-canal.png",
+      "hot": false,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [],
+      "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
+    },
+    {
+      "kind": "shop",
+      "name": "50滑板俱乐部（加州阳光·开元广场店）",
+      "legalName": "",
+      "city": "杭州",
+      "category": "俱乐部",
+      "services": [
+        "卖板",
+        "教学",
+        "维修"
+      ],
+      "address": "萧山区金城路333号加州阳光·开元广场",
+      "shortAddr": "萧山金城路333号",
+      "latitude": 30.163,
+      "longitude": 120.264,
+      "phone": "17767105967",
+      "hours": {
+        "open": "10:00",
+        "close": "21:30"
+      },
+      "partnerVenues": [],
+      "courses": [],
+      "social": {},
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fifty-kaiyuan.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fifty-kaiyuan.png",
+      "hot": false,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [],
+      "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
+    },
+    {
+      "kind": "shop",
+      "name": "50滑板店（东站西子国际店）",
+      "legalName": "",
+      "city": "杭州",
+      "category": "板店",
+      "services": [
+        "卖板",
+        "配件"
+      ],
+      "address": "上城区和兴路东站西子国际大厦",
+      "shortAddr": "东站西子国际",
+      "latitude": 30.2905,
+      "longitude": 120.2125,
+      "phone": "",
+      "hours": {
+        "open": "10:00",
+        "close": "21:00"
+      },
+      "partnerVenues": [],
+      "courses": [],
+      "social": {},
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fifty-east.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/fifty-east.png",
+      "hot": false,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [],
+      "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
     }
   ],
   "relations": [
-    { "org": "50滑板", "venue": "50滑板俱乐部（杭州大厦中央商城店）", "type": "拥有", "needVerify": false },
-    { "org": "50滑板", "venue": "钱塘轮滑中心滑板公园", "type": "合作", "needVerify": false, "note": "2025年世界滑板日主理方，活动在该场地举办（微博@杭州滑板）" },
-    { "org": "天天滑板", "venue": "天天滑板（萧山福尔特体育公园店）", "type": "拥有", "needVerify": false },
-    { "org": "Hangzhou Skate Crew", "venue": "滨江陆冲双翘滑板场地", "type": "合作", "needVerify": true, "note": "在该场地组织公益教学/付费课程" }
+    {
+      "org": "50滑板",
+      "venue": "50滑板俱乐部（杭州大厦中央商城店）",
+      "type": "拥有",
+      "needVerify": false
+    },
+    {
+      "org": "50滑板",
+      "venue": "钱塘轮滑中心滑板公园",
+      "type": "合作",
+      "needVerify": false,
+      "note": "2025年世界滑板日主理方，活动在该场地举办（微博@杭州滑板）"
+    },
+    {
+      "org": "天天滑板",
+      "venue": "天天滑板（萧山福尔特体育公园店）",
+      "type": "拥有",
+      "needVerify": false
+    },
+    {
+      "org": "Hangzhou Skate Crew",
+      "venue": "滨江陆冲双翘滑板场地",
+      "type": "合作",
+      "needVerify": true,
+      "note": "在该场地组织公益教学/付费课程"
+    }
   ],
   "dropped": [
-    { "name": "浙里趣滑呗·室内滑雪（余杭西溪）", "reason": "室内滑雪为主业，非滑板实体" },
-    { "name": "FIGHTING BABY儿童平衡车体适能运动中心（滨江浦沿）", "reason": "平衡车/体适能为主业，非滑板实体" }
+    {
+      "name": "浙里趣滑呗·室内滑雪（余杭西溪）",
+      "reason": "室内滑雪为主业，非滑板实体"
+    },
+    {
+      "name": "FIGHTING BABY儿童平衡车体适能运动中心（滨江浦沿）",
+      "reason": "平衡车/体适能为主业，非滑板实体"
+    }
   ]
 }

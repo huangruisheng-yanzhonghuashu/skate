@@ -14,7 +14,20 @@
       "name": "嘉兴火车站南广场滑板公园",
       "city": "嘉兴",
       "category": "混合",
-      "tags": [{ "label": "免费", "icon": "tagFree" }, { "label": "水泥", "icon": "tagCement" }, { "label": "有灯", "icon": "tagLight" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "水泥",
+          "icon": "tagCement"
+        },
+        {
+          "label": "有灯",
+          "icon": "tagLight"
+        }
+      ],
       "address": "南湖区城东路嘉兴火车站南广场",
       "shortAddr": "火车站南广场",
       "latitude": 30.7475,
@@ -22,7 +35,13 @@
       "indoor": false,
       "lighting": true,
       "fee": "免费",
-      "features": ["国内一流双循环泵道", "心形碗池", "陆冲区", "支持滑板/平衡车", "市产业集团建设，2025年底建成"],
+      "features": [
+        "国内一流双循环泵道",
+        "心形碗池",
+        "陆冲区",
+        "支持滑板/平衡车",
+        "市产业集团建设，2025年底建成"
+      ],
       "operator": "",
       "photos": [],
       "hot": true,
@@ -41,7 +60,16 @@
       "name": "中央公园泵道滑板公园",
       "city": "嘉兴",
       "category": "泵道",
-      "tags": [{ "label": "免费", "icon": "tagFree" }, { "label": "水泥", "icon": "tagCement" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "水泥",
+          "icon": "tagCement"
+        }
+      ],
       "address": "南湖区中环南路与纺工路交汇处中央公园",
       "shortAddr": "中央公园（纺工路）",
       "latitude": 30.7385,
@@ -49,7 +77,11 @@
       "indoor": false,
       "lighting": false,
       "fee": "免费",
-      "features": ["公园改造提升新增", "泵道可刷圈", "兼顾滑板与自行车"],
+      "features": [
+        "公园改造提升新增",
+        "泵道可刷圈",
+        "兼顾滑板与自行车"
+      ],
       "operator": "",
       "photos": [],
       "hot": true,
@@ -68,7 +100,12 @@
       "name": "长纤塘公园滑板泵道",
       "city": "嘉兴",
       "category": "泵道",
-      "tags": [{ "label": "免费", "icon": "tagFree" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        }
+      ],
       "address": "经开区塘汇街道长纤塘公园东侧",
       "shortAddr": "经开区塘汇长纤塘公园",
       "latitude": null,
@@ -76,21 +113,31 @@
       "indoor": false,
       "lighting": false,
       "fee": "免费",
-      "features": ["公园改造提升时因地制宜新建", "自然环境中的休闲练习场"],
+      "features": [
+        "公园改造提升时因地制宜新建",
+        "自然环境中的休闲练习场"
+      ],
       "operator": "",
       "photos": [],
       "hot": false,
       "status": "营业中",
       "confidence": "中",
       "needVerify": true,
-      "sources": ["https://wenku.baidu.com/view/e233e86b47323968011ca300a6c30c225801f071.html"]
+      "sources": [
+        "https://wenku.baidu.com/view/e233e86b47323968011ca300a6c30c225801f071.html"
+      ]
     },
     {
       "kind": "venue",
       "name": "筒仓艺术中心滑板运动场",
       "city": "嘉兴",
       "category": "街式",
-      "tags": [{ "label": "免费", "icon": "tagFree" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        }
+      ],
       "address": "南湖区余新镇渔里未来社区（筒仓艺术中心配套）",
       "shortAddr": "余新镇渔里未来社区",
       "latitude": null,
@@ -98,7 +145,10 @@
       "indoor": false,
       "lighting": false,
       "fee": "免费",
-      "features": ["万科·渔里未来社区配套", "筒仓艺术中心周边"],
+      "features": [
+        "万科·渔里未来社区配套",
+        "筒仓艺术中心周边"
+      ],
       "operator": "",
       "photos": [],
       "hot": false,
@@ -115,7 +165,16 @@
       "name": "万朵城体育公园极限运动场",
       "city": "嘉兴",
       "category": "混合",
-      "tags": [{ "label": "收费", "icon": "tagFree" }, { "label": "水泥", "icon": "tagCement" }],
+      "tags": [
+        {
+          "label": "收费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "水泥",
+          "icon": "tagCement"
+        }
+      ],
       "address": "万朵城体育公园内（详细地址待核）",
       "shortAddr": "万朵城体育公园",
       "latitude": null,
@@ -123,14 +182,20 @@
       "indoor": false,
       "lighting": false,
       "fee": "未知",
-      "features": ["全混凝土结构", "街式设施区+碗池区", "总占地约500㎡"],
+      "features": [
+        "全混凝土结构",
+        "街式设施区+碗池区",
+        "总占地约500㎡"
+      ],
       "operator": "",
       "photos": [],
       "hot": false,
       "status": "待核实",
       "confidence": "中",
       "needVerify": true,
-      "sources": ["https://b2b.baidu.com/q/aland?q=F8ACFDAAACACADA8FCF9AFF9FCFAACF0FBAAF0F1FEABAFAAAAAAF0ACABFBFEFA&id=qid1e4ceeda50f053e92c987bfccc9eb273&answer=7523513287731414958&ptype=9"],
+      "sources": [
+        "https://b2b.baidu.com/q/aland?q=F8ACFDAAACACADA8FCF9AFF9FCFAACF0FBAAF0F1FEABAFAAAAAAF0ACABFBFEFA&id=qid1e4ceeda50f053e92c987bfccc9eb273&answer=7523513287731414958&ptype=9"
+      ],
       "_merge_note": "来源为场地施工方案例页（大丰友邦极限运动场地建设），需实地核实是否开放"
     },
     {
@@ -138,7 +203,16 @@
       "name": "凌公塘公园街式区",
       "city": "嘉兴",
       "category": "街式",
-      "tags": [{ "label": "免费", "icon": "tagFree" }, { "label": "水泥", "icon": "tagCement" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "水泥",
+          "icon": "tagCement"
+        }
+      ],
       "address": "南湖区双溪路凌公塘公园内",
       "shortAddr": "凌公塘公园（双溪路）",
       "latitude": 30.7505,
@@ -146,7 +220,9 @@
       "indoor": false,
       "lighting": false,
       "fee": "免费",
-      "features": ["矮台/滑行道具"],
+      "features": [
+        "矮台/滑行道具"
+      ],
       "operator": "",
       "photos": [],
       "hot": false,
@@ -161,7 +237,16 @@
       "name": "秀湖公园平地广场",
       "city": "嘉兴",
       "category": "平地",
-      "tags": [{ "label": "免费", "icon": "tagFree" }, { "label": "有灯", "icon": "tagLight" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "有灯",
+          "icon": "tagLight"
+        }
+      ],
       "address": "秀洲区秀湖公园东广场",
       "shortAddr": "秀湖公园东广场",
       "latitude": 30.7655,
@@ -169,7 +254,9 @@
       "indoor": false,
       "lighting": true,
       "fee": "免费",
-      "features": ["开阔平地广场"],
+      "features": [
+        "开阔平地广场"
+      ],
       "operator": "",
       "photos": [],
       "hot": false,
@@ -184,7 +271,16 @@
       "name": "湘家荡环湖广场",
       "city": "嘉兴",
       "category": "平地",
-      "tags": [{ "label": "免费", "icon": "tagFree" }, { "label": "无灯", "icon": "tagLight" }],
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "无灯",
+          "icon": "tagLight"
+        }
+      ],
       "address": "南湖区七星街道湘家荡环湖景区",
       "shortAddr": "湘家荡环湖景区",
       "latitude": 30.7835,
@@ -192,7 +288,9 @@
       "indoor": false,
       "lighting": false,
       "fee": "免费",
-      "features": ["环湖刷街路线"],
+      "features": [
+        "环湖刷街路线"
+      ],
       "operator": "",
       "photos": [],
       "hot": false,
@@ -210,16 +308,28 @@
       "legalName": "嘉兴市经开城南爱滑运动俱乐部",
       "city": "嘉兴",
       "category": "俱乐部",
-      "services": ["教学", "组织活动", "零售"],
+      "services": [
+        "教学",
+        "组织活动",
+        "零售"
+      ],
       "address": "南湖区文昌路1299号泰富世界城4幢（层数多源不一致：3层/B1/2楼，待实地核）",
       "shortAddr": "泰富世界城4幢",
       "latitude": null,
       "longitude": null,
       "phone": "18605735062",
-      "hours": { "open": "13:00", "close": "21:00" },
+      "hours": {
+        "open": "13:00",
+        "close": "21:00"
+      },
       "partnerVenues": [],
-      "courses": ["春季班/暑期班招生", "零基础体验课"],
-      "social": { "douyin": "嘉兴爱滑板club" },
+      "courses": [
+        "春季班/暑期班招生",
+        "零基础体验课"
+      ],
+      "social": {
+        "douyin": "嘉兴爱滑板club"
+      },
       "photos": [],
       "hot": true,
       "status": "营业中",
@@ -239,13 +349,19 @@
       "legalName": "嘉兴市南湖区建设街道爱嘉滑板俱乐部",
       "city": "嘉兴",
       "category": "俱乐部",
-      "services": ["组织活动", "零售"],
+      "services": [
+        "组织活动",
+        "零售"
+      ],
       "address": "南湖区中山东路666号商03室-1层（永辉超市内）",
       "shortAddr": "中山东路666号",
       "latitude": 30.76,
       "longitude": 120.75,
       "phone": "",
-      "hours": { "open": "09:30", "close": "21:00" },
+      "hours": {
+        "open": "09:30",
+        "close": "21:00"
+      },
       "partnerVenues": [],
       "courses": [],
       "social": {},
@@ -267,15 +383,22 @@
       "legalName": "",
       "city": "嘉兴",
       "category": "培训机构",
-      "services": ["教学"],
+      "services": [
+        "教学"
+      ],
       "address": "嘉善县（详细地址待核，360地图有词条）",
       "shortAddr": "嘉善县",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
-      "courses": ["少儿滑板队（2025浙江省滑板积分联赛少儿男子乙组街式冠军 金宸帆）"],
+      "courses": [
+        "少儿滑板队（2025浙江省滑板积分联赛少儿男子乙组街式冠军 金宸帆）"
+      ],
       "social": {},
       "photos": [],
       "hot": false,
@@ -295,28 +418,47 @@
       "legalName": "",
       "city": "嘉兴",
       "category": "俱乐部",
-      "services": ["教学", "组织活动"],
+      "services": [
+        "教学",
+        "组织活动"
+      ],
       "address": "海宁市（详细地址待核）",
       "shortAddr": "海宁市",
       "latitude": null,
       "longitude": null,
       "phone": "",
-      "hours": { "open": "", "close": "" },
+      "hours": {
+        "open": "",
+        "close": ""
+      },
       "partnerVenues": [],
       "courses": [],
-      "social": { "douyin": "海宁BIG兔极限运动_王教练" },
+      "social": {
+        "douyin": "海宁BIG兔极限运动_王教练"
+      },
       "photos": [],
       "hot": false,
       "status": "营业中",
       "confidence": "低",
       "needVerify": true,
-      "sources": ["https://www.douyin.com/user/MS4wLjABAAAAZaLcs7p7xURFU4hgqDgq2YKXEjR9w2Ut-72pYzTCYOs"]
+      "sources": [
+        "https://www.douyin.com/user/MS4wLjABAAAAZaLcs7p7xURFU4hgqDgq2YKXEjR9w2Ut-72pYzTCYOs"
+      ]
     }
   ],
   "relations": [],
   "dropped": [
-    { "name": "南湖区政府门口小泵道", "reason": "仅19楼论坛单条提及，无规模/位置详情，不足以结构化" },
-    { "name": "嘉善滑板社", "reason": "仅抖音搜索联想词条，无实体信息" },
-    { "name": "嘉兴秀洲/南湖/嘉善/桐乡二手滑板店（列表网5条）", "reason": "同电话13518062038+模板化文案，群发广告" }
+    {
+      "name": "南湖区政府门口小泵道",
+      "reason": "仅19楼论坛单条提及，无规模/位置详情，不足以结构化"
+    },
+    {
+      "name": "嘉善滑板社",
+      "reason": "仅抖音搜索联想词条，无实体信息"
+    },
+    {
+      "name": "嘉兴秀洲/南湖/嘉善/桐乡二手滑板店（列表网5条）",
+      "reason": "同电话13518062038+模板化文案，群发广告"
+    }
   ]
 }
