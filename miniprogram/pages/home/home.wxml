@@ -2,12 +2,12 @@
   <!-- 头部：定位 + 搜索 -->
   <view class="header">
     <view wx:if="{{!searchOpen}}" class="header-row">
-      <view class="city" bindtap="goCityPicker" aria-role="button" aria-label="选择城市">
+      <view class="city" hover-class="hv" bindtap="goCityPicker" aria-role="button" aria-label="选择城市">
         <image class="city-pin" src="{{icons.pinOrange}}" mode="aspectFit" />
         <text>{{city}}</text>
         <image class="city-swap" src="{{icons.swap}}" mode="aspectFit" />
       </view>
-      <view class="search-pill" bindtap="openSearch">
+      <view class="search-pill" hover-class="hv" bindtap="openSearch">
         <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
         <text class="search-pill-text">搜索场地、俱乐部...</text>
       </view>
@@ -25,11 +25,11 @@
           placeholder-class="search-ph"
           bindinput="onQueryInput"
         />
-        <view wx:if="{{query}}" class="search-clear" aria-role="button" aria-label="清空搜索" bindtap="clearQuery">
+        <view wx:if="{{query}}" class="search-clear" hover-class="hv" aria-role="button" aria-label="清空搜索" bindtap="clearQuery">
           <image class="search-clear-icon" src="{{icons.xWhite}}" mode="aspectFit" />
         </view>
       </view>
-      <view class="search-cancel" bindtap="closeSearch">取消</view>
+      <view class="search-cancel" hover-class="hv" bindtap="closeSearch">取消</view>
     </view>
   </view>
 
@@ -62,7 +62,7 @@
       </cover-view>
     </map>
     <!-- 折叠手柄：点按收起/展开地图（地图实例保留不销毁） -->
-    <view class="map-handle" bindtap="toggleMap" aria-role="button" aria-label="{{mapCollapsed ? '展开地图' : '收起地图'}}">
+    <view class="map-handle" hover-class="hv" bindtap="toggleMap" aria-role="button" aria-label="{{mapCollapsed ? '展开地图' : '收起地图'}}">
       <view class="map-handle-bar"></view>
     </view>
   </view>
@@ -73,26 +73,30 @@
     <view class="control-panel">
       <!-- 实体切换：场地 / 俱乐部（文字 Tab + 橙色短指示条，轻导航让位内容） -->
       <view class="entity-seg" aria-role="tablist">
-        <view class="entity-item {{entity === 'venue' ? 'entity-active' : ''}}" aria-role="tab" data-entity="venue" bindtap="switchEntity">
+        <view class="entity-item {{entity === 'venue' ? 'entity-active' : ''}}" hover-class="hv" aria-role="tab" data-entity="venue" bindtap="switchEntity">
           <text>滑板场地</text>
           <view class="entity-bar"></view>
         </view>
-        <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" aria-role="tab" data-entity="shop" bindtap="switchEntity">
+        <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" hover-class="hv" aria-role="tab" data-entity="shop" bindtap="switchEntity">
           <text>俱乐部</text>
           <view class="entity-bar"></view>
         </view>
       </view>
 
-      <!-- 快捷筛选（场地=类型，店铺=服务） -->
-      <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
-        <view
-          wx:for="{{filters}}"
-          wx:key="*this"
-          class="filter-chip {{filter === item ? 'filter-chip-active' : ''}}"
-          data-filter="{{item}}"
-          bindtap="pickFilter"
-        >{{item}}</view>
-      </scroll-view>
+      <!-- 快捷筛选（场地=类型，店铺=服务）；右缘渐隐提示可横向滚动 -->
+      <view class="filters-wrap">
+        <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
+          <view
+            wx:for="{{filters}}"
+            wx:key="*this"
+            class="filter-chip {{filter === item ? 'filter-chip-active' : ''}}"
+            hover-class="hv"
+            data-filter="{{item}}"
+            bindtap="pickFilter"
+          >{{item}}</view>
+        </scroll-view>
+        <view class="filters-fade"></view>
+      </view>
     </view>
 
     <!-- 三级列表（行化：去卡融入面板，行间分隔线） -->
@@ -113,7 +117,7 @@
       </block>
 
       <block wx:elif="{{entity === 'venue'}}">
-        <view wx:for="{{list}}" wx:key="id" class="list-item">
+        <view wx:for="{{list}}" wx:key="id" class="list-item" data-id="{{item.id}}" bindtap="syncSelection">
           <venue-card
             venue="{{item}}"
             online="{{item.online}}"
@@ -125,6 +129,9 @@
         <view wx:if="{{empty}}" class="empty">
           <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
           <text class="empty-text">{{query ? '没有找到「' + query + '」相关的场地' : '暂无' + filter + '类型的场地'}}</text>
+          <view wx:if="{{query}}" class="empty-action" hover-class="hv" bindtap="clearQuery">清除搜索</view>
+          <view wx:elif="{{filter !== '全部'}}" class="empty-action" hover-class="hv" bindtap="resetFilter">查看全部类型</view>
+          <view wx:else class="empty-action" hover-class="hv" bindtap="goCityPicker">切换城市</view>
         </view>
         <view wx:if="{{!empty}}" class="loadmore">
           <text>已展示{{city}}全部 {{list.length}} 个场地</text>
@@ -132,7 +139,7 @@
       </block>
 
       <block wx:else>
-        <view wx:for="{{list}}" wx:key="id" class="list-item">
+        <view wx:for="{{list}}" wx:key="id" class="list-item" data-id="{{item.id}}" bindtap="syncSelection">
           <shop-card
             shop="{{item}}"
             index="{{index}}"
@@ -142,6 +149,9 @@
         <view wx:if="{{empty}}" class="empty">
           <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
           <text class="empty-text">{{query ? '没有找到「' + query + '」相关的俱乐部' : '暂无提供「' + filter + '」服务的俱乐部'}}</text>
+          <view wx:if="{{query}}" class="empty-action" hover-class="hv" bindtap="clearQuery">清除搜索</view>
+          <view wx:elif="{{filter !== '全部'}}" class="empty-action" hover-class="hv" bindtap="resetFilter">查看全部服务</view>
+          <view wx:else class="empty-action" hover-class="hv" bindtap="goCityPicker">切换城市</view>
         </view>
         <view wx:if="{{!empty}}" class="loadmore">
           <text>已展示{{city}}全部 {{list.length}} 家俱乐部</text>

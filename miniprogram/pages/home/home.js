@@ -319,7 +319,7 @@ Page({
       }
       if (v.id === selected) {
         marker.callout = {
-          content: (isVenue ? '' : '[俱乐部] ') + v.name,
+          content: (isVenue ? '' : '[俱乐部] ') + v.name + ' ›',
           display: 'ALWAYS',
           color: '#1A1A1E',
           fontSize: 12,
@@ -492,5 +492,19 @@ Page({
   pickFilter(e) {
     this.setData({ filter: e.currentTarget.dataset.filter })
     this.refresh()
+  },
+
+  /* 空态「查看全部」：重置筛选（按钮 bindtap，无 dataset） */
+  resetFilter() {
+    this.setData({ filter: '全部' })
+    this.refresh()
+  },
+
+  /* 列表点击：同步地图选中（marker 放大 + 常驻气泡），再由卡片自身逻辑进详情 */
+  syncSelection(e) {
+    const id = e.currentTarget.dataset.id
+    if (!id || id === this.data.selectedVenueId) return
+    this.setData({ selectedVenueId: id })
+    this.buildMarkers()
   },
 })

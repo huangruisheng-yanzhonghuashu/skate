@@ -25,7 +25,7 @@
       <view wx:for="{{venue.tags}}" wx:key="label" class="tag">{{item.label}}</view>
     </view>
 
-    <!-- 状态行（设计稿：绿点+绿字独占整行居中，无右侧按钮） -->
+    <!-- 状态行（绿点+绿字靠左，无右侧按钮） -->
     <view class="foot">
       <view wx:if="{{checked}}" class="state state-checked">
         <view class="dot-green"></view>
