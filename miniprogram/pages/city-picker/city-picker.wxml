@@ -15,7 +15,7 @@
         placeholder-class="search-ph"
         bindinput="onQueryInput"
       />
-      <view wx:if="{{query}}" class="search-clear" bindtap="clearQuery">
+      <view wx:if="{{query}}" class="search-clear" aria-role="button" aria-label="清空搜索" bindtap="clearQuery">
         <image class="search-clear-ico" src="{{icons.xWhite}}" mode="aspectFit" />
       </view>
     </view>
@@ -38,7 +38,7 @@
         wx:key="*this"
         class="city-row {{item === city ? 'city-row-active' : ''}}"
         data-city="{{item}}"
-        bindtap="pick"
+        aria-role="button" bindtap="pick"
       >{{item}}</view>
       <view wx:if="{{!results.length}}" class="empty">
         <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
@@ -50,7 +50,7 @@
     <block wx:else>
       <view class="section-title">定位/当前选中城市</view>
       <view class="chip-row">
-        <view class="loc-chip" data-city="{{city}}" bindtap="pick">{{city}}</view>
+        <view class="loc-chip" data-city="{{city}}" aria-role="button" bindtap="pick">{{city}}</view>
       </view>
 
       <view class="section-title">热门城市</view>
@@ -60,7 +60,7 @@
           wx:key="*this"
           class="hot-chip {{item === city ? 'hot-chip-active' : ''}}"
           data-city="{{item}}"
-          bindtap="pick"
+          aria-role="button" bindtap="pick"
         >{{item}}</view>
       </view>
 
@@ -71,7 +71,7 @@
           wx:key="*this"
           class="city-row {{item === city ? 'city-row-active' : ''}}"
           data-city="{{item}}"
-          bindtap="pick"
+          aria-role="button" bindtap="pick"
         >{{item}}</view>
       </block>
       <view class="body-pad"></view>

@@ -25,7 +25,7 @@
           placeholder-class="search-ph"
           bindinput="onQueryInput"
         />
-        <view wx:if="{{query}}" class="search-clear" bindtap="clearQuery">
+        <view wx:if="{{query}}" class="search-clear" aria-role="button" aria-label="清空搜索" bindtap="clearQuery">
           <image class="search-clear-icon" src="{{icons.xWhite}}" mode="aspectFit" />
         </view>
       </view>
@@ -61,6 +61,10 @@
         </cover-view>
       </cover-view>
     </map>
+    <!-- 折叠手柄：点按收起/展开地图（地图实例保留不销毁） -->
+    <view class="map-handle" bindtap="toggleMap" aria-role="button" aria-label="{{mapCollapsed ? '展开地图' : '收起地图'}}">
+      <view class="map-handle-bar"></view>
+    </view>
   </view>
 
   <!-- 整合面板：一级轨道 + 二级筛选 + 三级列表同底一体（分隔线划层次） -->
