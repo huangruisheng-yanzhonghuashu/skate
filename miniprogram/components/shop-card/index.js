@@ -11,6 +11,7 @@ Component({
   data: {
     status: '',
     openNow: false,
+    catText: '店',
     icons: {
       star: ICON.starOrange,
       starGray: ICON.starGray,
@@ -21,7 +22,13 @@ Component({
     shop(shop) {
       if (!shop) return
       const status = cloud.openStatus(shop)
-      this.setData({ status: status, openNow: status === '营业中' })
+      /* 左侧图标字按机构身份区分：板店/俱乐部/培训机构（旧数据无 category 兜底「店」） */
+      const CAT_TEXT = { '板店': '店', '俱乐部': '俱', '培训机构': '训' }
+      this.setData({
+        status: status,
+        openNow: status === '营业中',
+        catText: CAT_TEXT[shop.category] || '店',
+      })
     },
   },
 
