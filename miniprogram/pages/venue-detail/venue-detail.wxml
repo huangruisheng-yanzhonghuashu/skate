@@ -58,6 +58,12 @@
         <text>{{item.label}}</text>
       </view>
     </view>
+    <!-- 驻场/运营机构入口（org↔venue 关联，有运营方才显示） -->
+    <view wx:if="{{operatorShop}}" class="op-row" hover-class="op-hover" bindtap="goOperator" aria-role="button" aria-label="进入运营方主页">
+      <text class="op-label">运营方</text>
+      <text class="op-name">{{operatorShop.name}}</text>
+      <text class="op-arrow">›</text>
+    </view>
   </view>
 
   <!-- 实时状态（在线口径：30 分钟窗口内有过在场心跳） -->

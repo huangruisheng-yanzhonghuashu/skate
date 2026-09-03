@@ -25,11 +25,41 @@
       <text class="rating-num">{{rating || '暂无评分，点此评分'}}</text>
     </view>
     <text wx:if="{{shop.hot}}" class="hot-tag">热门店铺</text>
+    <text wx:if="{{shop.category}}" class="cat-tag">{{shop.category}}</text>
 
     <view class="block">
       <text class="block-title">服务项目</text>
       <view class="svc-list">
         <text wx:for="{{shop.services}}" wx:key="*this" class="svc">{{item}}</text>
+      </view>
+    </view>
+
+    <!-- 课程信息（仅培训机构类有） -->
+    <view wx:if="{{shop.courses.length}}" class="block">
+      <text class="block-title">课程信息</text>
+      <view class="svc-list">
+        <text wx:for="{{shop.courses}}" wx:key="*this" class="svc">{{item}}</text>
+      </view>
+    </view>
+
+    <!-- 合作/上课场地（org↔venue 关联，点击进场地详情） -->
+    <view wx:if="{{partners.length}}" class="block">
+      <text class="block-title">合作/上课场地</text>
+      <view
+        wx:for="{{partners}}"
+        wx:key="id"
+        class="partner-row"
+        hover-class="partner-hover"
+        data-id="{{item.id}}"
+        bindtap="goVenue"
+        aria-role="button"
+        aria-label="进入场地详情"
+      >
+        <view class="partner-info">
+          <text class="partner-name">{{item.name}}</text>
+          <text class="partner-addr">{{item.shortAddr}}</text>
+        </view>
+        <text class="partner-arrow">›</text>
       </view>
     </view>
 

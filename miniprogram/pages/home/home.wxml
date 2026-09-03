@@ -9,7 +9,7 @@
       </view>
       <view class="search-pill" hover-class="hv" bindtap="openSearch">
         <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
-        <text class="search-pill-text">搜索场地、俱乐部...</text>
+        <text class="search-pill-text">搜索场地、俱乐部、门店...</text>
       </view>
     </view>
 
@@ -21,7 +21,7 @@
           value="{{query}}"
           focus
           confirm-type="search"
-          placeholder="搜索场地、俱乐部..."
+          placeholder="搜索场地、俱乐部、门店..."
           placeholder-class="search-ph"
           bindinput="onQueryInput"
         />
@@ -46,7 +46,7 @@
       bindmarkertap="onMarkerTap"
     >
       <!-- 城市场地计数（设计稿：绿点 + 深色胶囊；折叠态隐藏避免溢出）。真机 cover-view flex/gap 会截断文字，文本直接撑开 -->
-      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">{{city}} · {{mapCount}} 个{{entity === 'shop' ? '俱乐部' : '滑板场地'}}<cover-view class="map-chip-dot"></cover-view></cover-view>
+      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">{{city}} · {{mapCount}} 个{{entity === 'shop' ? '门店与俱乐部' : '滑板场地'}}<cover-view class="map-chip-dot"></cover-view></cover-view>
       <!-- 定位中提示 -->
       <cover-view wx:if="{{locating}}" class="locating-tip">正在定位当前位置...</cover-view>
       <!-- 定位按钮：回到当前位置并匹配城市（设计稿：地图右上白底圆钮；准星用 cover-view 原生绘制，真机 cover-image 不支持 SVG） -->
@@ -78,12 +78,12 @@
           <view class="entity-bar"></view>
         </view>
         <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" hover-class="hv" aria-role="tab" data-entity="shop" bindtap="switchEntity">
-          <text>俱乐部</text>
+          <text>门店与俱乐部</text>
           <view class="entity-bar"></view>
         </view>
       </view>
 
-      <!-- 快捷筛选（场地=类型，店铺=服务）；右缘渐隐提示可横向滚动 -->
+      <!-- 快捷筛选：一级=类型（场地）/ category 三分（机构），二级=服务（仅机构）；右缘渐隐提示可横向滚动 -->
       <view class="filters-wrap">
         <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
           <view
@@ -93,6 +93,21 @@
             hover-class="hv"
             data-filter="{{item}}"
             bindtap="pickFilter"
+          >{{item}}</view>
+        </scroll-view>
+        <view class="filters-fade"></view>
+      </view>
+      <view wx:if="{{svcFilters.length}}" class="filters-wrap">
+        <scroll-view class="filters filters-svc" scroll-x enhanced show-scrollbar="{{false}}">
+          <view
+            wx:for="{{svcFilters}}"
+            wx:key="*this"
+            class="filter-chip filter-chip-sm {{svcFilter === item ? 'filter-chip-active' : ''}}"
+            hover-class="hv"
+            data-filter="{{item}}"
+            bindtap="pickSvc"
+            aria-role="button"
+            aria-label="按{{item}}筛选"
           >{{item}}</view>
         </scroll-view>
         <view class="filters-fade"></view>
@@ -148,13 +163,13 @@
         </view>
         <view wx:if="{{empty}}" class="empty">
           <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
-          <text class="empty-text">{{query ? '没有找到「' + query + '」相关的俱乐部' : '暂无提供「' + filter + '」服务的俱乐部'}}</text>
+          <text class="empty-text">{{query ? '没有找到「' + query + '」相关的门店与俱乐部' : (filter !== '全部' ? '暂无' + filter + '类型的门店与俱乐部' : (svcFilter ? '暂无提供「' + svcFilter + '」服务的门店与俱乐部' : '暂无门店与俱乐部数据'))}}</text>
           <view wx:if="{{query}}" class="empty-action" hover-class="hv" bindtap="clearQuery">清除搜索</view>
-          <view wx:elif="{{filter !== '全部'}}" class="empty-action" hover-class="hv" bindtap="resetFilter">查看全部服务</view>
+          <view wx:elif="{{filter !== '全部' || svcFilter}}" class="empty-action" hover-class="hv" bindtap="resetFilter">查看全部</view>
           <view wx:else class="empty-action" hover-class="hv" bindtap="goCityPicker">切换城市</view>
         </view>
         <view wx:if="{{!empty}}" class="loadmore">
-          <text>已展示{{city}}全部 {{list.length}} 家俱乐部</text>
+          <text>已展示{{city}}全部 {{list.length}} 家门店与俱乐部</text>
         </view>
       </block>
     </view>

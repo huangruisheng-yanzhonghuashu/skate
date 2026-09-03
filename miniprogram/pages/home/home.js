@@ -4,7 +4,9 @@ const { QQ_MAP_KEY } = require('../../utils/config.js')
 const { ICON } = require('../../utils/icons.js')
 
 const FIELD_FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
-const SHOP_FILTERS = ['全部', '卖板', '教学', '维修', '配件', '服装']
+/* 机构（shop 实体）双维筛选：category 三分为主、services 可选叠加（toggle，无「全部」占位） */
+const ORG_CATEGORY_FILTERS = ['全部', '板店', '俱乐部', '培训机构']
+const ORG_SERVICE_FILTERS = ['卖板', '教学', '维修', '配件', '服装', '组织活动', '装备租赁', '场地运营']
 
 /* HH:mm（今日已签到时间展示用） */
 function fmtHm(iso) {
@@ -31,6 +33,8 @@ Page({
     entity: 'venue',
     filters: FIELD_FILTERS,
     filter: '全部',
+    svcFilters: [],
+    svcFilter: '',
     query: '',
     searchOpen: false,
     list: [],
@@ -292,11 +296,16 @@ Page({
     const src = (entity === 'venue' ? this._venues : this._shops) || []
     const query = (this.data.query || '').trim()
     let items = src.filter((v) => v.city === this.data.city)
+    /* 无坐标实体无法上地图（导入数据待「地图选点」补坐标），markers 只要有坐标的 */
+    items = items.filter((v) => typeof v.latitude === 'number' && typeof v.longitude === 'number')
     if (entity === 'venue' && this.data.filter !== '全部') {
       items = items.filter((v) => v.category === this.data.filter)
     }
     if (entity === 'shop' && this.data.filter !== '全部') {
-      items = items.filter((s) => (s.services || []).indexOf(this.data.filter) >= 0)
+      items = items.filter((s) => (s.category || '俱乐部') === this.data.filter)
+    }
+    if (entity === 'shop' && this.data.svcFilter) {
+      items = items.filter((s) => (s.services || []).indexOf(this.data.svcFilter) >= 0)
     }
     if (query) {
       items = items.filter((v) =>
@@ -350,14 +359,16 @@ Page({
     }
   },
 
-  /* 实体切换：场地 ⇄ 店铺（设计稿交互规则：保留搜索词，不打断搜索流） */
+  /* 实体切换：场地 ⇄ 门店与俱乐部（设计稿交互规则：保留搜索词，不打断搜索流） */
   switchEntity(e) {
     const entity = e.currentTarget.dataset.entity
     if (entity === this.data.entity) return
     this.setData({
       entity: entity,
-      filters: entity === 'shop' ? SHOP_FILTERS : FIELD_FILTERS,
+      filters: entity === 'shop' ? ORG_CATEGORY_FILTERS : FIELD_FILTERS,
       filter: '全部',
+      svcFilters: entity === 'shop' ? ORG_SERVICE_FILTERS : [],
+      svcFilter: '',
       selectedVenueId: '',
     })
     this.refresh()
@@ -401,13 +412,25 @@ Page({
       })
     } else {
       let arr = (this._shops || []).filter((s) => s.city === city)
-      if (this.data.filter !== '全部') arr = arr.filter((s) => (s.services || []).indexOf(this.data.filter) >= 0)
+      /* category 三分筛选（旧数据无 category 视为俱乐部，保持向后兼容）；
+       * chips 动态收敛：当前城市没有的机构类型不渲染，避免「点了必空态」 */
+      const present = []
+      ;(this._shops || []).forEach((s) => {
+        if (s.city === city && s.category && present.indexOf(s.category) < 0) present.push(s.category)
+      })
+      const chips = ['全部'].concat(present)
+      if (chips.join('|') !== this.data.filters.join('|')) {
+        this.setData({ filters: chips, filter: chips.indexOf(this.data.filter) >= 0 ? this.data.filter : '全部' })
+      }
+      if (this.data.filter !== '全部') arr = arr.filter((s) => (s.category || '俱乐部') === this.data.filter)
+      if (this.data.svcFilter) arr = arr.filter((s) => (s.services || []).indexOf(this.data.svcFilter) >= 0)
       if (query) arr = arr.filter((s) => s.name.indexOf(query) >= 0 || (s.address || '').indexOf(query) >= 0)
       list = arr.map((s) => {
         const st = this._shopRatings && this._shopRatings[s.id]
         return {
           id: s.id,
           name: s.name,
+          category: s.category || '俱乐部',
           services: s.services || [],
           shortAddr: s.shortAddr,
           address: s.address,
@@ -494,9 +517,16 @@ Page({
     this.refresh()
   },
 
+  /* 服务筛选（机构 Tab 第二行 chips）：toggle 语义，再点取消，不选=全部 */
+  pickSvc(e) {
+    const v = e.currentTarget.dataset.filter
+    this.setData({ svcFilter: this.data.svcFilter === v ? '' : v })
+    this.refresh()
+  },
+
   /* 空态「查看全部」：重置筛选（按钮 bindtap，无 dataset） */
   resetFilter() {
-    this.setData({ filter: '全部' })
+    this.setData({ filter: '全部', svcFilter: '' })
     this.refresh()
   },
 

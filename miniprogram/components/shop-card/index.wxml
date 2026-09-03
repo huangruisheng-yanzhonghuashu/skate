@@ -1,6 +1,6 @@
 <view class="shop-card" style="animation-delay: {{index * 60}}ms" hover-class="shop-hover" bindtap="go">
   <view class="shop-icon">
-    <text class="shop-icon-text">店</text>
+    <text class="shop-icon-text">{{catText}}</text>
   </view>
   <view class="shop-info">
     <view class="shop-top">
@@ -8,6 +8,7 @@
       <text wx:if="{{status}}" class="shop-status {{openNow ? 'status-open' : 'status-closed'}}">{{status}}</text>
     </view>
     <view class="shop-svc">
+      <text wx:if="{{shop.category}}" class="svc-tag svc-cat">{{shop.category}}</text>
       <text wx:for="{{shop.services}}" wx:key="*this" class="svc-tag">{{item}}</text>
     </view>
     <view class="shop-rating" wx:if="{{shop.rating}}">

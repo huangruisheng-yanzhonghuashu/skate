@@ -94,6 +94,7 @@ exports.main = async (event) => {
             latitude: data.latitude,
             longitude: data.longitude,
             category: data.category,
+            operator: data.operator || '',
             hot: !!data.hot,
             address: data.address || '',
             shortAddr: data.shortAddr || data.address || '',
@@ -116,6 +117,7 @@ exports.main = async (event) => {
           id: data.id || genId('s'),
           city: data.city,
           name: data.name,
+          category: data.category || '俱乐部',
           services: data.services,
           address: data.address || '',
           shortAddr: data.shortAddr || data.address || '',
@@ -123,6 +125,7 @@ exports.main = async (event) => {
           longitude: data.longitude,
           phone: data.phone || '',
           hours: data.hours || { open: '09:00', close: '21:00' },
+          partnerVenues: Array.isArray(data.partnerVenues) ? data.partnerVenues : [],
           photos: Array.isArray(data.photos) ? data.photos : [],
           hot: !!data.hot,
         }
@@ -136,6 +139,7 @@ exports.main = async (event) => {
           data: {
             city: data.city,
             name: data.name,
+            category: data.category || '俱乐部',
             services: data.services,
             address: data.address || '',
             shortAddr: data.shortAddr || data.address || '',
@@ -145,6 +149,7 @@ exports.main = async (event) => {
             hours: data.hours || { open: '09:00', close: '21:00' },
             photos: Array.isArray(data.photos) ? data.photos : [],
             hot: !!data.hot,
+            ...(Array.isArray(data.partnerVenues) ? { partnerVenues: data.partnerVenues } : {}),
           },
         })
         return { ok: true }

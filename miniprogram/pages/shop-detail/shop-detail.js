@@ -31,6 +31,8 @@ Page({
     checked: false,
     rating: 0,
     ratingCount: 0,
+    /* org↔venue 关联：合作/上课场地（partnerVenues 名称解析为 venue 引用） */
+    partners: [],
     icons: {
       starOrange: ICON.starOrange,
       starGray: ICON.starGray,
@@ -55,9 +57,30 @@ Page({
       const status = cloud.openStatus(shop)
       this.setData({ shop: shop, status: status, openNow: status === '营业中' })
       wx.setNavigationBarTitle({ title: shop.name })
+      this.resolvePartners(shop)
       this.refresh()
       this.loadFeed()
     })
+  },
+
+  /* partnerVenues 存的是场地名：解析成 venue 引用供详情页跳转（名称不匹配的忽略） */
+  resolvePartners(shop) {
+    const names = shop.partnerVenues || []
+    if (!names.length) return
+    cloud.getVenues().then((venues) => {
+      this.setData({
+        partners: names
+          .map((n) => venues.find((v) => v.name === n))
+          .filter(Boolean)
+          .map((v) => ({ id: v.id, name: v.name, shortAddr: v.shortAddr || v.address || '' })),
+      })
+    })
+  },
+
+  /* 合作场地 → 场地详情 */
+  goVenue(e) {
+    const id = e.currentTarget.dataset.id
+    if (id) wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + id })
   },
 
   onShow() {

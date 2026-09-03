@@ -213,6 +213,44 @@
   margin-top: 24rpx;
 }
 
+/* 运营方入口行（org↔venue 关联） */
+.op-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-top: 20rpx;
+  padding: 22rpx 24rpx; /* 通栏命中区尽量接近 44pt 触控基准 */
+  border-radius: 12rpx;
+  background: #1E1E23;
+}
+
+.op-hover {
+  background: #26262C;
+}
+
+.op-label {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: #8C8C94;
+}
+
+.op-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #FF8A6E;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.op-arrow {
+  flex-shrink: 0;
+  color: #8C8C94;
+  font-size: 30rpx;
+}
+
 .tag {
   display: inline-flex;
   align-items: center;

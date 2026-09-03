@@ -33,6 +33,65 @@
   color: #FFFFFF;
 }
 
+/* category 徽标（板店/俱乐部/培训机构）：白描边中性样式，与列表卡片同体系 */
+.cat-tag {
+  display: inline-block;
+  margin-top: 12rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  background: transparent;
+  border: 2rpx solid rgba(255, 255, 255, 0.45);
+  color: #FFFFFF;
+  font-size: 22rpx;
+  font-weight: 600;
+}
+
+/* 合作/上课场地行（org↔venue 关联） */
+.partner-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-top: 16rpx;
+  border-radius: 16rpx;
+  background: #1E1E23;
+}
+
+.partner-hover {
+  background: #26262C;
+}
+
+.partner-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.partner-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.partner-addr {
+  font-size: 22rpx;
+  color: #8C8C94;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.partner-arrow {
+  flex-shrink: 0;
+  color: #8C8C94;
+  font-size: 32rpx;
+}
+
 .status {
   font-size: 22rpx;
   padding: 6rpx 16rpx;

@@ -181,6 +181,12 @@ module.exports = {
             <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
           </picker>
         </block>
+        <block wx:else>
+          <text class="f-label f-label-2">类型</text>
+          <picker range="{{orgCategories}}" bindchange="formOrgCategory">
+            <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
+          </picker>
+        </block>
       </view>
 
       <view wx:if="{{form.kind === 'shop'}}" class="f-row">

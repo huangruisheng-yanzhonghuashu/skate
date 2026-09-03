@@ -43,6 +43,7 @@ Page({
     venue: null,
     photos: [],
     tags: [],
+    operatorShop: null,
     current: 0,
     statusBarHeight: 20,
     distanceText: '',
@@ -102,6 +103,13 @@ Page({
         moreCount: 0,
         presenceUsers: [],
       })
+      /* 运营方（org↔venue 关联）：有 operator 时解析机构供跳转 */
+      if (venue.operator) {
+        cloud.getShops().then((shops) => {
+          const op = shops.find((s) => s.name === venue.operator)
+          if (op) this.setData({ operatorShop: { id: op.id, name: op.name } })
+        })
+      }
       this.refresh()
       this.loadFeed()
       this.computeDistance()
@@ -198,6 +206,12 @@ Page({
     wx.navigateBack({
       fail: () => wx.switchTab({ url: '/pages/home/home' }),
     })
+  },
+
+  /* 运营方机构 → 机构详情 */
+  goOperator() {
+    const op = this.data.operatorShop
+    if (op) wx.navigateTo({ url: '/pages/shop-detail/shop-detail?id=' + op.id })
   },
 
   /* 距离 pill：定位成功后算真实直线距离（失败静默隐藏） */

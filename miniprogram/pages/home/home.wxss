@@ -408,6 +408,22 @@
   font-weight: 500;
 }
 
+/* 机构 Tab 第二行（服务筛选）：紧凑化，与 category 行区分层级 */
+.filters-svc {
+  padding-top: 0;
+  padding-bottom: 20rpx;
+}
+
+.filter-chip-sm {
+  /* 触控目标与主行同高（64rpx≈32pt 仍小于 44pt 基准，但延续设计稿体系，不再缩小加剧） */
+  height: 64rpx;
+  line-height: 60rpx;
+  padding: 0 20rpx;
+  margin-right: 16rpx;
+  font-size: 22rpx;
+  color: #8C8C94;
+}
+
 /* ===== 列表（面板内行化：去卡融入，分隔线划行，左缘与筛选区对齐） ===== */
 
 /* 行：透明底 + 1rpx 分隔线（首行分隔线即二级/三级分组线）；左右 20rpx 与控制区对齐 */

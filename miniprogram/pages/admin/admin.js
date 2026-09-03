@@ -3,11 +3,13 @@ const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { fmtRel } = require('../../utils/format.js')
 
-const CATEGORIES = ['混合', '碗池', '街式', '平地', 'U池']
+const CATEGORIES = ['混合', '碗池', '街式', '平地', 'U池', '泵道', '街式地形']
 /* 场地标签选项 → 存库结构 { label, icon }（icon 供 venue-card 显示） */
 const TAG_OPTIONS = ['免费', '收费', '有灯', '无灯', '水泥', '木质']
 const TAG_ICON = { '免费': 'tagFree', '收费': 'tagFree', '有灯': 'tagLight', '无灯': 'tagLight', '水泥': 'tagCement', '木质': 'tagMixed' }
-const SERVICES = ['卖板', '教学', '维修', '配件', '服装']
+const SERVICES = ['卖板', '教学', '维修', '配件', '服装', '组织活动', '装备租赁', '场地运营']
+/* 机构类型三分：板店 / 俱乐部 / 培训机构（org 实体统一存 shops 集合，category 区分） */
+const ORG_CATEGORIES = ['板店', '俱乐部', '培训机构']
 const CITIES = ['嘉兴', '杭州']
 
 const emptyForm = function (city) {
@@ -48,6 +50,7 @@ Page({
     photosUploading: false,
     form: emptyForm('嘉兴'),
     categories: CATEGORIES,
+    orgCategories: ORG_CATEGORIES,
     tagOptions: TAG_OPTIONS,
     services: SERVICES,
     cities: CITIES,
@@ -292,6 +295,8 @@ Page({
   formPhone(e) { this.setData({ 'form.phone': e.detail.value }) },
   formCity(e) { this.setData({ 'form.city': this.data.cities[Number(e.detail.value)] }) },
   formCategory(e) { this.setData({ 'form.category': this.data.categories[Number(e.detail.value)] }) },
+  /* 机构类型三分（板店/俱乐部/培训机构） */
+  formOrgCategory(e) { this.setData({ 'form.category': this.data.orgCategories[Number(e.detail.value)] }) },
   formHoursOpen(e) { this.setData({ 'form.hours.open': e.detail.value }) },
   formHoursClose(e) { this.setData({ 'form.hours.close': e.detail.value }) },
   formHot(e) { this.setData({ 'form.hot': e.detail.value }) },
@@ -379,6 +384,7 @@ Page({
     if (!f.name.trim()) { wx.showToast({ title: '请填写名称', icon: 'none' }); return }
     if (f.latitude === null || f.longitude === null) { wx.showToast({ title: '请地图选点', icon: 'none' }); return }
     if (f.kind === 'venue' && !f.category) { wx.showToast({ title: '请选择场地类型', icon: 'none' }); return }
+    if (f.kind === 'shop' && !f.category) { wx.showToast({ title: '请选择机构类型', icon: 'none' }); return }
     if (f.kind === 'shop' && f.services.length === 0) { wx.showToast({ title: '请选择服务项目', icon: 'none' }); return }
 
     this.setData({ saving: true })
@@ -400,6 +406,7 @@ Page({
       payload.category = f.category
       payload.tags = f.tags.map((t) => ({ label: t, icon: TAG_ICON[t] || 'tagMixed' }))
     } else {
+      payload.category = f.category
       payload.services = f.services
       payload.phone = f.phone.trim()
       payload.hours = f.hours

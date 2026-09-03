@@ -88,6 +88,15 @@
   border-radius: 6rpx;
 }
 
+/* category 徽标（板店/俱乐部/培训机构）：白描边中性样式表示「身份」，
+   与橙色系 services 标签（能力）区分层级，同时压低卡片红色总量 */
+.svc-cat {
+  color: #FFFFFF;
+  background: transparent;
+  border: 2rpx solid rgba(255, 255, 255, 0.45);
+  font-weight: 600;
+}
+
 /* 评分星级（与 venue-card 同款双层裁剪） */
 .shop-rating {
   display: flex;
