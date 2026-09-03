@@ -5,8 +5,8 @@
     "venues": 8,
     "orgs": 4,
     "relations": 0,
-    "dropped": 7,
-    "needVerify": 6
+    "dropped": 3,
+    "needVerify": 9
   },
   "venues": [
     {
@@ -43,7 +43,7 @@
         "市产业集团建设，2025年底建成"
       ],
       "operator": "",
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/railway-station-park.png",
       "hot": true,
       "status": "营业中",
       "confidence": "高",
@@ -53,7 +53,8 @@
         "https://nhnews.zjol.com.cn/xwzx/qwmtknh/202511/t20251104_6457988.shtml",
         "https://zhuanlan.zhihu.com/p/1929174079295971878"
       ],
-      "_merge_note": "坐标沿用小程序历史种子（真实地点核验过）；南广场 2025-07 招标改造，滑板公园 2025 年底建成"
+      "_merge_note": "坐标沿用小程序历史种子（真实地点核验过）；南广场 2025-07 招标改造，滑板公园 2025 年底建成",
+      "cover": "c"
     },
     {
       "kind": "venue",
@@ -83,7 +84,7 @@
         "兼顾滑板与自行车"
       ],
       "operator": "",
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/central-park-pump.png",
       "hot": true,
       "status": "营业中",
       "confidence": "高",
@@ -93,7 +94,8 @@
         "https://www.douyin.com/video/7587703470103366931",
         "https://www.douyin.com/video/7631003743269504373"
       ],
-      "_merge_note": "坐标沿用小程序历史种子；2025-08 论坛曝光 + 2025-12/2026-04 多条抖音实拍"
+      "_merge_note": "坐标沿用小程序历史种子；2025-08 论坛曝光 + 2025-12/2026-04 多条抖音实拍",
+      "cover": "c"
     },
     {
       "kind": "venue",
@@ -118,14 +120,15 @@
         "自然环境中的休闲练习场"
       ],
       "operator": "",
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/changxiantang.png",
       "hot": false,
       "status": "营业中",
       "confidence": "中",
       "needVerify": true,
       "sources": [
         "https://wenku.baidu.com/view/e233e86b47323968011ca300a6c30c225801f071.html"
-      ]
+      ],
+      "cover": "c"
     },
     {
       "kind": "venue",
@@ -150,7 +153,7 @@
         "筒仓艺术中心周边"
       ],
       "operator": "",
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/silo-art.png",
       "hot": false,
       "status": "待核实",
       "confidence": "中",
@@ -158,7 +161,8 @@
       "sources": [
         "https://wenku.baidu.com/view/e233e86b47323968011ca300a6c30c225801f071.html",
         "http://zj.people.com.cn/n2/2023/0606/c186327-40446125.html"
-      ]
+      ],
+      "cover": "c"
     },
     {
       "kind": "venue",
@@ -188,7 +192,7 @@
         "总占地约500㎡"
       ],
       "operator": "",
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/wanduocheng.png",
       "hot": false,
       "status": "待核实",
       "confidence": "中",
@@ -196,7 +200,8 @@
       "sources": [
         "https://b2b.baidu.com/q/aland?q=F8ACFDAAACACADA8FCF9AFF9FCFAACF0FBAAF0F1FEABAFAAAAAAF0ACABFBFEFA&id=qid1e4ceeda50f053e92c987bfccc9eb273&answer=7523513287731414958&ptype=9"
       ],
-      "_merge_note": "来源为场地施工方案例页（大丰友邦极限运动场地建设），需实地核实是否开放"
+      "_merge_note": "来源为场地施工方案例页（大丰友邦极限运动场地建设），需实地核实是否开放",
+      "cover": "c"
     },
     {
       "kind": "venue",
@@ -224,13 +229,14 @@
         "矮台/滑行道具"
       ],
       "operator": "",
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/linggongtang.png",
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
       "sources": [],
-      "_merge_note": "仅小程序历史种子记录，本轮抓取无公开来源佐证"
+      "_merge_note": "仅小程序历史种子记录，本轮抓取无公开来源佐证",
+      "cover": "c"
     },
     {
       "kind": "venue",
@@ -258,13 +264,14 @@
         "开阔平地广场"
       ],
       "operator": "",
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/xiuhu.png",
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
       "sources": [],
-      "_merge_note": "非专门滑板场，平地广场适合滑行练习；仅历史种子记录"
+      "_merge_note": "非专门滑板场，平地广场适合滑行练习；仅历史种子记录",
+      "cover": "c"
     },
     {
       "kind": "venue",
@@ -292,13 +299,14 @@
         "环湖刷街路线"
       ],
       "operator": "",
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/xiangjiadang.png",
       "hot": false,
       "status": "待核实",
       "confidence": "低",
       "needVerify": true,
       "sources": [],
-      "_merge_note": "非专门滑板场，环湖平地刷街点；仅历史种子记录"
+      "_merge_note": "非专门滑板场，环湖平地刷街点；仅历史种子记录",
+      "cover": "c"
     }
   ],
   "orgs": [
@@ -330,7 +338,7 @@
       "social": {
         "douyin": "嘉兴爱滑板club"
       },
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/aihuaban.png",
       "hot": true,
       "status": "营业中",
       "confidence": "高",
@@ -341,7 +349,8 @@
         "https://m.dianping.com/shop/127813593",
         "https://www.douyin.com/video/7617690512052906481"
       ],
-      "_merge_note": "2018年创立，嘉兴本土第一家专业滑板俱乐部；参与世界滑板日活动；另有旭辉广场点位记录存疑（携程标题与地址不符，疑为历史迁移）"
+      "_merge_note": "2018年创立，嘉兴本土第一家专业滑板俱乐部；参与世界滑板日活动；另有旭辉广场点位记录存疑（携程标题与地址不符，疑为历史迁移）",
+      "cover": "c"
     },
     {
       "kind": "shop",
@@ -365,7 +374,7 @@
       "partnerVenues": [],
       "courses": [],
       "social": {},
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/aijia.png",
       "hot": false,
       "status": "待核实",
       "confidence": "中",
@@ -375,7 +384,8 @@
         "https://www.qcc.com/firm/88da1add66d4171f3de19a5ffc25c0b0.html",
         "https://m.tianyancha.com/company/3272499563"
       ],
-      "_merge_note": "个体工商户（2018-08-10 成立，经营者张宇涛）；因未年报被列入经营异常名录，活跃度存疑；坐标沿用历史种子"
+      "_merge_note": "个体工商户（2018-08-10 成立，经营者张宇涛）；因未年报被列入经营异常名录，活跃度存疑；坐标沿用历史种子",
+      "cover": "c"
     },
     {
       "kind": "shop",
@@ -400,7 +410,7 @@
         "少儿滑板队（2025浙江省滑板积分联赛少儿男子乙组街式冠军 金宸帆）"
       ],
       "social": {},
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/jingyi.png",
       "hot": false,
       "status": "营业中",
       "confidence": "中",
@@ -410,7 +420,8 @@
         "https://baike.baidu.com/item/金宸帆/67201118",
         "https://m.map.360.cn/m/search/detail/pid=a16f3389b5952012"
       ],
-      "_merge_note": "2023嘉兴市滑板积分联赛承办关联单位、省联赛冠军队，竞技培训实力有官方背书"
+      "_merge_note": "2023嘉兴市滑板积分联赛承办关联单位、省联赛冠军队，竞技培训实力有官方背书",
+      "cover": "c"
     },
     {
       "kind": "shop",
@@ -436,14 +447,15 @@
       "social": {
         "douyin": "海宁BIG兔极限运动_王教练"
       },
-      "photos": [],
+      "photos": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/jx/bigrabbit.png",
       "hot": false,
       "status": "营业中",
       "confidence": "低",
       "needVerify": true,
       "sources": [
         "https://www.douyin.com/user/MS4wLjABAAAAZaLcs7p7xURFU4hgqDgq2YKXEjR9w2Ut-72pYzTCYOs"
-      ]
+      ],
+      "cover": "c"
     }
   ],
   "relations": [],

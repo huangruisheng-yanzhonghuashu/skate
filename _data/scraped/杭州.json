@@ -2,10 +2,10 @@
   "city": "杭州",
   "scrapedAt": "2026-09-03",
   "summary": {
-    "venues": 12,
+    "venues": 13,
     "orgs": 16,
     "relations": 4,
-    "dropped": 2,
+    "dropped": 3,
     "needVerify": 22
   },
   "venues": [
@@ -50,7 +50,12 @@
         "https://baike.baidu.com/item/钱塘轮滑中心滑板公园/63062662",
         "https://www.hzzx.gov.cn/cshz/content/2025-03/18/content_8896448.htm"
       ],
-      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/qiantang-wheel-park.png"
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/qiantang-wheel-park.png",
+      "phone": "13666678926",
+      "hours": {
+        "open": "10:00",
+        "close": "21:00"
+      }
     },
     {
       "kind": "venue",
@@ -273,40 +278,6 @@
     },
     {
       "kind": "venue",
-      "name": "千岛湖沪马探险乐园泵道",
-      "city": "杭州",
-      "category": "泵道",
-      "tags": [
-        {
-          "label": "收费",
-          "icon": "tagFree"
-        }
-      ],
-      "address": "杭州市淳安县沪马探险乐园内（详细点位待核）",
-      "shortAddr": "淳安县沪马探险乐园",
-      "latitude": null,
-      "longitude": null,
-      "indoor": false,
-      "lighting": false,
-      "fee": "付费",
-      "features": [
-        "景区配套运动项目"
-      ],
-      "operator": "",
-      "photos": [
-        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/qiandaohu.png"
-      ],
-      "hot": false,
-      "status": "待核实",
-      "confidence": "低",
-      "needVerify": true,
-      "sources": [
-        "https://huodong.com/venue/hangzhou/skateboarding"
-      ],
-      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/qiandaohu.png"
-    },
-    {
-      "kind": "venue",
       "name": "亚运滑板公园",
       "city": "杭州",
       "category": "混合",
@@ -460,57 +431,88 @@
       "needVerify": true,
       "sources": [],
       "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
+    },
+    {
+      "kind": "venue",
+      "name": "临平银泰inPARK滑手空间",
+      "city": "杭州",
+      "category": "混合",
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "有灯",
+          "icon": "tagLight"
+        }
+      ],
+      "address": "临平区银泰inPARK潮流街区（滑手空间）",
+      "shortAddr": "临平银泰inPARK",
+      "latitude": null,
+      "longitude": null,
+      "indoor": false,
+      "lighting": true,
+      "fee": "免费",
+      "features": [
+        "碗池+抛台",
+        "临平区首届青年滑板遛遛赛举办地"
+      ],
+      "operator": "",
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/hz2-linping-inpark.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/hz2-linping-inpark.png",
+      "hot": true,
+      "status": "营业中",
+      "confidence": "中",
+      "needVerify": false,
+      "sources": [
+        "https://mp.weixin.qq.com/s?__biz=MzAxNjA3MzEyMQ==&mid=2662028067&idx=1&sn=fd1759ac000ccd460bceb2e1b5fb04a6",
+        "https://paper.hi-lp.cn/html/2025-07/14/content_135658_2401480.htm"
+      ]
+    },
+    {
+      "kind": "venue",
+      "name": "桐庐滑板公园",
+      "city": "杭州",
+      "category": "混合",
+      "tags": [
+        {
+          "label": "免费",
+          "icon": "tagFree"
+        },
+        {
+          "label": "水泥",
+          "icon": "tagCement"
+        }
+      ],
+      "address": "桐庐县春江东路洋洲小学西侧约210米",
+      "shortAddr": "春江东路洋洲小学西",
+      "latitude": null,
+      "longitude": null,
+      "indoor": false,
+      "lighting": false,
+      "fee": "免费",
+      "features": [
+        "碗池+U型台+平地练习区",
+        "工业风涂鸦墙"
+      ],
+      "operator": "",
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/hz2-tonglu-park.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/hz2-tonglu-park.png",
+      "hot": false,
+      "status": "营业中",
+      "confidence": "中",
+      "needVerify": false,
+      "sources": [
+        "https://hk.trip.com/moments/detail/tonglu-688-140081131/"
+      ]
     }
   ],
   "orgs": [
-    {
-      "kind": "shop",
-      "name": "50滑板",
-      "legalName": "",
-      "city": "杭州",
-      "category": "俱乐部",
-      "services": [
-        "教学",
-        "零售",
-        "组织活动",
-        "场地运营"
-      ],
-      "address": "杭州市拱墅区展览西路杭州大厦中央商城B2楼B239（主点）",
-      "shortAddr": "拱墅区杭州大厦中央商城",
-      "latitude": null,
-      "longitude": null,
-      "phone": "18758551949",
-      "hours": {
-        "open": "10:00",
-        "close": "22:00"
-      },
-      "partnerVenues": [
-        "钱塘轮滑中心滑板公园",
-        "50滑板俱乐部（杭州大厦中央商城店）"
-      ],
-      "courses": [
-        "少儿/成人零基础",
-        "1对1私教",
-        "4-6人小班",
-        "体验课约150-200元/节"
-      ],
-      "social": {
-        "douyin": "",
-        "wechat": ""
-      },
-      "photos": [],
-      "hot": true,
-      "status": "营业中",
-      "confidence": "高",
-      "needVerify": false,
-      "sources": [
-        "https://huodong.com/venue/detail/ey6sn",
-        "https://baike.baidu.com/item/王飞/61783816",
-        "https://www.sohu.com/a/533954973_121124677",
-        "https://tyj.zj.gov.cn/art/2023/11/1/art_1347213_59118177.html"
-      ],
-      "_merge_note": "创始人王飞（杭州滑板教父/国家级教练员）2006年创建50滑板俱乐部，浙江经营9家滑板培训学校；复合业态：板店+俱乐部+培训+演出空间/咖啡/泳池。其他点位：运河体育公园店（拱墅祥符街）、东站西子国际大厦店（上城和兴路）、滨江店。2025年世界滑板日主理方"
-    },
     {
       "kind": "shop",
       "name": "天天滑板",
@@ -1046,17 +1048,53 @@
       "needVerify": true,
       "sources": [],
       "_merge_note": "恢复自小程序历史种子（真实地点，坐标沿用）"
+    },
+    {
+      "kind": "shop",
+      "name": "创能体育·轮滑·滑板（金沙湖店）",
+      "legalName": "杭州创能体育发展有限公司",
+      "city": "杭州",
+      "category": "培训机构",
+      "services": [
+        "教学"
+      ],
+      "address": "钱塘区下沙街道金沙湖大剧院一层",
+      "shortAddr": "金沙湖大剧院一层",
+      "latitude": null,
+      "longitude": null,
+      "phone": "",
+      "hours": {
+        "open": "09:00",
+        "close": "21:00"
+      },
+      "partnerVenues": [],
+      "courses": [
+        "轮滑/滑板少儿培训"
+      ],
+      "social": {},
+      "photos": [
+        "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/hz2-chuangneng.png"
+      ],
+      "cover": "cloud://cloud1-d4grizmp31acb587e.636c-cloud1-d4grizmp31acb587e-1477671117/photos/hz/hz2-chuangneng.png",
+      "hot": false,
+      "status": "待核实",
+      "confidence": "中",
+      "needVerify": true,
+      "sources": [
+        "https://map.360.cn/site/k/%E8%BD%AE%E6%BB%91_%E5%98%89%E5%85%B4%E5%B8%82",
+        "https://www.zhipin.com/job_detail/8cb8bd7c028024131HN43tW9GFtZ.html"
+      ]
     }
   ],
   "relations": [
     {
-      "org": "50滑板",
+      "org": "50滑板俱乐部（杭州大厦中央商城店）",
       "venue": "50滑板俱乐部（杭州大厦中央商城店）",
       "type": "拥有",
       "needVerify": false
     },
     {
-      "org": "50滑板",
+      "org": "50滑板俱乐部（杭州大厦中央商城店）",
       "venue": "钱塘轮滑中心滑板公园",
       "type": "合作",
       "needVerify": false,
@@ -1084,6 +1122,10 @@
     {
       "name": "FIGHTING BABY儿童平衡车体适能运动中心（滨江浦沿）",
       "reason": "平衡车/体适能为主业，非滑板实体"
+    },
+    {
+      "name": "千岛湖沪马探险乐园泵道",
+      "reason": "核实为山地滑板车（luge）赛道，非滑板场地"
     }
   ]
 }
