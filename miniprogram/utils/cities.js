@@ -296,6 +296,7 @@ const CITY_INITIALS = {
   '平凉市': 'pls',
   '萍乡市': 'pxs',
   '莆田市': 'pts',
+  '普洱市': 'pes',
   '濮阳市': 'pys',
   /* Q */
   '七台河市': 'qths',
