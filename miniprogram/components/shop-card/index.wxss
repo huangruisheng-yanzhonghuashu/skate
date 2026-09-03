@@ -59,7 +59,7 @@
 
 .shop-status {
   flex-shrink: 0;
-  font-size: 20rpx;
+  font-size: 22rpx;
   padding: 4rpx 12rpx;
   border-radius: 8rpx;
 }
@@ -81,7 +81,7 @@
 }
 
 .svc-tag {
-  font-size: 20rpx;
+  font-size: 22rpx;
   color: #FF8A6E;
   background: rgba(255, 90, 54, 0.16);
   padding: 4rpx 14rpx;
@@ -130,8 +130,8 @@
 }
 
 .rating-count {
-  font-size: 20rpx;
-  color: #6E6E76;
+  font-size: 22rpx;
+  color: #8C8C94;
 }
 
 .shop-addr {
@@ -146,8 +146,8 @@
   flex-shrink: 0;
   padding: 12rpx 24rpx;
   border-radius: 999rpx;
-  background: rgba(0, 212, 170, 0.12);
-  color: #00D4AA;
+  background: rgba(255, 90, 54, 0.14);
+  color: #FF8A6E;
   font-size: 24rpx;
   font-weight: 600;
   display: flex;

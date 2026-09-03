@@ -134,6 +134,8 @@
   width: 100%;
   height: 40vh;
   min-height: 480rpx;
+  transition: height 0.3s ease;
+  overflow: hidden;
 }
 
 /* 城市场地计数 chip（左上，绿点 + 深色胶囊，设计稿同款）。
@@ -247,14 +249,13 @@
   align-items: center;
   height: 96rpx;
   padding: 0 16rpx;
-  color: #6E6E76;
-  font-size: 26rpx;
-  transition: font-size 0.2s ease, color 0.2s ease;
+  font-size: 30rpx;
+  color: #8C8C94;
+  transition: color 0.2s ease;
 }
 
 .entity-active {
   color: #FFFFFF;
-  font-size: 32rpx;
   font-weight: 700;
 }
 
@@ -279,11 +280,6 @@
 }
 
 /* ===== 地图折叠 ===== */
-.map {
-  transition: height 0.3s ease;
-  overflow: hidden;
-}
-
 .map-collapsed {
   height: 0 !important;
 }
@@ -372,10 +368,10 @@
 
 .filter-chip {
   display: inline-block;
-  height: 56rpx;
-  line-height: 54rpx;
+  height: 64rpx;
+  line-height: 60rpx;
   padding: 0 24rpx;
-  margin-right: 16rpx;
+  margin-right: 20rpx;
   border-radius: 999rpx;
   border: 2rpx solid #26262C;
   box-sizing: border-box;

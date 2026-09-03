@@ -1,4 +1,4 @@
-<view class="card" style="animation-delay: {{delay}}ms" bindtap="go" aria-role="button" aria-label="{{venue.name}}，查看场地详情">
+<view class="card" style="animation-delay: {{delay}}ms" hover-class="card-hover" bindtap="go" aria-role="button" aria-label="{{venue.name}}，查看场地详情">
   <!-- 左图：场地照片（无图回退图标位），热门角标压图 -->
   <view class="thumb">
     <image wx:if="{{venue.photo}}" class="thumb-img" src="{{venue.photo}}" mode="aspectFill" lazy-load />

@@ -10,7 +10,8 @@
   animation: card-in 0.4s ease-out backwards;
 }
 
-.card:active {
+/* 按压态：hover-class 触发（view 的 :active 真机不可靠，与 shop-card 机制统一） */
+.card-hover {
   opacity: 0.7;
   transform: scale(0.99);
 }

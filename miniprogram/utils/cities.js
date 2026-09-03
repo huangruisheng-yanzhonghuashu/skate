@@ -3,7 +3,13 @@
 
 const HOT_CITIES = ['北京', '上海', '成都', '深圳', '广州', '重庆', '西安', '武汉', '杭州', '郑州', '南京', '长沙']
 
-const CITY_GROUPS = [
+/* 城市名统一归一为短名（直辖市/地级市去「市」后缀）：
+ * 与场地库 city 字段、热门城市、首页显示、逆地理编码（autoMatchCity 已去「市」）保持一致 */
+function shortName(name) {
+  return name.replace(/市$/, '')
+}
+
+const CITY_GROUPS_FULL = [
   {
     letter: 'A',
     cities: ['阿坝藏族羌族自治州', '阿克苏地区', '阿拉善盟', '阿里地区', '阿勒泰地区', '安康市', '安庆市', '安顺市', '鞍山市', '澳门'],
@@ -94,8 +100,13 @@ const CITY_GROUPS = [
   },
 ]
 
-/* 拼音首字母索引：城市名 → 首字母串（如「北京市」→ 'bjs'），供拼音/首字母搜索 */
-const CITY_INITIALS = {
+/* 对外使用短名分组（北京市 → 北京），字母分组顺序不变 */
+const CITY_GROUPS = CITY_GROUPS_FULL.map(function (g) {
+  return { letter: g.letter, cities: g.cities.map(shortName) }
+})
+
+/* 拼音首字母索引：短名 → 首字母串（如「北京」→ 'bj'），供拼音/首字母搜索 */
+const CITY_INITIALS_FULL = {
   /* A */
   '阿坝藏族羌族自治州': 'abzzqzzzz',
   '阿克苏地区': 'aksdq',
@@ -447,13 +458,23 @@ const CITY_INITIALS = {
   '遵义市': 'zys',
 }
 
-/* 本地搜索：中文按名称包含匹配；英文/数字按拼音首字母前缀匹配
- * 「北京」→ 北京市 ✓　「jx」→ 嘉兴市 ✓　「cd」→ 成都市 ✓ */
+/* 短名索引：首字母映射按全称维护，这里转换为短名键（非「市」结尾的名称不变） */
+const CITY_INITIALS = {}
+CITY_GROUPS_FULL.forEach(function (g) {
+  g.cities.forEach(function (c) {
+    CITY_INITIALS[shortName(c)] = CITY_INITIALS_FULL[c]
+  })
+})
+
+/* 本地搜索：中文按短名包含匹配（输入全称「北京市」自动归一为「北京」）；
+ * 英文/数字按拼音首字母前缀匹配
+ * 「北京」/「北京市」→ 北京 ✓　「jx」→ 嘉兴 ✓　「cd」→ 成都 ✓ */
 function searchCities(keyword) {
-  const q = (keyword || '').trim()
-  if (!q) return []
-  const lower = q.toLowerCase()
+  const raw = (keyword || '').trim()
+  if (!raw) return []
+  const lower = raw.toLowerCase()
   const isAscii = /^[a-z0-9]+$/.test(lower)
+  const q = isAscii ? raw : raw.replace(/市$/, '')
   const results = []
   CITY_GROUPS.forEach(function (g) {
     g.cities.forEach(function (c) {
