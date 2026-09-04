@@ -10,12 +10,12 @@
       <text class="profile-name">{{user.nickname || '滑手'}}</text>
       <view class="profile-meta">
         <view class="meta-row">
-          <image class="meta-icon" src="{{icons.flame}}" mode="aspectFit" />
-          <text>滑龄 {{user.skateYears || '未设置'}}</text>
-        </view>
-        <view class="meta-row">
           <image class="meta-icon" src="{{icons.pin}}" mode="aspectFit" />
           <text>{{city}}</text>
+        </view>
+        <view class="meta-row">
+          <image class="meta-icon" src="{{icons.flame}}" mode="aspectFit" />
+          <text>滑龄 {{user.skateYears || '未设置'}}</text>
         </view>
       </view>
       <view wx:if="{{user.skills.length}}" class="profile-tags">
@@ -160,14 +160,18 @@
         </view>
       </view>
 
-      <view class="edit-field">
+      <!-- 滑龄：固定 4 档，行内 chip 单选（免弹窗，一步选中） -->
+      <view class="edit-tags">
         <text class="edit-label">滑龄</text>
-        <picker mode="selector" range="{{years}}" bindchange="onYearsChange">
-          <view class="edit-field-right">
-            <text class="edit-value {{form.skateYears ? '' : 'edit-ph'}}">{{form.skateYears || '选择滑龄'}}</text>
-            <image class="edit-chev" src="{{icons.chevron}}" mode="aspectFit" />
-          </view>
-        </picker>
+        <view class="tag-list">
+          <view
+            wx:for="{{years}}"
+            wx:key="*this"
+            class="tag-option {{form.skateYears === item ? 'tag-option-active' : ''}}"
+            data-year="{{item}}"
+            bindtap="onYearTap"
+          >{{item}}</view>
+        </view>
       </view>
 
       <view class="edit-tags">

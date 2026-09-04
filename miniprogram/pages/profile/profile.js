@@ -102,8 +102,9 @@ Page({
     this.setData({ 'form.nickname': e.detail.value })
   },
 
-  onYearsChange(e) {
-    this.setData({ 'form.skateYears': this.data.years[Number(e.detail.value)] })
+  /* 滑龄：行内 chip 单选 */
+  onYearTap(e) {
+    this.setData({ 'form.skateYears': e.currentTarget.dataset.year })
   },
 
   /* 擅长标签点选（上限 MAX_SKILLS） */
