@@ -41,8 +41,12 @@
 }
 
 .stat-label {
-  font-size: 22rpx;
+  font-size: 24rpx;
   color: #8C8C94;
+}
+
+.stat-hover {
+  background: #26262C;
 }
 
 /* ===== 个人卡片 ===== */
@@ -261,6 +265,34 @@
   color: #8C8C94;
 }
 
+/* 最近签到空态：虚线框弱化 + 去打卡引导 */
+.recent-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  background: #1E1E23;
+  border: 2rpx dashed #33333A;
+  border-radius: 24rpx;
+  padding: 48rpx 32rpx;
+}
+
+.recent-empty-icon {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.recent-empty-text {
+  font-size: 26rpx;
+  color: #8C8C94;
+}
+
+.recent-empty-cta {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #FF8A6E;
+}
+
 /* ===== 资料头像与引导 ===== */
 .avatar-img {
   width: 128rpx;
@@ -444,7 +476,7 @@
 .edit-count {
   flex-shrink: 0;
   font-size: 22rpx;
-  color: #6E6E76;
+  color: #8C8C94;
 }
 
 .edit-ph {

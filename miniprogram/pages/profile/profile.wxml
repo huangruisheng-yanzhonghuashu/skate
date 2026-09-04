@@ -28,15 +28,15 @@
 
   <!-- 统计行（设计稿：3 个独立小卡，数字大 + 标签小；签到数字橙色） -->
   <view class="stats">
-    <view class="stat" bindtap="goCheckins">
+    <view class="stat" hover-class="stat-hover" bindtap="goCheckins">
       <text class="stat-num stat-num-orange">{{checkinCount}}</text>
       <text class="stat-label">签到</text>
     </view>
-    <view class="stat" bindtap="goReports">
+    <view class="stat" hover-class="stat-hover" bindtap="goReports">
       <text class="stat-num">{{reportCount}}</text>
       <text class="stat-label">报错</text>
     </view>
-    <view class="stat" bindtap="goFeedback">
+    <view class="stat" hover-class="stat-hover" bindtap="goFeedback">
       <text class="stat-num">{{feedbackCount}}</text>
       <text class="stat-label">建议</text>
     </view>
@@ -109,6 +109,12 @@
       <text class="recent-name">{{item.venueName}}</text>
       <text class="recent-time">{{item.timeText}}</text>
     </view>
+    <!-- 空态：引导去首页打卡 -->
+    <view wx:if="{{!recent.length}}" class="recent-empty" hover-class="stat-hover" bindtap="goHome">
+      <image class="recent-empty-icon" src="{{icons.pin}}" mode="aspectFit" />
+      <text class="recent-empty-text">还没有签到记录</text>
+      <text class="recent-empty-cta">去打卡</text>
+    </view>
   </view>
 
   <!-- 编辑资料弹窗 -->
@@ -116,7 +122,7 @@
     <view class="edit-sheet" catchtap="noop">
       <view class="edit-head">
         <text class="edit-title">编辑资料</text>
-        <image class="edit-close" src="{{icons.close}}" catchtap="closeEdit" mode="aspectFit" />
+        <image class="edit-close" src="{{icons.close}}" catchtap="closeEdit" mode="aspectFit" aria-label="关闭" />
       </view>
 
       <!-- 头像：居中大图 + 相机角标 -->

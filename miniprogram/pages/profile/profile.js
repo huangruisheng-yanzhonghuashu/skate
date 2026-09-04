@@ -163,6 +163,7 @@ Page({
   },
 
   /* ===== 菜单跳转 ===== */
+  goHome() { wx.switchTab({ url: '/pages/home/home' }) },
   goCheckins() { wx.switchTab({ url: '/pages/checkins/checkins' }) },
   goReports() { wx.navigateTo({ url: '/pages/reports/reports' }) },
   goFeedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }) },
