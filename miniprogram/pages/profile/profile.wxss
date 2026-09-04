@@ -102,6 +102,64 @@
   height: 32rpx;
 }
 
+/* ===== 擅长标签 ===== */
+.profile-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.profile-tag {
+  font-size: 22rpx;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.14);
+  border-radius: 999rpx;
+  padding: 6rpx 20rpx;
+  line-height: 1.4;
+}
+
+.edit-tags {
+  display: flex;
+  align-items: flex-start;
+  gap: 24rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #26262C;
+}
+
+.edit-tags .edit-label {
+  padding-top: 10rpx;
+}
+
+.tag-list {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.tag-option {
+  font-size: 26rpx;
+  color: #A6A6AD;
+  background: #26262C;
+  border: 1rpx solid #26262C;
+  border-radius: 999rpx;
+  padding: 10rpx 28rpx;
+  line-height: 1.4;
+}
+
+.tag-option-active {
+  color: #FFFFFF;
+  background: rgba(255, 90, 54, 0.2);
+  border-color: #FF5A36;
+}
+
+.edit-tags-tip {
+  font-size: 22rpx;
+  color: #6E6E76;
+  padding: 16rpx 0 0 136rpx;
+}
+
 /* ===== 菜单 ===== */
 .menu {
   background: #1E1E23;

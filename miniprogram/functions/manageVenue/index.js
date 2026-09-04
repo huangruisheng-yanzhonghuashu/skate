@@ -75,6 +75,7 @@ exports.main = async (event) => {
           category: data.category,
           online: 0,
           hot: !!data.hot,
+          status: data.status === 'off' ? 'off' : 'on',
           address: data.address || '',
           shortAddr: data.shortAddr || data.address || '',
           tags: Array.isArray(data.tags) ? data.tags : [],
@@ -96,6 +97,8 @@ exports.main = async (event) => {
             category: data.category,
             operator: data.operator || '',
             hot: !!data.hot,
+            /* 状态仅在显式传入时更新（编辑表单不带 status，不能把已下架洗回上架） */
+            ...(data.status ? { status: data.status === 'off' ? 'off' : 'on' } : {}),
             address: data.address || '',
             shortAddr: data.shortAddr || data.address || '',
             tags: Array.isArray(data.tags) ? data.tags : [],
@@ -128,6 +131,7 @@ exports.main = async (event) => {
           partnerVenues: Array.isArray(data.partnerVenues) ? data.partnerVenues : [],
           photos: Array.isArray(data.photos) ? data.photos : [],
           hot: !!data.hot,
+          status: data.status === 'off' ? 'off' : 'on',
         }
         await db.collection('shops').add({ data: doc })
         return { ok: true, id: doc.id }
@@ -149,6 +153,8 @@ exports.main = async (event) => {
             hours: data.hours || { open: '09:00', close: '21:00' },
             photos: Array.isArray(data.photos) ? data.photos : [],
             hot: !!data.hot,
+            /* 状态仅在显式传入时更新（编辑表单不带 status） */
+            ...(data.status ? { status: data.status === 'off' ? 'off' : 'on' } : {}),
             ...(Array.isArray(data.partnerVenues) ? { partnerVenues: data.partnerVenues } : {}),
           },
         })
@@ -157,6 +163,20 @@ exports.main = async (event) => {
       case 'deleteShop': {
         if (!data.id) invalid('缺少 id')
         await db.collection('shops').where({ id: data.id }).remove()
+        return { ok: true }
+      }
+
+      /* ===== 上下架（status: 'on'|'off'，默认上架；下架后首页列表/地图不展示） ===== */
+      case 'setVenueStatus': {
+        if (!data.id) invalid('缺少 id')
+        if (data.status !== 'on' && data.status !== 'off') invalid('状态必须是 on 或 off')
+        await db.collection('venues').where({ id: data.id }).update({ data: { status: data.status } })
+        return { ok: true }
+      }
+      case 'setShopStatus': {
+        if (!data.id) invalid('缺少 id')
+        if (data.status !== 'on' && data.status !== 'off') invalid('状态必须是 on 或 off')
+        await db.collection('shops').where({ id: data.id }).update({ data: { status: data.status } })
         return { ok: true }
       }
 

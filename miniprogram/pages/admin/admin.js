@@ -27,9 +27,9 @@ Page({
     isAdmin: null, /* null 校验中 / true / false */
     myOpenid: '',
     entity: 'venue',
+    /* 城市与首页同源（store 全局城市）：cityFilter 默认取首页选中城市 */
     city: '',
-    cityFilter: '全部',
-    cityOptions: ['全部'],
+    cityFilter: '',
     venues: [],
     shops: [],
     viewVenues: [],
@@ -57,7 +57,9 @@ Page({
   },
 
   onLoad() {
-    this.setData({ city: store.getCity() })
+    /* 城市默认为首页选择的城市（store 全局城市） */
+    const city = store.getCity()
+    this.setData({ city: city, cityFilter: city })
     /* 进入即校验管理员身份（check 的 ok:false 是业务态，不走 callManage 的抛错封装，直接拿 openid） */
     wx.cloud.callFunction({ name: 'manageVenue', data: { action: 'check', data: {} } })
       .then((r) => {
@@ -76,24 +78,30 @@ Page({
   },
 
   onShow() {
-    /* 从表单返回后刷新列表（saveProfile 成功路径已在 save 内处理） */
+    /* 从城市选择页返回：检测全局城市变化，同步过滤条件（与首页 onShow 同款逻辑）
+     * 从表单返回后无需处理（save 成功路径已在 save 内 reload） */
+    const c = store.getCity()
+    if (this.data.cityFilter && c !== this.data.cityFilter) {
+      this.setData({ city: c, cityFilter: c })
+      this.applyFilter()
+    }
   },
 
   reload() {
     Promise.all([cloud.getVenues(true), cloud.getShops(true)]).then((rs) => {
-      /* 城市选项：从场地+店铺数据自动聚合（有序去重），前置"全部" */
+      /* 新增表单城市选项：预设城市 + 场地/店铺数据聚合去重（避免硬编码遗漏新城市） */
       const seen = {}
-      const cities = []
+      const cities = CITIES.slice()
       rs[0].concat(rs[1]).forEach((d) => {
         if (d.city && !seen[d.city]) {
           seen[d.city] = true
-          cities.push(d.city)
+          if (cities.indexOf(d.city) < 0) cities.push(d.city)
         }
       })
       this.setData({
         venues: rs[0],
         shops: rs[1],
-        cityOptions: ['全部'].concat(cities),
+        cities: cities,
       })
       this.applyFilter()
     })
@@ -109,9 +117,16 @@ Page({
     })
   },
 
-  onCityFilter(e) {
-    this.setData({ cityFilter: this.data.cityOptions[Number(e.detail.value)] })
+  /* 全部城市：清除城市过滤 */
+  filterAllCity() {
+    if (this.data.cityFilter === '全部') return
+    this.setData({ cityFilter: '全部' })
     this.applyFilter()
+  },
+
+  /* 切换城市：与首页一致，跳城市选择页（选中写回全局 store，onShow 检测变化后刷新） */
+  goCityPicker() {
+    wx.navigateTo({ url: '/pages/city-picker/city-picker' })
   },
 
   switchEntity(e) {
@@ -423,13 +438,31 @@ Page({
     })
   },
 
+  /* 上架/下架切换（status: 'on'|'off'，默认上架；下架后首页列表/地图不可见）
+   * 非破坏性操作，直接切换无需确认 */
+  toggleStatus(e) {
+    const kind = e.currentTarget.dataset.kind
+    const id = e.currentTarget.dataset.id
+    const list = kind === 'venue' ? this.data.venues : this.data.shops
+    const item = list.find((x) => x.id === id)
+    if (!item) return
+    const next = item.status === 'off' ? 'on' : 'off'
+    cloud.callManage(kind === 'venue' ? 'setVenueStatus' : 'setShopStatus', { id: id, status: next }).then(() => {
+      wx.showToast({ title: next === 'off' ? '已下架' : '已上架', icon: 'success' })
+      this.reload()
+    }).catch((err) => {
+      wx.showToast({ title: (err && err.message) || '操作失败', icon: 'none' })
+      console.warn('[admin] 上下架失败', (err && err.code) || '', (err && err.message) || err)
+    })
+  },
+
   /* 删除（二次确认） */
   removeItem(e) {
     const kind = e.currentTarget.dataset.kind
     const id = e.currentTarget.dataset.id
     wx.showModal({
       title: '确认删除',
-      content: '删除后不可恢复，确认删除这条' + (kind === 'venue' ? '场地' : '店铺') + '？',
+      content: '删除后不可恢复，确认删除这条' + (kind === 'venue' ? '场地' : '门店与俱乐部') + '？',
       confirmColor: '#E5484D',
       success: (r) => {
         if (!r.confirm) return

@@ -92,7 +92,8 @@ Page({
   /* 云端场地列表（数据全部来源于云数据库） */
   loadVenues() {
     cloud.getVenues().then((venues) => {
-      this._venues = venues
+      /* 只保留上架状态（status !== 'off'，旧数据无 status 视为上架），下架场地列表/地图/城市推断全不可见 */
+      this._venues = venues.filter((v) => v.status !== 'off')
       /* 在线人数：种子热度值先兜底，真实心跳数据随后覆盖 */
       venues.forEach((v) => { this._online[v.id] = v.online })
       this._venuesLoaded = true
@@ -109,7 +110,8 @@ Page({
   /* 云端店铺列表 */
   loadShops() {
     cloud.getShops().then((shops) => {
-      this._shops = shops
+      /* 同场地：只保留上架门店/俱乐部 */
+      this._shops = shops.filter((v) => v.status !== 'off')
       this._shopsLoaded = true
       this.setData({ loaded: this._venuesLoaded && this._shopsLoaded })
       this.tryLocateCity()
@@ -272,8 +274,8 @@ Page({
   /* 下拉刷新：强制重拉云端两实体 + 在线数 + 评分统计 */
   onPullDownRefresh() {
     Promise.all([cloud.getVenues(true), cloud.getShops(true)]).then((rs) => {
-      this._venues = rs[0]
-      this._shops = rs[1]
+      this._venues = rs[0].filter((v) => v.status !== 'off')
+      this._shops = rs[1].filter((v) => v.status !== 'off')
       rs[0].forEach((v) => { this._online[v.id] = v.online })
       this.refresh()
       this.buildMarkers()
@@ -394,10 +396,12 @@ Page({
       list = arr.map((v) => {
         const st = this._venueRatings && this._venueRatings[v.id]
         const today = store.getTodayCheckin(v.id)
+        /* 评分统一一位小数展示（设计稿 4.5/4.2 样式；整数种子分补 .0，无评分为 0 走「暂无」） */
+        const rating = st ? st.avg : v.rating
         return {
           id: v.id,
           name: v.name,
-          rating: st ? st.avg : v.rating,
+          rating: rating ? Number(rating).toFixed(1) : 0,
           ratingCount: st ? st.count : 0,
           distance: v.distance,
           shortAddr: v.shortAddr,

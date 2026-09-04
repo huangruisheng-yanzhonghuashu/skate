@@ -97,6 +97,33 @@
   white-space: nowrap;
 }
 
+/* 评分（设计稿：名称行右侧单颗橙星 + 分值，14px 星 / text-sm 半粗 / #FF5A36） */
+.rate {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  flex-shrink: 0;
+}
+
+.rate-star {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.rate-num {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #FF5A36;
+  line-height: 1;
+}
+
+/* 无评分兜底：灰字「暂无」不配星 */
+.rate-num-empty {
+  color: #8C8C94;
+  font-weight: 400;
+  font-size: 24rpx;
+}
+
 /* 地址 · 距离 */
 .addr {
   display: flex;

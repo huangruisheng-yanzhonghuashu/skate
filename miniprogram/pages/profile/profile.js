@@ -5,6 +5,9 @@ const { fmtRel } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
 const SKATE_YEARS = ['1年内', '1-3年', '3-5年', '5年以上']
+/* 擅长标签预设词表（多选上限 MAX_SKILLS，展示在个人卡片） */
+const TAG_OPTIONS = ['街式', '碗池', 'U池', '平花', '长板', '鱼板', '速降', '刷街', '道具', '教学']
+const MAX_SKILLS = 5
 
 Page({
   data: {
@@ -18,8 +21,10 @@ Page({
     /* 编辑资料弹窗 */
     editOpen: false,
     saving: false,
-    form: { nickname: '', skateYears: '', avatarFileID: '', avatarTemp: '' },
+    form: { nickname: '', skateYears: '', avatarFileID: '', avatarTemp: '', skills: [] },
     years: SKATE_YEARS,
+    tagOptions: TAG_OPTIONS,
+    tagSel: {},
     icons: {
       chevron: ICON.chevronRightAsh,
       flame: ICON.flameOrange,
@@ -68,10 +73,14 @@ Page({
   /* ===== 编辑资料 ===== */
   openEdit() {
     const u = store.getUser()
+    const skills = Array.isArray(u.skills) ? u.skills.slice() : []
+    const tagSel = {}
+    skills.forEach(function (t) { tagSel[t] = true })
     this.setData({
       editOpen: true,
       saving: false,
-      form: { nickname: u.nickname, skateYears: u.skateYears, avatarFileID: u.avatarFileID, avatarTemp: '' },
+      form: { nickname: u.nickname, skateYears: u.skateYears, avatarFileID: u.avatarFileID, avatarTemp: '', skills: skills },
+      tagSel: tagSel,
     })
   },
 
@@ -95,6 +104,25 @@ Page({
     this.setData({ 'form.skateYears': this.data.years[Number(e.detail.value)] })
   },
 
+  /* 擅长标签点选（上限 MAX_SKILLS） */
+  onTagToggle(e) {
+    const tag = e.currentTarget.dataset.tag
+    const sel = this.data.tagSel
+    if (sel[tag]) {
+      delete sel[tag]
+    } else {
+      if (Object.keys(sel).length >= MAX_SKILLS) {
+        wx.showToast({ title: '最多选 ' + MAX_SKILLS + ' 个', icon: 'none' })
+        return
+      }
+      sel[tag] = true
+    }
+    this.setData({
+      tagSel: sel,
+      'form.skills': Object.keys(sel),
+    })
+  },
+
   saveProfile() {
     if (this.data.saving) return
     const f = this.data.form
@@ -109,6 +137,7 @@ Page({
         nickname: nickname,
         avatarFileID: avatarFileID || f.avatarFileID,
         skateYears: f.skateYears,
+        skills: f.skills || [],
       }).then(() => {
         this.setData({ editOpen: false, saving: false })
         this.refresh()

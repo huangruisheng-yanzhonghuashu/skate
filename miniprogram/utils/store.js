@@ -6,8 +6,9 @@ const { dayKey } = require('./format.js')
 const KEY = 'skatespot-mp-state-v1'
 const PENDING_KEY = 'skatespot-mp-pending-v1'
 
-/* 用户资料默认值：未完善资料时的展示降级（用户可在"我的"页编辑） */
-const DEFAULT_USER = { nickname: '', avatarFileID: '', skateYears: '' }
+/* 用户资料默认值：未完善资料时的展示降级（用户可在"我的"页编辑）
+ * skills: 擅长标签（预设词表多选，上限 5 个，见 profile 页 TAG_OPTIONS） */
+const DEFAULT_USER = { nickname: '', avatarFileID: '', skateYears: '', skills: [] }
 
 let state = null
 const listeners = new Set()
@@ -130,11 +131,12 @@ function loadProfile() {
       state.city = p.city
       changed = true
     }
-    if (p.nickname || p.avatarFileID || p.skateYears) {
+    if (p.nickname || p.avatarFileID || p.skateYears || (p.skills && p.skills.length)) {
       state.user = {
         nickname: p.nickname || state.user.nickname,
         avatarFileID: p.avatarFileID || state.user.avatarFileID,
         skateYears: p.skateYears || state.user.skateYears,
+        skills: (p.skills && p.skills.length) ? p.skills : (state.user.skills || []),
       }
       changed = true
     }
@@ -193,12 +195,14 @@ function saveProfile(profile) {
   if (profile.nickname !== undefined) state.user.nickname = profile.nickname
   if (profile.avatarFileID !== undefined) state.user.avatarFileID = profile.avatarFileID
   if (profile.skateYears !== undefined) state.user.skateYears = profile.skateYears
+  if (profile.skills !== undefined) state.user.skills = profile.skills
   persist()
   notify()
   return cloud.saveProfile({
     nickname: state.user.nickname,
     avatarFileID: state.user.avatarFileID,
     skateYears: state.user.skateYears,
+    skills: state.user.skills || [],
     city: state.city,
   })
 }

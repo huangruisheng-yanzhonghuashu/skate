@@ -76,6 +76,13 @@
   margin-bottom: 16rpx;
 }
 
+/* 城市筛选 chips（全部 + 当前城市，与首页同源 store） */
+.city-chips {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+}
+
 .city-filter {
   display: inline-block;
   padding: 10rpx 24rpx;
@@ -83,6 +90,12 @@
   border-radius: 10rpx;
   color: #FFFFFF;
   font-size: 26rpx;
+}
+
+/* 激活态：橙色（当前生效的筛选维度） */
+.city-filter-on {
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
 }
 
 .meta-count {
@@ -169,23 +182,36 @@
   box-sizing: border-box;
 }
 
-/* ===== 新增按钮（固定底部全宽，设计稿同款） ===== */
+/* 上下架：中性灰描边（区别于编辑/删除的高危操作） */
+.op-status {
+  color: #A6A6AD;
+  background: transparent;
+  border: 2rpx solid #3A3A42;
+  box-sizing: border-box;
+}
+
+/* 已下架行弱化展示 */
+.row-off {
+  opacity: 0.55;
+}
+
+/* ===== 新增按钮（右下角小号圆形 ＋：拇指热区 + 添加心智 + 对角平衡） ===== */
 .fab {
   position: fixed;
-  left: 32rpx;
   right: 32rpx;
   bottom: calc(32rpx + env(safe-area-inset-bottom));
   z-index: 20;
+  width: 96rpx;
+  height: 96rpx;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8rpx;
   background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
-  font-size: 30rpx;
-  font-weight: 600;
-  padding: 26rpx 0;
-  border-radius: 999rpx;
+  font-size: 52rpx;
+  font-weight: 300;
+  line-height: 1;
+  border-radius: 50%;
   box-shadow: 0 8rpx 24rpx rgba(255, 90, 54, 0.35);
 }
 

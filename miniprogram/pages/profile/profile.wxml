@@ -18,6 +18,9 @@
           <text>{{city}}</text>
         </view>
       </view>
+      <view wx:if="{{user.skills.length}}" class="profile-tags">
+        <text wx:for="{{user.skills}}" wx:key="*this" class="profile-tag">{{item}}</text>
+      </view>
       <view wx:if="{{!profileComplete}}" class="profile-hint">点击完善资料，解锁专属身份</view>
     </view>
     <image class="profile-arrow" src="{{icons.chevron}}" mode="aspectFit" />
@@ -74,7 +77,7 @@
     <view class="menu-item" hover-class="menu-hover" bindtap="goAdmin">
       <view class="menu-left">
         <image class="menu-icon" src="{{icons.admin}}" mode="aspectFit" />
-        <text class="menu-label">场地管理</text>
+        <text class="menu-label">运营管理</text>
       </view>
       <view class="menu-right">
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
@@ -141,6 +144,20 @@
           <view class="edit-picker {{form.skateYears ? '' : 'edit-picker-empty'}}">{{form.skateYears || '选择滑龄'}}</view>
         </picker>
       </view>
+
+      <view class="edit-tags">
+        <text class="edit-label">擅长</text>
+        <view class="tag-list">
+          <view
+            wx:for="{{tagOptions}}"
+            wx:key="*this"
+            class="tag-option {{tagSel[item] ? 'tag-option-active' : ''}}"
+            data-tag="{{item}}"
+            bindtap="onTagToggle"
+          >{{item}}</view>
+        </view>
+      </view>
+      <view class="edit-tags-tip">最多选 5 个，展示在个人卡片</view>
 
       <button class="edit-save {{saving ? 'edit-saving' : ''}}" bindtap="saveProfile">
         {{saving ? '保存中...' : '保存'}}
