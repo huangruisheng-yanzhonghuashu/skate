@@ -194,7 +194,8 @@
   width: 100%;
   max-width: 600rpx;
   height: 80vh;
-  background: #1B1B20;
+  background: #232329;
+  border: 1rpx solid #2F2F36;
   border-radius: 20rpx;
   padding: 40rpx 40rpx calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;

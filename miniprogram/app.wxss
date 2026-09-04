@@ -5,6 +5,9 @@ page {
   --card: #1E1E23;
   --inset: #17171B;
   --line: #26262C;
+  /* 浮层/弹窗面板（高于 --card，避免与页面背景糊在一起） */
+  --sheet: #232329;
+  --sheet-line: #2F2F36;
 
   /* Primary brand: neon orange-red */
   --primary: #FF5A36;
