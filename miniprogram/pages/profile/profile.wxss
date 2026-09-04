@@ -309,20 +309,110 @@
   overflow-y: auto;
 }
 
+/* 头部：标题居中 + 右上角关闭（触区 ≥44px） */
+.edit-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+}
+
 .edit-title {
-  text-align: center;
   font-size: 34rpx;
   font-weight: 700;
   color: #FFFFFF;
-  margin-bottom: 40rpx;
 }
 
-.edit-row {
+.edit-close {
+  position: absolute;
+  right: -12rpx;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 64rpx;
+  height: 64rpx;
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+/* 头像：居中大图 + 橙色相机角标（微信 chooseAvatar 能力） */
+.avatar-edit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  background: transparent;
+  padding: 0;
+  margin: 0 0 24rpx;
+  line-height: 1;
+  width: 100%;
+}
+
+.avatar-edit::after {
+  border: none;
+}
+
+.avatar-edit-ring {
+  position: relative;
+  width: 152rpx;
+  height: 152rpx;
+}
+
+.avatar-edit-img {
+  width: 152rpx;
+  height: 152rpx;
+  border-radius: 50%;
+  display: block;
+}
+
+.avatar-edit-empty {
+  width: 152rpx;
+  height: 152rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+  color: #FFFFFF;
+  font-size: 56rpx;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-edit-badge {
+  position: absolute;
+  right: 0;
+  bottom: 4rpx;
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+  border: 4rpx solid #1B1B20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-edit-camera {
+  width: 28rpx;
+  height: 28rpx;
+}
+
+.avatar-edit-tip {
+  font-size: 24rpx;
+  color: #8C8C94;
+}
+
+/* 表单行：左标签 + 右内容（值/输入 + 箭头），整行可点 */
+.edit-field {
   display: flex;
   align-items: center;
   gap: 24rpx;
-  padding: 20rpx 0;
+  padding: 28rpx 0;
   border-bottom: 1rpx solid #26262C;
+}
+
+.edit-field-hover {
+  background: rgba(255, 90, 54, 0.06);
 }
 
 .edit-label {
@@ -332,42 +422,17 @@
   flex-shrink: 0;
 }
 
-/* 头像选择按钮（微信 chooseAvatar） */
-.avatar-btn {
-  width: 112rpx;
-  height: 112rpx;
-  padding: 0;
-  margin: 0;
-  border-radius: 50%;
-  background: transparent;
-  line-height: 1;
-  flex-shrink: 0;
-}
-
-.avatar-btn::after {
-  border: none;
-}
-
-.avatar-preview {
-  width: 112rpx;
-  height: 112rpx;
-  border-radius: 50%;
-  display: block;
-}
-
-.avatar-preview-empty {
-  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
-  color: #FFFFFF;
-  font-size: 36rpx;
-  font-weight: 600;
+.edit-field-right {
+  flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  gap: 12rpx;
 }
 
-.edit-tip {
-  font-size: 24rpx;
-  color: #8C8C94;
+.edit-value {
+  font-size: 30rpx;
+  color: #FFFFFF;
 }
 
 .edit-input {
@@ -376,17 +441,19 @@
   color: #FFFFFF;
 }
 
+.edit-count {
+  flex-shrink: 0;
+  font-size: 22rpx;
+  color: #6E6E76;
+}
+
 .edit-ph {
   color: #6E6E76;
 }
 
-.edit-picker {
-  font-size: 30rpx;
-  color: #FFFFFF;
-}
-
-.edit-picker-empty {
-  color: #6E6E76;
+.edit-chev {
+  width: 32rpx;
+  height: 32rpx;
 }
 
 .edit-save {

@@ -114,18 +114,24 @@
   <!-- 编辑资料弹窗 -->
   <view wx:if="{{editOpen}}" class="edit-mask" bindtap="closeEdit">
     <view class="edit-sheet" catchtap="noop">
-      <view class="edit-title">编辑资料</view>
-
-      <view class="edit-row">
-        <text class="edit-label">头像</text>
-        <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
-          <image wx:if="{{form.avatarTemp || form.avatarFileID}}" class="avatar-preview" src="{{form.avatarTemp || form.avatarFileID}}" mode="aspectFill" />
-          <view wx:else class="avatar-preview avatar-preview-empty">选</view>
-        </button>
-        <text class="edit-tip">点击头像更换</text>
+      <view class="edit-head">
+        <text class="edit-title">编辑资料</text>
+        <image class="edit-close" src="{{icons.close}}" catchtap="closeEdit" mode="aspectFit" />
       </view>
 
-      <view class="edit-row">
+      <!-- 头像：居中大图 + 相机角标 -->
+      <button class="avatar-edit" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <view class="avatar-edit-ring">
+          <image wx:if="{{form.avatarTemp || form.avatarFileID}}" class="avatar-edit-img" src="{{form.avatarTemp || form.avatarFileID}}" mode="aspectFill" />
+          <view wx:else class="avatar-edit-empty">{{form.nickname ? form.nickname[0] : '滑'}}</view>
+          <view class="avatar-edit-badge">
+            <image class="avatar-edit-camera" src="{{icons.camera}}" mode="aspectFit" />
+          </view>
+        </view>
+        <text class="avatar-edit-tip">点击更换头像</text>
+      </button>
+
+      <view class="edit-field">
         <text class="edit-label">昵称</text>
         <input
           class="edit-input"
@@ -136,12 +142,25 @@
           maxlength="12"
           bindinput="onNicknameInput"
         />
+        <text class="edit-count">{{form.nickname.length}}/12</text>
       </view>
 
-      <view class="edit-row">
+      <!-- 城市：复用全局城市选择页（选中即生效并返回） -->
+      <view class="edit-field" hover-class="edit-field-hover" bindtap="goCityPicker">
+        <text class="edit-label">城市</text>
+        <view class="edit-field-right">
+          <text class="edit-value">{{city || '选择城市'}}</text>
+          <image class="edit-chev" src="{{icons.chevron}}" mode="aspectFit" />
+        </view>
+      </view>
+
+      <view class="edit-field">
         <text class="edit-label">滑龄</text>
         <picker mode="selector" range="{{years}}" bindchange="onYearsChange">
-          <view class="edit-picker {{form.skateYears ? '' : 'edit-picker-empty'}}">{{form.skateYears || '选择滑龄'}}</view>
+          <view class="edit-field-right">
+            <text class="edit-value {{form.skateYears ? '' : 'edit-ph'}}">{{form.skateYears || '选择滑龄'}}</text>
+            <image class="edit-chev" src="{{icons.chevron}}" mode="aspectFit" />
+          </view>
         </picker>
       </view>
 

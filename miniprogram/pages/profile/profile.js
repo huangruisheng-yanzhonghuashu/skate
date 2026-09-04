@@ -33,6 +33,8 @@ Page({
       settings: ICON.settingsOrange,
       admin: ICON.venueOrange,
       send: ICON.sendOrange,
+      close: ICON.xWhite,
+      camera: ICON.cameraWhite,
     },
   },
 
@@ -165,6 +167,7 @@ Page({
   goReports() { wx.navigateTo({ url: '/pages/reports/reports' }) },
   goFeedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }) },
   goAdmin() { wx.navigateTo({ url: '/pages/admin/admin' }) },
+  goCityPicker() { wx.navigateTo({ url: '/pages/city-picker/city-picker' }) },
   goSettings() { wx.showToast({ title: '设置即将上线', icon: 'none' }) },
   goVenue(e) { wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + e.currentTarget.dataset.id }) },
 })
