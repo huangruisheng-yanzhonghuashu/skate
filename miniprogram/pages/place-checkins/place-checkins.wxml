@@ -14,7 +14,7 @@
       <view class="who">
         <view class="name-row">
           <text class="name">{{item.user}}</text>
-          <text wx:if="{{item.skateYears > 0}}" class="checkin-years">滑龄{{item.skateYears}}年</text>
+          <text wx:if="{{item.skateYears}}" class="checkin-years">滑龄{{item.skateYears}}</text>
         </view>
         <text class="time">{{item.time}}</text>
       </view>
