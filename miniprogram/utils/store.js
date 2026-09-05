@@ -13,8 +13,8 @@ const DEFAULT_USER = { nickname: '', avatarFileID: '', skateYears: '', skills: [
 let state = null
 const listeners = new Set()
 /* 云端写入失败的重试队列：checkins 为云端 doc 结构，likes 只保留最新目标状态，
- * videoUploads 为微博式异步视频上传队列（{at, venueId, videos: 临时路径[]}） */
-let pending = { checkins: [], likes: [], videoUploads: [] }
+ * mediaUploads 为微博式异步媒体上传队列（{at, venueId, photos: [], videos: []} 临时路径） */
+let pending = { checkins: [], likes: [], mediaUploads: [] }
 
 function persist() {
   try {
@@ -55,8 +55,8 @@ function init() {
     const saved = wx.getStorageSync(PENDING_KEY)
     if (saved && Array.isArray(saved.checkins) && Array.isArray(saved.likes)) {
       pending = saved
-      /* 旧版本快照无视频队列字段：补默认，避免 undefined */
-      if (!Array.isArray(pending.videoUploads)) pending.videoUploads = []
+      /* 旧版本快照无媒体队列字段：补默认，避免 undefined */
+      if (!Array.isArray(pending.mediaUploads)) pending.mediaUploads = []
     }
   } catch (e) { /* ignore */ }
   /* 3. 异步从云端同步 */
@@ -153,11 +153,11 @@ function loadProfile() {
 
 /* 重试队列补传 */
 function flushPending() {
-  if (!pending.checkins.length && !pending.likes.length && !pending.videoUploads.length) return
+  if (!pending.checkins.length && !pending.likes.length && !pending.mediaUploads.length) return
   const jobs = []
   if (pending.checkins.length) {
     jobs.push(cloud.pushCheckins(pending.checkins).then(function (results) {
-      /* 回填云端 _id（与 addCheckinDoc 成功路径一致）：视频异步上云按 rec.id 定位 doc */
+      /* 回填云端 _id（与 addCheckinDoc 成功路径一致）：媒体异步上云按 rec.id 定位 doc */
       ;(results || []).forEach(function (r, i) {
         const d = pending.checkins[i]
         if (!r || !r._id || !d) return
@@ -176,19 +176,19 @@ function flushPending() {
       pending.likes = []
     }))
   }
-  if (pending.videoUploads.length) {
-    pending.videoUploads.slice().forEach(function (v) {
+  if (pending.mediaUploads.length) {
+    pending.mediaUploads.slice().forEach(function (v) {
       const rec = state.checkins.find(function (c) { return c.at === v.at && c.venueId === v.venueId })
       /* 记录已删除：直接出队 */
       if (!rec) {
-        pending.videoUploads = pending.videoUploads.filter(function (x) { return x !== v })
+        pending.mediaUploads = pending.mediaUploads.filter(function (x) { return x !== v })
         return
       }
       /* doc 未上云（rec.id 还是本地临时 id）：留在队列，等 checkins 补传回填后下轮续传 */
       if (String(rec.id).indexOf('c-') === 0) return
       jobs.push(
-        uploadRecVideos(rec, rec.id).then(function () {
-          pending.videoUploads = pending.videoUploads.filter(function (x) { return x !== v })
+        uploadRecMedia(rec, rec.id).then(function () {
+          pending.mediaUploads = pending.mediaUploads.filter(function (x) { return x !== v })
         })
       )
     })
@@ -279,22 +279,26 @@ function calcStats() {
   return { total: state.checkins.length, streak: streak, weekDays: weekDays, monthDays: monthDays }
 }
 
-/* 签到（photos: 图片 fileID 数组，已同步上传；videos: 视频路径数组，可为临时路径）
- * 微博式发布：本地立即生效（临时视频本机可播），云端 doc 先不带视频写入，
- * 视频由后台队列异步上传，完成后回填本地 + 更新云端 doc，用户零等待 */
+/* 签到（photos: 图片路径数组；videos: 视频路径数组；均可为临时路径或 fileID）
+ * 微博式发布：本地立即生效（临时媒体本机可播，带"上传中"角标），云端 doc 只带已上传的
+ * fileID 写入，临时媒体由后台队列静默压缩/上传，完成后回填本地 + 更新云端 doc，用户零等待 */
 function addCheckin(venueId, venueName, note, photos, kind, videos, order) {
   init()
   const at = new Date().toISOString()
   const localId = 'c-' + Date.now()
+  const allPhotos = photos || []
   const allVideos = videos || []
-  const cloudVideos = allVideos.filter(function (v) { return v.indexOf('cloud://') === 0 })
-  const tempVideos = allVideos.filter(function (v) { return v.indexOf('cloud://') !== 0 })
+  const isCloud = function (v) { return v.indexOf('cloud://') === 0 }
+  const cloudPhotos = allPhotos.filter(isCloud)
+  const cloudVideos = allVideos.filter(isCloud)
+  const tempPhotos = allPhotos.filter(function (v) { return !isCloud(v) })
+  const tempVideos = allVideos.filter(function (v) { return !isCloud(v) })
   state.checkins.unshift({
     id: localId,
     venueId: venueId,
     venueName: venueName,
     note: note || '',
-    photos: photos || [],
+    photos: allPhotos,
     videos: allVideos,
     mediaOrder: order || [],
     kind: kind || 'venue',
@@ -307,7 +311,7 @@ function addCheckin(venueId, venueName, note, photos, kind, videos, order) {
     venueId: venueId,
     venueName: venueName,
     note: note || '',
-    photos: photos || [],
+    photos: cloudPhotos,
     videos: cloudVideos,
     mediaOrder: order || [],
     kind: kind || 'venue',
@@ -322,55 +326,57 @@ function addCheckin(venueId, venueName, note, photos, kind, videos, order) {
       rec.id = r._id
       persist()
     }
-    /* 视频后台上传（不阻塞发布） */
-    if (tempVideos.length && rec) uploadRecVideos(rec, (r && r._id) || '')
+    /* 媒体后台上传（不阻塞发布） */
+    if ((tempPhotos.length || tempVideos.length) && rec) uploadRecMedia(rec, (r && r._id) || '')
   }).catch(function (e) {
     pending.checkins.push(doc)
-    if (tempVideos.length) pending.videoUploads.push({ at: at, venueId: venueId, videos: tempVideos })
+    if (tempPhotos.length || tempVideos.length) enqueueMediaUpload(at, venueId, tempPhotos, tempVideos)
     persistPending()
     console.warn('[store] 签到上云失败，已排队重试', (e && e.errCode) || (e && e.message))
   })
 }
 
-/* 视频静默压缩（后台队列内进行，用户无感知）：压缩失败回退原文件直接上传 */
-function compressVideoSilently(src) {
-  return new Promise(function (resolve) {
-    if (!wx.compressVideo) return resolve(src)
-    wx.compressVideo({
-      src: src,
-      quality: 'medium',
-      success: function (r) { resolve(r.tempFilePath || src) },
-      fail: function () { resolve(src) },
-    })
+/* 媒体上传队列入队（同记录旧条目先出队，避免重复上传） */
+function enqueueMediaUpload(at, venueId, tempPhotos, tempVideos) {
+  pending.mediaUploads = pending.mediaUploads.filter(function (p) {
+    return !(p.at === at && p.venueId === venueId)
+  })
+  pending.mediaUploads.push({ at: at, venueId: venueId, photos: tempPhotos, videos: tempVideos })
+}
+
+/* 临时路径原地替换为 fileID（按下标对应，保持顺序与 mediaOrder 一致） */
+function replaceTempWithFileIDs(list, fileIDs) {
+  let i = 0
+  return list.map(function (v) {
+    return v.indexOf('cloud://') === 0 ? v : fileIDs[i++]
   })
 }
 
-/* 单条打卡的视频异步上云：静默压缩 → 云存储 → 回填本地 + 更新云端 doc
- * 失败进 pending.videoUploads，下次启动 flushPending 续传 */
-function uploadRecVideos(rec, docId) {
-  const temps = (rec.videos || []).filter(function (v) { return v.indexOf('cloud://') !== 0 })
-  if (!temps.length) return Promise.resolve()
-  return Promise.all(temps.map(function (p) {
-    return compressVideoSilently(p).then(function (compressed) {
-      return cloud.uploadFileTo('checkin-videos', compressed)
-    })
-  }))
-    .then(function (fileIDs) {
+/* 单条打卡的媒体异步上云：图片/视频直接上传（不压缩——wx.compressVideo 有"压缩中，请稍候"
+ * 原生弹窗无法隐藏，服务端压缩后续可接腾讯云数据万象）→ 回填本地 + 更新云端 doc
+ * 失败进 pending.mediaUploads，下次启动 flushPending 续传 */
+function uploadRecMedia(rec, docId) {
+  const tempPhotos = (rec.photos || []).filter(function (v) { return v.indexOf('cloud://') !== 0 })
+  const tempVideos = (rec.videos || []).filter(function (v) { return v.indexOf('cloud://') !== 0 })
+  if (!tempPhotos.length && !tempVideos.length) return Promise.resolve()
+  return Promise.all([
+    Promise.all(tempPhotos.map(function (p) { return cloud.uploadFileTo('checkin-photos', p) })),
+    Promise.all(tempVideos.map(function (p) { return cloud.uploadFileTo('checkin-videos', p) })),
+  ])
+    .then(function (rs) {
       /* 上传期间记录可能被删除：重新定位，不存在则静默结束 */
       const rec2 = state.checkins.find(function (c) { return c.at === rec.at && c.venueId === rec.venueId })
       if (!rec2) return
-      let i = 0
-      rec2.videos = rec2.videos.map(function (v) {
-        return v.indexOf('cloud://') === 0 ? v : fileIDs[i++]
-      })
+      rec2.photos = replaceTempWithFileIDs(rec2.photos, rs[0])
+      rec2.videos = replaceTempWithFileIDs(rec2.videos, rs[1])
       persist()
       notify()
-      if (docId) return cloud._updateCheckinDoc(docId, { videos: rec2.videos })
+      if (docId) return cloud._updateCheckinDoc(docId, { photos: rec2.photos, videos: rec2.videos })
     })
     .catch(function (e) {
-      pending.videoUploads.push({ at: rec.at, venueId: rec.venueId, videos: temps })
+      enqueueMediaUpload(rec.at, rec.venueId, tempPhotos, tempVideos)
       persistPending()
-      console.warn('[store] 视频上云失败，已排队续传', (e && e.errCode) || (e && e.message))
+      console.warn('[store] 媒体上云失败，已排队续传', (e && e.errCode) || (e && e.message))
     })
 }
 
@@ -387,7 +393,7 @@ function deleteCheckin(id) {
   pending.checkins = pending.checkins.filter(function (p) {
     return !(p.at === rec.at && p.venueId === rec.venueId)
   })
-  pending.videoUploads = pending.videoUploads.filter(function (p) {
+  pending.mediaUploads = pending.mediaUploads.filter(function (p) {
     return !(p.at === rec.at && p.venueId === rec.venueId)
   })
   persistPending()
@@ -452,34 +458,33 @@ function updateCheckin(id, note, photos, videos, order) {
   if (!rec.skateYears) rec.skateYears = state.user.skateYears || 0
   persist()
   notify()
-  /* 视频分流：cloud:// 直接写 doc；临时路径走微博式异步上传（不阻塞） */
+  /* 媒体分流：cloud:// 直接写 doc；临时路径走微博式异步上传（不阻塞） */
+  const cloudPhotos = rec.photos.filter(function (v) { return v.indexOf('cloud://') === 0 })
   const cloudVideos = rec.videos.filter(function (v) { return v.indexOf('cloud://') === 0 })
+  const tempPhotos = rec.photos.filter(function (v) { return v.indexOf('cloud://') !== 0 })
   const tempVideos = rec.videos.filter(function (v) { return v.indexOf('cloud://') !== 0 })
   if (String(rec.id).indexOf('c-') === 0) {
     /* 未同步：更新待同步队列里的对应文档 */
     pending.checkins.forEach(function (p) {
       if (p.at === rec.at && p.venueId === rec.venueId) {
         p.note = rec.note
-        p.photos = rec.photos
+        p.photos = cloudPhotos
         p.videos = cloudVideos
         p.mediaOrder = rec.mediaOrder
         p.skateYears = rec.skateYears
       }
     })
-    if (tempVideos.length) {
-      pending.videoUploads = pending.videoUploads.filter(function (p) {
-        return !(p.at === rec.at && p.venueId === rec.venueId)
-      })
-      pending.videoUploads.push({ at: rec.at, venueId: rec.venueId, videos: tempVideos })
+    if (tempPhotos.length || tempVideos.length) {
+      enqueueMediaUpload(rec.at, rec.venueId, tempPhotos, tempVideos)
     }
     persistPending()
     return Promise.resolve()
   }
-  const p = cloud._updateCheckinDoc(rec.id, { note: rec.note, photos: rec.photos, videos: cloudVideos, mediaOrder: rec.mediaOrder, skateYears: rec.skateYears })
+  const p = cloud._updateCheckinDoc(rec.id, { note: rec.note, photos: cloudPhotos, videos: cloudVideos, mediaOrder: rec.mediaOrder, skateYears: rec.skateYears })
     .catch(function (e) {
       console.warn('[store] 打卡更新上云失败', (e && e.errCode) || (e && e.message))
     })
-  if (tempVideos.length) uploadRecVideos(rec, rec.id)
+  if (tempPhotos.length || tempVideos.length) uploadRecMedia(rec, rec.id)
   return p
 }
 

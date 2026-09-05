@@ -47,6 +47,8 @@ Page({
   },
 
   onLoad(options) {
+    /* 订阅 store 变更：视频后台异步上传完成后（notify）实时重载打卡动态，"上传中"角标消失 */
+    this._unsubStore = store.subscribe(() => this.loadFeed())
     cloud.getShops().then((shops) => {
       const shop = shops.find((s) => s.id === options.id) || null
       if (!shop) {
@@ -147,12 +149,17 @@ Page({
     const shop = this.data.shop
     if (!shop) return
     cloud.getPlaceCheckins(shop.id, { noteOnly: true, limit: 20 }).then((rows) => {
-      /* 云写入是异步的（失败进重试队列）：合并本地本人打卡兜底，按 id 去重后时间倒序取前3 */
+      /* 云写入是异步的（失败进重试队列）：合并本地本人打卡兜底，按 id 去重后时间倒序取前3。
+       * 本人记录本地行优先：云 doc 在视频异步上传完成前 videos 为空，本地版本（含临时视频）是全集，
+       * 若云端行胜出会导致刚发的视频从动态里消失 */
       const seen = {}
       const merged = []
-      rows.concat(store.getLocalPlaceCheckins(shop.id, true)).forEach((r) => {
-        if (seen[r.id]) return
+      store.getLocalPlaceCheckins(shop.id, true).concat(rows).forEach((r) => {
+        /* 双键去重：id + at|venueId（云端 _id 回填前本地是临时 id，防竞态期同条记录出现两次） */
+        const k2 = r.at + '|' + r.venueId
+        if (seen[r.id] || seen[k2]) return
         seen[r.id] = true
+        seen[k2] = true
         merged.push(r)
       })
       merged.sort((a, b) => (a.at < b.at ? 1 : -1))
@@ -223,6 +230,10 @@ Page({
     wx.stopPullDownRefresh()
   },
 
+  onUnload() {
+    if (this._unsubStore) this._unsubStore()
+  },
+
   /* 分享给好友 / 分享朋友圈 */
   onShareAppMessage() {
     const s = this.data.shop
@@ -288,7 +299,6 @@ Page({
     wx.chooseMedia({
       count: remain,
       mediaType: ['mix'],
-      compressed: false, /* 选择时不压缩（快速返回）；压缩在后台队列静默进行 */
       success: (res) => {
         const added = res.tempFiles.map((f) => ({
           type: f.fileType === 'video' ? 'video' : 'image',
@@ -306,14 +316,9 @@ Page({
     this.setData({ checkinMedia: media })
   },
 
-  /* 上传图片组（同步，小文件）：fileID 保留、临时文件上传，维持原顺序。
-   * 视频不上传——微博式异步：透传给 store 后台队列压缩+上传，用户零等待。
-   * mediaOrder 记录用户选择时的图/视频混排顺序（'p0'/'v1' 引用分组后下标） */
-  uploadCheckinMedia(media) {
-    const upload = (m) => {
-      if (m.url.indexOf('cloud://') === 0) return Promise.resolve(m.url)
-      return cloud.uploadFileTo('checkin-photos', m.url)
-    }
+  /* 拆分媒体为存储结构：photos（图片）/ videos（视频）/ order（混排顺序标记）。
+   * 微博式：全部媒体后台异步上传（图片直接传、视频静默压缩后传），发布零等待 */
+  splitCheckinMedia(media) {
     const photos = []
     const videos = []
     const order = []
@@ -326,11 +331,7 @@ Page({
         videos.push(m.url)
       }
     })
-    return Promise.all(photos.map(upload)).then((fileIDs) => ({
-      photos: fileIDs,
-      videos: videos,
-      order: order,
-    }))
+    return { photos: photos, videos: videos, order: order }
   },
 
   confirmCheckin() {
@@ -339,36 +340,23 @@ Page({
     const note = this.data.note.trim()
     const media = this.data.checkinMedia
     const submit = () => {
-      this.setData({ checkinSubmitting: true })
-      const finish = (m) => {
-        if (this._editId) {
-          store.updateCheckin(this._editId, note, m.photos, m.videos, m.order).then(() => {
-            this._editId = ''
-            this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
-            wx.showToast({ title: '打卡已更新', icon: 'success' })
-            this.refresh()
-            this.loadFeed()
-          })
-          return
-        }
-        /* 新打卡：本地立即生效，图片同步上云，视频由 store 后台队列异步上云（零等待） */
-        store.addCheckin(s.id, s.name, note, m.photos, 'shop', m.videos, m.order)
-        this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
-        this.showCelebrate(s.name)
-        this.refresh()
-        this.loadFeed()
-      }
-      if (media.length) {
-        this.uploadCheckinMedia(media)
-          .then(finish)
-          .catch((e) => {
-            this.setData({ checkinSubmitting: false })
-            wx.showToast({ title: '图片上传失败，请重试', icon: 'none' })
-            console.warn('[shop-detail] 打卡图片上传失败', (e && e.errCode) || (e && e.message))
+      const m = this.splitCheckinMedia(media)
+      if (this._editId) {
+        store.updateCheckin(this._editId, note, m.photos, m.videos, m.order).then(() => {
+          this._editId = ''
+          this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
+          wx.showToast({ title: '打卡已更新', icon: 'success' })
+          this.refresh()
+          this.loadFeed()
         })
-    } else {
-      finish({ photos: [], videos: [] })
-    }
+        return
+      }
+      /* 新打卡：本地立即生效，媒体由 store 后台队列异步上云（零等待，失败自动排队续传） */
+      store.addCheckin(s.id, s.name, note, m.photos, 'shop', m.videos, m.order)
+      this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
+      this.showCelebrate(s.name)
+      this.refresh()
+      this.loadFeed()
     }
     /* 留言内容安全（复用 checkMsg 云函数，msgSecCheck v2） */
     if (note) {

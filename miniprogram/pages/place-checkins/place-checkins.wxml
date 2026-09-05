@@ -29,7 +29,6 @@
           object-fit="cover"
           controls
         />
-        <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
         <image
           wx:else
           class="photo"
@@ -40,6 +39,7 @@
           data-url="{{p.url}}"
           catchtap="preview"
         />
+        <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
       </view>
     </view>
     <!-- 评论入口（设计稿：💬 N 条评论 左 + 展开/收起 右，两端对齐） -->

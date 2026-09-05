@@ -111,7 +111,6 @@
               object-fit="cover"
               controls
             />
-            <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
             <image
               wx:else
               class="fphoto"
@@ -122,6 +121,7 @@
               data-url="{{p.url}}"
               catchtap="previewFeedPhotos"
             />
+            <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
           </view>
         </view>
       </view>
