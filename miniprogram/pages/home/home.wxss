@@ -29,6 +29,7 @@
 .nav-row-inner {
   display: flex;
   align-items: center;
+  justify-content: space-between; /* 城市（已有）贴左 · 热度胶囊贴右 */
   padding: 0 32rpx;
 }
 
@@ -420,22 +421,6 @@
   font-weight: 500;
 }
 
-/* 机构 Tab 第二行（服务筛选）：紧凑化，与 category 行区分层级 */
-.filters-svc {
-  padding-top: 0;
-  padding-bottom: 20rpx;
-}
-
-.filter-chip-sm {
-  /* 触控目标与主行同高（64rpx≈32pt 仍小于 44pt 基准，但延续设计稿体系，不再缩小加剧） */
-  height: 64rpx;
-  line-height: 60rpx;
-  padding: 0 20rpx;
-  margin-right: 16rpx;
-  font-size: 22rpx;
-  color: #8C8C94;
-}
-
 /* ===== 列表（面板内行化：去卡融入，分隔线划行，左缘与筛选区对齐） ===== */
 
 /* 行：透明底 + 1rpx 分隔线（首行分隔线即二级/三级分组线）；左右 20rpx 与控制区对齐 */
@@ -532,4 +517,244 @@
   font-size: 24rpx;
   font-weight: 600;
   color: #FF8A6E;
+}
+
+/* ===== 改版新增：导航行在线热度胶囊 ===== */
+.heat {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+  background: #1E1E23;
+  border: 1rpx solid #26262C;
+}
+
+.heat-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #00D4AA;
+  animation: heat-pulse 2s ease-in-out infinite;
+}
+
+@keyframes heat-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.heat-num {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  line-height: 1;
+}
+
+.heat-label {
+  font-size: 22rpx;
+  color: #8C8C94;
+  line-height: 1;
+}
+
+/* ===== 改版新增：快捷入口瓦片 ===== */
+.tiles {
+  display: flex;
+  gap: 16rpx;
+  margin: 24rpx 32rpx 0;
+}
+
+.tile {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12rpx;
+  padding: 26rpx 0 22rpx;
+  background: #1E1E23;
+  border: 1rpx solid #26262C;
+  border-radius: 20rpx;
+}
+
+.tile-icon {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+.tile-text {
+  font-size: 22rpx;
+  color: #C7C7CC;
+  white-space: nowrap;
+}
+
+/* ===== 改版新增：最新打卡横滑区 ===== */
+.feed-sec {
+  margin-top: 12rpx;
+}
+
+.sec-head {
+  display: flex;
+  align-items: center;
+  margin: 28rpx 32rpx 20rpx;
+}
+
+.sec-title {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+}
+
+.feed-scroll {
+  white-space: nowrap;
+  padding-left: 32rpx;
+}
+
+/* 打卡轻卡：封面（图/视频/文字降级）+ 一行留言 + 人/时间/场地 */
+.feed-card {
+  display: inline-flex;
+  flex-direction: column;
+  width: 280rpx;
+  margin-right: 20rpx;
+  background: #1E1E23;
+  border: 1rpx solid #26262C;
+  border-radius: 20rpx;
+  overflow: hidden;
+  vertical-align: top;
+  animation: feed-in 0.3s ease backwards;
+}
+
+@keyframes feed-in {
+  from {
+    opacity: 0;
+    transform: translateY(12rpx);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.feed-cover {
+  position: relative;
+  width: 280rpx;
+  height: 200rpx;
+  background: #111114;
+}
+
+.feed-cover-media {
+  width: 100%;
+  height: 100%;
+}
+
+/* 无封面文字卡：留言撑满封面区（4 行截断） */
+.feed-cover-text {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.feed-cover-text text {
+  font-size: 24rpx;
+  color: #A6A6AD;
+  line-height: 1.5;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+/* 视频播放角标（CSS 三角 + 半透圆底，不依赖图片） */
+.feed-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 56rpx;
+  height: 56rpx;
+  margin: -28rpx 0 0 -28rpx;
+  border-radius: 50%;
+  background: rgba(17, 17, 20, 0.55);
+}
+
+.feed-play::after {
+  content: '';
+  position: absolute;
+  left: 22rpx;
+  top: 17rpx;
+  border-style: solid;
+  border-width: 11rpx 0 11rpx 18rpx;
+  border-color: transparent transparent transparent #FFFFFF;
+}
+
+.feed-note {
+  padding: 16rpx 20rpx 0;
+  font-size: 24rpx;
+  color: #D0D0D6;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-meta {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  padding: 16rpx 20rpx 0;
+}
+
+/* 头像点击区（点按进滑手主页）：包裹层定形，内层头像填满 */
+.feed-avatar-wrap {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.feed-avatar {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.feed-avatar-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2A2A31;
+  color: #8C8C94;
+  font-size: 20rpx;
+}
+
+.feed-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 22rpx;
+  color: #A6A6AD;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.feed-time {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  color: #6E6E76;
+}
+
+.feed-place {
+  padding: 8rpx 20rpx 20rpx;
+  font-size: 22rpx;
+  color: #FF8A6E;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ===== 改版新增：系统减弱动效适配 ===== */
+@media (prefers-reduced-motion: reduce) {
+  .heat-dot { animation: none; }
+  .feed-card { animation: none; }
 }

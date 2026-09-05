@@ -1,4 +1,4 @@
-// 滑哪儿 小程序入口
+// 去哪滑 小程序入口
 const store = require('./utils/store.js')
 const { BRAND_FONT_URL } = require('./utils/config.js')
 

@@ -2,12 +2,19 @@ const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { QQ_MAP_KEY } = require('../../utils/config.js')
 const qqmap = require('../../utils/qqmap.js')
+const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
 const FIELD_FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
-/* 机构（shop 实体）双维筛选：category 三分为主、services 可选叠加（toggle，无「全部」占位） */
-const ORG_CATEGORY_FILTERS = ['全部', '板店', '俱乐部', '培训机构']
+/* 机构服务筛选（拆 Tab 后每个机构 Tab 内的第二行 chips，toggle，无「全部」占位） */
 const ORG_SERVICE_FILTERS = ['卖板', '教学', '维修', '配件', '服装', '组织活动', '装备租赁', '场地运营']
+/* 一级 Tab：场地 + 机构类型三分，板店放最后（旧数据无 category 的店铺按约定落「俱乐部」） */
+const HOME_TABS = [
+  { key: 'venue', label: '场地' },
+  { key: '俱乐部', label: '俱乐部' },
+  { key: '培训机构', label: '培训机构' },
+  { key: '板店', label: '板店' },
+]
 
 /* HH:mm（今日已签到时间展示用） */
 function fmtHm(iso) {
@@ -35,6 +42,11 @@ Page({
     statusBarHeight: 20,
     navContentHeight: 44,
     entity: 'venue',
+    /* 拆 Tab：一级 4 Tab，机构 Tab 锁定 category（orgType），venue 为空 */
+    orgType: '',
+    activeTab: 'venue',
+    entityLabel: '场地',
+    tabs: HOME_TABS,
     filters: FIELD_FILTERS,
     filter: '全部',
     svcFilters: [],
@@ -45,9 +57,17 @@ Page({
     empty: false,
     loaded: false,
     mapCount: 0,
+    mapChip: '', /* 地图计数胶囊整串文案（city · N 个/家 xx，按 Tab 参数化） */
+    loadmoreText: '', /* 列表尾文案（已展示 city 全部 N 个/家 xx） */
     locating: true,
-    mapCollapsed: false,
+    mapCollapsed: false, /* 地图默认展开（保留折叠手柄可收起让位内容） */
     markers: [],
+    heatCount: 0, /* 今日在滑总人数（presence 聚合求和） */
+    feed: [], /* 最新打卡横滑卡（发现页同源前 10 条） */
+    /* 打卡媒体预览（media-viewer，同发现页） */
+    viewerShow: false,
+    viewerSources: [],
+    viewerCurrent: 0,
     selectedVenueId: '',
     latitude: 31.2304,
     longitude: 121.48,
@@ -59,6 +79,11 @@ Page({
       search: ICON.searchPh,
       xWhite: ICON.xWhite,
       venueFog: ICON.venueFog,
+      /* 快捷入口瓦片（与一级 Tab 一致）+ 打卡区 */
+      tileVenue: ICON.venueOrange,
+      tileShop: ICON.storeOrange,
+      tileClub: ICON.usersOrange,
+      tileTrain: ICON.gradCapOrange,
     },
   },
 
@@ -84,6 +109,8 @@ Page({
     this._geoCity = null
     this.loadVenues()
     this.loadShops()
+    /* 最新打卡横滑卡（社区氛围区） */
+    this.loadFeed()
     /* 用户评分统计 */
     this.refreshRatings()
     /* 手机定位：设置地图中心 + 自动匹配城市 */
@@ -144,13 +171,44 @@ Page({
     if (!any) this.setData({ selectedVenueId: cityVenues[0].id })
   },
 
-  /* 真实在线人数：一次聚合查询所有场地的窗口内心跳分布，覆盖列表显示 */
+  /* 真实在线人数：一次聚合查询所有场地的窗口内心跳分布，覆盖列表显示
+   * 同时汇总为头部「今日 N 人在滑」热度胶囊（全城市合计） */
   refreshOnline() {
     cloud.getOnlineMap().then((map) => {
       if (!map) return /* 查询失败（如权限未配置），保留兜底热度值 */
       ;(this._venues || []).forEach((v) => { this._online[v.id] = map[v.id] || 0 })
+      const heat = Object.keys(map).reduce((s, k) => s + (map[k] || 0), 0)
+      this.setData({ heatCount: heat })
       this.refresh()
     })
+  },
+
+  /* 首页「最新打卡」：发现页同源社区流前 10 条（有留言或媒体的内容记录）
+   * 轻量卡：封面（首图/视频）+ 一行留言 + 人/时间/场地；无封面降级为文字卡
+   * 交互三分：内容点按预览媒体（media-viewer）、头像进滑手主页、场地名进详情 */
+  loadFeed() {
+    cloud.getPublicCheckins({ limit: 10 }).then((rows) => {
+      const feed = rows.map((r) => {
+        const media = toMedia(r.photos, r.videos, r.mediaOrder)
+        const cover = media[0] || null
+        return {
+          id: r.id,
+          openid: r.openid,
+          kind: r.kind,
+          user: r.user,
+          avatarFile: r.avatarFile,
+          avatarText: r.avatarText,
+          venueId: r.venueId,
+          venueName: r.venueName || '',
+          note: r.note || '',
+          timeText: fmtAgo(r.at),
+          media: media,
+          cover: cover ? cover.url : '',
+          coverType: cover ? cover.type : 'image',
+        }
+      }).filter((x) => x.cover || x.note)
+      this.setData({ feed })
+    }).catch(() => { /* 打卡流失败静默：首页工具功能不受影响 */ })
   },
 
   /* 用户评分统计：真实均值/人数覆盖卡片与详情显示（无评分时用种子预设分兜底） */
@@ -288,6 +346,7 @@ Page({
       this.buildMarkers()
       this.refreshOnline()
       this.refreshRatings()
+      this.loadFeed()
       wx.stopPullDownRefresh()
       wx.showToast({ title: '已刷新', icon: 'none' })
     }).catch(() => {
@@ -368,20 +427,100 @@ Page({
     }
   },
 
-  /* 实体切换：场地 ⇄ 门店与俱乐部（设计稿交互规则：保留搜索词，不打断搜索流） */
+  /* 一级 Tab 切换：场地 ⇄ 板店/俱乐部/培训机构（保留搜索词，不打断搜索流） */
   switchEntity(e) {
-    const entity = e.currentTarget.dataset.entity
-    if (entity === this.data.entity) return
-    this.setData({
-      entity: entity,
-      filters: entity === 'shop' ? ORG_CATEGORY_FILTERS : FIELD_FILTERS,
-      filter: '全部',
-      svcFilters: entity === 'shop' ? ORG_SERVICE_FILTERS : [],
-      svcFilter: '',
-      selectedVenueId: '',
-    })
+    this.switchTabTo(e.currentTarget.dataset.tab)
+  },
+
+  /* Tab 切换内部实现（同 Tab 幂等跳过），快捷入口瓦片复用
+   * 机构 Tab：entity 固定 shop + orgType 锁定 category；filter 同步为 orgType 供地图/列表同口径 */
+  switchTabTo(tab) {
+    if (tab === this.data.activeTab) return
+    let patch
+    if (tab === 'venue') {
+      patch = {
+        entity: 'venue',
+        orgType: '',
+        activeTab: 'venue',
+        entityLabel: '场地',
+        filters: FIELD_FILTERS,
+        filter: '全部',
+        svcFilters: [],
+        svcFilter: '',
+      }
+    } else {
+      patch = {
+        entity: 'shop',
+        orgType: tab,
+        activeTab: tab,
+        entityLabel: tab,
+        filters: [],
+        filter: tab,
+        svcFilters: ORG_SERVICE_FILTERS,
+        svcFilter: '',
+      }
+    }
+    patch.selectedVenueId = ''
+    this.setData(patch)
     this.refresh()
     this.buildMarkers()
+  },
+
+  /* ===== 快捷入口（改版新增） ===== */
+  /* 找场地 / 门店俱乐部瓦片：切到对应 Tab + 滚动到列表面板 */
+  quickTo(e) {
+    this.switchTabTo(e.currentTarget.dataset.tab)
+    wx.nextTick(() => {
+      wx.pageScrollTo({ selector: '.panel', offsetTop: -16, duration: 300, fail: () => {} })
+    })
+  },
+
+  /* 打卡卡内容点按：有媒体走 media-viewer 预览（Tab 页预览期间隐藏底部 TabBar）；
+   * 纯文字卡无媒体可预览，降级进打卡详情页 */
+  onFeedContent(e) {
+    const d = e.currentTarget.dataset
+    const media = d.media || []
+    if (!media.length) {
+      if (d.id) wx.navigateTo({ url: '/pages/post-detail/post-detail?id=' + encodeURIComponent(d.id) })
+      return
+    }
+    cloud.getMediaPreviewSources(media).then((sources) => {
+      if (!sources.length) return
+      const tb = typeof this.getTabBar === 'function' && this.getTabBar()
+      if (tb) tb.setData({ hidden: true })
+      this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: d.index || 0 })
+    })
+  },
+
+  /* 预览关闭：恢复底部 TabBar */
+  onViewerClose() {
+    const tb = typeof this.getTabBar === 'function' && this.getTabBar()
+    if (tb) tb.setData({ hidden: false })
+    this.setData({ viewerShow: false })
+  },
+
+  /* 打卡卡头像：进滑手主页（与发现页 goUserProfile 同参数约定） */
+  goFeedUser(e) {
+    const d = e.currentTarget.dataset
+    cloud.ensureOpenid().then((my) => {
+      const openid = d.openid || my || ''
+      wx.navigateTo({
+        url: '/pages/user-profile/user-profile?openid=' + encodeURIComponent(openid) +
+          '&u=' + encodeURIComponent(d.user || '') +
+          '&avatar=' + encodeURIComponent(d.avatar || ''),
+      })
+    })
+  },
+
+  /* 打卡卡场所名：按类型进场地/店铺详情（与发现页 goPlace 同约定） */
+  goFeedPlace(e) {
+    const { id, kind } = e.currentTarget.dataset
+    if (!id) return
+    if (kind === 'shop') {
+      wx.navigateTo({ url: '/pages/shop-detail/shop-detail?id=' + id })
+    } else {
+      wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + id })
+    }
   },
 
   /* 定位按钮：重新定位 + 城市匹配（onLoad 未授权时可从这里补授权） */
@@ -423,17 +562,9 @@ Page({
       })
     } else {
       let arr = (this._shops || []).filter((s) => s.city === city)
-      /* category 三分筛选（旧数据无 category 视为俱乐部，保持向后兼容）；
-       * chips 动态收敛：当前城市没有的机构类型不渲染，避免「点了必空态」 */
-      const present = []
-      ;(this._shops || []).forEach((s) => {
-        if (s.city === city && s.category && present.indexOf(s.category) < 0) present.push(s.category)
-      })
-      const chips = ['全部'].concat(present)
-      if (chips.join('|') !== this.data.filters.join('|')) {
-        this.setData({ filters: chips, filter: chips.indexOf(this.data.filter) >= 0 ? this.data.filter : '全部' })
-      }
-      if (this.data.filter !== '全部') arr = arr.filter((s) => (s.category || '俱乐部') === this.data.filter)
+      /* 拆 Tab 后机构类型由一级 Tab 锁定（orgType），二级只留服务 chips；
+       * 旧数据无 category 视为俱乐部，保持向后兼容 */
+      arr = arr.filter((s) => (s.category || '俱乐部') === this.data.orgType)
       if (this.data.svcFilter) arr = arr.filter((s) => (s.services || []).indexOf(this.data.svcFilter) >= 0)
       if (query) arr = arr.filter((s) => s.name.indexOf(query) >= 0 || (s.address || '').indexOf(query) >= 0)
       list = arr.map((s) => {
@@ -453,11 +584,22 @@ Page({
         }
       })
     }
-    /* 地图计数 chip：当前城市该实体总数（不受筛选/搜索影响，与设计稿「嘉兴 · 12 个场地」一致） */
-    const cityTotal = this.data.entity === 'venue'
+    /* 地图计数 chip / 列表尾 / 空态文案：按当前 Tab 类型参数化（个场地 / 家板店…） */
+    const isVenue = this.data.entity === 'venue'
+    const entityLabel = isVenue ? '场地' : this.data.orgType
+    const measure = isVenue ? '个' : '家'
+    const cityTotal = isVenue
       ? (this._venues || []).filter((v) => v.city === city).length
-      : (this._shops || []).filter((s) => s.city === city).length
-    this.setData({ list, empty: list.length === 0, city: city, mapCount: cityTotal })
+      : (this._shops || []).filter((s) => s.city === city && (s.category || '俱乐部') === this.data.orgType).length
+    this.setData({
+      list,
+      empty: list.length === 0,
+      city: city,
+      mapCount: cityTotal,
+      mapChip: city + ' · ' + cityTotal + ' ' + measure + entityLabel,
+      loadmoreText: '已展示' + city + '全部 ' + list.length + ' ' + measure + entityLabel,
+      entityLabel: entityLabel,
+    })
     /* 列表与地图保持同口径（搜索/筛选/切城后 markers 跟随） */
     this.buildMarkers()
   },
@@ -533,16 +675,19 @@ Page({
     this.refresh()
   },
 
-  /* 服务筛选（机构 Tab 第二行 chips）：toggle 语义，再点取消，不选=全部 */
+  /* 服务筛选（机构 Tab 第二行 chips）：含「全部」占位（点全部/再点已选项=清空） */
   pickSvc(e) {
     const v = e.currentTarget.dataset.filter
-    this.setData({ svcFilter: this.data.svcFilter === v ? '' : v })
+    const next = v === '全部' ? '' : (this.data.svcFilter === v ? '' : v)
+    this.setData({ svcFilter: next })
     this.refresh()
   },
 
-  /* 空态「查看全部」：重置筛选（按钮 bindtap，无 dataset） */
+  /* 空态「查看全部」：场地 Tab 重置类型筛选；机构 Tab 类型已由 Tab 锁定，只清服务筛选 */
   resetFilter() {
-    this.setData({ filter: '全部', svcFilter: '' })
+    const patch = { svcFilter: '' }
+    if (this.data.entity === 'venue') patch.filter = '全部'
+    this.setData(patch)
     this.refresh()
   },
 

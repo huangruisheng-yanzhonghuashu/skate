@@ -21,6 +21,12 @@ const P = {
   heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
   comment: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>',
   venue: '<path d="M3.5 17.2h17" stroke-width="2.6"/><path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/><path d="M12.1 12.3L13.5 11.85"/>',
+  /* 门店（lucide store：雨棚 + 门面 + 门） */
+  store: '<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/>',
+  /* 群组（lucide users：俱乐部） */
+  users: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>',
+  /* 学位帽（lucide graduation-cap：培训机构） */
+  gradCap: '<path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12.5V16c0 1.66 2.69 3 6 3s6-1.34 6-3v-3.5"/><path d="M22 10v6"/>',
   locate: '<circle cx="12" cy="12" r="7"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><circle cx="12" cy="12" r="1.2" fill="#1A1A1E" stroke="none"/>',
   /* 定位准星（白色中心点版：深色按钮上中心点可见，与设计稿一致） */
   locateW: '<circle cx="12" cy="12" r="7"/><path d="M12 2v3"/><path d="M12 19v3"/><path d="M2 12h3"/><path d="M19 12h3"/><circle cx="12" cy="12" r="1.6" fill="#FFFFFF" stroke="none"/>',
@@ -141,6 +147,11 @@ const ICON = {
 
   /* 视频封面播放角标 */
   playWhite: svg(P.play, { fill: WHITE, stroke: WHITE }),
+
+  /* 首页快捷入口瓦片（橙色 duotone） */
+  storeOrange: svg(P.store, { stroke: ORANGE }),
+  usersOrange: svg(P.users, { stroke: ORANGE }),
+  gradCapOrange: svg(P.gradCap, { stroke: ORANGE }),
 }
 
 module.exports = { ICON, svg }

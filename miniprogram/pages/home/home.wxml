@@ -9,6 +9,12 @@
           <text>{{city}}</text>
           <image class="city-swap" src="{{icons.swap}}" mode="aspectFit" />
         </view>
+        <!-- 在线热度（presence 聚合合计；无人在线时隐藏避免噪音） -->
+        <view wx:if="{{heatCount > 0}}" class="heat" aria-label="今日 {{heatCount}} 人在滑">
+          <view class="heat-dot"></view>
+          <text class="heat-num">{{heatCount}}</text>
+          <text class="heat-label">人在滑</text>
+        </view>
       </view>
     </view>
 
@@ -40,7 +46,106 @@
     </view>
   </view>
 
-  <!-- 地图卡片（圆角容器 + 城市计数 chip；可折叠：点分隔手柄切换；实例保留不销毁） -->
+  <!-- 快捷入口：与一级 Tab 一致的 4 瓦片，点击切 Tab + 滚动到列表面板 -->
+  <view class="tiles">
+    <view class="tile" hover-class="hv" bindtap="quickTo" data-tab="venue" aria-role="button" aria-label="场地">
+      <image class="tile-icon" src="{{icons.tileVenue}}" mode="aspectFit" />
+      <text class="tile-text">场地</text>
+    </view>
+    <view class="tile" hover-class="hv" bindtap="quickTo" data-tab="俱乐部" aria-role="button" aria-label="俱乐部">
+      <image class="tile-icon" src="{{icons.tileClub}}" mode="aspectFit" />
+      <text class="tile-text">俱乐部</text>
+    </view>
+    <view class="tile" hover-class="hv" bindtap="quickTo" data-tab="培训机构" aria-role="button" aria-label="培训机构">
+      <image class="tile-icon" src="{{icons.tileTrain}}" mode="aspectFit" />
+      <text class="tile-text">培训机构</text>
+    </view>
+    <view class="tile" hover-class="hv" bindtap="quickTo" data-tab="板店" aria-role="button" aria-label="板店">
+      <image class="tile-icon" src="{{icons.tileShop}}" mode="aspectFit" />
+      <text class="tile-text">板店</text>
+    </view>
+  </view>
+
+  <!-- 最新打卡（改版新增）：发现页同源社区流，横滑轻卡；空数据整区隐藏 -->
+  <view class="feed-sec" wx:if="{{feed.length}}">
+    <view class="sec-head">
+      <text class="sec-title">最新打卡</text>
+    </view>
+    <scroll-view class="feed-scroll" scroll-x enhanced show-scrollbar="{{false}}">
+      <view
+        wx:for="{{feed}}"
+        wx:key="id"
+        class="feed-card"
+        aria-role="button"
+        aria-label="{{item.user}}的打卡"
+      >
+        <!-- 内容区（封面/文字）：点按预览媒体，纯文字卡降级进打卡详情 -->
+        <view
+          class="feed-cover"
+          hover-class="hv"
+          bindtap="onFeedContent"
+          data-id="{{item.id}}"
+          data-media="{{item.media}}"
+          data-index="0"
+          aria-role="button"
+          aria-label="预览打卡内容"
+        >
+          <video
+            wx:if="{{item.coverType === 'video'}}"
+            class="feed-cover-media"
+            src="{{item.cover}}"
+            object-fit="cover"
+            controls="{{false}}"
+            show-center-play-btn="{{false}}"
+          />
+          <image
+            wx:elif="{{item.cover}}"
+            class="feed-cover-media"
+            src="{{item.cover}}"
+            mode="aspectFill"
+            lazy-load
+          />
+          <view wx:else class="feed-cover-text"><text>{{item.note}}</text></view>
+          <view wx:if="{{item.coverType === 'video'}}" class="feed-play"></view>
+        </view>
+        <view
+          wx:if="{{item.cover && item.note}}"
+          class="feed-note"
+          hover-class="hv"
+          bindtap="onFeedContent"
+          data-id="{{item.id}}"
+          data-media="{{item.media}}"
+          data-index="0"
+        >{{item.note}}</view>
+        <!-- 头像：进滑手主页 -->
+        <view
+          class="feed-meta"
+          catchtap="goFeedUser"
+          data-openid="{{item.openid}}"
+          data-user="{{item.user}}"
+          data-avatar="{{item.avatarFile}}"
+        >
+          <view class="feed-avatar-wrap" hover-class="hv">
+            <image wx:if="{{item.avatarFile}}" class="feed-avatar" src="{{item.avatarFile}}" mode="aspectFill" />
+            <view wx:else class="feed-avatar feed-avatar-text">{{item.avatarText}}</view>
+          </view>
+          <text class="feed-name">{{item.user}}</text>
+          <text class="feed-time">{{item.timeText}}</text>
+        </view>
+        <!-- 场所名：进场地/店铺详情 -->
+        <view
+          wx:if="{{item.venueName}}"
+          class="feed-place"
+          hover-class="hv"
+          catchtap="goFeedPlace"
+          data-id="{{item.venueId}}"
+          data-kind="{{item.kind}}"
+        >{{item.venueName}}</view>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 地图卡片（圆角容器 + 城市计数 chip；可折叠：点分隔手柄切换；实例保留不销毁；改版默认收起） -->
   <view class="map-card">
     <map
       id="map"
@@ -53,7 +158,7 @@
       bindmarkertap="onMarkerTap"
     >
       <!-- 城市场地计数（设计稿：绿点 + 深色胶囊；折叠态隐藏避免溢出）。真机 cover-view flex/gap 会截断文字，文本直接撑开 -->
-      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">{{city}} · {{mapCount}} 个{{entity === 'shop' ? '门店与俱乐部' : '滑板场地'}}<cover-view class="map-chip-dot"></cover-view></cover-view>
+      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">{{mapChip}}<cover-view class="map-chip-dot"></cover-view></cover-view>
       <!-- 定位中提示 -->
       <cover-view wx:if="{{locating}}" class="locating-tip">正在定位当前位置...</cover-view>
       <!-- 定位按钮：回到当前位置并匹配城市（设计稿：地图右上白底圆钮；准星用 cover-view 原生绘制，真机 cover-image 不支持 SVG） -->
@@ -78,20 +183,24 @@
   <view class="panel">
     <!-- 一级 + 二级（面板内控制区） -->
     <view class="control-panel">
-      <!-- 实体切换：场地 / 俱乐部（文字 Tab + 橙色短指示条，轻导航让位内容） -->
+      <!-- 一级 Tab：场地 / 板店 / 俱乐部 / 培训机构（文字 Tab + 橙色短指示条，轻导航让位内容） -->
       <view class="entity-seg" aria-role="tablist">
-        <view class="entity-item {{entity === 'venue' ? 'entity-active' : ''}}" hover-class="hv" aria-role="tab" data-entity="venue" bindtap="switchEntity">
-          <text>滑板场地</text>
-          <view class="entity-bar"></view>
-        </view>
-        <view class="entity-item {{entity === 'shop' ? 'entity-active' : ''}}" hover-class="hv" aria-role="tab" data-entity="shop" bindtap="switchEntity">
-          <text>门店与俱乐部</text>
+        <view
+          wx:for="{{tabs}}"
+          wx:key="key"
+          class="entity-item {{activeTab === item.key ? 'entity-active' : ''}}"
+          hover-class="hv"
+          aria-role="tab"
+          data-tab="{{item.key}}"
+          bindtap="switchEntity"
+        >
+          <text>{{item.label}}</text>
           <view class="entity-bar"></view>
         </view>
       </view>
 
-      <!-- 快捷筛选：一级=类型（场地）/ category 三分（机构），二级=服务（仅机构）；右缘渐隐提示可横向滚动 -->
-      <view class="filters-wrap">
+      <!-- 二级筛选：场地=类型 chips；机构 Tab 类型已锁定，只留服务 chips；右缘渐隐提示可横向滚动 -->
+      <view wx:if="{{entity === 'venue'}}" class="filters-wrap">
         <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
           <view
             wx:for="{{filters}}"
@@ -105,11 +214,19 @@
         <view class="filters-fade"></view>
       </view>
       <view wx:if="{{svcFilters.length}}" class="filters-wrap">
-        <scroll-view class="filters filters-svc" scroll-x enhanced show-scrollbar="{{false}}">
+        <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
+          <view
+            class="filter-chip {{!svcFilter ? 'filter-chip-active' : ''}}"
+            hover-class="hv"
+            data-filter="全部"
+            bindtap="pickSvc"
+            aria-role="button"
+            aria-label="全部服务"
+          >全部</view>
           <view
             wx:for="{{svcFilters}}"
             wx:key="*this"
-            class="filter-chip filter-chip-sm {{svcFilter === item ? 'filter-chip-active' : ''}}"
+            class="filter-chip {{svcFilter === item ? 'filter-chip-active' : ''}}"
             hover-class="hv"
             data-filter="{{item}}"
             bindtap="pickSvc"
@@ -157,7 +274,7 @@
           <view class="empty-submit" hover-class="hv" bindtap="goRecommend">知道这里有什么场地？来推荐</view>
         </view>
         <view wx:if="{{!empty}}" class="loadmore">
-          <text>已展示{{city}}全部 {{list.length}} 个场地</text>
+          <text>{{loadmoreText}}</text>
         </view>
       </block>
 
@@ -171,22 +288,31 @@
         </view>
         <view wx:if="{{empty}}" class="empty">
           <image class="empty-icon" src="{{icons.venueFog}}" mode="aspectFit" />
-          <text class="empty-text">{{query ? '没有找到「' + query + '」相关的门店与俱乐部' : (filter !== '全部' ? '暂无' + filter + '类型的门店与俱乐部' : (svcFilter ? '暂无提供「' + svcFilter + '」服务的门店与俱乐部' : '暂无门店与俱乐部数据'))}}</text>
+          <text class="empty-text">{{query ? '没有找到「' + query + '」相关的' + entityLabel : '暂无' + entityLabel + (svcFilter ? '（提供「' + svcFilter + '」服务）' : '')}}</text>
           <view wx:if="{{query}}" class="empty-action" hover-class="hv" bindtap="clearQuery">清除搜索</view>
-          <view wx:elif="{{filter !== '全部' || svcFilter}}" class="empty-action" hover-class="hv" bindtap="resetFilter">查看全部</view>
+          <view wx:elif="{{svcFilter}}" class="empty-action" hover-class="hv" bindtap="resetFilter">查看全部服务</view>
           <view wx:else class="empty-action" hover-class="hv" bindtap="goCityPicker">切换城市</view>
-          <view class="empty-submit" hover-class="hv" bindtap="goRecommend">知道这里有什么门店与俱乐部？来推荐</view>
+          <view class="empty-submit" hover-class="hv" bindtap="goRecommend">知道这里有什么{{entityLabel}}？来推荐</view>
         </view>
         <view wx:if="{{!empty}}" class="loadmore">
-          <text>已展示{{city}}全部 {{list.length}} 家门店与俱乐部</text>
+          <text>{{loadmoreText}}</text>
         </view>
       </block>
 
-      <!-- 推荐入口：列表非空时底部轻量引导（场地/门店与俱乐部共用） -->
+      <!-- 推荐入口：列表非空时底部轻量引导（场地/机构共用） -->
       <view wx:if="{{loaded && !empty}}" class="submit-line" hover-class="hv" bindtap="goRecommend">
-        <text class="submit-line-text">还有漏掉的场地、门店与俱乐部？</text>
+        <text class="submit-line-text">还有漏掉的{{entityLabel === '场地' ? '场地、门店与俱乐部' : entityLabel}}？</text>
         <text class="submit-line-cta">推荐给我们</text>
       </view>
     </view>
   </view>
 </view>
+
+<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播；与发现页同组件） -->
+<media-viewer
+  visible="{{viewerShow}}"
+  sources="{{viewerSources}}"
+  current="{{viewerCurrent}}"
+  bind:close="onViewerClose"
+/>
+

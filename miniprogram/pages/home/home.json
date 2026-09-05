@@ -2,5 +2,8 @@
   "navigationStyle": "custom",
   "navigationBarTitleText": "滑哪儿",
   "enablePullDownRefresh": true,
-  "backgroundTextStyle": "light"
+  "backgroundTextStyle": "light",
+  "usingComponents": {
+    "media-viewer": "/components/media-viewer/media-viewer"
+  }
 }
