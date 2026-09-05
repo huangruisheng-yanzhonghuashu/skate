@@ -299,6 +299,18 @@ Page({
 
   /* ===== 打卡弹窗（发布 / 编辑复用；打卡带留言/媒体，可发多条，无需在现场） ===== */
   openPost() {
+    const s = this.data.shop
+    /* 打卡门槛：所选地点近 7 天必须有本人签到记录（新发布时校验，编辑已发打卡不受限） */
+    if (!store.checkedWithinDays(s.id, 7)) {
+      wx.showModal({
+        title: '无法打卡',
+        content: '近 7 天没有在「' + s.name + '」的签到记录，先到场签到后才能打卡。',
+        confirmText: '去签到',
+        cancelText: '我知道了',
+        success: (r) => { if (r.confirm) this.doCheckin() },
+      })
+      return
+    }
     this._editId = ''
     this.setData({
       checkinOpen: true,

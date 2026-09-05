@@ -60,7 +60,7 @@
     <image class="publish-btn-icon" src="{{icons.check}}" mode="aspectFit" />
     <text>{{submitting ? '发布中...' : '发布打卡'}}</text>
   </view>
-  <view class="publish-tip">打卡是内容分享，不用在现场；到了场地记得点详情页「签到」哦</view>
+  <view class="publish-tip">打卡需近 7 天在该地点有签到记录；到场后先在详情页「签到」，即可随时发打卡</view>
 </view>
 
 <!-- 地点选择弹层 -->
@@ -96,11 +96,13 @@
           data-id="{{item.id}}"
           data-name="{{item.name}}"
           data-kind="{{item.kind}}"
+          data-ok="{{item.ok}}"
           bindtap="pickPlace"
         >
           <image class="place-row-icon" src="{{icons.pin}}" mode="aspectFit" />
           <text class="place-row-name">{{item.name}}</text>
           <text class="place-row-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+          <text class="place-row-ok {{item.ok ? '' : 'place-row-ok-no'}}">{{item.ok ? '可打卡' : '近7天未签到'}}</text>
         </view>
       </block>
       <text class="group-title">{{query ? '搜索结果' : '全部地点'}}</text>
@@ -113,11 +115,13 @@
           data-id="{{item.id}}"
           data-name="{{item.name}}"
           data-kind="{{item.kind}}"
+          data-ok="{{item.ok}}"
           bindtap="pickPlace"
         >
           <image class="place-row-icon" src="{{icons.pin}}" mode="aspectFit" />
           <text class="place-row-name">{{item.name}}</text>
           <text class="place-row-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+          <text class="place-row-ok {{item.ok ? '' : 'place-row-ok-no'}}">{{item.ok ? '可打卡' : '近7天未签到'}}</text>
         </view>
       </block>
       <view wx:else class="picker-empty">

@@ -326,6 +326,22 @@
   line-height: 1.2;
 }
 
+/* 打卡门槛标记：可打卡=青调 / 近7天未签到=灰调（未签到行点击拦截） */
+.place-row-ok {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  color: #00D4AA;
+  background: rgba(0, 212, 170, 0.12);
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  line-height: 1.2;
+}
+
+.place-row-ok-no {
+  color: #6E6E76;
+  background: rgba(166, 166, 173, 0.14);
+}
+
 .picker-empty {
   padding: 60rpx 0;
   text-align: center;

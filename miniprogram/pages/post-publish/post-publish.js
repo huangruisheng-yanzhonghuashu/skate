@@ -1,5 +1,6 @@
 /* 发布打卡（全局入口）：选地点（搜索 + 最近去过）+ 留言 + 图/视频，无需在现场
- * 打卡为内容记录（type=post），可发多条；签到（现场凭证）走详情页一键操作 */
+ * 打卡为内容记录（type=post），可发多条；门槛：所选地点近 7 天必须有本人签到记录
+ * 签到（现场凭证）走详情页一键操作 */
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { ICON } = require('../../utils/icons.js')
@@ -51,12 +52,14 @@ Page({
     })
   },
 
-  /* 最近去过：按本人签到记录聚合（cloud.getUserFrequentVenues） */
+  /* 最近去过：按本人签到记录聚合（cloud.getUserFrequentVenues）；标 ok=近7天有签到（打卡门槛） */
   loadRecents() {
     cloud.ensureOpenid().then((openid) => {
       if (!openid) return
       cloud.getUserFrequentVenues(openid, 10).then((rows) => {
-        this.setData({ recents: rows })
+        this.setData({
+          recents: rows.map((p) => ({ ...p, ok: store.checkedWithinDays(p.id, 7) })),
+        })
         if (!this.data.query) this.applyQuery('')
       })
     })
@@ -79,15 +82,21 @@ Page({
   applyQuery(query) {
     const q = (query || '').trim()
     const source = this._all
-    const list = q
+    const list = (q
       ? source.filter((p) => p.name.indexOf(q) >= 0)
       : source.slice(0, LIST_LIMIT)
+    ).map((p) => ({ ...p, ok: store.checkedWithinDays(p.id, 7) }))
     this.setData({ query: q, results: list })
   },
 
   pickPlace(e) {
     const d = e.currentTarget.dataset
     if (!d.id) return
+    /* 打卡门槛：近 7 天没有签到记录的地点不可选 */
+    if (!d.ok) {
+      wx.showToast({ title: '近 7 天未在此签到，无法打卡', icon: 'none', duration: 2500 })
+      return
+    }
     this.setData({
       place: { id: d.id, name: d.name || '', kind: d.kind || 'venue' },
       pickerOpen: false,
@@ -148,6 +157,15 @@ Page({
     const p = this.data.place
     if (!p) {
       wx.showToast({ title: '请先选择场地或店铺', icon: 'none' })
+      return
+    }
+    /* 打卡门槛兜底校验：所选地点近 7 天必须有本人签到记录 */
+    if (!store.checkedWithinDays(p.id, 7)) {
+      wx.showModal({
+        title: '无法打卡',
+        content: '近 7 天没有在「' + p.name + '」的签到记录，先到场签到后才能打卡。',
+        showCancel: false,
+      })
       return
     }
     const note = this.data.note.trim()

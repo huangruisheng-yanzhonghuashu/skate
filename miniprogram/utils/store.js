@@ -261,6 +261,15 @@ function checkedToday(venueId) {
   })
 }
 
+/* 近 N 天是否在某地点有签到记录（打卡门槛：所选场地/店铺近 7 天必须有签到，否则不允许打卡） */
+function checkedWithinDays(venueId, days) {
+  init()
+  const since = Date.now() - (days || 7) * 86400000
+  return state.checkins.some(function (c) {
+    return isCheckinRec(c) && c.venueId === venueId && new Date(c.at).getTime() >= since
+  })
+}
+
 /* 统计（只数"签到"记录，打卡不参与）：总数 / 连续天数 / 本周天数 / 本月签到日集合 */
 function calcStats() {
   init()
@@ -620,6 +629,7 @@ module.exports = {
   isProfileComplete: isProfileComplete,
   saveProfile: saveProfile,
   checkedToday: checkedToday,
+  checkedWithinDays: checkedWithinDays,
   calcStats: calcStats,
   checkIn: checkIn,
   addPost: addPost,
