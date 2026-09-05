@@ -175,7 +175,7 @@
         </view>
       </block>
 
-      <!-- 推荐入口：列表非空时底部轻量引导（场地/店铺共用） -->
+      <!-- 推荐入口：列表非空时底部轻量引导（场地/门店与俱乐部共用） -->
       <view wx:if="{{loaded && !empty}}" class="submit-line" hover-class="hv" bindtap="goRecommend">
         <text class="submit-line-text">还有漏掉的场地、门店与俱乐部？</text>
         <text class="submit-line-cta">推荐给我们</text>

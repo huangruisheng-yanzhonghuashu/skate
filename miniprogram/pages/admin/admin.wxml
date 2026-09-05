@@ -162,7 +162,7 @@ module.exports = {
       <view wx:else class="state"><text>暂无场地报错</text></view>
     </block>
 
-    <!-- 推荐审核（滑手提交的场地/店铺：入库=预填表单核对后上架，驳回=填理由） -->
+    <!-- 推荐审核（滑手提交的场地、门店与俱乐部：入库=预填表单核对后上架，驳回=填理由） -->
     <block wx:elif="{{entity === 'submission'}}">
       <view wx:if="{{submissionsLoading}}" class="state"><text>加载中...</text></view>
       <block wx:elif="{{submissions.length}}">

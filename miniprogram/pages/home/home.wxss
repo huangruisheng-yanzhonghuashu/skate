@@ -491,7 +491,7 @@
   font-weight: 500;
 }
 
-/* 空态次级行动：推荐场地/店铺 */
+/* 空态次级行动：推荐场地、门店与俱乐部 */
 .empty-submit {
   margin-top: 16rpx;
   font-size: 26rpx;

@@ -1,4 +1,4 @@
-/* 推荐场地/店铺：滑手提交 → 管理员在运营管理「推荐审核」Tab 审
+/* 推荐场地、门店与俱乐部：滑手提交 → 管理员在运营管理「推荐审核」Tab 审
  * submissions 集合（仅创建者可读写）：用户只能看自己的推荐，审核结果/回复由云函数写回 */
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
@@ -160,7 +160,7 @@ Page({
         if (msg.indexOf('auth') >= 0 || msg.indexOf('deny') >= 0) {
           wx.showModal({
             title: '需要位置权限',
-            content: '用于在地图上选取场地/店铺坐标',
+            content: '用于在地图上选取场地、门店与俱乐部坐标',
             confirmText: '去设置',
             success: (r2) => { if (r2.confirm) wx.openSetting() },
           })

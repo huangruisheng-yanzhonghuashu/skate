@@ -455,7 +455,7 @@ Page({
     wx.navigateTo({ url: '/pages/city-picker/city-picker' })
   },
 
-  /* 推荐场地/店铺入口（列表底部/空态引导） */
+  /* 推荐场地、门店与俱乐部入口（列表底部/空态引导） */
   goRecommend() {
     wx.navigateTo({ url: '/pages/recommend/recommend' })
   },

@@ -199,7 +199,7 @@ Page({
     })
   },
 
-  /* ===== 推荐审核（滑手提交的场地/店铺） ===== */
+  /* ===== 推荐审核（滑手提交的场地、门店与俱乐部） ===== */
   loadSubmissions() {
     if (this.data.submissionsLoading) return
     this.setData({ submissionsLoading: true })
@@ -456,7 +456,7 @@ Page({
           if (msg.indexOf('auth') >= 0 || msg.indexOf('deny') >= 0) {
             wx.showModal({
               title: '需要位置权限',
-              content: '用于在地图上选取场地/店铺坐标',
+              content: '用于在地图上选取场地、门店与俱乐部坐标',
               confirmText: '去设置',
               success: (r2) => { if (r2.confirm) wx.openSetting() },
             })
