@@ -102,7 +102,7 @@
     <text class="section-title">打卡排行榜</text>
     <view wx:if="{{!board.length}}" class="board-empty">暂无排行数据，快去签到抢第一</view>
     <block wx:else>
-      <view wx:for="{{board}}" wx:key="rank" class="board-row {{item.self ? 'board-row-self' : ''}}">
+      <view wx:for="{{board}}" wx:key="rank" class="board-row {{item.self ? 'board-row-self' : ''}}" hover-class="board-row-hover" bindtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-self="{{item.self}}">
         <view class="board-left">
           <view class="board-rank board-rank-{{item.rank <= 3 ? item.rank : 'n'}}">{{item.rank}}</view>
           <text class="board-user {{item.self ? 'board-user-self' : ''}}">{{item.user}}{{item.self ? '（我）' : ''}}</text>

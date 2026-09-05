@@ -114,6 +114,23 @@ Page({
     this.setData({ viewerShow: false })
   },
 
+  /* 打卡人头像/昵称 → 滑手主页（本人则回「我的」tab） */
+  goUserProfile(e) {
+    const d = e.currentTarget.dataset
+    cloud.ensureOpenid().then((my) => {
+      if (!d.openid || (my && d.openid === my)) {
+        wx.switchTab({ url: '/pages/profile/profile' })
+        return
+      }
+      wx.navigateTo({
+        url: '/pages/user-profile/user-profile?openid=' + encodeURIComponent(d.openid) +
+          '&u=' + encodeURIComponent(d.user || '') +
+          '&avatar=' + encodeURIComponent(d.avatar || '') +
+          '&years=' + encodeURIComponent(String(d.years || '')),
+      })
+    })
+  },
+
   goPlace() {
     if (this.data.kind === 'shop') {
       wx.navigateTo({ url: '/pages/shop-detail/shop-detail?id=' + this._id })

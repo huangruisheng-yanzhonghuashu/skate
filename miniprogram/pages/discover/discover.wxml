@@ -25,7 +25,7 @@
   <!-- 打卡社区流 -->
   <view class="feed" wx:if="{{list.length}}">
     <view wx:for="{{list}}" wx:key="id" class="feed-card feed-in" style="animation-delay: {{index < 10 ? index * 60 : 0}}ms">
-      <view class="feed-head">
+      <view class="feed-head" hover-class="feed-head-hover" catchtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-avatar="{{item.avatarFile}}">
         <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
         <view wx:else class="avatar">{{item.avatarText}}</view>
         <view class="feed-user">
@@ -34,10 +34,10 @@
             <text class="feed-name">{{item.user}}</text>
             <text class="feed-time">{{item.timeText}}</text>
           </view>
-          <!-- 第二行：类型灰标 + 场地名橙色链接（跳转入口独立成行不被截断） -->
+          <!-- 第二行：类型灰标 + 场地名橙色链接（跳转入口独立成行不被截断；catchtap 防止冒泡触发滑手主页） -->
           <view class="feed-place-row">
             <text class="feed-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
-            <text class="feed-venue" data-id="{{item.venueId}}" data-kind="{{item.kind}}" bindtap="goPlace">{{item.venueName}}</text>
+            <text class="feed-venue" data-id="{{item.venueId}}" data-kind="{{item.kind}}" catchtap="goPlace">{{item.venueName}}</text>
           </view>
         </view>
       </view>

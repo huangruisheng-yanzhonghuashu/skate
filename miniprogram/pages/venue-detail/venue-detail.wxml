@@ -93,7 +93,7 @@
     </view>
     <view class="checkin-list" wx:if="{{feed.length}}">
       <view wx:for="{{feed}}" wx:key="id" class="checkin-card">
-        <view class="checkin-head">
+        <view class="checkin-head" hover-class="checkin-head-hover" catchtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-avatar="{{item.avatarFile}}" data-years="{{item.skateYears}}">
           <image wx:if="{{item.avatarFile}}" class="checkin-avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
           <view wx:else class="checkin-avatar" style="background: {{item.color}}">{{item.avatarText}}</view>
           <view class="checkin-user">

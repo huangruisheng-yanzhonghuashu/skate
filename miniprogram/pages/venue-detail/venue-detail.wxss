@@ -370,6 +370,11 @@
   gap: 24rpx;
 }
 
+/* 打卡人头部可点（进滑手主页）按压反馈 */
+.checkin-head-hover {
+  opacity: 0.7;
+}
+
 .checkin-avatar {
   width: 80rpx;
   height: 80rpx;

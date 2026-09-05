@@ -91,6 +91,7 @@ function mapCheckin(d) {
   const avatar = d.avatar || ''
   return {
     id: d._id,
+    openid: d._openid || '',
     kind: d.kind || 'venue',
     venueId: d.venueId,
     venueName: d.venueName,
@@ -156,13 +157,19 @@ function getPlaceCheckins(venueId, opts) {
     })
 }
 
-/* 发现页社区流：所有人的"内容打卡"（有留言或有照片），全量按时间倒序分页 */
+/* 发现页社区流：所有人的"内容打卡"（有留言或有照片），全量按时间倒序分页
+ * opts.openid 传入时限定为某位滑手的公开动态（滑手主页用） */
 function getPublicCheckins(opts) {
   opts = opts || {}
   const cmd = db().command
-  let q = db().collection('checkins').where(
-    cmd.or([{ note: cmd.neq('') }, { photos: cmd.neq([]) }, { videos: cmd.neq([]) }])
-  )
+  const where = opts.openid
+    ? cmd.or([
+        { _openid: opts.openid, note: cmd.neq('') },
+        { _openid: opts.openid, photos: cmd.neq([]) },
+        { _openid: opts.openid, videos: cmd.neq([]) },
+      ])
+    : cmd.or([{ note: cmd.neq('') }, { photos: cmd.neq([]) }, { videos: cmd.neq([]) }])
+  let q = db().collection('checkins').where(where)
   if (opts.skip) q = q.skip(opts.skip)
   return q.orderBy('at', 'desc').limit(opts.limit || 20).get()
     .then((r) => (r.data || []).map(mapCheckin))
@@ -364,6 +371,7 @@ function getLeaderboard(limit) {
     return rows.map(function (x, i) {
       return {
         rank: i + 1,
+        openid: x._id || '',
         user: x.name || '滑友',
         count: x.count,
         self: !!(_openid && x._id === _openid),
@@ -372,6 +380,72 @@ function getLeaderboard(limit) {
   }).catch(function (e) {
     console.warn('[cloud] 排行榜聚合失败', (e && e.errCode) || (e && e.message))
     return []
+  })
+}
+
+/* ===== 滑手主页（他人视角的公开档案） ===== */
+/* 他人资料（需 user_profiles"所有用户可读"权限；无权限/未设置时返回 null，调用方降级用跳转种子信息） */
+function getUserProfileByOpenid(openid) {
+  if (!openid) return Promise.resolve(null)
+  return db().collection('user_profiles')
+    .where({ _openid: openid })
+    .limit(1)
+    .get()
+    .then((r) => (r.data && r.data[0]) || null)
+    .catch(function (e) {
+      console.warn('[cloud] 他人资料读取失败', (e && e.errCode) || (e && e.message))
+      return null
+    })
+}
+
+/* 常去场地：按 openid 聚合打卡记录按场地分组计数，打卡数倒序（需 checkins"所有用户可读"权限）
+ * 返回 [{ id: venueId, name, kind, count }]；limit：展示用 10 / 统计足迹场地数用 100 */
+function getUserFrequentVenues(openid, limit) {
+  const $ = agg()
+  if (!openid) return Promise.resolve([])
+  return db().collection('checkins').aggregate()
+    .match({ _openid: openid })
+    .group({ _id: '$venueId', count: $.sum(1), name: $.last('$venueName'), kind: $.last('$kind') })
+    .sort({ count: -1 })
+    .limit(limit || 100)
+    .end()
+    .then(function (r) {
+      return (r.list || []).filter(function (x) { return !!x._id }).map(function (x) {
+        return { id: x._id, name: x.name || '', kind: x.kind || 'venue', count: x.count }
+      })
+    })
+    .catch(function (e) {
+      console.warn('[cloud] 常去场地聚合失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
+}
+
+/* 滑手数据概览：累计打卡数 + 获赞总数
+ * 获赞 = 该滑手内容打卡最近 100 条的点赞求和（feed_likes 无归属字段无法全量聚合，长尾忽略）
+ * 需 checkins / feed_likes"所有用户可读"权限 */
+function getUserStats(openid) {
+  const cmd = db().command
+  if (!openid) return Promise.resolve({ checkinCount: 0, likeCount: 0 })
+  const countQ = db().collection('checkins')
+    .where({ _openid: openid })
+    .count()
+    .catch(function () { return { total: 0 } })
+  const idsQ = db().collection('checkins')
+    .where(cmd.or([
+      { _openid: openid, note: cmd.neq('') },
+      { _openid: openid, photos: cmd.neq([]) },
+      { _openid: openid, videos: cmd.neq([]) },
+    ]))
+    .field({ _id: true })
+    .limit(100)
+    .get()
+    .catch(function () { return { data: [] } })
+  return Promise.all([countQ, idsQ]).then(function (rs) {
+    const ids = (rs[1].data || []).map(function (d) { return d._id })
+    return getLikeCounts(ids).then(function (map) {
+      const likeCount = Object.keys(map).reduce(function (s, k) { return s + (map[k] || 0) }, 0)
+      return { checkinCount: (rs[0] && rs[0].total) || 0, likeCount: likeCount }
+    })
   })
 }
 
@@ -636,6 +710,9 @@ module.exports = {
   getMyProfile: getMyProfile,
   saveCity: saveCity,
   getLeaderboard: getLeaderboard,
+  getUserProfileByOpenid: getUserProfileByOpenid,
+  getUserFrequentVenues: getUserFrequentVenues,
+  getUserStats: getUserStats,
   addVenueReport: addVenueReport,
   countMyReports: countMyReports,
   getMyReports: getMyReports,

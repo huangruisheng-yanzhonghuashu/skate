@@ -298,6 +298,7 @@ Page({
       this.setData({
         feed: merged.slice(0, 3).map((f) => ({
           id: f.id,
+          openid: f.openid || '',
           user: f.user,
           avatarFile: f.avatarFile,
           avatarText: f.avatarText,
@@ -315,6 +316,23 @@ Page({
 
   onSwiperChange(e) {
     this.setData({ current: e.detail.current })
+  },
+
+  /* 打卡人头像/昵称 → 滑手主页（本人则回「我的」tab） */
+  goUserProfile(e) {
+    const d = e.currentTarget.dataset
+    cloud.ensureOpenid().then((my) => {
+      if (!d.openid || (my && d.openid === my)) {
+        wx.switchTab({ url: '/pages/profile/profile' })
+        return
+      }
+      wx.navigateTo({
+        url: '/pages/user-profile/user-profile?openid=' + encodeURIComponent(d.openid) +
+          '&u=' + encodeURIComponent(d.user || '') +
+          '&avatar=' + encodeURIComponent(d.avatar || '') +
+          '&years=' + encodeURIComponent(String(d.years || '')),
+      })
+    })
   },
 
   /* 原生地图导航 */

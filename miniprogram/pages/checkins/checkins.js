@@ -64,6 +64,16 @@ Page({
     }
   },
 
+  /* 榜单行 → 滑手主页（本人则留在本页，避免跳出签到 tab） */
+  goUserProfile(e) {
+    const d = e.currentTarget.dataset
+    if (d.self) return
+    wx.navigateTo({
+      url: '/pages/user-profile/user-profile?openid=' + encodeURIComponent(d.openid || '') +
+        '&u=' + encodeURIComponent(d.user || ''),
+    })
+  },
+
   /* 切月：delta ±1，跨年自动进位；不允许看未来月份 */
   switchMonth(e) {
     const delta = Number(e.currentTarget.dataset.delta) || 0

@@ -52,6 +52,11 @@
   gap: 20rpx;
 }
 
+/* 打卡人头部可点（进滑手主页）按压反馈 */
+.head-hover {
+  opacity: 0.7;
+}
+
 .avatar-img {
   width: 80rpx;
   height: 80rpx;

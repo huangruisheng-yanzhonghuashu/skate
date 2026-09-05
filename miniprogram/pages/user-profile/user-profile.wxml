@@ -1,0 +1,121 @@
+<view class="page">
+  <!-- 头部资料卡 -->
+  <view class="hero anim-fade-in">
+    <view class="hero-top">
+      <image wx:if="{{avatarFile}}" class="hero-avatar-img" src="{{avatarFile}}" mode="aspectFill" />
+      <view wx:else class="hero-avatar">{{avatarText}}</view>
+      <view class="hero-info">
+        <text class="hero-name">{{user}}</text>
+        <text wx:if="{{metaText}}" class="hero-meta">{{metaText}}</text>
+      </view>
+    </view>
+    <view wx:if="{{skills.length}}" class="hero-tags">
+      <text wx:for="{{skills}}" wx:key="*this" class="hero-tag">{{item}}</text>
+    </view>
+  </view>
+
+  <!-- 数据概览 ×3（图标 + 大数字 + 标签，与签到页统计卡同款） -->
+  <view class="stats">
+    <view class="stat">
+      <image class="stat-icon" src="{{icons.trophy}}" mode="aspectFit" />
+      <text class="stat-num">{{stats.checkinCount}}</text>
+      <text class="stat-label">累计打卡</text>
+    </view>
+    <view class="stat">
+      <image class="stat-icon" src="{{icons.venue}}" mode="aspectFit" />
+      <text class="stat-num">{{stats.venueCount}}</text>
+      <text class="stat-label">足迹场地</text>
+    </view>
+    <view class="stat">
+      <image class="stat-icon" src="{{icons.heart}}" mode="aspectFit" />
+      <text class="stat-num">{{stats.likeCount}}</text>
+      <text class="stat-label">获赞</text>
+    </view>
+  </view>
+
+  <!-- 常去场地（横滑卡片，按打卡次数排序） -->
+  <view wx:if="{{places.length}}" class="section">
+    <text class="section-title">常去场地</text>
+    <scroll-view class="places" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
+      <view
+        wx:for="{{places}}"
+        wx:key="id"
+        class="place-card"
+        hover-class="place-card-hover"
+        data-id="{{item.id}}"
+        data-kind="{{item.kind}}"
+        bindtap="goPlace"
+      >
+        <text class="place-kind {{item.kind === 'shop' ? 'place-kind-shop' : ''}}">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+        <text class="place-name">{{item.name}}</text>
+        <text class="place-count">{{item.count}} 次打卡</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- TA的动态（公开内容打卡流，同发现页卡片） -->
+  <view class="section">
+    <text class="section-title">TA的动态</text>
+    <view wx:if="{{list.length}}" class="feed">
+      <view wx:for="{{list}}" wx:key="id" class="card card-in" style="animation-delay: {{index < 10 ? index * 60 : 0}}ms">
+        <view class="card-place">
+          <text class="card-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+          <text class="card-venue" data-id="{{item.venueId}}" data-kind="{{item.kind}}" bindtap="goPlace">{{item.venueName}}</text>
+          <text class="card-time">{{item.timeText}}</text>
+        </view>
+        <text wx:if="{{item.note}}" class="note">{{item.note}}</text>
+        <view wx:if="{{item.media.length}}" class="photos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
+          <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell" catchtap="previewMedia" data-media="{{item.media}}" data-index="{{index}}">
+            <video
+              wx:if="{{p.type === 'video'}}"
+              class="card-video"
+              src="{{p.url}}"
+              object-fit="cover"
+              controls="{{false}}"
+              show-center-play-btn="{{false}}"
+            />
+            <image
+              wx:else
+              class="photo"
+              src="{{p.url}}"
+              mode="aspectFill"
+              lazy-load
+            />
+            <view wx:if="{{p.type === 'video'}}" class="video-play"></view>
+            <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
+          </view>
+        </view>
+        <view class="actions">
+          <view class="action {{item.liked ? 'action-liked' : ''}}" data-id="{{item.id}}" bindtap="toggleLike">
+            <image class="action-icon" src="{{item.liked ? icons.heartOrange : icons.heartAsh}}" mode="aspectFit" />
+            <text>{{item.likeCount}}</text>
+          </view>
+          <view class="action {{item.commentsOpen ? 'action-liked' : ''}}" data-id="{{item.id}}" bindtap="toggleComments">
+            <image class="action-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
+            <text>{{item.commentCount}}</text>
+          </view>
+        </view>
+        <comment-box
+          wx:if="{{item.commentsOpen}}"
+          checkin-id="{{item.id}}"
+          data-id="{{item.id}}"
+          bind:countchange="onCommentCount"
+        />
+      </view>
+      <view wx:if="{{loading}}" class="more">加载中...</view>
+      <view wx:elif="{{!finished && list.length}}" class="more">上拉加载更多</view>
+      <view wx:elif="{{finished && list.length}}" class="more">— 没有更多了 —</view>
+    </view>
+    <view wx:elif="{{empty && !loading}}" class="empty">
+      <text class="empty-text">这位滑手还没留下公开足迹</text>
+    </view>
+  </view>
+</view>
+
+<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播） -->
+<media-viewer
+  visible="{{viewerShow}}"
+  sources="{{viewerSources}}"
+  current="{{viewerCurrent}}"
+  bind:close="onViewerClose"
+/>

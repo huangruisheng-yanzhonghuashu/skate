@@ -8,7 +8,7 @@
   <view wx:if="{{list.length}}" class="count-line">共 {{list.length}} 条打卡</view>
 
   <view wx:for="{{list}}" wx:key="id" class="card card-in" style="animation-delay: {{index < 10 ? index * 60 : 0}}ms">
-    <view class="head">
+    <view class="head" hover-class="head-hover" catchtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-avatar="{{item.avatarFile}}" data-years="{{item.skateYears}}">
       <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
       <view wx:else class="avatar">{{item.avatarText}}</view>
       <view class="who">

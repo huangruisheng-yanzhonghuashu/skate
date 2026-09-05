@@ -274,6 +274,11 @@
   border-radius: 16rpx;
 }
 
+/* 榜单行可点（进滑手主页）按压反馈 */
+.board-row-hover {
+  background: #26262C;
+}
+
 /* 我的行：橙色淡底高亮（设计稿同款） */
 .board-row-self {
   background: rgba(255, 90, 54, 0.10);
