@@ -97,3 +97,11 @@
     <view class="empty-btn" bindtap="goHome">去打卡</view>
   </view>
 </view>
+
+<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播） -->
+<media-viewer
+  visible="{{viewerShow}}"
+  sources="{{viewerSources}}"
+  current="{{viewerCurrent}}"
+  bind:close="onViewerClose"
+/>

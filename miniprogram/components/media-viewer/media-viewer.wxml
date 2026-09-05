@@ -1,0 +1,34 @@
+<view wx:if="{{visible}}" class="mv-mask" catchtouchmove="noop">
+  <swiper class="mv-swiper" current="{{idx}}" bindchange="onSwiperChange">
+    <swiper-item wx:for="{{sources}}" wx:key="url">
+      <view class="mv-item">
+        <block wx:if="{{item.type === 'video'}}">
+          <video
+            wx:if="{{playingIdx === index}}"
+            class="mv-video"
+            src="{{item.url}}"
+            object-fit="contain"
+            controls
+            autoplay
+          />
+          <view wx:else class="mv-video-wrap" catchtap="onPlayTap" data-index="{{index}}">
+            <video
+              class="mv-video"
+              src="{{item.url}}"
+              object-fit="cover"
+              controls="{{false}}"
+              show-center-play-btn="{{false}}"
+            />
+            <view class="mv-play"></view>
+          </view>
+        </block>
+        <image wx:else class="mv-img" src="{{item.url}}" mode="aspectFit" bindtap="onClose" />
+      </view>
+    </swiper-item>
+  </swiper>
+  <view wx:if="{{sources.length > 1}}" class="mv-count">{{idx + 1}}/{{sources.length}}</view>
+  <view class="mv-close" catchtap="onClose">
+    <view class="mv-close-line mv-close-l1"></view>
+    <view class="mv-close-line mv-close-l2"></view>
+  </view>
+</view>

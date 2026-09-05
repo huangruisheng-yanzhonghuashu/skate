@@ -1,5 +1,8 @@
 {
   "navigationStyle": "custom",
+  "usingComponents": {
+    "media-viewer": "/components/media-viewer/media-viewer"
+  },
   "navigationBarTextStyle": "white",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "light"

@@ -1,5 +1,8 @@
 {
   "navigationBarTitleText": "全部打卡",
+  "usingComponents": {
+    "media-viewer": "/components/media-viewer/media-viewer"
+  },
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "light"
 }
