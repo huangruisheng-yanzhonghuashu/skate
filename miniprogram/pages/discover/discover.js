@@ -51,6 +51,7 @@ Page({
         const cCounts = rs[1]
         const mapped = rows.map((r) => ({
           id: r.id,
+          openid: r.openid,
           kind: r.kind,
           venueId: r.venueId,
           venueName: r.venueName,
@@ -137,16 +138,13 @@ Page({
     this.setData({ list: this.sortList(list) })
   },
 
-  /* 打卡人头像/昵称 → 滑手主页（本人则回「我的」tab） */
+  /* 打卡人头像/昵称 → 滑手主页（本人也进新页面：openid 缺失时兜底用本人 openid） */
   goUserProfile(e) {
     const d = e.currentTarget.dataset
     cloud.ensureOpenid().then((my) => {
-      if (!d.openid || (my && d.openid === my)) {
-        wx.switchTab({ url: '/pages/profile/profile' })
-        return
-      }
+      const openid = d.openid || my || ''
       wx.navigateTo({
-        url: '/pages/user-profile/user-profile?openid=' + encodeURIComponent(d.openid) +
+        url: '/pages/user-profile/user-profile?openid=' + encodeURIComponent(openid) +
           '&u=' + encodeURIComponent(d.user || '') +
           '&avatar=' + encodeURIComponent(d.avatar || ''),
       })

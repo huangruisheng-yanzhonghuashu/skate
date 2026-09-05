@@ -64,13 +64,15 @@ Page({
     }
   },
 
-  /* 榜单行 → 滑手主页（本人则留在本页，避免跳出签到 tab） */
+  /* 榜单行 → 滑手主页（本人也进新页面：openid 缺失时兜底用本人 openid） */
   goUserProfile(e) {
     const d = e.currentTarget.dataset
-    if (d.self) return
-    wx.navigateTo({
-      url: '/pages/user-profile/user-profile?openid=' + encodeURIComponent(d.openid || '') +
-        '&u=' + encodeURIComponent(d.user || ''),
+    cloud.ensureOpenid().then((my) => {
+      const openid = d.openid || my || ''
+      wx.navigateTo({
+        url: '/pages/user-profile/user-profile?openid=' + encodeURIComponent(openid) +
+          '&u=' + encodeURIComponent(d.user || ''),
+      })
     })
   },
 
