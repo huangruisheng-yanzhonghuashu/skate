@@ -297,7 +297,7 @@ Page({
           note: f.note,
           photos: f.photos,
           videos: f.videos,
-          media: toMedia(f.photos, f.videos),
+          media: toMedia(f.photos, f.videos, f.mediaOrder),
         })),
       })
     })
@@ -343,7 +343,7 @@ Page({
       checkinOpen: true,
       checkinMode: 'edit',
       note: rec.note || '',
-      checkinMedia: toMedia(rec.photos, rec.videos),
+      checkinMedia: toMedia(rec.photos, rec.videos, rec.mediaOrder),
       checkinSubmitting: false,
     })
   },
@@ -365,6 +365,7 @@ Page({
       count: remain,
       mediaType: ['mix'],
       sourceType: ['album', 'camera'],
+      compressed: false, /* 选择时不压缩（快速返回）；压缩在后台队列静默进行 */
       success: (res) => {
         const added = res.tempFiles.map((f) => ({
           type: f.fileType === 'video' ? 'video' : 'image',
@@ -382,19 +383,31 @@ Page({
     this.setData({ checkinMedia: media })
   },
 
-  /* 上传媒体组：保留已上传的 fileID，只上传新选的临时文件，维持原顺序
-   * 返回 { photos: 图片 fileID 数组, videos: 视频 fileID 数组 }（存储分层） */
+  /* 上传图片组（同步，小文件）：fileID 保留、临时文件上传，维持原顺序。
+   * 视频不上传——微博式异步：透传给 store 后台队列压缩+上传，用户零等待。
+   * mediaOrder 记录用户选择时的图/视频混排顺序（'p0'/'v1' 引用分组后下标） */
   uploadCheckinMedia(media) {
     const upload = (m) => {
       if (m.url.indexOf('cloud://') === 0) return Promise.resolve(m.url)
       return cloud.uploadFileTo('checkin-photos', m.url)
     }
-    const photos = media.filter((m) => m.type === 'image')
-    const videos = media.filter((m) => m.type === 'video')
-    return Promise.all([
-      Promise.all(photos.map(upload)),
-      Promise.all(videos.map(upload)),
-    ]).then((rs) => ({ photos: rs[0], videos: rs[1] }))
+    const photos = []
+    const videos = []
+    const order = []
+    media.forEach((m) => {
+      if (m.type === 'image') {
+        order.push('p' + photos.length)
+        photos.push(m.url)
+      } else {
+        order.push('v' + videos.length)
+        videos.push(m.url)
+      }
+    })
+    return Promise.all(photos.map(upload)).then((fileIDs) => ({
+      photos: fileIDs,
+      videos: videos,
+      order: order,
+    }))
   },
 
   confirmCheckin() {
@@ -402,37 +415,51 @@ Page({
     const v = this.data.venue
     const note = this.data.note.trim()
     const media = this.data.checkinMedia
-    this.setData({ checkinSubmitting: true })
-    const finish = (m) => {
-      if (this._editId) {
-        /* 补充打卡：更新当日记录（不新增，统计口径不变） */
-        store.updateCheckin(this._editId, note, m.photos, m.videos).then(() => {
-          this._editId = ''
-          this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
-          wx.showToast({ title: '打卡已更新', icon: 'success' })
-          this.refresh()
-          this.loadFeed()
-        })
-        return
+    const submit = () => {
+      this.setData({ checkinSubmitting: true })
+      const finish = (m) => {
+        if (this._editId) {
+          /* 补充打卡：更新当日记录（不新增，统计口径不变） */
+          store.updateCheckin(this._editId, note, m.photos, m.videos, m.order).then(() => {
+            this._editId = ''
+            this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
+            wx.showToast({ title: '打卡已更新', icon: 'success' })
+            this.refresh()
+            this.loadFeed()
+          })
+          return
+        }
+        /* 新签到：本地立即生效，图片同步上云，视频由 store 后台队列异步上云（零等待） */
+        store.addCheckin(v.id, v.name, note, m.photos, 'venue', m.videos, m.order)
+        this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
+        this.showCelebrate()
+        this.refresh()
+        this.loadFeed()
       }
-      /* 新签到：本地立即生效，云端写入由 store 异步处理（失败自动排队重试） */
-      store.addCheckin(v.id, v.name, note, m.photos, 'venue', m.videos)
-      this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
-      this.showCelebrate()
-      this.refresh()
-      this.loadFeed()
+      if (media.length) {
+        this.uploadCheckinMedia(media)
+          .then(finish)
+          .catch((e) => {
+            this.setData({ checkinSubmitting: false })
+            wx.showToast({ title: '图片上传失败，请重试', icon: 'none' })
+            console.warn('[venue-detail] 签到图片上传失败', (e && e.errCode) || (e && e.message))
+          })
+      } else {
+        finish({ photos: [], videos: [] })
+      }
     }
-    if (media.length) {
-      /* 媒体组：fileID 保留、临时文件上传，然后落库 */
-      this.uploadCheckinMedia(media)
-        .then(finish)
-        .catch((e) => {
-          this.setData({ checkinSubmitting: false })
-          wx.showToast({ title: '媒体上传失败，请重试', icon: 'none' })
-          console.warn('[venue-detail] 签到媒体上传失败', (e && e.errCode) || (e && e.message))
-        })
+    /* 留言内容安全（复用 checkMsg 云函数，msgSecCheck v2） */
+    if (note) {
+      wx.cloud.callFunction({ name: 'checkMsg', data: { content: note } }).then((r) => {
+        const res = (r && r.result) || {}
+        if (!res.ok) {
+          wx.showToast({ title: res.msg || '内容包含违规信息，请修改后发布', icon: 'none', duration: 3000 })
+          return
+        }
+        submit()
+      }).catch(() => submit()) /* 审核服务异常不阻塞发布（云函数侧已降级放行） */
     } else {
-      finish({ photos: [], videos: [] })
+      submit()
     }
   },
 

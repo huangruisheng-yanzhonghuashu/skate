@@ -111,6 +111,7 @@
               object-fit="cover"
               controls
             />
+            <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
             <image
               wx:else
               class="fphoto"

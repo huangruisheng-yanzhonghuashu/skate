@@ -41,12 +41,28 @@ function fmtAgo(iso) {
   return diffDay + '天前'
 }
 
-/* 打卡媒体合成（微博式混排展示）：图片在前视频在后 → [{type:'image'|'video', url}]
- * 存储仍是 photos（图片）/ videos（视频）两个数组，展示时合成混排 */
-function toMedia(photos, videos) {
+/* 打卡媒体合成（微博式混排展示）→ [{type:'image'|'video', url, local}]
+ * 存储仍是 photos（图片）/ videos（视频）两个数组；mediaOrder 为用户选择时的混排顺序
+ * 标记（'p0'/'v1' 引用两数组的下标），有则按其重建顺序，无（旧记录）退化为图片在前视频在后；
+ * local=true 表示还是本地临时路径（微博式异步上传中，云端他人暂不可见） */
+function toMedia(photos, videos, order) {
+  const p = photos || []
+  const v = videos || []
+  const item = function (type, url) {
+    return { type: type, url: url, local: url.indexOf('cloud://') !== 0 }
+  }
+  if (order && order.length) {
+    const list = []
+    order.forEach(function (t) {
+      const idx = parseInt(t.slice(1), 10)
+      if (t.charAt(0) === 'p' && p[idx]) list.push(item('image', p[idx]))
+      else if (t.charAt(0) === 'v' && v[idx]) list.push(item('video', v[idx]))
+    })
+    return list
+  }
   const m = []
-  ;(photos || []).forEach(function (u) { m.push({ type: 'image', url: u }) })
-  ;(videos || []).forEach(function (u) { m.push({ type: 'video', url: u }) })
+  p.forEach(function (u) { m.push(item('image', u)) })
+  v.forEach(function (u) { m.push(item('video', u)) })
   return m
 }
 

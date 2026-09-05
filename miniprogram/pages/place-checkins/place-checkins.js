@@ -55,7 +55,7 @@ Page({
     cloud.getPlaceCheckins(this._id, { skip: this._skip, limit: PAGE_SIZE }).then((rows) => {
       const mapped = rows.map((r) => ({
         ...r,
-        media: toMedia(r.photos, r.videos),
+        media: toMedia(r.photos, r.videos, r.mediaOrder),
         time: fmtAgo(r.at),
         commentCount: 0,
         commentsOpen: false,

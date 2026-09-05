@@ -97,6 +97,7 @@ function mapCheckin(d) {
     note: d.note || '',
     photos: d.photos || [],
     videos: d.videos || [],
+    mediaOrder: d.mediaOrder || [],
     at: d.at,
     skateYears: d.skateYears || 0,
     user: d.userName || '滑手',

@@ -255,6 +255,23 @@
   background: #000000;
 }
 
+/* 视频异步上传中角标（微博式：本机可见临时视频，云端他人待上传完成后可见） */
+.photo-cell {
+  position: relative;
+}
+
+.video-uploading {
+  position: absolute;
+  left: 10rpx;
+  bottom: 10rpx;
+  z-index: 2;
+  padding: 4rpx 14rpx;
+  border-radius: 999rpx;
+  background: rgba(0, 0, 0, 0.55);
+  color: #FFFFFF;
+  font-size: 18rpx;
+}
+
 .ftime {
   font-size: 22rpx;
   color: #6E6E76;

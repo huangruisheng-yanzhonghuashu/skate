@@ -59,7 +59,7 @@ Page({
           avatarText: r.avatarText,
           note: r.note,
           photos: r.photos,
-          media: toMedia(r.photos, r.videos),
+          media: toMedia(r.photos, r.videos, r.mediaOrder),
           timeText: fmtAgo(r.at),
           liked: store.isLiked(r.id),
           likeCount: this._counts[r.id] || 0,
