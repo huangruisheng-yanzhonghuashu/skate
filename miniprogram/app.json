@@ -13,6 +13,8 @@
     "pages/reports/reports",
     "pages/submit/submit",
     "pages/post-publish/post-publish",
+    "pages/my-posts/my-posts",
+    "pages/post-detail/post-detail",
     "pages/city-picker/city-picker"
   ],
   "window": {

@@ -1,0 +1,7 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "打卡详情",
+  "usingComponents": {
+    "media-viewer": "/components/media-viewer/media-viewer"
+  }
+}

@@ -1,0 +1,152 @@
+<!-- 自定义导航栏（media-viewer 预览需全屏覆盖） -->
+<view class="nav" style="padding-top: {{statusBarHeight}}px">
+  <view class="nav-row">
+    <view class="nav-back-btn" hover-class="nav-btn-hover" bindtap="goBack" aria-role="button" aria-label="返回">
+      <image class="nav-back-icon" src="{{icons.back}}" mode="aspectFit" />
+    </view>
+    <text class="nav-title">打卡详情</text>
+    <view class="nav-right"></view>
+  </view>
+</view>
+
+<view class="page" style="padding-top: {{statusBarHeight + 44}}px">
+  <block wx:if="{{loaded}}">
+    <!-- 地点卡：类型徽章 + 场地名（可点进详情页）+ 打卡时间 -->
+    <view class="place-card">
+      <view class="place-row" hover-class="place-row-hover" data-id="{{venueId}}" data-kind="{{kind}}" bindtap="goPlace">
+        <text class="place-kind {{kind === 'shop' ? 'place-kind-shop' : ''}}">{{kind === 'shop' ? '店铺' : '场地'}}</text>
+        <text class="place-name">{{venueName}}</text>
+        <image class="place-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+      <text class="place-time">{{timeText}}</text>
+    </view>
+
+    <!-- 留言 -->
+    <text wx:if="{{note}}" class="note">{{note}}</text>
+
+    <!-- 素材：图视频混排（1张大图 / 2张对半 / 3+三列），点击进 media-viewer 预览 -->
+    <view wx:if="{{media.length}}" class="photos photos-{{media.length >= 3 ? 'grid' : media.length}}">
+      <view wx:for="{{media}}" wx:key="url" class="photo-cell" bindtap="previewMedia" data-media="{{media}}" data-index="{{index}}">
+        <video
+          wx:if="{{item.type === 'video'}}"
+          class="photo-video"
+          src="{{item.url}}"
+          object-fit="cover"
+          controls="{{false}}"
+          show-center-play-btn="{{false}}"
+        />
+        <image
+          wx:else
+          class="photo-img"
+          src="{{item.url}}"
+          mode="aspectFill"
+          lazy-load
+        />
+        <view wx:if="{{item.type === 'video'}}" class="video-play"></view>
+        <view wx:if="{{item.local}}" class="video-uploading">上传中</view>
+      </view>
+    </view>
+    <view wx:if="{{!note && !media.length}}" class="bare">这条打卡没有留言和素材</view>
+
+    <!-- 点赞 / 评论 -->
+    <view class="actions">
+      <view class="action {{liked ? 'action-liked' : ''}}" hover-class="action-hover" bindtap="toggleLike" aria-role="button" aria-label="点赞">
+        <image class="action-icon" src="{{liked ? icons.heartOrange : icons.heartAsh}}" mode="aspectFit" />
+        <text>{{likeCount}}</text>
+      </view>
+      <view class="action" aria-role="text" aria-label="评论数">
+        <image class="action-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
+        <text>{{commentCount}}</text>
+      </view>
+    </view>
+
+    <!-- 评论区（查看全部 + 发表/删除） -->
+    <view class="comments">
+      <text class="comments-title">评论</text>
+      <comment-box
+        checkin-id="{{postId}}"
+        bind:countchange="onCommentCount"
+      />
+    </view>
+
+    <!-- 底部操作：编辑 / 删除 -->
+    <view class="ops">
+      <view class="op-btn op-btn-edit" hover-class="op-btn-hover" bindtap="openEdit">
+        <image class="op-btn-icon" src="{{icons.edit}}" mode="aspectFit" />
+        <text>编辑打卡</text>
+      </view>
+      <view class="op-btn op-btn-del" hover-class="op-btn-hover" bindtap="delPost">
+        <image class="op-btn-icon" src="{{icons.trash}}" mode="aspectFit" />
+        <text>删除打卡</text>
+      </view>
+    </view>
+  </block>
+</view>
+
+<!-- 编辑打卡弹窗（留言 + 媒体，地点不可改） -->
+<view wx:if="{{editOpen}}" class="mask anim-fade-in" bindtap="closeEdit" catchtouchmove="noop">
+  <view class="sheet anim-sheet-in" catchtap="noop">
+    <view class="sheet-head">
+      <text class="sheet-title">编辑打卡</text>
+      <view class="sheet-close" hover-class="nav-btn-hover" bindtap="closeEdit" aria-role="button" aria-label="关闭">
+        <image class="sheet-close-icon" src="{{icons.x}}" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="venue-chip">
+      <image class="venue-chip-icon" src="{{icons.pin}}" mode="aspectFit" />
+      <text class="venue-chip-text">{{venueName}}</text>
+    </view>
+
+    <view class="field">
+      <view class="note-head">
+        <text class="note-label">说点什么</text>
+        <text class="note-count">{{editNote.length}}/200</text>
+      </view>
+      <textarea
+        class="field-textarea"
+        value="{{editNote}}"
+        maxlength="200"
+        placeholder="说点什么... (选填)"
+        placeholder-class="ph"
+        bindinput="onNoteInput"
+      />
+    </view>
+
+    <view class="field">
+      <view class="photo-grid">
+        <view wx:for="{{editMedia}}" wx:key="url" class="photo-tile">
+          <video
+            wx:if="{{item.type === 'video'}}"
+            class="photo-tile-img photo-tile-video"
+            src="{{item.url}}"
+            object-fit="cover"
+            controls="{{false}}"
+            show-center-play-btn="{{false}}"
+          />
+          <image wx:else class="photo-tile-img" src="{{item.url}}" mode="aspectFill" />
+          <view class="photo-tile-del" data-index="{{index}}" catchtap="removeMedia">
+            <image class="photo-tile-del-icon" src="{{icons.x}}" mode="aspectFit" />
+          </view>
+        </view>
+        <view wx:if="{{editMedia.length < 9}}" class="photo-add" bindtap="chooseMedia">
+          <image class="photo-add-icon" src="{{icons.plus}}" mode="aspectFit" />
+          <text class="photo-add-text">添加图片/视频</text>
+          <text class="photo-add-sub">最多 9 个</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="sheet-btn {{saving ? 'sheet-btn-loading' : ''}}" bindtap="saveEdit">
+      <text>{{saving ? '保存中...' : '保存修改'}}</text>
+    </view>
+  </view>
+</view>
+
+<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播） -->
+<media-viewer
+  visible="{{viewerShow}}"
+  sources="{{viewerSources}}"
+  current="{{viewerCurrent}}"
+  bind:close="onViewerClose"
+/>

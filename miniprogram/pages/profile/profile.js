@@ -1,7 +1,6 @@
-/* 我的：签到统计 + 编辑资料 + 入口 */
+/* 我的：签到统计（快捷入口） + 编辑资料 + 打卡/报错/建议/推荐管理入口 */
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
-const { fmtRel } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
 const SKATE_YEARS = ['1年内', '1-3年', '3-5年', '5年以上']
@@ -15,10 +14,10 @@ Page({
     profileComplete: store.isProfileComplete(),
     city: '嘉兴',
     checkinCount: 0,
+    postCount: 0,
     reportCount: 0,
     feedbackCount: 0,
     submissionCount: 0,
-    recent: [],
     /* 编辑资料弹窗 */
     editOpen: false,
     saving: false,
@@ -28,16 +27,15 @@ Page({
     tagSel: {},
     icons: {
       chevron: ICON.chevronRightAsh,
-      flame: ICON.flameOrange,
       pin: ICON.pinOrangeSmall,
       file: ICON.fileOrange,
       settings: ICON.settingsOrange,
       admin: ICON.venueOrange,
       send: ICON.sendOrange,
       plus: ICON.plusOrange,
-      camera: ICON.cameraOrange,
-      close: ICON.xWhite,
+      edit: ICON.editOrange,
       camera: ICON.cameraWhite,
+      close: ICON.xWhite,
     },
   },
 
@@ -50,19 +48,11 @@ Page({
 
   refresh() {
     const s = store.calcStats()
-    /* 最近签到：只取"签到"记录（打卡在签到与打卡列表页看） */
-    const recent = store.getState().checkins
-      .filter(store.isCheckinRec)
-      .slice(0, 3)
-      .map((c) => ({
-        id: c.id,
-        venueId: c.venueId,
-        venueName: c.venueName,
-        timeText: fmtRel(c.at),
-      }))
+    /* 打卡条数：内容记录（type=post，或旧数据有留言/媒体） */
+    const postCount = store.getState().checkins.filter(store.isPostRec).length
     this.setData({
       checkinCount: s.total,
-      recent: recent,
+      postCount: postCount,
       city: store.getCity(),
       user: store.getUser(),
       profileComplete: store.isProfileComplete(),
@@ -174,14 +164,13 @@ Page({
   },
 
   /* ===== 菜单跳转 ===== */
-  goHome() { wx.switchTab({ url: '/pages/home/home' }) },
   goCheckins() { wx.switchTab({ url: '/pages/checkins/checkins' }) },
   goPostPublish() { wx.navigateTo({ url: '/pages/post-publish/post-publish' }) },
+  goMyPosts() { wx.navigateTo({ url: '/pages/my-posts/my-posts' }) },
   goReports() { wx.navigateTo({ url: '/pages/reports/reports' }) },
   goFeedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }) },
   goRecommend() { wx.navigateTo({ url: '/pages/submit/submit' }) },
   goAdmin() { wx.navigateTo({ url: '/pages/admin/admin' }) },
   goCityPicker() { wx.navigateTo({ url: '/pages/city-picker/city-picker' }) },
   goSettings() { wx.showToast({ title: '设置即将上线', icon: 'none' }) },
-  goVenue(e) { wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + e.currentTarget.dataset.id }) },
 })

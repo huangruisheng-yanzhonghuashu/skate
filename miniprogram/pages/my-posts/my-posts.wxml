@@ -1,0 +1,43 @@
+<!-- 自定义导航栏（media-viewer 预览需全屏覆盖） -->
+<view class="nav" style="padding-top: {{statusBarHeight}}px">
+  <view class="nav-row">
+    <view class="nav-back-btn" hover-class="nav-btn-hover" bindtap="goBack" aria-role="button" aria-label="返回">
+      <image class="nav-back-icon" src="{{icons.back}}" mode="aspectFit" />
+    </view>
+    <text class="nav-title">我的打卡</text>
+    <view class="nav-right"></view>
+  </view>
+</view>
+
+<view class="page" style="padding-top: {{statusBarHeight + 44}}px">
+  <!-- 打卡记录行（签到页「最近记录」同款行式） -->
+  <view wx:if="{{list.length}}" class="records">
+    <view
+      wx:for="{{list}}"
+      wx:key="id"
+      class="rec"
+      data-id="{{item.id}}"
+      bindlongpress="delPost"
+    >
+      <view
+        class="rec-main"
+        hover-class="rec-main-hover"
+        data-id="{{item.id}}"
+        bindtap="goDetail"
+      >
+        <text class="rec-date">{{item.dateText}}</text>
+        <text class="rec-name">{{item.venueName}}</text>
+        <text class="rec-kind {{item.kind === 'shop' ? 'rec-kind-shop' : ''}}">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+        <image class="rec-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
+    <view class="rec-hint">长按记录可删除</view>
+  </view>
+
+  <!-- 空态：引导去发打卡 -->
+  <view wx:elif="{{!loading}}" class="empty" bindtap="goPostPublish">
+    <image class="empty-icon" src="{{icons.camera}}" mode="aspectFit" />
+    <text class="empty-text">还没有打卡记录</text>
+    <text class="empty-cta">去发打卡</text>
+  </view>
+</view>

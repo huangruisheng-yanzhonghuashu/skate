@@ -113,29 +113,6 @@
     </view>
   </view>
 
-  <!-- 最近签到记录（设计稿：左对齐标题） -->
-  <view class="recent">
-    <text class="recent-title">最近签到</text>
-    <view
-      wx:for="{{recent}}"
-      wx:key="id"
-      class="recent-item"
-      hover-class="menu-hover"
-      data-id="{{item.venueId}}"
-      bindtap="goVenue"
-    >
-      <image class="recent-icon" src="{{icons.pin}}" mode="aspectFit" />
-      <text class="recent-name">{{item.venueName}}</text>
-      <text class="recent-time">{{item.timeText}}</text>
-    </view>
-    <!-- 空态：引导去首页签到 -->
-    <view wx:if="{{!recent.length}}" class="recent-empty" hover-class="stat-hover" bindtap="goHome">
-      <image class="recent-empty-icon" src="{{icons.pin}}" mode="aspectFit" />
-      <text class="recent-empty-text">还没有签到记录</text>
-      <text class="recent-empty-cta">去签到</text>
-    </view>
-  </view>
-
   <!-- 编辑资料弹窗 -->
   <view wx:if="{{editOpen}}" class="edit-mask" bindtap="closeEdit">
     <view class="edit-sheet" catchtap="noop">

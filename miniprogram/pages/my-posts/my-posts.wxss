@@ -1,0 +1,155 @@
+/* 我的打卡：本人打卡记录行式列表（点击进详情，长按删除），行式与签到页最近记录同款 */
+.page {
+  min-height: 100vh;
+  background: #111114;
+  padding: 24rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* 自定义导航栏（media-viewer 预览需全屏覆盖） */
+.nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 30;
+  background: #1A1A1E;
+}
+
+.nav-row {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+}
+
+.nav-back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  margin-left: -12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn-hover {
+  opacity: 0.7;
+}
+
+.nav-back-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.nav-title {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-right {
+  width: 52rpx;
+  flex-shrink: 0;
+}
+
+/* ===== 记录行（与签到页最近记录同款） ===== */
+.rec {
+  border-bottom: 1rpx solid #26262C;
+}
+
+.rec:last-of-type {
+  border-bottom: none;
+}
+
+.rec-main {
+  height: 104rpx;
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  border-radius: 12rpx;
+}
+
+.rec-main-hover {
+  background: #26262C;
+}
+
+.rec-date {
+  flex-shrink: 0;
+  font-size: 26rpx;
+  color: #8C8C94;
+}
+
+.rec-name {
+  flex: 1;
+  min-width: 0;
+  font-size: 28rpx;
+  color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 类型徽章：场地=青色调 / 店铺=橙色调 */
+.rec-kind {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  color: #00D4AA;
+  background: rgba(0, 212, 170, 0.12);
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  line-height: 1.2;
+}
+
+.rec-kind-shop {
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
+}
+
+.rec-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.rec-hint {
+  padding: 24rpx 0 0;
+  text-align: center;
+  font-size: 22rpx;
+  color: #6E6E76;
+}
+
+/* ===== 空态 ===== */
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  background: #1E1E23;
+  border: 2rpx dashed #33333A;
+  border-radius: 24rpx;
+  padding: 80rpx 32rpx;
+  margin-top: 40rpx;
+}
+
+.empty-icon {
+  width: 56rpx;
+  height: 56rpx;
+}
+
+.empty-text {
+  font-size: 26rpx;
+  color: #8C8C94;
+}
+
+.empty-cta {
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #FF8A6E;
+}
