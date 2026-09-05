@@ -1,0 +1,128 @@
+<view class="page">
+  <!-- 地点 -->
+  <view class="field">
+    <text class="label">在哪里</text>
+    <view wx:if="{{place}}" class="place-chip" hover-class="hover" bindtap="openPicker" aria-role="button" aria-label="更换地点">
+      <image class="place-chip-icon" src="{{icons.pin}}" mode="aspectFit" />
+      <text class="place-chip-name">{{place.name}}</text>
+      <text class="place-chip-kind">{{place.kind === 'shop' ? '店铺' : '场地'}}</text>
+    </view>
+    <view wx:else class="place-pick" hover-class="hover" bindtap="openPicker" aria-role="button" aria-label="选择地点">
+      <image class="place-pick-icon" src="{{icons.pin}}" mode="aspectFit" />
+      <text>选择场地或店铺</text>
+      <text class="place-pick-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- 留言 -->
+  <view class="field">
+    <view class="note-head">
+      <text class="label">说点什么</text>
+      <text class="note-count">{{note.length}}/200</text>
+    </view>
+    <textarea
+      class="textarea"
+      value="{{note}}"
+      maxlength="200"
+      placeholder="分享今天的滑板时刻... "
+      placeholder-class="ph"
+      bindinput="onNoteInput"
+    />
+  </view>
+
+  <!-- 媒体 -->
+  <view class="field">
+    <view class="photo-grid">
+      <view wx:for="{{media}}" wx:key="url" class="photo-tile">
+        <video
+          wx:if="{{item.type === 'video'}}"
+          class="photo-tile-img photo-tile-video"
+          src="{{item.url}}"
+          object-fit="cover"
+          controls="{{false}}"
+          show-center-play-btn="{{false}}"
+        />
+        <image wx:else class="photo-tile-img" src="{{item.url}}" mode="aspectFill" />
+        <view class="photo-tile-del" data-index="{{index}}" catchtap="removeMedia">
+          <image class="photo-tile-del-icon" src="{{icons.x}}" mode="aspectFit" />
+        </view>
+      </view>
+      <view wx:if="{{media.length < 9}}" class="photo-add" bindtap="chooseMedia">
+        <image class="photo-add-icon" src="{{icons.imagePlus}}" mode="aspectFit" />
+        <text class="photo-add-text">添加图片/视频</text>
+        <text class="photo-add-sub">最多 9 个</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 发布 -->
+  <view class="publish-btn {{submitting ? 'publish-btn-loading' : ''}}" bindtap="publish">
+    <image class="publish-btn-icon" src="{{icons.check}}" mode="aspectFit" />
+    <text>{{submitting ? '发布中...' : '发布打卡'}}</text>
+  </view>
+  <view class="publish-tip">打卡是内容分享，不用在现场；到了场地记得点详情页「签到」哦</view>
+</view>
+
+<!-- 地点选择弹层 -->
+<view wx:if="{{pickerOpen}}" class="mask" bindtap="closePicker" catchtouchmove="noop">
+  <view class="sheet" catchtap="noop">
+    <view class="sheet-head">
+      <text class="sheet-title">选择地点</text>
+      <view class="sheet-close" hover-class="hover" bindtap="closePicker" aria-role="button" aria-label="关闭">
+        <image class="sheet-close-icon" src="{{icons.close}}" mode="aspectFit" />
+      </view>
+    </view>
+
+    <view class="search-row">
+      <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
+      <input
+        class="search-input"
+        value="{{query}}"
+        placeholder="搜索场地/店铺名称"
+        placeholder-class="ph"
+        confirm-type="search"
+        bindinput="onQuery"
+      />
+    </view>
+
+    <scroll-view scroll-y class="picker-list">
+      <block wx:if="{{!query && recents.length}}">
+        <text class="group-title">最近去过</text>
+        <view
+          wx:for="{{recents}}"
+          wx:key="id"
+          class="place-row"
+          hover-class="hover"
+          data-id="{{item.id}}"
+          data-name="{{item.name}}"
+          data-kind="{{item.kind}}"
+          bindtap="pickPlace"
+        >
+          <image class="place-row-icon" src="{{icons.pin}}" mode="aspectFit" />
+          <text class="place-row-name">{{item.name}}</text>
+          <text class="place-row-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+        </view>
+      </block>
+      <text class="group-title">{{query ? '搜索结果' : '全部地点'}}</text>
+      <block wx:if="{{results.length}}">
+        <view
+          wx:for="{{results}}"
+          wx:key="id"
+          class="place-row"
+          hover-class="hover"
+          data-id="{{item.id}}"
+          data-name="{{item.name}}"
+          data-kind="{{item.kind}}"
+          bindtap="pickPlace"
+        >
+          <image class="place-row-icon" src="{{icons.pin}}" mode="aspectFit" />
+          <text class="place-row-name">{{item.name}}</text>
+          <text class="place-row-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+        </view>
+      </block>
+      <view wx:else class="picker-empty">
+        <text>{{query ? '没有找到相关地点' : '当前城市暂无地点'}}</text>
+      </view>
+    </scroll-view>
+  </view>
+</view>

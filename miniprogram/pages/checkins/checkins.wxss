@@ -206,6 +206,22 @@
   white-space: nowrap;
 }
 
+/* 记录类型徽章：签到=灰调 / 打卡=橙调（名称旁小徽章，与场地/店铺徽章并列） */
+.rec-type {
+  flex-shrink: 0;
+  font-size: 20rpx;
+  color: #A6A6AD;
+  background: rgba(166, 166, 173, 0.14);
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  line-height: 1.2;
+}
+
+.rec-type-post {
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
+}
+
 /* 类型徽章：场地=青色调 / 店铺=橙色调（设计稿：名称旁小徽章） */
 .rec-kind {
   flex-shrink: 0;
@@ -259,7 +275,7 @@
   color: #6E6E76;
 }
 
-/* ===== 打卡排行榜 ===== */
+/* ===== 签到排行榜 ===== */
 .board {
   background: #1E1E23;
   border-radius: 20rpx;

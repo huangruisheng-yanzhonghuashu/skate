@@ -52,7 +52,7 @@ Page({
     moreCount: 0,
     feed: [],
     checked: false,
-    /* 签到弹窗 */
+    /* 打卡弹窗 */
     checkinOpen: false,
     note: '',
     checkinMedia: [],
@@ -73,6 +73,7 @@ Page({
       send: ICON.sendOrange,
       check: ICON.checkWhite,
       checkWhite: ICON.checkWhite,
+      camera: ICON.cameraOrange,
       flag: ICON.flagAsh,
       checkCircle: ICON.checkCircleOrange,
       edit: ICON.editAsh,
@@ -117,7 +118,7 @@ Page({
       this.computeDistance()
       if (this._autoCheckin) {
         this._autoCheckin = false
-        if (!store.checkedToday(venue.id)) this.openCheckin()
+        if (!store.checkedToday(venue.id)) this.doCheckin()
       }
     })
   },
@@ -299,6 +300,7 @@ Page({
         feed: merged.slice(0, 3).map((f) => ({
           id: f.id,
           openid: f.openid || '',
+          own: store.hasCheckin(f.id),
           user: f.user,
           avatarFile: f.avatarFile,
           avatarText: f.avatarText,
@@ -344,8 +346,49 @@ Page({
     })
   },
 
-  /* ===== 签到弹窗（新增 / 补充今日打卡复用） ===== */
-  openCheckin() {
+  /* ===== 一键签到（硬校验：定位在场地 PRESENCE_RADIUS_M 内才允许；无内容，计入统计/连签/排行） ===== */
+  doCheckin() {
+    const v = this.data.venue
+    if (!v || this._checkinBusy) return
+    this._checkinBusy = true
+    wx.getLocation({
+      type: 'gcj02',
+      success: (res) => {
+        this._checkinBusy = false
+        const dist = cloud.distanceM(res.latitude, res.longitude, v.latitude, v.longitude)
+        if (dist <= PRESENCE_RADIUS_M) {
+          store.checkIn(v.id, v.name, 'venue', Math.round(dist))
+          this.showCelebrate()
+          this.refresh()
+          return
+        }
+        wx.showModal({
+          title: '无法签到',
+          content: '你距「' + v.name + '」约 ' + (dist >= 1000 ? (dist / 1000).toFixed(1) + 'km' : Math.round(dist) + 'm') + '，需在现场才能签到。也可以先发一条打卡分享内容。',
+          confirmText: '导航前往',
+          cancelText: '我知道了',
+          success: (r) => { if (r.confirm) this.openNav() },
+        })
+      },
+      fail: () => {
+        this._checkinBusy = false
+        wx.showModal({
+          title: '需要定位权限',
+          content: '签到需开启定位以确认你在现场。也可以直接发打卡分享内容。',
+          confirmText: '去开启',
+          success: (r) => {
+            if (!r.confirm) return
+            wx.openSetting({
+              success: (s) => { if (s.authSetting['scope.userLocation']) this.doCheckin() },
+            })
+          },
+        })
+      },
+    })
+  },
+
+  /* ===== 打卡弹窗（发布 / 编辑复用；打卡带留言/媒体，可发多条，无需在现场） ===== */
+  openPost() {
     this._editId = ''
     this.setData({
       checkinOpen: true,
@@ -356,13 +399,8 @@ Page({
     })
   },
 
-  /* 补充今日打卡：预填当日记录的留言/媒体（fileID 直接回显） */
-  openEditCheckin() {
-    const rec = store.getTodayCheckin(this.data.venue.id)
-    if (!rec) {
-      this.refresh()
-      return
-    }
+  /* 编辑打卡：预填记录的留言/媒体（fileID 直接回显） */
+  openEditPost(rec) {
     this._editId = rec.id
     this.setData({
       checkinOpen: true,
@@ -370,6 +408,35 @@ Page({
       note: rec.note || '',
       checkinMedia: toMedia(rec.photos, rec.videos, rec.mediaOrder),
       checkinSubmitting: false,
+    })
+  },
+
+  /* 长按自己的打卡卡片：编辑 / 删除（他人卡片无响应） */
+  onPostLongPress(e) {
+    const id = e.currentTarget.dataset.id
+    if (!store.hasCheckin(id)) return
+    const rec = store.getState().checkins.find((c) => c.id === id) || null
+    wx.showActionSheet({
+      itemList: ['编辑打卡', '删除打卡'],
+      success: (r) => {
+        if (r.tapIndex === 0) {
+          if (rec) this.openEditPost(rec)
+        } else if (r.tapIndex === 1) {
+          wx.showModal({
+            title: '删除打卡',
+            content: '删除这条打卡？删除后不可恢复',
+            confirmColor: '#E5484D',
+            success: (m) => {
+              if (!m.confirm) return
+              store.deleteCheckin(id).then(() => {
+                wx.showToast({ title: '已删除', icon: 'success' })
+                this.loadFeed()
+              })
+            },
+          })
+        }
+      },
+      fail: () => { /* 用户取消 */ },
     })
   },
 
@@ -425,7 +492,7 @@ Page({
     return { photos: photos, videos: videos, order: order }
   },
 
-  confirmCheckin() {
+  confirmPost() {
     if (this.data.checkinSubmitting) return
     const v = this.data.venue
     const note = this.data.note.trim()
@@ -433,21 +500,19 @@ Page({
     const submit = () => {
       const m = this.splitCheckinMedia(media)
       if (this._editId) {
-        /* 补充打卡：更新当日记录（不新增，统计口径不变） */
-        store.updateCheckin(this._editId, note, m.photos, m.videos, m.order).then(() => {
+        /* 编辑打卡：更新单条记录 */
+        store.updatePost(this._editId, note, m.photos, m.videos, m.order).then(() => {
           this._editId = ''
           this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
           wx.showToast({ title: '打卡已更新', icon: 'success' })
-          this.refresh()
           this.loadFeed()
         })
         return
       }
-      /* 新签到：本地立即生效，媒体由 store 后台队列异步上云（零等待，失败自动排队续传） */
-      store.addCheckin(v.id, v.name, note, m.photos, 'venue', m.videos, m.order)
+      /* 发布打卡：本地立即生效，媒体由 store 后台队列异步上云（零等待，失败自动排队续传） */
+      store.addPost(v.id, v.name, note, m.photos, 'venue', m.videos, m.order)
       this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
-      this.showCelebrate()
-      this.refresh()
+      wx.showToast({ title: '打卡已发布', icon: 'success' })
       this.loadFeed()
     }
     /* 留言内容安全（复用 checkMsg 云函数，msgSecCheck v2） */
@@ -477,7 +542,7 @@ Page({
     const streak = s.streak
     const next = STREAK_MILESTONES.find((m) => m > streak)
     const sub = next
-      ? '再打 ' + (next - streak) + ' 天解锁「' + next + ' 日坚持」徽章'
+      ? '再签 ' + (next - streak) + ' 天解锁「' + next + ' 日坚持」徽章'
       : '全部徽章已解锁，滑手榜样！'
     this.setData({
       celebrate: true,

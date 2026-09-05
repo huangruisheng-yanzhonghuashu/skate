@@ -35,6 +35,7 @@ Page({
       admin: ICON.venueOrange,
       send: ICON.sendOrange,
       plus: ICON.plusOrange,
+      camera: ICON.cameraOrange,
       close: ICON.xWhite,
       camera: ICON.cameraWhite,
     },
@@ -49,12 +50,16 @@ Page({
 
   refresh() {
     const s = store.calcStats()
-    const recent = store.getState().checkins.slice(0, 3).map((c) => ({
-      id: c.id,
-      venueId: c.venueId,
-      venueName: c.venueName,
-      timeText: fmtRel(c.at),
-    }))
+    /* 最近签到：只取"签到"记录（打卡在签到与打卡列表页看） */
+    const recent = store.getState().checkins
+      .filter(store.isCheckinRec)
+      .slice(0, 3)
+      .map((c) => ({
+        id: c.id,
+        venueId: c.venueId,
+        venueName: c.venueName,
+        timeText: fmtRel(c.at),
+      }))
     this.setData({
       checkinCount: s.total,
       recent: recent,
@@ -171,6 +176,7 @@ Page({
   /* ===== 菜单跳转 ===== */
   goHome() { wx.switchTab({ url: '/pages/home/home' }) },
   goCheckins() { wx.switchTab({ url: '/pages/checkins/checkins' }) },
+  goPostPublish() { wx.navigateTo({ url: '/pages/post-publish/post-publish' }) },
   goReports() { wx.navigateTo({ url: '/pages/reports/reports' }) },
   goFeedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }) },
   goRecommend() { wx.navigateTo({ url: '/pages/submit/submit' }) },

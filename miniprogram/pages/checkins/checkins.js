@@ -1,4 +1,5 @@
-/* 我的签到：统计 + 日历（可切月） + 排行榜 + 打卡记录（长按删除） */
+/* 我的签到：统计 + 日历（可切月） + 签到排行榜 + 签到与打卡记录（长按删除）
+ * 口径：统计/日历只数"签到"（现场记录），打卡（内容记录）不参与 */
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { fmtRel } = require('../../utils/format.js')
@@ -39,7 +40,7 @@ Page({
     if (!this.data.boardLoaded) this.loadBoard(this.data.boardExpanded)
   },
 
-  /* 云端排行榜：聚合所有人场地签到数（店铺打卡不计入），需 checkins"所有用户可读"权限 */
+  /* 云端排行榜：聚合所有人场地"签到"数（店铺与打卡记录不计入），需 checkins"所有用户可读"权限 */
   loadBoard(expanded) {
     cloud.getLeaderboard(expanded ? BOARD_LIMIT : 5).then((board) => {
       this.setData({ board, boardLoaded: true })
@@ -96,10 +97,12 @@ Page({
     const viewYear = this._viewYear
     const viewMonth = this._viewMonth
 
-    /* 所看月份的签到日集合（本地记录口径，支持回看历史月份） */
+    /* 所看月份的签到日集合（只算"签到"记录；本地记录口径，支持回看历史月份） */
+    const state = store.getState()
     const checkedSet = new Set(
-      store.getState().checkins
+      state.checkins
         .filter((c) => {
+          if (!store.isCheckinRec(c)) return false
           const d = new Date(c.at)
           return d.getFullYear() === viewYear && d.getMonth() === viewMonth
         })
@@ -122,12 +125,13 @@ Page({
     }
     while (cells.length % 7 !== 0) cells.push({ day: 0 })
 
-    /* 打卡记录（最近 30 条）：地点 + 类型 + 时间 + 留言 + 首图 */
-    const records = store.getState().checkins.slice(0, 30).map((c) => ({
+    /* 签到与打卡记录（最近 30 条）：地点 + 类型 + 时间 + 留言 + 首图 */
+    const records = state.checkins.slice(0, 30).map((c) => ({
       id: c.id,
       venueId: c.venueId,
       venueName: c.venueName,
       kind: c.kind || 'venue',
+      typeLabel: store.isPostRec(c) ? '打卡' : '签到',
       timeText: fmtRel(c.at),
       note: c.note || '',
       photo: (c.photos && c.photos[0]) || '',
@@ -152,13 +156,13 @@ Page({
     }
   },
 
-  /* 打卡记录：长按删除（二次确认，本地+云端；替代常驻删除按钮防误触） */
+  /* 记录长按删除（二次确认，本地+云端；替代常驻删除按钮防误触） */
   delRecord(e) {
     const id = e.currentTarget.dataset.id
     const rec = this.data.records.find((r) => r.id === id)
     wx.showModal({
-      title: '删除打卡',
-      content: '删除「' + (rec ? rec.venueName : '该打卡') + '」的这条打卡记录？',
+      title: '删除记录',
+      content: '删除「' + (rec ? rec.venueName : '该记录') + '」的这条' + (rec && rec.typeLabel === '打卡' ? '打卡' : '签到') + '记录？',
       confirmColor: '#E5484D',
       success: (r) => {
         if (!r.confirm) return

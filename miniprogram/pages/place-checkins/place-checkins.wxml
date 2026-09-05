@@ -1,6 +1,6 @@
 <view class="page">
   <view wx:if="{{empty && !loading}}" class="empty">
-    <text class="empty-text">还没有打卡记录，去抢首条打卡吧</text>
+    <text class="empty-text">还没有打卡，去场地或店铺主页发第一条</text>
     <view class="empty-btn" bindtap="goPlace">去打卡</view>
   </view>
 

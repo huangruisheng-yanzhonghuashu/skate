@@ -17,6 +17,7 @@ Page({
       heartAsh: ICON.heartAsh,
       heartOrange: ICON.heartOrange,
       commentAsh: ICON.commentAsh,
+      camera: ICON.cameraOrange,
     },
   },
 
@@ -176,5 +177,10 @@ Page({
 
   goHome() {
     wx.switchTab({ url: '/pages/home/home' })
+  },
+
+  /* 发打卡：无需在场，进发布页选地点后发内容 */
+  goPostPublish() {
+    wx.navigateTo({ url: '/pages/post-publish/post-publish' })
   },
 })

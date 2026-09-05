@@ -1,6 +1,7 @@
 /* 滑手主页：他人视角的公开档案（头部资料 + 数据概览 + 常去场地 + 公开动态流）
  * 头部信息：跳转携带的种子信息先渲染，他人资料（user_profiles）拉到后覆盖；
- * 动态口径与发现页一致：只展示"内容打卡"（有留言或有照片/视频），纯签到不对外 */
+ * 动态口径与发现页一致：只展示"打卡"（有留言或照片/视频的内容记录），纯签到不对外；
+ * 累计签到数与常去场地只按"签到"记录统计（getUserStats/getUserFrequentVenues） */
 const cloud = require('../../utils/cloud.js')
 const store = require('../../utils/store.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')

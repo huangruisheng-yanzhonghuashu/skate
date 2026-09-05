@@ -12,6 +12,7 @@
     "pages/feedback/feedback",
     "pages/reports/reports",
     "pages/submit/submit",
+    "pages/post-publish/post-publish",
     "pages/city-picker/city-picker"
   ],
   "window": {

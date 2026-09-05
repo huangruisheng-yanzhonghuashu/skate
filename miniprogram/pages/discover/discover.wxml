@@ -1,23 +1,29 @@
 <view class="page">
-  <!-- 头部：大标题 + 右侧最新/热门切换（设计稿同款） -->
+  <!-- 头部：大标题 + 右侧发打卡 + 最新/热门切换（设计稿同款） -->
   <view class="dis-header">
     <text class="dis-title">发现</text>
-    <view class="dis-tabs">
-      <view
-        class="dis-tab {{tab === 'latest' ? 'dis-tab-active' : ''}}"
-        data-tab="latest"
-        bindtap="switchTab"
-      >
-        <text>最新</text>
-        <view wx:if="{{tab === 'latest'}}" class="dis-tab-line"></view>
+    <view class="dis-right">
+      <view class="dis-post" hover-class="dis-post-hover" bindtap="goPostPublish" aria-role="button" aria-label="发打卡">
+        <image class="dis-post-icon" src="{{icons.camera}}" mode="aspectFit" />
+        <text>发打卡</text>
       </view>
-      <view
-        class="dis-tab {{tab === 'hot' ? 'dis-tab-active' : ''}}"
-        data-tab="hot"
-        bindtap="switchTab"
-      >
-        <text>热门</text>
-        <view wx:if="{{tab === 'hot'}}" class="dis-tab-line"></view>
+      <view class="dis-tabs">
+        <view
+          class="dis-tab {{tab === 'latest' ? 'dis-tab-active' : ''}}"
+          data-tab="latest"
+          bindtap="switchTab"
+        >
+          <text>最新</text>
+          <view wx:if="{{tab === 'latest'}}" class="dis-tab-line"></view>
+        </view>
+        <view
+          class="dis-tab {{tab === 'hot' ? 'dis-tab-active' : ''}}"
+          data-tab="hot"
+          bindtap="switchTab"
+        >
+          <text>热门</text>
+          <view wx:if="{{tab === 'hot'}}" class="dis-tab-line"></view>
+        </view>
       </view>
     </view>
   </view>

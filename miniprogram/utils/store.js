@@ -87,7 +87,8 @@ function syncFromCloud() {
     })
 }
 
-/* 本地 → 云端一次性迁移（仅签到与点赞；旧本地记录补 photos/kind 默认值） */
+/* 本地 → 云端一次性迁移（仅签到/打卡与点赞；旧本地记录补 photos/kind/type 默认值，
+ * type 按内容懒兼容判定：有留言/媒体为 post，否则 checkin） */
 function migrateLocal() {
   const docs = state.checkins.map(function (c) {
     return {
@@ -96,6 +97,7 @@ function migrateLocal() {
       note: c.note || '',
       photos: c.photos || [],
       kind: c.kind || 'venue',
+      type: recHasContent(c) ? 'post' : 'checkin',
       at: c.at,
       userName: state.user.nickname || '滑手',
       avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
@@ -115,6 +117,7 @@ function migrateLocal() {
         venueId: c.venueId,
         venueName: c.venueName,
         note: c.note || '',
+        type: recHasContent(c) ? 'post' : 'checkin',
         at: c.at,
         userName: state.user.nickname || '滑手',
         avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
@@ -236,20 +239,34 @@ function saveProfile(profile) {
   })
 }
 
-/* 今日是否已在某场地签到（不传 venueId 则任意场地） */
+/* ===== 签到/打卡记录判别（懒兼容旧数据：无 type 字段按"是否有留言/媒体"判定） ===== */
+function recHasContent(c) {
+  return !!((c.note || '').trim() || (c.photos || []).length || (c.videos || []).length)
+}
+/* 签到：type=checkin，或旧数据无 type 且无内容 */
+function isCheckinRec(c) {
+  return c.type === 'checkin' || (!c.type && !recHasContent(c))
+}
+/* 打卡：type=post，或旧数据无 type 且有留言/媒体 */
+function isPostRec(c) {
+  return c.type === 'post' || (!c.type && recHasContent(c))
+}
+
+/* 今日是否已在某地点签到（只算"签到"记录；不传 venueId 则任意地点） */
 function checkedToday(venueId) {
   init()
   const today = dayKey(new Date())
   return state.checkins.some(function (c) {
-    return dayKey(c.at) === today && (!venueId || c.venueId === venueId)
+    return isCheckinRec(c) && dayKey(c.at) === today && (!venueId || c.venueId === venueId)
   })
 }
 
-/* 统计：总数 / 连续天数 / 本周天数 / 本月签到日集合 */
+/* 统计（只数"签到"记录，打卡不参与）：总数 / 连续天数 / 本周天数 / 本月签到日集合 */
 function calcStats() {
   init()
+  const checkins = state.checkins.filter(isCheckinRec)
   const now = new Date()
-  const keys = new Set(state.checkins.map(function (c) { return dayKey(c.at) }))
+  const keys = new Set(checkins.map(function (c) { return dayKey(c.at) }))
   const shiftKey = function (delta) {
     const d = new Date(now)
     d.setDate(d.getDate() + delta)
@@ -265,24 +282,74 @@ function calcStats() {
   monday.setDate(now.getDate() - weekday)
   monday.setHours(0, 0, 0, 0)
   const weekDays = new Set(
-    state.checkins.filter(function (c) { return new Date(c.at) >= monday })
+    checkins.filter(function (c) { return new Date(c.at) >= monday })
       .map(function (c) { return dayKey(c.at) })
   ).size
 
   const monthDays = new Set(
-    state.checkins.filter(function (c) {
+    checkins.filter(function (c) {
       const d = new Date(c.at)
       return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()
     }).map(function (c) { return new Date(c.at).getDate() })
   )
 
-  return { total: state.checkins.length, streak: streak, weekDays: weekDays, monthDays: monthDays }
+  return { total: checkins.length, streak: streak, weekDays: weekDays, monthDays: monthDays }
 }
 
-/* 签到（photos: 图片路径数组；videos: 视频路径数组；均可为临时路径或 fileID）
+/* 签到：现场一键记录（无留言/媒体，type=checkin；需调用方先完成定位在场校验）
+ * distance 为签到时距场地米数（冗余备查）。本地立即生效；云端写入失败进重试队列 */
+function checkIn(venueId, venueName, kind, distance) {
+  init()
+  const at = new Date().toISOString()
+  const localId = 'c-' + Date.now()
+  state.checkins.unshift({
+    id: localId,
+    venueId: venueId,
+    venueName: venueName,
+    note: '',
+    photos: [],
+    videos: [],
+    mediaOrder: [],
+    kind: kind || 'venue',
+    at: at,
+    type: 'checkin',
+    distance: distance || 0,
+    skateYears: state.user.skateYears || 0,
+  })
+  persist()
+  notify()
+  const doc = {
+    venueId: venueId,
+    venueName: venueName,
+    note: '',
+    photos: [],
+    videos: [],
+    mediaOrder: [],
+    kind: kind || 'venue',
+    at: at,
+    type: 'checkin',
+    distance: distance || 0,
+    userName: state.user.nickname || '滑手',
+    avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
+    skateYears: state.user.skateYears || 0,
+  }
+  cloud.addCheckinDoc(doc).then(function (r) {
+    const rec = state.checkins.find(function (c) { return c.id === localId })
+    if (r && r._id && rec) {
+      rec.id = r._id
+      persist()
+    }
+  }).catch(function (e) {
+    pending.checkins.push(doc)
+    persistPending()
+    console.warn('[store] 签到上云失败，已排队重试', (e && e.errCode) || (e && e.message))
+  })
+}
+
+/* 发布打卡：带留言/媒体的内容记录（type=post；同一地点可发多条，无需在现场）
  * 微博式发布：本地立即生效（临时媒体本机可播，带"上传中"角标），云端 doc 只带已上传的
- * fileID 写入，临时媒体由后台队列静默压缩/上传，完成后回填本地 + 更新云端 doc，用户零等待 */
-function addCheckin(venueId, venueName, note, photos, kind, videos, order) {
+ * fileID 写入，临时媒体由后台队列静默上传，完成后回填本地 + 更新云端 doc，用户零等待 */
+function addPost(venueId, venueName, note, photos, kind, videos, order) {
   init()
   const at = new Date().toISOString()
   const localId = 'c-' + Date.now()
@@ -303,6 +370,7 @@ function addCheckin(venueId, venueName, note, photos, kind, videos, order) {
     mediaOrder: order || [],
     kind: kind || 'venue',
     at: at,
+    type: 'post',
     skateYears: state.user.skateYears || 0,
   })
   persist()
@@ -316,6 +384,7 @@ function addCheckin(venueId, venueName, note, photos, kind, videos, order) {
     mediaOrder: order || [],
     kind: kind || 'venue',
     at: at,
+    type: 'post',
     userName: state.user.nickname || '滑手',
     avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
     skateYears: state.user.skateYears || 0,
@@ -332,7 +401,7 @@ function addCheckin(venueId, venueName, note, photos, kind, videos, order) {
     pending.checkins.push(doc)
     if (tempPhotos.length || tempVideos.length) enqueueMediaUpload(at, venueId, tempPhotos, tempVideos)
     persistPending()
-    console.warn('[store] 签到上云失败，已排队重试', (e && e.errCode) || (e && e.message))
+    console.warn('[store] 打卡上云失败，已排队重试', (e && e.errCode) || (e && e.message))
   })
 }
 
@@ -403,26 +472,32 @@ function deleteCheckin(id) {
   })
 }
 
-/* 今天在某地点的打卡记录（供"补充留言/照片"预填），无则返回 null */
+/* 今天在某地点的签到记录（签到态展示用），无则返回 null */
 function getTodayCheckin(placeId) {
   init()
   const today = dayKey(new Date())
   return state.checkins.find(function (c) {
-    return c.venueId === placeId && dayKey(c.at) === today
+    return isCheckinRec(c) && c.venueId === placeId && dayKey(c.at) === today
   }) || null
 }
 
-/* 某地点的本人打卡（本地兜底）：输出结构与 cloud 的 mapCheckin 对齐。
+/* 本人是否有某条记录（打卡动态里判断"自己的"卡片，供长按编辑/删除） */
+function hasCheckin(id) {
+  init()
+  return state.checkins.some(function (c) { return c.id === id })
+}
+
+/* 某地点的本人记录（本地兜底）：输出结构与 cloud 的 mapCheckin 对齐。
  * 详情页打卡动态用：云读取失败/云写入延迟（含重试队列中）时，本人打卡仍可见 */
-function getLocalPlaceCheckins(placeId, noteOnly) {
+function getLocalPlaceCheckins(placeId, postsOnly) {
   init()
   const nickname = state.user.nickname || '滑手'
   const avatar = state.user.avatarFileID || ''
   return state.checkins
     .filter(function (c) {
       if (c.venueId !== placeId) return false
-      /* noteOnly：有留言/照片/视频（与 cloud.getPlaceCheckins 口径一致） */
-      if (noteOnly && !(c.note || '').trim() && !(c.photos || []).length && !(c.videos || []).length) return false
+      /* postsOnly：只要"打卡"记录（与 cloud.getPlaceCheckins 口径一致） */
+      if (postsOnly && !isPostRec(c)) return false
       return true
     })
     .map(function (c) {
@@ -444,9 +519,9 @@ function getLocalPlaceCheckins(placeId, noteOnly) {
     })
 }
 
-/* 补充打卡：更新当日已有记录的留言/照片（不新增记录，统计口径不变）
+/* 编辑打卡：更新单条打卡记录的留言/媒体（不限当日；多条打卡各自独立编辑）
  * 本地立即生效；已同步记录（云端 _id）异步 update，未同步记录（c- 开头）同步更新重试队列 */
-function updateCheckin(id, note, photos, videos, order) {
+function updatePost(id, note, photos, videos, order) {
   init()
   const rec = state.checkins.find(function (c) { return c.id === id })
   if (!rec) return Promise.resolve()
@@ -454,6 +529,8 @@ function updateCheckin(id, note, photos, videos, order) {
   rec.photos = photos || []
   rec.videos = videos || []
   rec.mediaOrder = order || []
+  /* 仅非签到记录标记为 post（编辑入口只出现在打卡卡片上，此处为防御性兜底） */
+  if (!isCheckinRec(rec)) rec.type = 'post'
   /* 旧记录无滑龄快照：补充打卡时顺手回填当前资料（已填过则不覆盖，保持快照语义） */
   if (!rec.skateYears) rec.skateYears = state.user.skateYears || 0
   persist()
@@ -544,8 +621,12 @@ module.exports = {
   saveProfile: saveProfile,
   checkedToday: checkedToday,
   calcStats: calcStats,
-  addCheckin: addCheckin,
-  updateCheckin: updateCheckin,
+  checkIn: checkIn,
+  addPost: addPost,
+  updatePost: updatePost,
+  hasCheckin: hasCheckin,
+  isCheckinRec: isCheckinRec,
+  isPostRec: isPostRec,
   getTodayCheckin: getTodayCheckin,
   getLocalPlaceCheckins: getLocalPlaceCheckins,
   deleteCheckin: deleteCheckin,

@@ -85,13 +85,16 @@ function getFeeds() {
   return _feedsPromise
 }
 
-/* ===== 签到（用户作用域：默认权限下自动只读写本人数据） ===== */
-/* 单条签到记录 → 展示结构（avatar 兼容 fileID 与文字头像两种存储） */
+/* ===== 签到与打卡（用户作用域：默认权限下自动只读写本人数据） =====
+ * type='checkin' 签到（现场定位一键记录，无内容） / type='post' 打卡（带留言/媒体的内容记录，可多条）
+ * 旧数据无 type 字段：读侧按"是否有留言/媒体"懒兼容判定 */
+/* 单条记录 → 展示结构（avatar 兼容 fileID 与文字头像两种存储） */
 function mapCheckin(d) {
   const avatar = d.avatar || ''
   return {
     id: d._id,
     openid: d._openid || '',
+    type: d.type || '',
     kind: d.kind || 'venue',
     venueId: d.venueId,
     venueName: d.venueName,
@@ -134,19 +137,18 @@ function _updateCheckinDoc(id, patch) {
   return db().collection('checkins').doc(id).update({ data: patch })
 }
 
-/* 某地点（场地/店铺）的打卡流（所有人，按时间倒序）
- * opts: { noteOnly: 只取"有内容的"（有留言或有照片，打卡动态区用）, skip: 分页偏移, limit: 条数 }
+/* 某地点（场地/店铺）的打卡流（所有人，按时间倒序）——只含"打卡"：
+ * type=post，或旧数据（无 type）有留言/媒体的记录；纯签到不出现在打卡流
  * 需 checkins"所有用户可读"权限；无权限时仅返回自己的，行为仍正确 */
 function getPlaceCheckins(venueId, opts) {
   opts = opts || {}
   const cmd = db().command
-  const where = opts.noteOnly
-    ? cmd.or([
-        { venueId: venueId, note: cmd.neq('') },
-        { venueId: venueId, photos: cmd.neq([]) },
-        { venueId: venueId, videos: cmd.neq([]) },
-      ])
-    : { venueId: venueId }
+  const where = cmd.or([
+    { venueId: venueId, type: 'post' },
+    { venueId: venueId, note: cmd.neq('') },
+    { venueId: venueId, photos: cmd.neq([]) },
+    { venueId: venueId, videos: cmd.neq([]) },
+  ])
   let q = db().collection('checkins').where(where)
   if (opts.skip) q = q.skip(opts.skip)
   return q.orderBy('at', 'desc').limit(opts.limit || 20).get()
@@ -157,18 +159,24 @@ function getPlaceCheckins(venueId, opts) {
     })
 }
 
-/* 发现页社区流：所有人的"内容打卡"（有留言或有照片），全量按时间倒序分页
+/* 发现页社区流：所有人的"打卡"（type=post，或旧数据有留言/媒体），全量按时间倒序分页
  * opts.openid 传入时限定为某位滑手的公开动态（滑手主页用） */
 function getPublicCheckins(opts) {
   opts = opts || {}
   const cmd = db().command
   const where = opts.openid
     ? cmd.or([
+        { _openid: opts.openid, type: 'post' },
         { _openid: opts.openid, note: cmd.neq('') },
         { _openid: opts.openid, photos: cmd.neq([]) },
         { _openid: opts.openid, videos: cmd.neq([]) },
       ])
-    : cmd.or([{ note: cmd.neq('') }, { photos: cmd.neq([]) }, { videos: cmd.neq([]) }])
+    : cmd.or([
+        { type: 'post' },
+        { note: cmd.neq('') },
+        { photos: cmd.neq([]) },
+        { videos: cmd.neq([]) },
+      ])
   let q = db().collection('checkins').where(where)
   if (opts.skip) q = q.skip(opts.skip)
   return q.orderBy('at', 'desc').limit(opts.limit || 20).get()
@@ -354,14 +362,18 @@ function saveCity(city) {
   })
 }
 
-/* ===== 排行榜（聚合所有人场地签到数，需 checkins"所有用户可读"权限）
- * limit 参数化（首页榜 5 / 完整榜 20）；店铺打卡不计入（kind != shop，旧数据无 kind 字段视为场地） */
+/* ===== 排行榜（聚合所有人场地"签到"数，需 checkins"所有用户可读"权限）
+ * limit 参数化（首页榜 5 / 完整榜 20）；只数签到：type=checkin，或旧数据（无 type）无留言/媒体；
+ * 店铺签到不计入（kind != shop，旧数据无 kind 字段视为场地），打卡（type=post）不参与排行 */
 function getLeaderboard(limit) {
   const $ = agg()
   const cmd = db().command
   return ensureOpenid().then(function () {
     return db().collection('checkins').aggregate()
-      .match({ kind: cmd.neq('shop') })
+      .match(cmd.or([
+        { kind: cmd.neq('shop'), type: 'checkin' },
+        { kind: cmd.neq('shop'), type: cmd.exists(false), note: cmd.in(['', null]), photos: cmd.in([[], null]), videos: cmd.in([[], null]) },
+      ]))
       .group({ _id: '$_openid', count: $.sum(1), name: $.last('$userName') })
       .sort({ count: -1 })
       .limit(limit || 5)
@@ -398,13 +410,17 @@ function getUserProfileByOpenid(openid) {
     })
 }
 
-/* 常去场地：按 openid 聚合打卡记录按场地分组计数，打卡数倒序（需 checkins"所有用户可读"权限）
+/* 常去场地：按 openid 聚合"签到"记录按场地分组计数，签到数倒序（需 checkins"所有用户可读"权限）
  * 返回 [{ id: venueId, name, kind, count }]；limit：展示用 10 / 统计足迹场地数用 100 */
 function getUserFrequentVenues(openid, limit) {
   const $ = agg()
+  const cmd = db().command
   if (!openid) return Promise.resolve([])
   return db().collection('checkins').aggregate()
-    .match({ _openid: openid })
+    .match(cmd.or([
+      { _openid: openid, type: 'checkin' },
+      { _openid: openid, type: cmd.exists(false), note: cmd.in(['', null]), photos: cmd.in([[], null]), videos: cmd.in([[], null]) },
+    ]))
     .group({ _id: '$venueId', count: $.sum(1), name: $.last('$venueName'), kind: $.last('$kind') })
     .sort({ count: -1 })
     .limit(limit || 100)
@@ -420,18 +436,23 @@ function getUserFrequentVenues(openid, limit) {
     })
 }
 
-/* 滑手数据概览：累计打卡数 + 获赞总数
- * 获赞 = 该滑手内容打卡最近 100 条的点赞求和（feed_likes 无归属字段无法全量聚合，长尾忽略）
+/* 滑手数据概览：累计签到数 + 获赞总数
+ * 签到数只数"签到"记录（type=checkin，或旧数据无留言/媒体）；打卡不计数
+ * 获赞 = 该滑手打卡（type=post，或旧数据有留言/媒体）最近 100 条的点赞求和
  * 需 checkins / feed_likes"所有用户可读"权限 */
 function getUserStats(openid) {
   const cmd = db().command
   if (!openid) return Promise.resolve({ checkinCount: 0, likeCount: 0 })
   const countQ = db().collection('checkins')
-    .where({ _openid: openid })
+    .where(cmd.or([
+      { _openid: openid, type: 'checkin' },
+      { _openid: openid, type: cmd.exists(false), note: cmd.in(['', null]), photos: cmd.in([[], null]), videos: cmd.in([[], null]) },
+    ]))
     .count()
     .catch(function () { return { total: 0 } })
   const idsQ = db().collection('checkins')
     .where(cmd.or([
+      { _openid: openid, type: 'post' },
       { _openid: openid, note: cmd.neq('') },
       { _openid: openid, photos: cmd.neq([]) },
       { _openid: openid, videos: cmd.neq([]) },

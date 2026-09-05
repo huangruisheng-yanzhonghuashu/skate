@@ -64,9 +64,9 @@
     </view>
   </view>
 
-  <!-- 打卡记录（最近30条；长按删除，避免误触） -->
+  <!-- 签到与打卡记录（最近30条；长按删除，避免误触） -->
   <view class="records">
-    <text class="section-title">打卡记录</text>
+    <text class="section-title">签到与打卡</text>
     <view
       wx:for="{{records}}"
       wx:key="id"
@@ -77,6 +77,7 @@
       <view class="rec-main" data-id="{{item.venueId}}" data-kind="{{item.kind}}" bindtap="goRecord">
         <view class="rec-row1">
           <text class="rec-name">{{item.venueName}}</text>
+          <text class="rec-type {{item.typeLabel === '打卡' ? 'rec-type-post' : ''}}">{{item.typeLabel}}</text>
           <text class="rec-kind {{item.kind === 'shop' ? 'rec-kind-shop' : ''}}">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
           <text class="rec-time">{{item.timeText}}</text>
         </view>
@@ -92,14 +93,14 @@
       </view>
     </view>
     <view wx:if="{{!records.length}}" class="rec-empty">
-      <text>还没有打卡记录，去场地或店铺签个到吧</text>
+      <text>还没有记录，去场地或店铺签到，或发一条打卡吧</text>
     </view>
     <view wx:if="{{records.length}}" class="rec-hint">长按记录可删除</view>
   </view>
 
-  <!-- 打卡排行榜 -->
+  <!-- 签到排行榜（只统计现场签到，打卡不参与） -->
   <view class="board">
-    <text class="section-title">打卡排行榜</text>
+    <text class="section-title">签到排行榜</text>
     <view wx:if="{{!board.length}}" class="board-empty">暂无排行数据，快去签到抢第一</view>
     <block wx:else>
       <view wx:for="{{board}}" wx:key="rank" class="board-row {{item.self ? 'board-row-self' : ''}}" hover-class="board-row-hover" bindtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-self="{{item.self}}">

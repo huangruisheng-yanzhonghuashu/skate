@@ -19,7 +19,7 @@
     <view class="stat">
       <image class="stat-icon" src="{{icons.trophy}}" mode="aspectFit" />
       <text class="stat-num">{{stats.checkinCount}}</text>
-      <text class="stat-label">累计打卡</text>
+      <text class="stat-label">累计签到</text>
     </view>
     <view class="stat">
       <image class="stat-icon" src="{{icons.venue}}" mode="aspectFit" />
@@ -33,7 +33,7 @@
     </view>
   </view>
 
-  <!-- 常去场地（横滑卡片，按打卡次数排序） -->
+  <!-- 常去场地（横滑卡片，按签到次数排序） -->
   <view wx:if="{{places.length}}" class="section">
     <text class="section-title">常去场地</text>
     <scroll-view class="places" scroll-x enhanced="{{true}}" show-scrollbar="{{false}}">
@@ -48,7 +48,7 @@
       >
         <text class="place-kind {{item.kind === 'shop' ? 'place-kind-shop' : ''}}">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
         <text class="place-name">{{item.name}}</text>
-        <text class="place-count">{{item.count}} 次打卡</text>
+        <text class="place-count">{{item.count}} 次签到</text>
       </view>
     </scroll-view>
   </view>

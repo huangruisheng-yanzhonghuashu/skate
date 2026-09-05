@@ -371,10 +371,12 @@
   flex: 1.3;
 }
 
-.act-done {
-  background: #26262C;
-  color: #8C8C94;
-  flex: 1.3;
+/* 发打卡：描边幽灵态副按钮（与主按钮拉开层级，打卡为内容动作） */
+.act-post {
+  background: transparent;
+  color: #FF8A6E;
+  border: 2rpx solid rgba(255, 90, 54, 0.35);
+  box-sizing: border-box;
 }
 
 .act-call {

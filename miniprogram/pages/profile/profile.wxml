@@ -54,6 +54,15 @@
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
+    <view class="menu-item" hover-class="menu-hover" bindtap="goPostPublish">
+      <view class="menu-left">
+        <image class="menu-icon" src="{{icons.camera}}" mode="aspectFit" />
+        <text class="menu-label">发打卡</text>
+      </view>
+      <view class="menu-right">
+        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
     <view class="menu-item" hover-class="menu-hover" bindtap="goReports">
       <view class="menu-left">
         <image class="menu-icon" src="{{icons.file}}" mode="aspectFit" />
@@ -119,11 +128,11 @@
       <text class="recent-name">{{item.venueName}}</text>
       <text class="recent-time">{{item.timeText}}</text>
     </view>
-    <!-- 空态：引导去首页打卡 -->
+    <!-- 空态：引导去首页签到 -->
     <view wx:if="{{!recent.length}}" class="recent-empty" hover-class="stat-hover" bindtap="goHome">
       <image class="recent-empty-icon" src="{{icons.pin}}" mode="aspectFit" />
       <text class="recent-empty-text">还没有签到记录</text>
-      <text class="recent-empty-cta">去打卡</text>
+      <text class="recent-empty-cta">去签到</text>
     </view>
   </view>
 

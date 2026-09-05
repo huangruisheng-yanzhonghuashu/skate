@@ -92,7 +92,7 @@
       </view>
     </view>
     <view class="checkin-list" wx:if="{{feed.length}}">
-      <view wx:for="{{feed}}" wx:key="id" class="checkin-card">
+      <view wx:for="{{feed}}" wx:key="id" class="checkin-card" bindlongpress="onPostLongPress" data-id="{{item.id}}">
         <view class="checkin-head" hover-class="checkin-head-hover" catchtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-avatar="{{item.avatarFile}}" data-years="{{item.skateYears}}">
           <image wx:if="{{item.avatarFile}}" class="checkin-avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
           <view wx:else class="checkin-avatar" style="background: {{item.color}}">{{item.avatarText}}</view>
@@ -128,10 +128,10 @@
         </view>
       </view>
     </view>
-    <view wx:else class="checkin-empty">还没有打卡，点下方「签到」抢首条打卡</view>
+    <view wx:else class="checkin-empty">还没有打卡，点下方「发打卡」发第一条</view>
   </view>
 
-  <!-- 底部固定操作栏：导航 / 签到打卡 / 报错（设计稿：两侧窄块 + 中间大按钮） -->
+  <!-- 底部固定操作栏：导航 / 签到(未签到，一键+定位硬校验) / 发打卡(主按钮翻转或副入口) / 报错 -->
   <view class="action-bar">
     <view class="action-side" hover-class="action-hover" bindtap="openNav" aria-role="button" aria-label="导航到场地">
       <image class="action-icon" src="{{icons.send}}" mode="aspectFit" />
@@ -139,41 +139,46 @@
     </view>
     <view
       wx:if="{{checked}}"
-      class="action-main action-done"
-      hover-class="action-hover"
-      bindtap="openEditCheckin"
-      aria-role="button"
-      aria-label="补充今日打卡"
-    >
-      <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
-      <text class="action-label">已签到 · 补充</text>
-    </view>
-    <view
-      wx:else
       class="action-main"
       hover-class="action-main-hover"
-      bindtap="openCheckin"
+      bindtap="openPost"
       aria-role="button"
-      aria-label="签到打卡"
+      aria-label="发打卡"
     >
-      <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
-      <text class="action-label">签到打卡</text>
+      <image class="action-icon" src="{{icons.camera}}" mode="aspectFit" />
+      <text class="action-label">发打卡</text>
     </view>
+    <block wx:else>
+      <view
+        class="action-main"
+        hover-class="action-main-hover"
+        bindtap="doCheckin"
+        aria-role="button"
+        aria-label="签到"
+      >
+        <image class="action-icon" src="{{icons.check}}" mode="aspectFit" />
+        <text class="action-label">签到</text>
+      </view>
+      <view class="action-ghost" hover-class="action-hover" bindtap="openPost" aria-role="button" aria-label="发打卡">
+        <image class="action-icon" src="{{icons.camera}}" mode="aspectFit" />
+        <text class="action-label">发打卡</text>
+      </view>
+    </block>
     <view class="action-side" hover-class="action-hover" bindtap="openReport" aria-role="button" aria-label="报错">
       <image class="action-icon" src="{{icons.flag}}" mode="aspectFit" />
       <text class="action-label">报错</text>
     </view>
   </view>
 
-  <!-- 签到弹窗（底部 sheet，键盘友好） -->
+  <!-- 发布打卡弹窗（底部 sheet，键盘友好） -->
   <view wx:if="{{checkinOpen}}" class="sheet-mask anim-fade-in" bindtap="closeCheckin" catchtouchmove="noop">
     <view class="sheet anim-sheet-in" catchtap="noop">
       <view class="sheet-handle"></view>
       <view class="sheet-head">
         <view class="sheet-head-badge">
-          <image class="sheet-head-badge-icon" src="{{icons.checkWhite}}" mode="aspectFit" />
+          <image class="sheet-head-badge-icon" src="{{icons.camera}}" mode="aspectFit" />
         </view>
-        <text class="sheet-title">{{checkinMode === 'edit' ? '补充今日打卡' : '签到打卡'}}</text>
+        <text class="sheet-title">{{checkinMode === 'edit' ? '编辑打卡' : '发布打卡'}}</text>
         <view class="sheet-close" hover-class="sheet-close-hover" bindtap="closeCheckin" aria-role="button" aria-label="关闭">
           <image class="sheet-close-icon" src="{{icons.x}}" mode="aspectFit" />
         </view>
@@ -223,9 +228,9 @@
         </view>
       </view>
 
-      <view class="sheet-btn {{checkinSubmitting ? 'sheet-btn-loading' : ''}}" bindtap="confirmCheckin">
+      <view class="sheet-btn {{checkinSubmitting ? 'sheet-btn-loading' : ''}}" bindtap="confirmPost">
         <image class="sheet-btn-icon" src="{{icons.check}}" mode="aspectFit" />
-        <text>{{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '签到中...') : (checkinMode === 'edit' ? '更新打卡' : '确认签到')}}</text>
+        <text>{{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '发布中...') : (checkinMode === 'edit' ? '更新打卡' : '发布打卡')}}</text>
       </view>
       <view class="sheet-cancel" bindtap="closeCheckin">取消</view>
     </view>
@@ -309,7 +314,7 @@
       <image class="celebrate-check" src="{{icons.checkWhite}}" mode="aspectFit" />
     </view>
     <text class="celebrate-title">签到成功</text>
-    <text class="celebrate-streak">已连续打卡 {{celebrateStreak}} 天</text>
+    <text class="celebrate-streak">已连续签到 {{celebrateStreak}} 天</text>
     <text class="celebrate-sub">{{celebrateSub}}</text>
   </view>
 </view>

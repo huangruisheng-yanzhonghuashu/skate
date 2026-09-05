@@ -25,6 +25,35 @@
   gap: 40rpx;
 }
 
+/* 头部右侧组：发打卡按钮 + 切换 tabs */
+.dis-right {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+/* 发打卡：橙描边胶囊按钮（打卡为内容动作，无需在场） */
+.dis-post {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 10rpx 22rpx;
+  border-radius: 999rpx;
+  border: 2rpx solid rgba(255, 90, 54, 0.4);
+  color: #FF8A6E;
+  font-size: 24rpx;
+  line-height: 1;
+}
+
+.dis-post-icon {
+  width: 26rpx;
+  height: 26rpx;
+}
+
+.dis-post-hover {
+  opacity: 0.75;
+}
+
 .dis-tab {
   position: relative;
   padding: 4rpx 4rpx 12rpx;

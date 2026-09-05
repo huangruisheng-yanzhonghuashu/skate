@@ -89,7 +89,7 @@
       </view>
     </view>
     <view wx:if="{{feed.length}}">
-      <view wx:for="{{feed}}" wx:key="id" class="fcard">
+      <view wx:for="{{feed}}" wx:key="id" class="fcard" bindlongpress="onPostLongPress" data-id="{{item.id}}">
         <view class="fhead">
           <image wx:if="{{item.avatarFile}}" class="favatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
           <view wx:else class="favatar" style="background: {{item.color}}">{{item.avatarText}}</view>
@@ -125,21 +125,21 @@
         </view>
       </view>
     </view>
-    <view wx:else class="fempty">还没有打卡，点下方「打卡」抢首条</view>
+    <view wx:else class="fempty">还没有打卡，点下方「发打卡」发第一条</view>
   </view>
 
-  <!-- 底部操作：打卡(或补充) / 拨号 / 导航 -->
+  <!-- 底部操作：签到(定位硬校验) / 发打卡 / 拨号 / 导航（已签到后主位翻转为发打卡） -->
   <view class="actions">
-    <view wx:if="{{checked}}" class="act act-done" bindtap="openEditCheckin">已打卡 · 补充</view>
-    <button wx:else class="act act-checkin" bindtap="openCheckin">打卡</button>
+    <view wx:if="{{!checked}}" class="act act-checkin" bindtap="doCheckin">签到</view>
+    <view class="act act-post" bindtap="openPost">发打卡</view>
     <button wx:if="{{shop.phone}}" class="act act-call" bindtap="callShop">拨打电话</button>
     <button class="act act-nav" bindtap="openMap">地图导航</button>
   </view>
 
-  <!-- 打卡弹窗 -->
+  <!-- 发布打卡弹窗 -->
   <view wx:if="{{checkinOpen}}" class="mask" bindtap="closeCheckin" catchtouchmove="noop">
     <view class="sheet" catchtap="noop">
-      <view class="sheet-title">{{checkinMode === 'edit' ? '补充今日打卡' : '店铺打卡'}}</view>
+      <view class="sheet-title">{{checkinMode === 'edit' ? '编辑打卡' : '发布打卡'}}</view>
 
       <view class="f-row">
         <text class="f-label">说点什么</text>
@@ -171,8 +171,8 @@
         </view>
       </view>
 
-      <button class="f-btn {{checkinSubmitting ? 'f-btn-loading' : ''}}" bindtap="confirmCheckin">
-        {{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '打卡中...') : (checkinMode === 'edit' ? '更新打卡' : '确认打卡')}}
+      <button class="f-btn {{checkinSubmitting ? 'f-btn-loading' : ''}}" bindtap="confirmPost">
+        {{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '发布中...') : (checkinMode === 'edit' ? '更新打卡' : '发布打卡')}}
       </button>
       <view class="f-cancel" bindtap="closeCheckin">取消</view>
     </view>
@@ -193,8 +193,8 @@
     <view class="celebrate-badge">
       <image class="celebrate-check" src="{{icons.checkWhite}}" mode="aspectFit" />
     </view>
-    <text class="celebrate-title">打卡成功</text>
-    <text class="celebrate-streak">已连续打卡 {{celebrateStreak}} 天</text>
+    <text class="celebrate-title">签到成功</text>
+    <text class="celebrate-streak">已连续签到 {{celebrateStreak}} 天</text>
     <text class="celebrate-sub">{{celebrateSub}}</text>
   </view>
 </view>

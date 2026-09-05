@@ -107,6 +107,7 @@ const ICON = {
   plusOrange: svg(P.plus, { stroke: ORANGE }),
   xWhite: svg(P.x, { stroke: WHITE, sw: 2.5 }),
   cameraWhite: svg(P.camera, { stroke: WHITE }),
+  cameraOrange: svg(P.camera, { stroke: ORANGE }),
   imagePlusAsh: svg(P.imagePlus, { stroke: ASH }),
 
   /* 通用 */

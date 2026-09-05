@@ -837,6 +837,26 @@
   color: #00D4AA;
 }
 
+/* 发打卡副入口：未签到时主次结构中的次按钮（描边幽灵态，与主按钮拉开层级） */
+.action-ghost {
+  width: 128rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  padding: 14rpx 0;
+  border-radius: 20rpx;
+  border: 2rpx solid rgba(255, 90, 54, 0.35);
+  color: #FF8A6E;
+  box-sizing: border-box;
+}
+
+.action-ghost .action-label {
+  font-size: 22rpx;
+  line-height: 1;
+}
+
 /* ===== 底部弹层（签到/报错共用：表单类弹窗统一底部 sheet，键盘友好） ===== */
 .sheet-mask {
   position: fixed;
