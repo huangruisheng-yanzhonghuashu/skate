@@ -27,7 +27,17 @@
       >
         <text class="rec-date">{{item.dateText}}</text>
         <text class="rec-name">{{item.venueName}}</text>
-        <text class="rec-kind {{item.kind === 'shop' ? 'rec-kind-shop' : ''}}">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+        <text class="rec-kind {{item.kind === 'shop' ? 'rec-kind-shop' : ''}}">{{item.kindText}}</text>
+        <view class="rec-stats">
+          <view class="rec-stat">
+            <image class="rec-stat-icon" src="{{icons.heart}}" mode="aspectFit" />
+            <text>{{item.likeCount}}</text>
+          </view>
+          <view class="rec-stat">
+            <image class="rec-stat-icon" src="{{icons.comment}}" mode="aspectFit" />
+            <text>{{item.commentCount}}</text>
+          </view>
+        </view>
         <image class="rec-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>

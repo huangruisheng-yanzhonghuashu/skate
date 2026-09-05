@@ -14,7 +14,7 @@
     <!-- 地点卡：类型徽章 + 场地名（可点进详情页）+ 打卡时间 -->
     <view class="place-card">
       <view class="place-row" hover-class="place-row-hover" data-id="{{venueId}}" data-kind="{{kind}}" bindtap="goPlace">
-        <text class="place-kind {{kind === 'shop' ? 'place-kind-shop' : ''}}">{{kind === 'shop' ? '店铺' : '场地'}}</text>
+        <text class="place-kind {{kind === 'shop' ? 'place-kind-shop' : ''}}">{{kindText}}</text>
         <text class="place-name">{{venueName}}</text>
         <image class="place-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>

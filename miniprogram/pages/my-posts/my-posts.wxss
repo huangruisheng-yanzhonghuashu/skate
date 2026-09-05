@@ -118,6 +118,28 @@
   opacity: 0.6;
 }
 
+/* 行内计数：点赞数 + 评论数（小图标 + 数字） */
+.rec-stats {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.rec-stat {
+  display: flex;
+  align-items: center;
+  gap: 4rpx;
+  font-size: 22rpx;
+  color: #8C8C94;
+  min-width: 40rpx;
+}
+
+.rec-stat-icon {
+  width: 24rpx;
+  height: 24rpx;
+}
+
 .rec-hint {
   padding: 24rpx 0 0;
   text-align: center;

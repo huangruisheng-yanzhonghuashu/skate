@@ -10,11 +10,15 @@ const nav = require('../../utils/nav.js')
 
 const MAX_MEDIA = 9
 
+/* shops.category → 徽章文案（板店对外叫「门店」，与「场地、门店与俱乐部」文案统一） */
+const CAT_TEXT = { '板店': '门店', '俱乐部': '俱乐部', '培训机构': '培训机构' }
+
 Page({
   data: {
     loaded: false,
     postId: '',
     kind: 'venue',
+    kindText: '场地',
     venueId: '',
     venueName: '',
     timeText: '',
@@ -79,6 +83,7 @@ Page({
     this.setData({
       loaded: true,
       kind: rec.kind || 'venue',
+      kindText: (rec.kind || 'venue') === 'shop' ? '门店' : '场地',
       venueId: rec.venueId || '',
       venueName: rec.venueName || '',
       timeText: d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()),
@@ -88,6 +93,18 @@ Page({
       likeCount: this._counts[rec.id] || 0,
     })
     this.loadCounts()
+    this.loadKindText(rec)
+  },
+
+  /* 机构类型徽章：shops.category 精确显示（场地固定「场地」，机构兜底「俱乐部」） */
+  loadKindText(rec) {
+    if ((rec.kind || 'venue') !== 'shop') return
+    cloud.getShops().then((shops) => {
+      const hit = (shops || []).find((s) => s.id === rec.venueId)
+      if (!hit) return
+      const cat = hit.category || '俱乐部'
+      this.setData({ kindText: CAT_TEXT[cat] || cat })
+    })
   },
 
   /* 点赞/评论计数（云端聚合，与发现页口径一致） */
