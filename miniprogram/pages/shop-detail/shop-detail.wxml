@@ -102,15 +102,23 @@
           </view>
         </view>
         <text class="fnote">{{item.note}}</text>
-        <view wx:if="{{item.photos.length}}" class="fphotos photos-{{item.photos.length >= 3 ? 'grid' : item.photos.length}}">
-          <view wx:for="{{item.photos}}" wx:for-item="p" wx:key="*this" class="photo-cell">
+        <view wx:if="{{item.media.length}}" class="fphotos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
+          <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell">
+            <video
+              wx:if="{{p.type === 'video'}}"
+              class="fvideo"
+              src="{{p.url}}"
+              object-fit="cover"
+              controls
+            />
             <image
+              wx:else
               class="fphoto"
-              src="{{p}}"
+              src="{{p.url}}"
               mode="aspectFill"
               lazy-load
               data-urls="{{item.photos}}"
-              data-url="{{p}}"
+              data-url="{{p.url}}"
               catchtap="previewFeedPhotos"
             />
           </view>
@@ -147,11 +155,19 @@
 
       <view class="f-row">
         <view class="pgrid">
-          <view wx:for="{{checkinPhotos}}" wx:key="*this" class="ptile">
-            <image class="ptile-img" src="{{item}}" mode="aspectFill" />
-            <view class="ptile-del" data-index="{{index}}" catchtap="removeCheckinPhoto">×</view>
+          <view wx:for="{{checkinMedia}}" wx:key="url" class="ptile">
+            <video
+              wx:if="{{item.type === 'video'}}"
+              class="ptile-img ptile-video"
+              src="{{item.url}}"
+              object-fit="cover"
+              controls="{{false}}"
+              show-center-play-btn="{{false}}"
+            />
+            <image wx:else class="ptile-img" src="{{item.url}}" mode="aspectFill" />
+            <view class="ptile-del" data-index="{{index}}" catchtap="removeCheckinMedia">×</view>
           </view>
-          <view wx:if="{{checkinPhotos.length < 9}}" class="padd" bindtap="chooseCheckinPhoto">＋ 添加照片</view>
+          <view wx:if="{{checkinMedia.length < 9}}" class="padd" bindtap="chooseCheckinMedia">＋ 添加照片/视频</view>
         </view>
       </view>
 

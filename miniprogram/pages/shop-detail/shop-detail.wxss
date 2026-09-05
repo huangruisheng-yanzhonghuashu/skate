@@ -244,6 +244,17 @@
   color: #8A8A93;
 }
 
+/* 打卡视频（动态九宫格内联播放，与图片同占位） */
+.fvideo {
+  width: 100%;
+  height: 100%;
+}
+
+/* 弹层选择区的视频小卡：静帧预览、不可点播（确认后动态区可播） */
+.ptile-video {
+  background: #000000;
+}
+
 .ftime {
   font-size: 22rpx;
   color: #6E6E76;

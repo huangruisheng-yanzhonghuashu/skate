@@ -96,6 +96,7 @@ function mapCheckin(d) {
     venueName: d.venueName,
     note: d.note || '',
     photos: d.photos || [],
+    videos: d.videos || [],
     at: d.at,
     skateYears: d.skateYears || 0,
     user: d.userName || '滑手',
@@ -141,6 +142,7 @@ function getPlaceCheckins(venueId, opts) {
     ? cmd.or([
         { venueId: venueId, note: cmd.neq('') },
         { venueId: venueId, photos: cmd.neq([]) },
+        { venueId: venueId, videos: cmd.neq([]) },
       ])
     : { venueId: venueId }
   let q = db().collection('checkins').where(where)
@@ -158,7 +160,7 @@ function getPublicCheckins(opts) {
   opts = opts || {}
   const cmd = db().command
   let q = db().collection('checkins').where(
-    cmd.or([{ note: cmd.neq('') }, { photos: cmd.neq([]) }])
+    cmd.or([{ note: cmd.neq('') }, { photos: cmd.neq([]) }, { videos: cmd.neq([]) }])
   )
   if (opts.skip) q = q.skip(opts.skip)
   return q.orderBy('at', 'desc').limit(opts.limit || 20).get()

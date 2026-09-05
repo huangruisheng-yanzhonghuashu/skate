@@ -20,15 +20,23 @@
       </view>
     </view>
     <text wx:if="{{item.note}}" class="note">{{item.note}}</text>
-    <view wx:if="{{item.photos.length}}" class="photos photos-{{item.photos.length >= 3 ? 'grid' : item.photos.length}}">
-      <view wx:for="{{item.photos}}" wx:for-item="p" wx:key="*this" class="photo-cell">
+    <view wx:if="{{item.media.length}}" class="photos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
+      <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell">
+        <video
+          wx:if="{{p.type === 'video'}}"
+          class="pc-video"
+          src="{{p.url}}"
+          object-fit="cover"
+          controls
+        />
         <image
+          wx:else
           class="photo"
-          src="{{p}}"
+          src="{{p.url}}"
           mode="aspectFill"
           lazy-load
           data-urls="{{item.photos}}"
-          data-url="{{p}}"
+          data-url="{{p.url}}"
           catchtap="preview"
         />
       </view>

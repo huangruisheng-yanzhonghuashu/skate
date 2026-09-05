@@ -105,15 +105,23 @@
           </view>
         </view>
         <text class="checkin-text">{{item.note}}</text>
-        <view wx:if="{{item.photos.length}}" class="checkin-photos photos-{{item.photos.length >= 3 ? 'grid' : item.photos.length}}">
-          <view wx:for="{{item.photos}}" wx:for-item="p" wx:key="*this" class="photo-cell">
+        <view wx:if="{{item.media.length}}" class="checkin-photos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
+          <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell">
+            <video
+              wx:if="{{p.type === 'video'}}"
+              class="checkin-video"
+              src="{{p.url}}"
+              object-fit="cover"
+              controls
+            />
             <image
+              wx:else
               class="checkin-photo"
-              src="{{p}}"
+              src="{{p.url}}"
               mode="aspectFill"
               lazy-load
               data-urls="{{item.photos}}"
-              data-url="{{p}}"
+              data-url="{{p.url}}"
               catchtap="previewFeedPhotos"
             />
           </view>
@@ -193,16 +201,24 @@
 
       <view class="field">
         <view class="photo-grid">
-          <view wx:for="{{checkinPhotos}}" wx:key="*this" class="photo-tile">
-            <image class="photo-tile-img" src="{{item}}" mode="aspectFill" />
-            <view class="photo-tile-del" data-index="{{index}}" catchtap="removeCheckinPhoto">
+          <view wx:for="{{checkinMedia}}" wx:key="url" class="photo-tile">
+            <video
+              wx:if="{{item.type === 'video'}}"
+              class="photo-tile-img photo-tile-video"
+              src="{{item.url}}"
+              object-fit="cover"
+              controls="{{false}}"
+              show-center-play-btn="{{false}}"
+            />
+            <image wx:else class="photo-tile-img" src="{{item.url}}" mode="aspectFill" />
+            <view class="photo-tile-del" data-index="{{index}}" catchtap="removeCheckinMedia">
               <image class="photo-tile-del-icon" src="{{icons.x}}" mode="aspectFit" />
             </view>
           </view>
-          <view wx:if="{{checkinPhotos.length < 9}}" class="photo-add" bindtap="chooseCheckinPhoto">
+          <view wx:if="{{checkinMedia.length < 9}}" class="photo-add" bindtap="chooseCheckinMedia">
             <image class="photo-add-icon" src="{{icons.plus}}" mode="aspectFit" />
-            <text class="photo-add-text">添加图片</text>
-            <text class="photo-add-sub">最多 9 张</text>
+            <text class="photo-add-text">添加图片/视频</text>
+            <text class="photo-add-sub">最多 9 个</text>
           </view>
         </view>
       </view>

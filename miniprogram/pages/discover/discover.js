@@ -1,7 +1,7 @@
 /* 发现页：真实打卡社区流（所有人的内容打卡：有留言或有照片） */
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
-const { fmtAgo } = require('../../utils/format.js')
+const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
 const PAGE_SIZE = 20
@@ -59,6 +59,7 @@ Page({
           avatarText: r.avatarText,
           note: r.note,
           photos: r.photos,
+          media: toMedia(r.photos, r.videos),
           timeText: fmtAgo(r.at),
           liked: store.isLiked(r.id),
           likeCount: this._counts[r.id] || 0,

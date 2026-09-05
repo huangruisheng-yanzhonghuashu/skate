@@ -253,7 +253,7 @@ function calcStats() {
 
 /* 签到（photos: 云存储 fileID 数组；kind: 'venue'|'shop'）
  * 本地立即生效；云端写入成功后把云端 _id 回写到本地记录（供删除用），失败进重试队列 */
-function addCheckin(venueId, venueName, note, photos, kind) {
+function addCheckin(venueId, venueName, note, photos, kind, videos) {
   init()
   const at = new Date().toISOString()
   const localId = 'c-' + Date.now()
@@ -263,6 +263,7 @@ function addCheckin(venueId, venueName, note, photos, kind) {
     venueName: venueName,
     note: note || '',
     photos: photos || [],
+    videos: videos || [],
     kind: kind || 'venue',
     at: at,
     skateYears: state.user.skateYears || 0,
@@ -274,6 +275,7 @@ function addCheckin(venueId, venueName, note, photos, kind) {
     venueName: venueName,
     note: note || '',
     photos: photos || [],
+    videos: videos || [],
     kind: kind || 'venue',
     at: at,
     userName: state.user.nickname || '滑手',
@@ -333,8 +335,8 @@ function getLocalPlaceCheckins(placeId, noteOnly) {
   return state.checkins
     .filter(function (c) {
       if (c.venueId !== placeId) return false
-      /* noteOnly：有留言或有照片（与 cloud.getPlaceCheckins 口径一致） */
-      if (noteOnly && !(c.note || '').trim() && !(c.photos || []).length) return false
+      /* noteOnly：有留言/照片/视频（与 cloud.getPlaceCheckins 口径一致） */
+      if (noteOnly && !(c.note || '').trim() && !(c.photos || []).length && !(c.videos || []).length) return false
       return true
     })
     .map(function (c) {
@@ -345,6 +347,7 @@ function getLocalPlaceCheckins(placeId, noteOnly) {
         venueName: c.venueName,
         note: c.note || '',
         photos: c.photos || [],
+        videos: c.videos || [],
         at: c.at,
         skateYears: c.skateYears || 0,
         user: nickname,
@@ -356,12 +359,15 @@ function getLocalPlaceCheckins(placeId, noteOnly) {
 
 /* 补充打卡：更新当日已有记录的留言/照片（不新增记录，统计口径不变）
  * 本地立即生效；已同步记录（云端 _id）异步 update，未同步记录（c- 开头）同步更新重试队列 */
-function updateCheckin(id, note, photos) {
+function updateCheckin(id, note, photos, videos) {
   init()
   const rec = state.checkins.find(function (c) { return c.id === id })
   if (!rec) return Promise.resolve()
   rec.note = note || ''
   rec.photos = photos || []
+  rec.videos = videos || []
+  /* 旧记录无滑龄快照：补充打卡时顺手回填当前资料（已填过则不覆盖，保持快照语义） */
+  if (!rec.skateYears) rec.skateYears = state.user.skateYears || 0
   persist()
   notify()
   if (String(rec.id).indexOf('c-') === 0) {
@@ -370,12 +376,14 @@ function updateCheckin(id, note, photos) {
       if (p.at === rec.at && p.venueId === rec.venueId) {
         p.note = rec.note
         p.photos = rec.photos
+        p.videos = rec.videos
+        p.skateYears = rec.skateYears
       }
     })
     persistPending()
     return Promise.resolve()
   }
-  return cloud._updateCheckinDoc(rec.id, { note: rec.note, photos: rec.photos })
+  return cloud._updateCheckinDoc(rec.id, { note: rec.note, photos: rec.photos, videos: rec.videos, skateYears: rec.skateYears })
     .catch(function (e) {
       console.warn('[store] 打卡更新上云失败', (e && e.errCode) || (e && e.message))
     })

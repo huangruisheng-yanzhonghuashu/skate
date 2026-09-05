@@ -41,4 +41,13 @@ function fmtAgo(iso) {
   return diffDay + '天前'
 }
 
-module.exports = { fmtRel, fmtAgo, isSameDay, dayKey, pad }
+/* 打卡媒体合成（微博式混排展示）：图片在前视频在后 → [{type:'image'|'video', url}]
+ * 存储仍是 photos（图片）/ videos（视频）两个数组，展示时合成混排 */
+function toMedia(photos, videos) {
+  const m = []
+  ;(photos || []).forEach(function (u) { m.push({ type: 'image', url: u }) })
+  ;(videos || []).forEach(function (u) { m.push({ type: 'video', url: u }) })
+  return m
+}
+
+module.exports = { fmtRel, fmtAgo, isSameDay, dayKey, pad, toMedia }

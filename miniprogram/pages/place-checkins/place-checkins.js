@@ -1,6 +1,6 @@
 /* 全部打卡列表（场地/店铺共用）：分页加载所有人的打卡 */
 const cloud = require('../../utils/cloud.js')
-const { fmtAgo } = require('../../utils/format.js')
+const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
 const PAGE_SIZE = 20
@@ -55,6 +55,7 @@ Page({
     cloud.getPlaceCheckins(this._id, { skip: this._skip, limit: PAGE_SIZE }).then((rows) => {
       const mapped = rows.map((r) => ({
         ...r,
+        media: toMedia(r.photos, r.videos),
         time: fmtAgo(r.at),
         commentCount: 0,
         commentsOpen: false,

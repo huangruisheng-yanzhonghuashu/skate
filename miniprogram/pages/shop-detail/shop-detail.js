@@ -1,7 +1,7 @@
 /* 店铺详情：照片轮播 + 服务 + 营业时间 + 拨号/导航 + 店铺打卡 */
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
-const { fmtAgo } = require('../../utils/format.js')
+const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
 /* 连签徽章里程碑（庆祝层提示用，与场地详情页一致） */
@@ -42,7 +42,7 @@ Page({
     /* 打卡弹窗 */
     checkinOpen: false,
     note: '',
-    checkinPhotos: [],
+    checkinMedia: [],
     checkinSubmitting: false,
   },
 
@@ -167,6 +167,8 @@ Page({
           skateYears: f.skateYears || 0,
           note: f.note,
           photos: f.photos,
+          videos: f.videos,
+          media: toMedia(f.photos, f.videos),
         })),
       })
     })
@@ -246,7 +248,7 @@ Page({
       checkinOpen: true,
       checkinMode: 'new',
       note: '',
-      checkinPhotos: [],
+      checkinMedia: [],
       checkinSubmitting: false,
     })
   },
@@ -263,7 +265,7 @@ Page({
       checkinOpen: true,
       checkinMode: 'edit',
       note: rec.note || '',
-      checkinPhotos: (rec.photos || []).slice(),
+      checkinMedia: toMedia(rec.photos, rec.videos),
       checkinSubmitting: false,
     })
   },
@@ -279,68 +281,78 @@ Page({
     this.setData({ note: e.detail.value })
   },
 
-  chooseCheckinPhoto() {
-    const remain = 9 - this.data.checkinPhotos.length
+  /* 选媒体：图片 + 视频混选（微博式），图+视频合计上限 9 */
+  chooseCheckinMedia() {
+    const remain = 9 - this.data.checkinMedia.length
     if (remain <= 0) return
     wx.chooseMedia({
       count: remain,
-      mediaType: ['image'],
+      mediaType: ['mix'],
       success: (res) => {
-        const added = res.tempFiles.map((f) => f.tempFilePath)
-        this.setData({ checkinPhotos: [...this.data.checkinPhotos, ...added] })
+        const added = res.tempFiles.map((f) => ({
+          type: f.fileType === 'video' ? 'video' : 'image',
+          url: f.tempFilePath,
+        }))
+        this.setData({ checkinMedia: [...this.data.checkinMedia, ...added] })
       },
     })
   },
 
-  removeCheckinPhoto(e) {
+  removeCheckinMedia(e) {
     const i = e.currentTarget.dataset.index
-    const photos = [...this.data.checkinPhotos]
-    photos.splice(i, 1)
-    this.setData({ checkinPhotos: photos })
+    const media = [...this.data.checkinMedia]
+    media.splice(i, 1)
+    this.setData({ checkinMedia: media })
   },
 
-  /* 上传照片组：保留已上传 fileID，只上传新选临时文件 */
-  uploadMixedPhotos(photos) {
-    const jobs = photos.map((p) => {
-      if (p.indexOf('cloud://') === 0) return Promise.resolve(p)
-      return cloud.uploadFileTo('checkin-photos', p)
-    })
-    return Promise.all(jobs)
+  /* 上传媒体组：保留已上传 fileID，只上传新选临时文件
+   * 返回 { photos: 图片 fileID 数组, videos: 视频 fileID 数组 }（存储分层） */
+  uploadCheckinMedia(media) {
+    const upload = (m) => {
+      if (m.url.indexOf('cloud://') === 0) return Promise.resolve(m.url)
+      return cloud.uploadFileTo('checkin-photos', m.url)
+    }
+    const photos = media.filter((m) => m.type === 'image')
+    const videos = media.filter((m) => m.type === 'video')
+    return Promise.all([
+      Promise.all(photos.map(upload)),
+      Promise.all(videos.map(upload)),
+    ]).then((rs) => ({ photos: rs[0], videos: rs[1] }))
   },
 
   confirmCheckin() {
     if (this.data.checkinSubmitting) return
     const s = this.data.shop
     const note = this.data.note.trim()
-    const photos = this.data.checkinPhotos
+    const media = this.data.checkinMedia
     this.setData({ checkinSubmitting: true })
-    const finish = (fileIDs) => {
+    const finish = (m) => {
       if (this._editId) {
-        store.updateCheckin(this._editId, note, fileIDs).then(() => {
+        store.updateCheckin(this._editId, note, m.photos, m.videos).then(() => {
           this._editId = ''
-          this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
+          this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
           wx.showToast({ title: '打卡已更新', icon: 'success' })
           this.refresh()
           this.loadFeed()
         })
         return
       }
-      store.addCheckin(s.id, s.name, note, fileIDs, 'shop')
-      this.setData({ checkinOpen: false, checkinSubmitting: false, checkinPhotos: [], note: '' })
+      store.addCheckin(s.id, s.name, note, m.photos, 'shop', m.videos)
+      this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
       this.showCelebrate(s.name)
       this.refresh()
       this.loadFeed()
     }
-    if (photos.length) {
-      this.uploadMixedPhotos(photos)
+    if (media.length) {
+      this.uploadCheckinMedia(media)
         .then(finish)
         .catch((e) => {
           this.setData({ checkinSubmitting: false })
-          wx.showToast({ title: '照片上传失败，请重试', icon: 'none' })
-          console.warn('[shop-detail] 打卡照片上传失败', (e && e.errCode) || (e && e.message))
+          wx.showToast({ title: '媒体上传失败，请重试', icon: 'none' })
+          console.warn('[shop-detail] 打卡媒体上传失败', (e && e.errCode) || (e && e.message))
         })
     } else {
-      finish([])
+      finish({ photos: [], videos: [] })
     }
   },
 
