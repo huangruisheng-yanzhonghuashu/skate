@@ -44,22 +44,22 @@
 
   <!-- 菜单 -->
   <view class="menu">
-    <view class="menu-item" hover-class="menu-hover" bindtap="goCheckins">
-      <view class="menu-left">
-        <image class="menu-icon" src="{{icons.pin}}" mode="aspectFit" />
-        <text class="menu-label">我的签到</text>
-      </view>
-      <view class="menu-right">
-        <text class="menu-value">{{checkinCount}}次</text>
-        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
-      </view>
-    </view>
     <view class="menu-item" hover-class="menu-hover" bindtap="goPostPublish">
       <view class="menu-left">
         <image class="menu-icon" src="{{icons.camera}}" mode="aspectFit" />
         <text class="menu-label">发打卡</text>
       </view>
       <view class="menu-right">
+        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
+    <view class="menu-item" hover-class="menu-hover" bindtap="goMyPosts">
+      <view class="menu-left">
+        <image class="menu-icon" src="{{icons.edit}}" mode="aspectFit" />
+        <text class="menu-label">我的打卡</text>
+      </view>
+      <view class="menu-right">
+        <text class="menu-value">{{postCount}}条</text>
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>

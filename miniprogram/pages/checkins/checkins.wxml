@@ -1,48 +1,47 @@
 <view class="page">
-  <!-- 统计卡 ×3（图标 + 大数字 + 小单位 + 标签） -->
+  <!-- 统计带（设计稿：一卡三列，label 上 + 数字下，竖分隔线） -->
   <view class="stats">
-    <view class="stat">
-      <image class="stat-icon" src="{{icons.trophy}}" mode="aspectFit" />
-      <view class="stat-value-row">
+    <view class="stat-col">
+      <text class="stat-label">累计签到</text>
+      <view class="stat-value">
         <text class="stat-num">{{stats.total}}</text>
         <text class="stat-unit">次</text>
       </view>
-      <text class="stat-label">总签到</text>
     </view>
-    <view class="stat">
-      <image class="stat-icon" src="{{icons.flame}}" mode="aspectFit" />
-      <view class="stat-value-row">
+    <view class="stat-col">
+      <text class="stat-label">连续</text>
+      <view class="stat-value">
         <text class="stat-num">{{stats.streak}}</text>
         <text class="stat-unit">天</text>
       </view>
-      <text class="stat-label">连续签到</text>
     </view>
-    <view class="stat">
-      <image class="stat-icon" src="{{icons.calendar}}" mode="aspectFit" />
-      <view class="stat-value-row">
-        <text class="stat-num">{{stats.weekDays}}</text>
-        <text class="stat-unit">天</text>
+    <view class="stat-col">
+      <text class="stat-label">本月</text>
+      <view class="stat-value">
+        <text class="stat-num">{{stats.month}}</text>
+        <text class="stat-unit">次</text>
       </view>
-      <text class="stat-label">本周签到</text>
     </view>
   </view>
 
-  <!-- 签到日历（左右切月；已签=橙字，今日=橙圆，未来日期弱化） -->
+  <!-- 签到日历（标题左 + 双箭头右；已签=提亮+底部橙点，今日=橙圆白字，未来日期弱化） -->
   <view class="calendar">
     <view class="cal-head">
-      <view class="cal-arrow" hover-class="cal-arrow-hover" data-delta="-1" bindtap="switchMonth" aria-role="button" aria-label="上个月">
-        <image class="cal-arrow-icon" src="{{icons.chevronLeft}}" mode="aspectFit" />
-      </view>
       <text class="cal-title">{{monthTitle}}</text>
-      <view
-        class="cal-arrow {{isCurrentMonth ? 'cal-arrow-disabled' : ''}}"
-        hover-class="cal-arrow-hover"
-        data-delta="1"
-        bindtap="switchMonth"
-        aria-role="button"
-        aria-label="下个月"
-      >
-        <image class="cal-arrow-icon" src="{{icons.chevronRight}}" mode="aspectFit" />
+      <view class="cal-nav">
+        <view class="cal-arrow" hover-class="cal-arrow-hover" data-delta="-1" bindtap="switchMonth" aria-role="button" aria-label="上个月">
+          <image class="cal-arrow-icon" src="{{icons.chevronLeft}}" mode="aspectFit" />
+        </view>
+        <view
+          class="cal-arrow {{isCurrentMonth ? 'cal-arrow-disabled' : ''}}"
+          hover-class="cal-arrow-hover"
+          data-delta="1"
+          bindtap="switchMonth"
+          aria-role="button"
+          aria-label="下个月"
+        >
+          <image class="cal-arrow-icon" src="{{icons.chevronRight}}" mode="aspectFit" />
+        </view>
       </view>
     </view>
     <view class="week-row">
@@ -51,22 +50,60 @@
     <view class="day-grid">
       <view wx:for="{{cells}}" wx:key="index" class="day-cell">
         <block wx:if="{{item.day > 0}}">
+          <view wx:if="{{item.isToday}}" class="day-today">{{item.day}}</view>
           <view
-            wx:if="{{item.isToday}}"
-            class="day-today {{item.checked ? 'day-today-checked' : ''}}"
-          >{{item.day}}</view>
-          <text
             wx:else
             class="day-num {{item.checked ? 'day-num-checked' : ''}} {{item.future ? 'day-future' : ''}}"
-          >{{item.day}}</text>
+          >{{item.day}}</view>
         </block>
       </view>
     </view>
   </view>
 
-  <!-- 签到与打卡记录（最近30条；长按删除，避免误触） -->
+  <!-- 本月签到榜（只统计现场签到，打卡不参与；行可点进滑手主页） -->
+  <view class="board">
+    <view class="board-head">
+      <text class="board-title">本月签到榜</text>
+      <text class="board-chip">{{monthChip}}</text>
+    </view>
+    <view wx:if="{{!board.length}}" class="board-empty">本月还没有人签到，快去抢第一</view>
+    <block wx:else>
+      <view
+        wx:for="{{board}}"
+        wx:key="rank"
+        class="board-row"
+        hover-class="board-row-hover"
+        bindtap="goUserProfile"
+        data-openid="{{item.openid}}"
+        data-user="{{item.user}}"
+      >
+        <view class="board-rank board-rank-{{item.rank <= 3 ? item.rank : 'n'}}">{{item.rank}}</view>
+        <view class="board-avatar board-avatar-{{index % 4}}">{{item.char}}</view>
+        <text class="board-user">{{item.user}}</text>
+        <view class="board-count">
+          <text class="board-count-num">{{item.count}}</text>
+          <text class="board-count-unit">次</text>
+        </view>
+      </view>
+      <!-- 我的行级高亮（设计稿：主色淡底 + 主色左缘） -->
+      <view wx:if="{{myCount}}" class="board-self">
+        <text class="board-self-name">我</text>
+        <text class="board-self-sep">·</text>
+        <text class="board-self-meta">{{myCount}} 次</text>
+        <block wx:if="{{myRank}}">
+          <text class="board-self-sep">·</text>
+          <text class="board-self-meta">第 {{myRank}} 名</text>
+        </block>
+      </view>
+      <view class="board-more" bindtap="toggleBoard">
+        {{boardExpanded ? '收起榜单' : '展开完整榜单'}}
+      </view>
+    </block>
+  </view>
+
+  <!-- 最近签到记录（最近30条，不含打卡；长按删除，避免误触） -->
   <view class="records">
-    <text class="section-title">签到与打卡</text>
+    <text class="rec-group-title">最近记录</text>
     <view
       wx:for="{{records}}"
       wx:key="id"
@@ -74,45 +111,22 @@
       data-id="{{item.id}}"
       bindlongpress="delRecord"
     >
-      <view class="rec-main" data-id="{{item.venueId}}" data-kind="{{item.kind}}" bindtap="goRecord">
-        <view class="rec-row1">
-          <text class="rec-name">{{item.venueName}}</text>
-          <text class="rec-type {{item.typeLabel === '打卡' ? 'rec-type-post' : ''}}">{{item.typeLabel}}</text>
-          <text class="rec-kind {{item.kind === 'shop' ? 'rec-kind-shop' : ''}}">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
-          <text class="rec-time">{{item.timeText}}</text>
-        </view>
-        <text wx:if="{{item.note}}" class="rec-note">{{item.note}}</text>
-        <image
-          wx:if="{{item.photo}}"
-          class="rec-photo"
-          src="{{item.photo}}"
-          mode="aspectFill"
-          data-url="{{item.photo}}"
-          catchtap="previewRecordPhoto"
-        />
+      <view
+        class="rec-main"
+        hover-class="rec-main-hover"
+        data-id="{{item.venueId}}"
+        data-kind="{{item.kind}}"
+        bindtap="goRecord"
+      >
+        <text class="rec-date">{{item.dateText}}</text>
+        <text class="rec-name">{{item.venueName}}</text>
+        <text class="rec-kind {{item.kind === 'shop' ? 'rec-kind-shop' : ''}}">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
+        <image class="rec-arrow" src="{{icons.chevronRight}}" mode="aspectFit" />
       </view>
     </view>
     <view wx:if="{{!records.length}}" class="rec-empty">
-      <text>还没有记录，去场地或店铺签到，或发一条打卡吧</text>
+      <text>还没有签到记录，去场地或店铺签到吧</text>
     </view>
     <view wx:if="{{records.length}}" class="rec-hint">长按记录可删除</view>
-  </view>
-
-  <!-- 签到排行榜（只统计现场签到，打卡不参与） -->
-  <view class="board">
-    <text class="section-title">签到排行榜</text>
-    <view wx:if="{{!board.length}}" class="board-empty">暂无排行数据，快去签到抢第一</view>
-    <block wx:else>
-      <view wx:for="{{board}}" wx:key="rank" class="board-row {{item.self ? 'board-row-self' : ''}}" hover-class="board-row-hover" bindtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-self="{{item.self}}">
-        <view class="board-left">
-          <view class="board-rank board-rank-{{item.rank <= 3 ? item.rank : 'n'}}">{{item.rank}}</view>
-          <text class="board-user {{item.self ? 'board-user-self' : ''}}">{{item.user}}{{item.self ? '（我）' : ''}}</text>
-        </view>
-        <text class="board-count {{item.rank <= 3 ? 'board-count-top' : ''}}">{{item.count}}次</text>
-      </view>
-      <view class="board-more" bindtap="toggleBoard">
-        {{boardExpanded ? '收起榜单' : '查看完整榜单（' + board.length + ' 人）'}}
-      </view>
-    </block>
   </view>
 </view>

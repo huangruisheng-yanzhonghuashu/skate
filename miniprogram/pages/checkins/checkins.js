@@ -1,8 +1,7 @@
-/* 我的签到：统计 + 日历（可切月） + 签到排行榜 + 签到与打卡记录（长按删除）
- * 口径：统计/日历只数"签到"（现场记录），打卡（内容记录）不参与 */
+/* 我的签到：本月统计带 + 日历（可切月） + 本月签到榜 + 最近签到记录（长按删除）
+ * 口径：统计/日历/榜单/记录只数"签到"（现场记录），打卡（内容记录）不参与 */
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
-const { fmtRel } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 
 /* 设计稿：周一起始 */
@@ -11,19 +10,19 @@ const BOARD_LIMIT = 20
 
 Page({
   data: {
-    stats: { total: 0, streak: 0, weekDays: 0 },
+    stats: { total: 0, streak: 0, month: 0 },
     weekLabels: WEEK_LABELS,
     cells: [],
     monthTitle: '',
+    monthChip: '',
     isCurrentMonth: true,
     board: [],
     boardExpanded: false,
     boardLoaded: false,
+    myCount: 0,
+    myRank: 0,
     records: [],
     icons: {
-      trophy: ICON.trophyOrange,
-      flame: ICON.flameOrangeStat,
-      calendar: ICON.calendarOrange,
       chevronLeft: ICON.chevronLeftWhite,
       chevronRight: ICON.chevronRightAsh,
     },
@@ -32,37 +31,46 @@ Page({
   onShow() {
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
     if (tb) tb.setData({ selected: 2 })
-    /* 回到当月（跨月停留后回到页面时归位） */
     const now = new Date()
-    this._viewYear = now.getFullYear()
-    this._viewMonth = now.getMonth()
+    /* 仅冷进入归位当月；从详情页返回保留所看月份 */
+    if (!this._inited) {
+      this._viewYear = now.getFullYear()
+      this._viewMonth = now.getMonth()
+      this._inited = true
+    }
+    this.setData({ monthChip: (now.getMonth() + 1) + '月' })
     this.refresh()
     if (!this.data.boardLoaded) this.loadBoard(this.data.boardExpanded)
   },
 
-  /* 云端排行榜：聚合所有人场地"签到"数（店铺与打卡记录不计入），需 checkins"所有用户可读"权限 */
+  /* 本月边界（ISO 字符串；云端 at 为 ISO 串，可字典序比较） */
+  monthRange() {
+    const now = new Date()
+    return {
+      start: new Date(now.getFullYear(), now.getMonth(), 1).toISOString(),
+      end: new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString(),
+    }
+  },
+
+  /* 云端排行榜（本月）：聚合所有人场地"签到"数（店铺与打卡记录不计入），需 checkins"所有用户可读"权限 */
   loadBoard(expanded) {
-    cloud.getLeaderboard(expanded ? BOARD_LIMIT : 5).then((board) => {
-      this.setData({ board, boardLoaded: true })
+    return cloud.getLeaderboard(expanded ? BOARD_LIMIT : 5, this.monthRange()).then((rows) => {
+      const board = rows.map((b) => Object.assign({}, b, { char: (b.user || '滑').slice(0, 1) }))
+      const me = board.find((b) => b.self)
+      this.setData({ board, boardLoaded: true, myRank: me ? me.rank : 0 })
     })
   },
 
-  /* 下拉刷新：统计/日历/记录/榜单全量重取 */
+  /* 下拉刷新：统计/日历/记录同步重取，榜单回来后再收起刷新圈 */
   onPullDownRefresh() {
     this.refresh()
-    this.loadBoard(this.data.boardExpanded)
-    wx.stopPullDownRefresh()
+    this.loadBoard(this.data.boardExpanded).then(() => wx.stopPullDownRefresh())
   },
 
   toggleBoard() {
     const expanded = !this.data.boardExpanded
     this.setData({ boardExpanded: expanded })
-    if (expanded) {
-      this.loadBoard(true)
-      wx.showToast({ title: '已展开完整榜单', icon: 'none' })
-    } else {
-      this.loadBoard(false)
-    }
+    this.loadBoard(expanded)
   },
 
   /* 榜单行 → 滑手主页（本人也进新页面：openid 缺失时兜底用本人 openid） */
@@ -96,9 +104,16 @@ Page({
     const now = new Date()
     const viewYear = this._viewYear
     const viewMonth = this._viewMonth
-
-    /* 所看月份的签到日集合（只算"签到"记录；本地记录口径，支持回看历史月份） */
     const state = store.getState()
+
+    /* 本月签到次数（条数）：统计带"本月"与榜单底栏"我"共用 */
+    const monthCount = state.checkins.filter((c) => {
+      if (!store.isCheckinRec(c)) return false
+      const d = new Date(c.at)
+      return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth()
+    }).length
+
+    /* 所看月份的签到日集合（本地口径，支持回看历史月份） */
     const checkedSet = new Set(
       state.checkins
         .filter((c) => {
@@ -125,20 +140,25 @@ Page({
     }
     while (cells.length % 7 !== 0) cells.push({ day: 0 })
 
-    /* 签到与打卡记录（最近 30 条）：地点 + 类型 + 时间 + 留言 + 首图 */
-    const records = state.checkins.slice(0, 30).map((c) => ({
-      id: c.id,
-      venueId: c.venueId,
-      venueName: c.venueName,
-      kind: c.kind || 'venue',
-      typeLabel: store.isPostRec(c) ? '打卡' : '签到',
-      timeText: fmtRel(c.at),
-      note: c.note || '',
-      photo: (c.photos && c.photos[0]) || '',
-    }))
+    /* 最近签到记录（30条，不含打卡）：MM-DD + 地点 */
+    const pad = (n) => (n < 10 ? '0' + n : '' + n)
+    const records = state.checkins
+      .filter(store.isCheckinRec)
+      .slice(0, 30)
+      .map((c) => {
+        const d = new Date(c.at)
+        return {
+          id: c.id,
+          venueId: c.venueId,
+          venueName: c.venueName,
+          kind: c.kind || 'venue',
+          dateText: pad(d.getMonth() + 1) + '-' + pad(d.getDate()),
+        }
+      })
 
     this.setData({
-      stats: { total: s.total, streak: s.streak, weekDays: s.weekDays },
+      stats: { total: s.total, streak: s.streak, month: monthCount },
+      myCount: monthCount,
       cells,
       records,
       isCurrentMonth,
@@ -146,7 +166,7 @@ Page({
     })
   },
 
-  /* 打卡记录：点击进对应详情页 */
+  /* 记录点击 → 对应详情页 */
   goRecord(e) {
     const { id, kind } = e.currentTarget.dataset
     if (kind === 'shop') {
@@ -156,25 +176,22 @@ Page({
     }
   },
 
-  /* 记录长按删除（二次确认，本地+云端；替代常驻删除按钮防误触） */
+  /* 记录长按删除（二次确认，本地+云端；榜单同步重取） */
   delRecord(e) {
     const id = e.currentTarget.dataset.id
     const rec = this.data.records.find((r) => r.id === id)
     wx.showModal({
       title: '删除记录',
-      content: '删除「' + (rec ? rec.venueName : '该记录') + '」的这条' + (rec && rec.typeLabel === '打卡' ? '打卡' : '签到') + '记录？',
+      content: '删除「' + (rec ? rec.venueName : '该记录') + '」的这条签到记录？',
       confirmColor: '#E5484D',
       success: (r) => {
         if (!r.confirm) return
         store.deleteCheckin(id).then(() => {
           wx.showToast({ title: '已删除', icon: 'success' })
           this.refresh()
+          this.loadBoard(this.data.boardExpanded)
         })
       },
     })
-  },
-
-  previewRecordPhoto(e) {
-    wx.previewImage({ urls: [e.currentTarget.dataset.url] })
   },
 })

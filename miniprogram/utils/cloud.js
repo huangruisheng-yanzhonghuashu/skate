@@ -369,17 +369,22 @@ function saveCity(city) {
 }
 
 /* ===== 排行榜（聚合所有人场地"签到"数，需 checkins"所有用户可读"权限）
- * limit 参数化（首页榜 5 / 完整榜 20）；只数签到：type=checkin，或旧数据（无 type）无留言/媒体；
- * 店铺签到不计入（kind != shop，旧数据无 kind 字段视为场地），打卡（type=post）不参与排行 */
-function getLeaderboard(limit) {
+ * limit 参数化（首页榜 5 / 完整榜 20）；month: { start, end } 可选月份边界（ISO 字符串，
+ * 云端 at 存 ISO 串可字典序比较），传了则只统计该月，不传为累计；只数签到：type=checkin，
+ * 或旧数据（无 type）无留言/媒体；店铺签到不计入（kind != shop），打卡（type=post）不参与 */
+function getLeaderboard(limit, month) {
   const $ = agg()
   const cmd = db().command
   return ensureOpenid().then(function () {
+    let where = cmd.or([
+      { kind: cmd.neq('shop'), type: 'checkin' },
+      { kind: cmd.neq('shop'), type: cmd.exists(false), note: cmd.in(['', null]), photos: cmd.in([[], null]), videos: cmd.in([[], null]) },
+    ])
+    if (month && month.start && month.end) {
+      where = cmd.and([where, { at: cmd.gte(month.start).and(cmd.lt(month.end)) }])
+    }
     return db().collection('checkins').aggregate()
-      .match(cmd.or([
-        { kind: cmd.neq('shop'), type: 'checkin' },
-        { kind: cmd.neq('shop'), type: cmd.exists(false), note: cmd.in(['', null]), photos: cmd.in([[], null]), videos: cmd.in([[], null]) },
-      ]))
+      .match(where)
       .group({ _id: '$_openid', count: $.sum(1), name: $.last('$userName') })
       .sort({ count: -1 })
       .limit(limit || 5)
