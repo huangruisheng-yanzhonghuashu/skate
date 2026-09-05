@@ -56,6 +56,14 @@
   line-height: 1.15;
 }
 
+/* 首页选中态：底座为正圆（非文字撑开的长椭圆），固定宽高 + 50% 圆角 */
+.tab-item.active .brand-pill {
+  width: 100rpx;
+  height: 100rpx;
+  padding: 0;
+  border-radius: 50%;
+}
+
 .brand-line {
   font-weight: 800;
   color: #FFFFFF;

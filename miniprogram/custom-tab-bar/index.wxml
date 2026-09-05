@@ -10,7 +10,7 @@
   >
     <!-- 激活：橙胶囊内 图标+文字横排；未激活：图标上、文字下（设计稿同款） -->
     <!-- 首页项：选中时显示品牌字标「滑/哪儿」两行竖排（无图标）；切走后恢复「图标+首页」（参考美团） -->
-    <view class="tab-pill">
+    <view class="tab-pill {{index === 0 && selected === 0 ? 'brand-pill' : ''}}">
       <view wx:if="{{index === 0 && selected === 0}}" class="brand-stack">
         <text class="brand-line brand-big">滑</text>
         <text class="brand-line brand-small">哪儿</text>
