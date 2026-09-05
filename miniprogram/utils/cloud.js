@@ -131,13 +131,16 @@ function _updateCheckinDoc(id, patch) {
 }
 
 /* 某地点（场地/店铺）的打卡流（所有人，按时间倒序）
- * opts: { noteOnly: 只要有留言的（打卡动态区用）, skip: 分页偏移, limit: 条数 }
+ * opts: { noteOnly: 只取"有内容的"（有留言或有照片，打卡动态区用）, skip: 分页偏移, limit: 条数 }
  * 需 checkins"所有用户可读"权限；无权限时仅返回自己的，行为仍正确 */
 function getPlaceCheckins(venueId, opts) {
   opts = opts || {}
   const cmd = db().command
   const where = opts.noteOnly
-    ? { venueId: venueId, note: cmd.neq('') }
+    ? cmd.or([
+        { venueId: venueId, note: cmd.neq('') },
+        { venueId: venueId, photos: cmd.neq([]) },
+      ])
     : { venueId: venueId }
   let q = db().collection('checkins').where(where)
   if (opts.skip) q = q.skip(opts.skip)

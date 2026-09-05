@@ -146,9 +146,18 @@ Page({
   loadFeed() {
     const shop = this.data.shop
     if (!shop) return
-    cloud.getPlaceCheckins(shop.id, { noteOnly: true, limit: 3 }).then((feed) => {
+    cloud.getPlaceCheckins(shop.id, { noteOnly: true, limit: 20 }).then((rows) => {
+      /* 云写入是异步的（失败进重试队列）：合并本地本人打卡兜底，按 id 去重后时间倒序取前3 */
+      const seen = {}
+      const merged = []
+      rows.concat(store.getLocalPlaceCheckins(shop.id, true)).forEach((r) => {
+        if (seen[r.id]) return
+        seen[r.id] = true
+        merged.push(r)
+      })
+      merged.sort((a, b) => (a.at < b.at ? 1 : -1))
       this.setData({
-        feed: feed.map((f) => ({
+        feed: merged.slice(0, 3).map((f) => ({
           id: f.id,
           user: f.user,
           avatarFile: f.avatarFile,

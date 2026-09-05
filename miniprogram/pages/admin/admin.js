@@ -3,6 +3,7 @@ const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { fmtRel } = require('../../utils/format.js')
 const { QQ_MAP_KEY } = require('../../utils/config.js')
+const qqmap = require('../../utils/qqmap.js')
 
 const CATEGORIES = ['混合', '碗池', '街式', '平地', 'U池', '泵道', '街式地形']
 /* 场地标签选项 → 存库结构 { label, icon }（icon 供 venue-card 显示） */
@@ -335,27 +336,23 @@ Page({
     this.setData({ 'form.services': arr })
   },
 
-  /* 正地理编码：地址文本 → 坐标（腾讯位置服务 WebService）。
-   * 无地址 / 未配置 Key / 请求失败时 resolve(null)，调用方走默认定位打开地图 */
+  /* 正地理编码：地址文本 → 坐标（腾讯位置服务 WebService，签名见 utils/qqmap.js）。
+   * 无地址 / 未配置 Key 时 resolve({ok:false})，调用方走默认定位打开地图 */
   geocodeAddress() {
     const f = this.data.form
     const addr = (f.address || '').trim()
-    if (!addr || !QQ_MAP_KEY) return Promise.resolve(null)
-    return new Promise((resolve) => {
-      wx.request({
-        url: 'https://apis.map.qq.com/ws/geocoder/v1/',
-        data: {
-          address: f.city ? f.city + addr : addr, /* 带城市前缀提升匹配精度 */
-          region: f.city || '',
-          key: QQ_MAP_KEY,
-        },
-        success: (r) => {
-          const res = r.data || {}
-          const loc = res.status === 0 && res.result && res.result.location
-          resolve(loc ? { latitude: res.result.location.lat, longitude: res.result.location.lng } : null)
-        },
-        fail: () => resolve(null),
-      })
+    if (!addr || !QQ_MAP_KEY) return Promise.resolve({ ok: false, detail: '' })
+    return qqmap.request('/ws/geocoder/v1/', {
+      address: f.city ? f.city + addr : addr, /* 带城市前缀提升匹配精度 */
+      region: f.city || '',
+      key: QQ_MAP_KEY,
+    }).then((result) => {
+      const loc = result && result.location
+      return loc
+        ? { ok: true, latitude: loc.lat, longitude: loc.lng }
+        : { ok: false, detail: '未匹配到地址' }
+    }).catch((e) => {
+      return { ok: false, detail: (e && e.message) || '请求失败' }
     })
   },
 
@@ -399,10 +396,10 @@ Page({
       return
     }
     wx.showLoading({ title: '定位地址中', mask: true })
-    this.geocodeAddress().then((loc) => {
+    this.geocodeAddress().then((r) => {
       wx.hideLoading()
-      if (!loc) wx.showToast({ title: '未匹配到地址，已打开地图', icon: 'none' })
-      open(loc)
+      if (!r.ok) wx.showToast({ title: '未匹配到地址：' + (r.detail || '未知原因'), icon: 'none', duration: 3000 })
+      open(r.ok ? { latitude: r.latitude, longitude: r.longitude } : null)
     })
   },
 

@@ -321,6 +321,35 @@ function getTodayCheckin(placeId) {
   }) || null
 }
 
+/* 某地点的本人打卡（本地兜底）：输出结构与 cloud 的 mapCheckin 对齐。
+ * 详情页打卡动态用：云读取失败/云写入延迟（含重试队列中）时，本人打卡仍可见 */
+function getLocalPlaceCheckins(placeId, noteOnly) {
+  init()
+  const nickname = state.user.nickname || '滑手'
+  const avatar = state.user.avatarFileID || ''
+  return state.checkins
+    .filter(function (c) {
+      if (c.venueId !== placeId) return false
+      /* noteOnly：有留言或有照片（与 cloud.getPlaceCheckins 口径一致） */
+      if (noteOnly && !(c.note || '').trim() && !(c.photos || []).length) return false
+      return true
+    })
+    .map(function (c) {
+      return {
+        id: c.id,
+        kind: c.kind || 'venue',
+        venueId: c.venueId,
+        venueName: c.venueName,
+        note: c.note || '',
+        photos: c.photos || [],
+        at: c.at,
+        user: nickname,
+        avatarFile: avatar.indexOf('cloud://') === 0 ? avatar : '',
+        avatarText: avatar.indexOf('cloud://') === 0 ? nickname.slice(0, 1) : (avatar || nickname.slice(0, 1)),
+      }
+    })
+}
+
 /* 补充打卡：更新当日已有记录的留言/照片（不新增记录，统计口径不变）
  * 本地立即生效；已同步记录（云端 _id）异步 update，未同步记录（c- 开头）同步更新重试队列 */
 function updateCheckin(id, note, photos) {
@@ -407,6 +436,7 @@ module.exports = {
   addCheckin: addCheckin,
   updateCheckin: updateCheckin,
   getTodayCheckin: getTodayCheckin,
+  getLocalPlaceCheckins: getLocalPlaceCheckins,
   deleteCheckin: deleteCheckin,
   isLiked: isLiked,
   toggleLike: toggleLike,

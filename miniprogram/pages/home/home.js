@@ -1,6 +1,7 @@
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { QQ_MAP_KEY } = require('../../utils/config.js')
+const qqmap = require('../../utils/qqmap.js')
 const { ICON } = require('../../utils/icons.js')
 
 const FIELD_FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
@@ -187,28 +188,22 @@ Page({
       this.tryLocateCity()
       return
     }
-    wx.request({
-      url: 'https://apis.map.qq.com/ws/geocoder/v1/',
-      data: {
-        location: latitude + ',' + longitude,
-        key: QQ_MAP_KEY,
-        get_poi: 0,
-      },
-      success: (r) => {
-        const ad = r.data && r.data.result && r.data.result.ad_info
-        const city = ad && ad.city
-        if (!city) {
-          this.tryLocateCity()
-          return
-        }
-        this._geoDone = true
-        this._geoCity = city.replace(/市$/, '')
-        this.applyGeoCityIfKnown()
-      },
-      fail: (e) => {
-        console.warn('[home] 逆地理编码失败，回退最近场地推断', (e && e.errMsg) || e)
+    qqmap.request('/ws/geocoder/v1/', {
+      location: latitude + ',' + longitude,
+      key: QQ_MAP_KEY,
+      get_poi: 0,
+    }).then((result) => {
+      const city = result && result.ad_info && result.ad_info.city
+      if (!city) {
         this.tryLocateCity()
-      },
+        return
+      }
+      this._geoDone = true
+      this._geoCity = city.replace(/市$/, '')
+      this.applyGeoCityIfKnown()
+    }).catch((e) => {
+      console.warn('[home] 逆地理编码失败，回退最近场地推断', (e && e.message) || e)
+      this.tryLocateCity()
     })
   },
 
