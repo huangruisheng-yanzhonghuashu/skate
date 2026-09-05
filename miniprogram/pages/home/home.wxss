@@ -55,10 +55,10 @@
   height: 28rpx;
 }
 
-/* 城市切换图标（⇌）：与 pin 同尺寸（设计稿 14×14px，白色） */
+/* 城市切换图标（⇌）：比城市名小一号、灰色弱化，避免抢视觉权重 */
 .city-swap {
-  width: 28rpx;
-  height: 28rpx;
+  width: 24rpx;
+  height: 24rpx;
   flex-shrink: 0;
 }
 

@@ -55,7 +55,7 @@ Page({
     icons: {
       pinWhite: ICON.pinWhite,
       pinOrange: ICON.pinOrangeSmall,
-      swap: ICON.swapWhite,
+      swap: ICON.swapAsh,
       search: ICON.searchPh,
       xWhite: ICON.xWhite,
       venueFog: ICON.venueFog,

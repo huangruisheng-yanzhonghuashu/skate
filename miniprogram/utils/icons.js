@@ -117,6 +117,8 @@ const ICON = {
   searchPh: svg(P.search, { stroke: '#C7C7C7' }),
   chevronDownWhite: svg(P.chevronDown, { stroke: WHITE }),
   swapWhite: svg(P.swap, { stroke: WHITE, sw: 2.2 }),
+  /* 城市切换弱化态：灰色细描边，避免与城市名抢视觉权重 */
+  swapAsh: svg(P.swap, { stroke: '#8C8C94', sw: 2 }),
   locateInk: svg(P.locate, { stroke: '#1A1A1E' }),
   locateWhite: svg(P.locateW, { stroke: WHITE }),
   checkGreenBold: svg(P.check, { stroke: '#00B386', sw: 3 }),
