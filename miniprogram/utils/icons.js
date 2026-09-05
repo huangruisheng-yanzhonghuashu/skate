@@ -51,6 +51,8 @@ const P = {
   compass: '<circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/>',
   calendar: '<path d="M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h18"/>',
   trash: '<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/>',
+  /* 视频打卡封面角标（实心播放键） */
+  play: '<path d="M7 4.5L20 12 7 19.5 7 4.5Z"/>',
 }
 
 const ASH = '#8C8C8C'
@@ -136,6 +138,9 @@ const ICON = {
   trophyOrange: svg(P.trophy, { stroke: ORANGE }),
   flameOrangeStat: svg(P.flame, { stroke: ORANGE }),
   calendarOrange: svg(P.calendar, { stroke: ORANGE }),
+
+  /* 视频封面播放角标 */
+  playWhite: svg(P.play, { fill: WHITE, stroke: WHITE }),
 }
 
 module.exports = { ICON, svg }

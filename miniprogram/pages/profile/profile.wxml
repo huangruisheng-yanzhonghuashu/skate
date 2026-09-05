@@ -2,47 +2,48 @@
   <!-- 页面大标题（设计稿同款） -->
   <view class="page-title">我的</view>
 
-  <!-- 个人卡片（点击进入资料编辑） -->
-  <view class="profile" hover-class="profile-hover" bindtap="openEdit">
-    <image wx:if="{{user.avatarFileID}}" class="avatar-img" src="{{user.avatarFileID}}" mode="aspectFill" />
-    <view wx:else class="avatar">{{user.nickname ? user.nickname[0] : '滑'}}</view>
-    <view class="profile-info">
-      <text class="profile-name">{{user.nickname || '滑手'}}</text>
-      <view class="profile-meta">
-        <view class="meta-row">
-          <image class="meta-icon" src="{{icons.pin}}" mode="aspectFit" />
-          <text>{{city}}</text>
+  <!-- 个人卡片：上（点击进入资料编辑）+ 下（签到/打卡/推荐快捷统计，可点跳转） -->
+  <view class="profile-card">
+    <view class="profile" hover-class="profile-hover" bindtap="openEdit">
+      <image wx:if="{{user.avatarFileID}}" class="avatar-img" src="{{user.avatarFileID}}" mode="aspectFill" />
+      <view wx:else class="avatar">{{user.nickname ? user.nickname[0] : '滑'}}</view>
+      <view class="profile-info">
+        <text class="profile-name">{{user.nickname || '滑手'}}</text>
+        <view class="profile-meta">
+          <view class="meta-row">
+            <image class="meta-icon" src="{{icons.pin}}" mode="aspectFit" />
+            <text>{{city}}</text>
+          </view>
+          <view class="meta-row">
+            <image class="meta-icon" src="{{icons.flame}}" mode="aspectFit" />
+            <text>滑龄 {{user.skateYears || '未设置'}}</text>
+          </view>
         </view>
-        <view class="meta-row">
-          <image class="meta-icon" src="{{icons.flame}}" mode="aspectFit" />
-          <text>滑龄 {{user.skateYears || '未设置'}}</text>
+        <view wx:if="{{user.skills.length}}" class="profile-tags">
+          <text wx:for="{{user.skills}}" wx:key="*this" class="profile-tag">{{item}}</text>
         </view>
+        <view wx:if="{{!profileComplete}}" class="profile-hint">点击完善资料，解锁专属身份</view>
       </view>
-      <view wx:if="{{user.skills.length}}" class="profile-tags">
-        <text wx:for="{{user.skills}}" wx:key="*this" class="profile-tag">{{item}}</text>
-      </view>
-      <view wx:if="{{!profileComplete}}" class="profile-hint">点击完善资料，解锁专属身份</view>
+      <image class="profile-arrow" src="{{icons.chevron}}" mode="aspectFit" />
     </view>
-    <image class="profile-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+
+    <view class="card-stats">
+      <view class="cstat" hover-class="cstat-hover" bindtap="goCheckins">
+        <text class="cstat-num cstat-num-orange">{{checkinCount}}</text>
+        <text class="cstat-label">签到</text>
+      </view>
+      <view class="cstat" hover-class="cstat-hover" bindtap="goMyPosts">
+        <text class="cstat-num">{{postCount}}</text>
+        <text class="cstat-label">打卡</text>
+      </view>
+      <view class="cstat" hover-class="cstat-hover" bindtap="goRecommend">
+        <text class="cstat-num">{{submissionCount}}</text>
+        <text class="cstat-label">推荐</text>
+      </view>
+    </view>
   </view>
 
-  <!-- 统计行（设计稿：3 个独立小卡，数字大 + 标签小；签到数字橙色） -->
-  <view class="stats">
-    <view class="stat" hover-class="stat-hover" bindtap="goCheckins">
-      <text class="stat-num stat-num-orange">{{checkinCount}}</text>
-      <text class="stat-label">签到</text>
-    </view>
-    <view class="stat" hover-class="stat-hover" bindtap="goReports">
-      <text class="stat-num">{{reportCount}}</text>
-      <text class="stat-label">报错</text>
-    </view>
-    <view class="stat" hover-class="stat-hover" bindtap="goFeedback">
-      <text class="stat-num">{{feedbackCount}}</text>
-      <text class="stat-label">建议</text>
-    </view>
-  </view>
-
-  <!-- 菜单 -->
+  <!-- 菜单（打卡/推荐入口已并入个人卡片统计，此处不再重复） -->
   <view class="menu">
     <view class="menu-item" hover-class="menu-hover" bindtap="goPostPublish">
       <view class="menu-left">
@@ -50,16 +51,6 @@
         <text class="menu-label">发打卡</text>
       </view>
       <view class="menu-right">
-        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
-      </view>
-    </view>
-    <view class="menu-item" hover-class="menu-hover" bindtap="goMyPosts">
-      <view class="menu-left">
-        <image class="menu-icon" src="{{icons.edit}}" mode="aspectFit" />
-        <text class="menu-label">我的打卡</text>
-      </view>
-      <view class="menu-right">
-        <text class="menu-value">{{postCount}}条</text>
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
@@ -73,7 +64,7 @@
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
-    <view class="menu-item" hover-class="menu-hover" bindtap="goFeedback">
+    <view class="menu-item menu-item-last" hover-class="menu-hover" bindtap="goFeedback">
       <view class="menu-left">
         <image class="menu-icon" src="{{icons.send}}" mode="aspectFit" />
         <text class="menu-label">你提我改</text>
@@ -83,29 +74,14 @@
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
-    <view class="menu-item" hover-class="menu-hover" bindtap="goRecommend">
-      <view class="menu-left">
-        <image class="menu-icon" src="{{icons.plus}}" mode="aspectFit" />
-        <text class="menu-label">我的推荐</text>
-      </view>
-      <view class="menu-right">
-        <text class="menu-value">{{submissionCount}}条</text>
-        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
-      </view>
-    </view>
-    <view class="menu-item" hover-class="menu-hover" bindtap="goAdmin">
+  </view>
+
+  <!-- 运营管理（仅管理员可见） -->
+  <view wx:if="{{isAdmin}}" class="menu">
+    <view class="menu-item menu-item-last" hover-class="menu-hover" bindtap="goAdmin">
       <view class="menu-left">
         <image class="menu-icon" src="{{icons.admin}}" mode="aspectFit" />
         <text class="menu-label">运营管理</text>
-      </view>
-      <view class="menu-right">
-        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
-      </view>
-    </view>
-    <view class="menu-item menu-item-last" hover-class="menu-hover" bindtap="goSettings">
-      <view class="menu-left">
-        <image class="menu-icon" src="{{icons.settings}}" mode="aspectFit" />
-        <text class="menu-label">设置</text>
       </view>
       <view class="menu-right">
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />

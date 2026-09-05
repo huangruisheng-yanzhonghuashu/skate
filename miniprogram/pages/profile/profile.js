@@ -8,6 +8,10 @@ const SKATE_YEARS = ['1年内', '1-3年', '3-5年', '5年以上']
 const TAG_OPTIONS = ['街式', '碗池', 'U池', '平花', '长板', '鱼板', '速降', '刷街', '道具', '教学']
 const MAX_SKILLS = 5
 
+/* 管理员标识缓存（config/admins 白名单，复用 manageVenue 的 check 校验，成功后本会话不再重复请求） */
+let _adminChecked = false
+let _isAdmin = false
+
 Page({
   data: {
     user: store.getUser(),
@@ -18,6 +22,7 @@ Page({
     reportCount: 0,
     feedbackCount: 0,
     submissionCount: 0,
+    isAdmin: false,
     /* 编辑资料弹窗 */
     editOpen: false,
     saving: false,
@@ -29,11 +34,8 @@ Page({
       chevron: ICON.chevronRightAsh,
       pin: ICON.pinOrangeSmall,
       file: ICON.fileOrange,
-      settings: ICON.settingsOrange,
       admin: ICON.venueOrange,
       send: ICON.sendOrange,
-      plus: ICON.plusOrange,
-      edit: ICON.editOrange,
       camera: ICON.cameraWhite,
       close: ICON.xWhite,
     },
@@ -44,6 +46,7 @@ Page({
     if (tb) tb.setData({ selected: 3 })
     this.refresh()
     this.loadCounts()
+    this.loadAdmin()
   },
 
   refresh() {
@@ -70,6 +73,28 @@ Page({
     cloud.countMySubmissions().then((n) => {
       this.setData({ submissionCount: n })
     })
+  },
+
+  /* 运营管理入口显隐：仅管理员（config/admins 白名单，走 manageVenue check）
+   * 校验成功/失败后写模块级缓存，本会话不再重复调用 */
+  loadAdmin() {
+    if (_adminChecked) {
+      this.setData({ isAdmin: _isAdmin })
+      return
+    }
+    wx.cloud.callFunction({ name: 'manageVenue', data: { action: 'check', data: {} } })
+      .then((r) => {
+        _isAdmin = !!(r.result && r.result.ok)
+        _adminChecked = true
+        this.setData({ isAdmin: _isAdmin })
+      })
+      .catch((e) => {
+        /* 云函数不可用/网络错误：按非管理员隐藏入口 */
+        _isAdmin = false
+        _adminChecked = true
+        this.setData({ isAdmin: false })
+        console.warn('[profile] 管理员校验失败', (e && e.errMsg) || (e && e.message) || e)
+      })
   },
 
   /* ===== 编辑资料 ===== */
@@ -172,5 +197,4 @@ Page({
   goRecommend() { wx.navigateTo({ url: '/pages/submit/submit' }) },
   goAdmin() { wx.navigateTo({ url: '/pages/admin/admin' }) },
   goCityPicker() { wx.navigateTo({ url: '/pages/city-picker/city-picker' }) },
-  goSettings() { wx.showToast({ title: '设置即将上线', icon: 'none' }) },
 })

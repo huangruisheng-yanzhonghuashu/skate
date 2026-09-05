@@ -1,47 +1,79 @@
-<!-- 自定义导航栏（media-viewer 预览需全屏覆盖） -->
+<!-- 自定义导航栏（media-viewer 预览需全屏覆盖），右侧相机 = 发打卡入口 -->
 <view class="nav" style="padding-top: {{statusBarHeight}}px">
   <view class="nav-row">
     <view class="nav-back-btn" hover-class="nav-btn-hover" bindtap="goBack" aria-role="button" aria-label="返回">
       <image class="nav-back-icon" src="{{icons.back}}" mode="aspectFit" />
     </view>
     <text class="nav-title">我的打卡</text>
-    <view class="nav-right"></view>
+    <view class="nav-post-btn" hover-class="nav-btn-hover" bindtap="goPostPublish" aria-role="button" aria-label="发打卡">
+      <image class="nav-post-icon" src="{{icons.camera}}" mode="aspectFit" />
+    </view>
   </view>
 </view>
 
 <view class="page" style="padding-top: {{statusBarHeight + 44}}px">
-  <!-- 打卡记录行（签到页「最近记录」同款行式） -->
-  <view wx:if="{{list.length}}" class="records">
+  <!-- 实体类型过滤 chips（客户端过滤） -->
+  <view wx:if="{{hasRecords}}" class="filters">
+    <view
+      wx:for="{{filters}}"
+      wx:key="key"
+      class="fchip {{filter === item.key ? 'fchip-active' : ''}}"
+      data-key="{{item.key}}"
+      hover-class="fchip-hover"
+      bindtap="onFilterTap"
+    >{{item.label}}</view>
+  </view>
+
+  <!-- 打卡卡片列表：封面缩略图 + 留言摘要 + 日期/地点/类型 + 点赞评论 -->
+  <view wx:if="{{list.length}}" class="cards">
     <view
       wx:for="{{list}}"
       wx:key="id"
-      class="rec"
+      class="card"
       data-id="{{item.id}}"
       bindlongpress="delPost"
     >
       <view
-        class="rec-main"
-        hover-class="rec-main-hover"
+        class="card-main"
+        hover-class="card-main-hover"
         data-id="{{item.id}}"
         bindtap="goDetail"
       >
-        <text class="rec-date">{{item.dateText}}</text>
-        <text class="rec-name">{{item.venueName}}</text>
-        <text class="rec-kind {{item.kind === 'shop' ? 'rec-kind-shop' : ''}}">{{item.kindText}}</text>
-        <view class="rec-stats">
-          <view class="rec-stat">
-            <image class="rec-stat-icon" src="{{icons.heart}}" mode="aspectFit" />
-            <text>{{item.likeCount}}</text>
-          </view>
-          <view class="rec-stat">
-            <image class="rec-stat-icon" src="{{icons.comment}}" mode="aspectFit" />
-            <text>{{item.commentCount}}</text>
+        <view class="cover">
+          <image wx:if="{{item.cover}}" class="cover-img" src="{{item.cover}}" mode="aspectFill" />
+          <view wx:else class="cover-empty">{{item.venueName ? item.venueName[0] : '滑'}}</view>
+          <view wx:if="{{item.coverVideo}}" class="cover-play">
+            <image class="cover-play-icon" src="{{icons.play}}" mode="aspectFit" />
           </view>
         </view>
-        <image class="rec-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+        <view class="card-info">
+          <text class="card-note">{{item.noteText || item.venueName}}</text>
+          <view class="card-meta">
+            <text class="card-date">{{item.dateText}}</text>
+            <text class="card-venue">{{item.venueName}}</text>
+            <text class="card-kind {{item.kind === 'shop' ? 'card-kind-shop' : ''}}">{{item.kindText}}</text>
+            <view class="card-stats">
+              <view class="card-stat">
+                <image class="card-stat-icon" src="{{icons.heart}}" mode="aspectFit" />
+                <text>{{item.likeCount}}</text>
+              </view>
+              <view class="card-stat">
+                <image class="card-stat-icon" src="{{icons.comment}}" mode="aspectFit" />
+                <text>{{item.commentCount}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        <image class="card-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
-    <view class="rec-hint">长按记录可删除</view>
+    <view class="card-hint">长按记录可删除</view>
+  </view>
+
+  <!-- 有记录但当前过滤无匹配 -->
+  <view wx:elif="{{noMatch}}" class="empty">
+    <text class="empty-text">该类型下暂无打卡</text>
+    <view class="empty-btn" hover-class="empty-btn-hover" bindtap="goShowAll">查看全部</view>
   </view>
 
   <!-- 空态：引导去发打卡 -->

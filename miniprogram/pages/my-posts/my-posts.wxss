@@ -1,8 +1,8 @@
-/* 我的打卡：本人打卡记录行式列表（点击进详情，长按删除），行式与签到页最近记录同款 */
+/* 我的打卡：类型过滤 chips + 卡片列表（封面/摘要/计数），导航栏相机为发打卡入口 */
 .page {
   min-height: 100vh;
   background: #111114;
-  padding: 24rpx 32rpx calc(40rpx + env(safe-area-inset-bottom));
+  padding: 0 32rpx calc(40rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
 }
 
@@ -23,7 +23,8 @@
   padding: 0 24rpx;
 }
 
-.nav-back-btn {
+.nav-back-btn,
+.nav-post-btn {
   width: 64rpx;
   height: 64rpx;
   margin-left: -12rpx;
@@ -32,13 +33,19 @@
   justify-content: center;
 }
 
+.nav-post-btn {
+  margin-left: 0;
+  margin-right: -12rpx;
+}
+
 .nav-btn-hover {
   opacity: 0.7;
 }
 
-.nav-back-icon {
-  width: 36rpx;
-  height: 36rpx;
+.nav-back-icon,
+.nav-post-icon {
+  width: 40rpx;
+  height: 40rpx;
 }
 
 .nav-title {
@@ -53,50 +60,146 @@
   white-space: nowrap;
 }
 
-.nav-right {
-  width: 52rpx;
-  flex-shrink: 0;
-}
-
-/* ===== 记录行（与签到页最近记录同款） ===== */
-.rec {
-  border-bottom: 1rpx solid #26262C;
-}
-
-.rec:last-of-type {
-  border-bottom: none;
-}
-
-.rec-main {
-  height: 104rpx;
+/* ===== 实体类型过滤 chips ===== */
+.filters {
   display: flex;
-  align-items: center;
-  gap: 20rpx;
-  border-radius: 12rpx;
+  gap: 16rpx;
+  padding: 24rpx 0;
+  overflow-x: auto;
 }
 
-.rec-main-hover {
+.fchip {
+  flex-shrink: 0;
+  font-size: 26rpx;
+  color: #A6A6AD;
+  background: #1E1E23;
+  border: 1rpx solid #1E1E23;
+  border-radius: 999rpx;
+  padding: 12rpx 32rpx;
+  line-height: 1.4;
+}
+
+.fchip-hover {
   background: #26262C;
 }
 
-.rec-date {
+.fchip-active {
+  color: #FFFFFF;
+  background: rgba(255, 90, 54, 0.2);
+  border-color: #FF5A36;
+}
+
+/* ===== 打卡卡片 ===== */
+.card {
+  background: #1E1E23;
+  border-radius: 20rpx;
+  margin-bottom: 20rpx;
+  overflow: hidden;
+}
+
+.card-main {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 24rpx;
+}
+
+.card-main-hover {
+  background: #26262C;
+}
+
+/* 封面缩略图：首图 / 无图首字占位 / 视频-only 播放角标 */
+.cover {
+  position: relative;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 14rpx;
+  overflow: hidden;
   flex-shrink: 0;
-  font-size: 26rpx;
+}
+
+.cover-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cover-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  background: linear-gradient(135deg, #3A3A42, #26262C);
+}
+
+.cover-play {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.cover-play-icon {
+  width: 52rpx;
+  height: 52rpx;
+}
+
+.card-info {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4rpx 0;
+}
+
+/* 留言摘要：最多两行省略；无留言兜底地点名 */
+.card-note {
+  font-size: 28rpx;
+  color: #FFFFFF;
+  line-height: 1.5;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.card-date {
+  flex-shrink: 0;
+  font-size: 22rpx;
   color: #8C8C94;
 }
 
-.rec-name {
+.card-venue {
   flex: 1;
   min-width: 0;
-  font-size: 28rpx;
-  color: #FFFFFF;
+  font-size: 22rpx;
+  color: #8C8C94;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-/* 类型徽章：场地=青色调 / 店铺=橙色调 */
-.rec-kind {
+/* 类型徽章：场地=青色调 / 机构=橙色调 */
+.card-kind {
   flex-shrink: 0;
   font-size: 20rpx;
   color: #00D4AA;
@@ -106,27 +209,20 @@
   line-height: 1.2;
 }
 
-.rec-kind-shop {
+.card-kind-shop {
   color: #FF8A6E;
   background: rgba(255, 90, 54, 0.16);
 }
 
-.rec-arrow {
-  width: 32rpx;
-  height: 32rpx;
-  flex-shrink: 0;
-  opacity: 0.6;
-}
-
-/* 行内计数：点赞数 + 评论数（小图标 + 数字） */
-.rec-stats {
+/* 行内计数：点赞 + 评论 */
+.card-stats {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   gap: 16rpx;
 }
 
-.rec-stat {
+.card-stat {
   display: flex;
   align-items: center;
   gap: 4rpx;
@@ -135,19 +231,26 @@
   min-width: 40rpx;
 }
 
-.rec-stat-icon {
+.card-stat-icon {
   width: 24rpx;
   height: 24rpx;
 }
 
-.rec-hint {
-  padding: 24rpx 0 0;
+.card-arrow {
+  width: 32rpx;
+  height: 32rpx;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.card-hint {
+  padding: 8rpx 0 0;
   text-align: center;
   font-size: 22rpx;
   color: #6E6E76;
 }
 
-/* ===== 空态 ===== */
+/* ===== 空态（无记录 / 过滤无匹配） ===== */
 .empty {
   display: flex;
   flex-direction: column;
@@ -157,7 +260,7 @@
   border: 2rpx dashed #33333A;
   border-radius: 24rpx;
   padding: 80rpx 32rpx;
-  margin-top: 40rpx;
+  margin-top: 24rpx;
 }
 
 .empty-icon {
@@ -174,4 +277,18 @@
   font-size: 26rpx;
   font-weight: 600;
   color: #FF8A6E;
+}
+
+.empty-btn {
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #FF8A6E;
+  padding: 12rpx 40rpx;
+  border: 1rpx solid rgba(255, 90, 54, 0.5);
+  border-radius: 999rpx;
+}
+
+.empty-btn-hover {
+  background: rgba(255, 90, 54, 0.12);
 }
