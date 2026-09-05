@@ -2,6 +2,7 @@
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { fmtRel } = require('../../utils/format.js')
+const { QQ_MAP_KEY } = require('../../utils/config.js')
 
 const CATEGORIES = ['混合', '碗池', '街式', '平地', 'U池', '泵道', '街式地形']
 /* 场地标签选项 → 存库结构 { label, icon }（icon 供 venue-card 显示） */
@@ -334,27 +335,74 @@ Page({
     this.setData({ 'form.services': arr })
   },
 
-  /* 地图选点：一次拿到地址/坐标（未选时用地址文本兜底） */
+  /* 正地理编码：地址文本 → 坐标（腾讯位置服务 WebService）。
+   * 无地址 / 未配置 Key / 请求失败时 resolve(null)，调用方走默认定位打开地图 */
+  geocodeAddress() {
+    const f = this.data.form
+    const addr = (f.address || '').trim()
+    if (!addr || !QQ_MAP_KEY) return Promise.resolve(null)
+    return new Promise((resolve) => {
+      wx.request({
+        url: 'https://apis.map.qq.com/ws/geocoder/v1/',
+        data: {
+          address: f.city ? f.city + addr : addr, /* 带城市前缀提升匹配精度 */
+          region: f.city || '',
+          key: QQ_MAP_KEY,
+        },
+        success: (r) => {
+          const res = r.data || {}
+          const loc = res.status === 0 && res.result && res.result.location
+          resolve(loc ? { latitude: res.result.location.lat, longitude: res.result.location.lng } : null)
+        },
+        fail: () => resolve(null),
+      })
+    })
+  },
+
+  /* 地图选点：一次拿到地址/坐标。
+   * 已填地址时先正地理编码，地图直接定位到该地址附近（而非当前位置），选点更准 */
   chooseLocation() {
-    wx.chooseLocation({
-      success: (r) => {
-        this.setData({
-          'form.latitude': r.latitude,
-          'form.longitude': r.longitude,
-          'form.address': r.address || r.name || this.data.form.address,
-        })
-      },
-      fail: (e) => {
-        const msg = (e && e.errMsg) || ''
-        if (msg.indexOf('auth') >= 0 || msg.indexOf('deny') >= 0) {
-          wx.showModal({
-            title: '需要位置权限',
-            content: '用于在地图上选取场地/店铺坐标',
-            confirmText: '去设置',
-            success: (r2) => { if (r2.confirm) wx.openSetting() },
+    const open = (loc) => {
+      wx.chooseLocation({
+        latitude: loc ? loc.latitude : undefined,
+        longitude: loc ? loc.longitude : undefined,
+        success: (r) => {
+          this.setData({
+            'form.latitude': r.latitude,
+            'form.longitude': r.longitude,
+            'form.address': r.address || r.name || this.data.form.address,
           })
-        }
-      },
+        },
+        fail: (e) => {
+          const msg = (e && e.errMsg) || ''
+          if (msg.indexOf('auth') >= 0 || msg.indexOf('deny') >= 0) {
+            wx.showModal({
+              title: '需要位置权限',
+              content: '用于在地图上选取场地/店铺坐标',
+              confirmText: '去设置',
+              success: (r2) => { if (r2.confirm) wx.openSetting() },
+            })
+          }
+        },
+      })
+    }
+    const f = this.data.form
+    const addr = (f.address || '').trim()
+    if (!addr) {
+      open(null)
+      return
+    }
+    if (!QQ_MAP_KEY) {
+      /* 未配置 Key 无法把地址换算成坐标，明确提示而非静默降级 */
+      wx.showToast({ title: '填 Key 后才能按地址定位（utils/config.js QQ_MAP_KEY）', icon: 'none', duration: 2500 })
+      open(null)
+      return
+    }
+    wx.showLoading({ title: '定位地址中', mask: true })
+    this.geocodeAddress().then((loc) => {
+      wx.hideLoading()
+      if (!loc) wx.showToast({ title: '未匹配到地址，已打开地图', icon: 'none' })
+      open(loc)
     })
   },
 

@@ -6,7 +6,7 @@ module.exports = {
    * 把 https://apis.map.qq.com 加入 request 合法域名，真机才可请求
    * 留空时的行为：定位成功后用「最近的场地/店铺」所在城市兜底（零配置可用，
    * 精度取决于场地分布），城市仍可手动切换 */
-  QQ_MAP_KEY: '',
+  QQ_MAP_KEY: 'O2LBZ-QKSC3-AGT3S-O7ESO-X5UOF-HWFUJ',
 
   /* ===== 场地实时在线人数（方案 B：位置心跳） ===== */
   /* 心跳有效窗口：距上次心跳超过该时长的用户不计入"此刻在场"。

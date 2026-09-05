@@ -56,12 +56,14 @@ module.exports = {
     <!-- 列表 -->
     <block wx:if="{{entity === 'venue'}}">
       <view wx:for="{{viewVenues}}" wx:key="id" class="row {{item.status === 'off' ? 'row-off' : ''}}">
-        <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
-        <view wx:else class="row-img row-img-empty">无图</view>
-        <view class="row-info">
-          <text class="row-name">{{item.name}}</text>
-          <text class="row-sub">{{item.category}} · {{item.shortAddr || item.address}}</text>
-          <text class="row-sub">{{item.city}} · {{item.hot ? '热门' : '常规'}}{{item.status === 'off' ? ' · 已下架' : ''}}</text>
+        <view class="row-main">
+          <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
+          <view wx:else class="row-img row-img-empty">无图</view>
+          <view class="row-info">
+            <text class="row-name">{{item.name}}</text>
+            <text class="row-sub">{{item.category}} · {{item.shortAddr || item.address}}</text>
+            <text class="row-sub">{{item.city}} · {{item.hot ? '热门' : '常规'}}{{item.status === 'off' ? ' · 已下架' : ''}}</text>
+          </view>
         </view>
         <view class="row-ops">
           <view class="op op-status" data-kind="venue" data-id="{{item.id}}" bindtap="toggleStatus">{{item.status === 'off' ? '上架' : '下架'}}</view>
@@ -74,12 +76,14 @@ module.exports = {
 
     <block wx:elif="{{entity === 'shop'}}">
       <view wx:for="{{viewShops}}" wx:key="id" class="row {{item.status === 'off' ? 'row-off' : ''}}">
-        <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
-        <view wx:else class="row-img row-img-empty">无图</view>
-        <view class="row-info">
-          <text class="row-name">{{item.name}}</text>
-          <text class="row-sub">{{util.join(item.services, ' / ')}}</text>
-          <text class="row-sub">{{item.city}} · {{item.hours.open}}-{{item.hours.close}}{{item.phone ? ' · ' + item.phone : ''}}{{item.status === 'off' ? ' · 已下架' : ''}}</text>
+        <view class="row-main">
+          <image wx:if="{{item.photos.length}}" class="row-img" src="{{item.photos[0]}}" mode="aspectFill" />
+          <view wx:else class="row-img row-img-empty">无图</view>
+          <view class="row-info">
+            <text class="row-name">{{item.name}}</text>
+            <text class="row-sub">{{util.join(item.services, ' / ')}}</text>
+            <text class="row-sub">{{item.city}} · {{item.hours.open}}-{{item.hours.close}}{{item.phone ? ' · ' + item.phone : ''}}{{item.status === 'off' ? ' · 已下架' : ''}}</text>
+          </view>
         </view>
         <view class="row-ops">
           <view class="op op-status" data-kind="shop" data-id="{{item.id}}" bindtap="toggleStatus">{{item.status === 'off' ? '上架' : '下架'}}</view>
@@ -224,7 +228,7 @@ module.exports = {
       <view class="f-row">
         <text class="f-label">坐标</text>
         <view class="f-btn {{form.latitude !== null ? 'f-btn-ok' : ''}}" bindtap="chooseLocation">
-          {{form.latitude !== null ? '已选点 ' + util.coord(form.latitude, form.longitude) : '打开地图选点'}}
+          {{form.latitude !== null ? '已选点 ' + util.coord(form.latitude, form.longitude) : form.address ? '按地址打开地图选点' : '打开地图选点'}}
         </view>
       </view>
 

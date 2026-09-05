@@ -103,15 +103,23 @@
   color: #8C8C94;
 }
 
-/* ===== 列表行 ===== */
+/* ===== 列表行（卡片式：上方图+信息，底部通栏操作条） ===== */
 .row {
+  display: flex;
+  flex-direction: column;
+  background: #1E1E23;
+  border-radius: 16rpx;
+  padding: 20rpx 0 0;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+}
+
+.row-main {
   display: flex;
   align-items: center;
   gap: 20rpx;
-  background: #1E1E23;
-  border-radius: 16rpx;
-  padding: 20rpx;
-  margin-bottom: 16rpx;
+  padding: 0 20rpx;
+  margin-bottom: 20rpx;
 }
 
 .row-img {
@@ -155,13 +163,42 @@
   white-space: nowrap;
 }
 
+/* 底部操作条：通栏、三分格、分隔线，点击区大且不易误触 */
 .row-ops {
   display: flex;
-  flex-direction: column;
-  gap: 12rpx;
-  flex-shrink: 0;
+  border-top: 1rpx solid #2A2A31;
 }
 
+.row-ops .op {
+  flex: 1;
+  padding: 20rpx 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 26rpx;
+}
+
+.row-ops .op + .op {
+  border-left: 1rpx solid #2A2A31;
+}
+
+.row-ops .op:active {
+  opacity: 0.6;
+}
+
+/* 上/下架：中性灰（低危高频）；编辑：橙色（设计稿主色）；删除：红色（高危，去底色弱化） */
+.row-ops .op-status {
+  color: #A6A6AD;
+}
+
+.row-ops .op-edit {
+  color: #FF8A6E;
+}
+
+.row-ops .op-del {
+  color: #FF3B30;
+}
+
+/* 建议/报错卡片的「处理」按钮：保留胶囊实心样式 */
 .op {
   font-size: 24rpx;
   padding: 8rpx 20rpx;
@@ -169,25 +206,9 @@
   text-align: center;
 }
 
-/* 编辑：橙色实心（设计稿）；删除：红色描边 */
 .op-edit {
   color: #FFFFFF;
   background: linear-gradient(135deg, #FF5A36, #FF8A6E);
-}
-
-.op-del {
-  color: #FF3B30;
-  background: transparent;
-  border: 2rpx solid rgba(255, 59, 48, 0.5);
-  box-sizing: border-box;
-}
-
-/* 上下架：中性灰描边（区别于编辑/删除的高危操作） */
-.op-status {
-  color: #A6A6AD;
-  background: transparent;
-  border: 2rpx solid #3A3A42;
-  box-sizing: border-box;
 }
 
 /* 已下架行弱化展示 */
