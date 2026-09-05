@@ -173,7 +173,7 @@ Page({
   goCheckins() { wx.switchTab({ url: '/pages/checkins/checkins' }) },
   goReports() { wx.navigateTo({ url: '/pages/reports/reports' }) },
   goFeedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }) },
-  goRecommend() { wx.navigateTo({ url: '/pages/recommend/recommend' }) },
+  goRecommend() { wx.navigateTo({ url: '/pages/submit/submit' }) },
   goAdmin() { wx.navigateTo({ url: '/pages/admin/admin' }) },
   goCityPicker() { wx.navigateTo({ url: '/pages/city-picker/city-picker' }) },
   goSettings() { wx.showToast({ title: '设置即将上线', icon: 'none' }) },

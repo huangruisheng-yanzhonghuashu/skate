@@ -45,11 +45,21 @@
 }
 
 /* ===== 实体切换（设计稿：靠左自适应胶囊组） ===== */
-.seg {
-  display: flex;
-  justify-content: flex-start;
-  gap: 14rpx;
+/* 实体切换胶囊容器：超出一屏横向滚动（隐藏滚动条） */
+.seg-wrap {
+  white-space: nowrap;
   margin-bottom: 20rpx;
+}
+
+.seg-wrap ::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.seg {
+  display: inline-flex;
+  gap: 14rpx;
 }
 
 .seg-item {
@@ -322,11 +332,6 @@
   font-size: 28rpx;
   color: #FFFFFF;
   flex-shrink: 0;
-}
-
-/* 同行第二个字段标签（城市+类型同行布局） */
-.f-label-2 {
-  margin-left: 16rpx;
 }
 
 /* 字段补充说明（如：最多 6 张） */

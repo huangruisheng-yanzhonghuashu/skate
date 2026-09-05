@@ -1,7 +1,7 @@
 {
   "projectname": "miniprogram",
   "setting": {
-    "compileHotReLoad": true,
+    "compileHotReLoad": false,
     "urlCheck": false,
     "coverView": false,
     "lazyloadPlaceholderEnable": false,

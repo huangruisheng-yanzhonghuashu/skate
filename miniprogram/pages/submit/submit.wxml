@@ -46,6 +46,11 @@ module.exports = {
         <text class="fb-reply-text">{{item.reply}}</text>
       </view>
       <text class="fb-time">提交于 {{item.timeText}}</text>
+      <!-- 操作：待审核可编辑，已审核查看详情 -->
+      <view class="fb-ops">
+        <view wx:if="{{item.status === 'pending'}}" class="op-btn" hover-class="op-btn-hover" data-id="{{item.id}}" catchtap="openEdit">编辑</view>
+        <view wx:else class="op-btn op-btn-ghost" hover-class="op-btn-hover" data-id="{{item.id}}" catchtap="openDetail">查看详情</view>
+      </view>
     </view>
   </block>
   <view wx:else class="state">
@@ -53,14 +58,14 @@ module.exports = {
     <text class="state-desc">点下方按钮，推荐第一个场地、门店与俱乐部</text>
   </view>
 
-  <!-- 推荐按钮 -->
-  <view class="fab" bindtap="openForm">＋ 推荐</view>
+  <!-- 推荐按钮（弹窗打开时隐藏，避免透过遮罩可见可点） -->
+  <view wx:if="{{!formOpen && !detailOpen}}" class="fab" bindtap="openForm">＋ 推荐</view>
 
   <!-- 推荐表单弹窗（结构与运营管理表单一致：左侧标题 + 右上关闭，字段同序） -->
   <view wx:if="{{formOpen}}" class="mask" catchtouchmove="noop" bindtap="closeForm">
     <view class="sheet" catchtap="noop">
       <view class="sheet-head">
-        <text class="sheet-title">{{form.kind === 'venue' ? '推荐场地' : '推荐门店与俱乐部'}}</text>
+        <text class="sheet-title">{{editing ? '编辑推荐' : (form.kind === 'venue' ? '推荐场地' : '推荐门店与俱乐部')}}</text>
         <view class="sheet-close" catchtap="closeForm" aria-role="button" aria-label="关闭">×</view>
       </view>
       <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
@@ -79,23 +84,18 @@ module.exports = {
           <input class="f-input" value="{{form.name}}" maxlength="30" placeholder="必填，≤30字" placeholder-class="ph" bindinput="onNameInput" />
         </view>
 
-        <!-- 场地：城市 + 类型同行（与管理表单一致）；门店与俱乐部：类型单独一行 -->
-        <view class="f-row">
+        <!-- 城市 / 类型各占一行；城市选择跳城市选择页（与首页同款，选中写全局 store 返回） -->
+        <view class="f-row" hover-class="f-row-hover" bindtap="goCityPicker">
           <text class="f-label">城市</text>
-          <picker range="{{cities}}" bindchange="onCityChange">
+          <view class="f-city">
             <view class="f-picker">{{form.city}}</view>
-          </picker>
-          <block wx:if="{{form.kind === 'venue'}}">
-            <text class="f-label f-label-2">类型</text>
-            <picker range="{{venueCategories}}" bindchange="onCategoryChange">
-              <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
-            </picker>
-          </block>
+            <text class="f-city-cta">切换 ›</text>
+          </view>
         </view>
 
-        <view wx:if="{{form.kind === 'shop'}}" class="f-row">
+        <view class="f-row">
           <text class="f-label">类型</text>
-          <picker range="{{orgCategories}}" bindchange="onCategoryChange">
+          <picker range="{{form.kind === 'venue' ? venueCategories : orgCategories}}" bindchange="onCategoryChange">
             <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
           </picker>
         </view>
@@ -181,9 +181,51 @@ module.exports = {
           />
         </view>
 
-        <view class="f-tip">提交后由管理员审核，结果回复在列表中</view>
+        <view class="f-tip">{{editing ? '更新后将重新进入审核流程' : '提交后由管理员审核，结果回复在列表中'}}</view>
 
-        <button class="f-save {{submitting ? 'f-saving' : ''}}" bindtap="submit">{{submitting ? '提交中...' : '提交'}}</button>
+        <button class="f-save {{submitting ? 'f-saving' : ''}}" bindtap="submit">{{submitting ? '提交中...' : (editing ? '更新提交' : '提交')}}</button>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- 详情弹窗（只读查看，已审核的推荐） -->
+  <view wx:if="{{detailOpen}}" class="mask" catchtouchmove="noop" bindtap="closeDetail">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">推荐详情</text>
+        <view class="sheet-close" catchtap="closeDetail" aria-role="button" aria-label="关闭">×</view>
+      </view>
+      <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
+        <view class="f-row"><text class="f-label">类型</text><text class="f-value">{{detail.kindText}}</text></view>
+        <view class="f-row"><text class="f-label">状态</text><text class="fb-status fb-status-{{detail.status}}">{{detail.statusText}}</text></view>
+        <view class="f-row"><text class="f-label">名称</text><text class="f-value">{{detail.name}}</text></view>
+        <view class="f-row"><text class="f-label">类别</text><text class="f-value">{{detail.category}}</text></view>
+        <view class="f-row"><text class="f-label">城市</text><text class="f-value">{{detail.city}}</text></view>
+        <view class="f-row"><text class="f-label">地址</text><text class="f-value">{{detail.address || '—'}}</text></view>
+        <view wx:if="{{detail.note}}" class="f-row f-row-top"><text class="f-label">补充</text><text class="f-value">{{detail.note}}</text></view>
+        <view wx:if="{{detail.photos.length}}" class="f-row">
+          <text class="f-label">照片</text>
+          <view class="fb-photos">
+            <image
+              wx:for="{{detail.photos}}"
+              wx:for-item="p"
+              wx:key="*this"
+              class="fb-photo"
+              src="{{p}}"
+              mode="aspectFill"
+              data-photos="{{detail.photos}}"
+              data-src="{{p}}"
+              bindtap="previewDetailPhoto"
+            />
+          </view>
+        </view>
+        <view wx:if="{{detail.reply}}" class="fb-reply">
+          <view class="fb-reply-head">
+            <text class="fb-reply-label">审核意见</text>
+          </view>
+          <text class="fb-reply-text">{{detail.reply}}</text>
+        </view>
+        <view class="f-row"><text class="f-label">时间</text><text class="f-value">{{detail.timeText}}</text></view>
       </scroll-view>
     </view>
   </view>

@@ -41,8 +41,8 @@
     <text class="state-desc">点下方按钮，第一条由你来提</text>
   </view>
 
-  <!-- 提交按钮 -->
-  <view class="fab" bindtap="openForm">＋ 提一条</view>
+  <!-- 提交按钮（弹窗打开时隐藏） -->
+  <view wx:if="{{!formOpen}}" class="fab" bindtap="openForm">＋ 提一条</view>
 
   <!-- 提交弹窗（结构与运营管理表单弹窗一致：左侧标题 + 右上关闭） -->
   <view wx:if="{{formOpen}}" class="mask" catchtouchmove="noop" bindtap="closeForm">

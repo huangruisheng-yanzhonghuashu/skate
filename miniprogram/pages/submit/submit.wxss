@@ -252,16 +252,29 @@
   align-items: flex-start;
 }
 
+/* 可点行按压态（城市行等） */
+.f-row-hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* 城市行右侧：当前值 + 切换引导 */
+.f-city {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.f-city-cta {
+  font-size: 24rpx;
+  color: #6E6E76;
+}
+
 .f-label {
   width: 96rpx;
   font-size: 28rpx;
   color: #FFFFFF;
   flex-shrink: 0;
-}
-
-/* 同行第二个字段标签（城市+类型同行布局） */
-.f-label-2 {
-  margin-left: 16rpx;
 }
 
 /* 字段补充说明（如：最多 6 张） */
@@ -422,4 +435,37 @@
 
 .f-saving {
   opacity: 0.6;
+}
+
+/* ===== 卡片操作区（编辑/查看详情） ===== */
+.fb-ops {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 16rpx;
+}
+
+.op-btn {
+  font-size: 24rpx;
+  color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.16);
+  padding: 8rpx 24rpx;
+  border-radius: 999rpx;
+}
+
+.op-btn-ghost {
+  color: #A6A6AD;
+  background: #26262C;
+}
+
+.op-btn-hover {
+  opacity: 0.7;
+}
+
+/* ===== 详情只读字段值 ===== */
+.f-value {
+  flex: 1;
+  font-size: 28rpx;
+  color: #D9D9DE;
+  line-height: 1.5;
+  word-break: break-all;
 }

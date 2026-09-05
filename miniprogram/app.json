@@ -11,12 +11,12 @@
     "pages/admin/admin",
     "pages/feedback/feedback",
     "pages/reports/reports",
-    "pages/recommend/recommend",
+    "pages/submit/submit",
     "pages/city-picker/city-picker"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1A1A1E",
-    "navigationBarTitleText": "SkateSpot",
+    "navigationBarTitleText": "滑哪儿",
     "navigationBarTextStyle": "white",
     "backgroundColor": "#111114",
     "backgroundTextStyle": "light"

@@ -32,14 +32,16 @@ module.exports = {
 
   <!-- 管理界面 -->
   <block wx:else>
-    <!-- 实体切换（设计稿：场地/门店与俱乐部/建议/报错 橙色胶囊 tab） -->
-    <view class="seg">
-      <view class="seg-item {{entity === 'venue' ? 'seg-active' : ''}}" data-entity="venue" bindtap="switchEntity">场地</view>
-      <view class="seg-item {{entity === 'shop' ? 'seg-active' : ''}}" data-entity="shop" bindtap="switchEntity">门店与俱乐部</view>
-      <view class="seg-item {{entity === 'feedback' ? 'seg-active' : ''}}" data-entity="feedback" bindtap="switchEntity">建议</view>
-      <view class="seg-item {{entity === 'report' ? 'seg-active' : ''}}" data-entity="report" bindtap="switchEntity">报错</view>
-      <view class="seg-item {{entity === 'submission' ? 'seg-active' : ''}}" data-entity="submission" bindtap="switchEntity">推荐审核</view>
-    </view>
+    <!-- 实体切换（橙色胶囊 tab；超出一屏横向滚动，隐藏滚动条） -->
+    <scroll-view class="seg-wrap" scroll-x enhanced show-scrollbar="{{false}}">
+      <view class="seg">
+        <view class="seg-item {{entity === 'venue' ? 'seg-active' : ''}}" data-entity="venue" bindtap="switchEntity">场地</view>
+        <view class="seg-item {{entity === 'shop' ? 'seg-active' : ''}}" data-entity="shop" bindtap="switchEntity">门店与俱乐部</view>
+        <view class="seg-item {{entity === 'feedback' ? 'seg-active' : ''}}" data-entity="feedback" bindtap="switchEntity">建议</view>
+        <view class="seg-item {{entity === 'report' ? 'seg-active' : ''}}" data-entity="report" bindtap="switchEntity">报错</view>
+        <view class="seg-item {{entity === 'submission' ? 'seg-active' : ''}}" data-entity="submission" bindtap="switchEntity">推荐审核</view>
+      </view>
+    </scroll-view>
 
     <!-- 城市筛选 + 计数（建议 tab 无城市维度，仅显示计数）
          城市与首页同源（store 全局城市），默认取首页选中城市，点城市跳城市选择页（与首页一致） -->
@@ -200,7 +202,7 @@ module.exports = {
     </block>
 
     <!-- 新增按钮（仅场地/门店 tab 显示；左下角小号 ＋，能表达添加即可） -->
-    <view wx:if="{{entity === 'venue' || entity === 'shop'}}" class="fab" bindtap="openCreate" aria-role="button" aria-label="新增">＋</view>
+    <view wx:if="{{(entity === 'venue' || entity === 'shop') && !formOpen}}" class="fab" bindtap="openCreate" aria-role="button" aria-label="新增">＋</view>
   </block>
 
   <!-- 编辑表单弹窗（居中卡片；标题左对齐 + 关闭，设计稿同款；catchtouchmove 防滚动穿透） -->
@@ -217,25 +219,26 @@ module.exports = {
         <input class="f-input" value="{{form.name}}" maxlength="30" placeholder="必填，≤30字" placeholder-class="ph" bindinput="formName" />
       </view>
 
-      <!-- 城市 + 类型：场地同行两列；门店与俱乐部类型单独一行 -->
+      <!-- 城市 / 类型各占一行 -->
       <view class="f-row">
         <text class="f-label">城市</text>
         <picker range="{{cities}}" bindchange="formCity">
           <view class="f-picker">{{form.city}}</view>
         </picker>
+      </view>
+
+      <view class="f-row">
+        <text class="f-label">类型</text>
         <block wx:if="{{form.kind === 'venue'}}">
-          <text class="f-label f-label-2">类型</text>
           <picker range="{{categories}}" bindchange="formCategory">
             <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
           </picker>
         </block>
-      </view>
-
-      <view wx:if="{{form.kind === 'shop'}}" class="f-row">
-        <text class="f-label">类型</text>
-        <picker range="{{orgCategories}}" bindchange="formOrgCategory">
-          <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
-        </picker>
+        <block wx:else>
+          <picker range="{{orgCategories}}" bindchange="formOrgCategory">
+            <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
+          </picker>
+        </block>
       </view>
 
       <view wx:if="{{form.kind === 'shop'}}" class="f-row">

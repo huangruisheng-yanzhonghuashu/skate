@@ -576,6 +576,11 @@ function countMySubmissions() {
     .catch(() => 0)
 }
 
+/* 编辑本人待审核推荐（仅创建者可读写权限下只能改自己的；patch 不含 status/reply，审核流字段由云函数管） */
+function updateMySubmission(id, patch) {
+  return db().collection('submissions').doc(id).update({ data: patch })
+}
+
 /* ===== 头像与资料 ===== */
 /* 上传头像到云存储，返回 fileID（image 组件可直接显示 cloud:// 路径） */
 function uploadAvatar(tempFilePath) {
@@ -747,6 +752,7 @@ module.exports = {
   addSubmission: addSubmission,
   getMySubmissions: getMySubmissions,
   countMySubmissions: countMySubmissions,
+  updateMySubmission: updateMySubmission,
   uploadAvatar: uploadAvatar,
   uploadFileTo: uploadFileTo,
   saveProfile: saveProfile,

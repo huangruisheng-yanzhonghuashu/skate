@@ -8,7 +8,6 @@ const VENUE_CATEGORIES = ['混合', '碗池', '街式', '平地', 'U池', '泵�
 const ORG_CATEGORIES = ['板店', '俱乐部', '培训机构']
 const VENUE_TAGS = ['免费', '收费', '有灯', '无灯', '水泥', '木质']
 const SERVICES = ['卖板', '教学', '维修', '配件', '服装', '组织活动', '装备租赁', '场地运营']
-const CITIES = ['嘉兴', '杭州']
 const STATUS_TEXT = { pending: '待审核', done: '已通过', rejected: '未通过' }
 
 /* 数据库记录 → 展示结构 */
@@ -48,36 +47,39 @@ Page({
     formOpen: false,
     submitting: false,
     uploading: false,
+    editing: false, /* true=编辑待审核推荐（提交走更新而非新增） */
+    /* 详情弹窗（已通过/未通过只读查看） */
+    detailOpen: false,
+    detail: null,
     form: emptyForm('嘉兴'),
     venueCategories: VENUE_CATEGORIES,
     orgCategories: ORG_CATEGORIES,
     venueTags: VENUE_TAGS,
     services: SERVICES,
-    cities: CITIES,
   },
 
   onShow() {
     this.load()
+    /* 从城市选择页返回：把全局选中城市同步进表单（_pickingCity 标记区分首次进入） */
+    if (this._pickingCity) {
+      this._pickingCity = false
+      const c = store.getCity()
+      if (c && c !== this.data.form.city) this.setData({ 'form.city': c })
+    }
   },
 
   load() {
     cloud.getMySubmissions().then((list) => {
-      /* 城市选项合并推荐里出现过的城市，保证表单可选 */
-      const cities = CITIES.slice()
-      list.forEach((d) => {
-        if (d.city && cities.indexOf(d.city) < 0) cities.push(d.city)
-      })
-      this.setData({ list: list.map(mapSubmission), loading: false, cities: cities })
+      /* 原始文档留作编辑/详情取数（mapSubmission 丢了 services/tags/坐标等字段） */
+      this._raw = list
+      this.setData({ list: list.map(mapSubmission), loading: false })
     })
   },
 
   /* ===== 提交弹窗 ===== */
   openForm() {
-    const city = store.getCity()
-    const form = emptyForm(city)
-    const cities = this.data.cities.slice()
-    if (city && cities.indexOf(city) < 0) cities.unshift(city)
-    this.setData({ formOpen: true, submitting: false, uploading: false, form: form, cities: cities })
+    this._editingId = ''
+    this.setData({ formOpen: true, submitting: false, uploading: false, editing: false, form: emptyForm(store.getCity()) })
   },
 
   /* 有未提交内容时二次确认，防误触丢失 */
@@ -97,7 +99,10 @@ Page({
       cancelText: '继续编辑',
       confirmColor: '#E5484D',
       success: (r) => {
-        if (r.confirm) this.setData({ formOpen: false })
+        if (r.confirm) {
+          this._editingId = ''
+          this.setData({ formOpen: false, editing: false })
+        }
       },
     })
   },
@@ -116,7 +121,12 @@ Page({
   onPhoneInput(e) { this.setData({ 'form.phone': e.detail.value }) },
   onNoteInput(e) { this.setData({ 'form.note': e.detail.value }) },
 
-  onCityChange(e) { this.setData({ 'form.city': this.data.cities[Number(e.detail.value)] }) },
+  /* 城市选择：跳城市选择页（搜索/热门/字母索引，与首页同款），返回后在 onShow 同步 */
+  goCityPicker() {
+    this._pickingCity = true
+    wx.navigateTo({ url: '/pages/city-picker/city-picker' })
+  },
+
   onCategoryChange(e) {
     const v = Number(e.detail.value)
     this.setData({ 'form.category': this.data.form.kind === 'venue' ? this.data.venueCategories[v] : this.data.orgCategories[v] })
@@ -211,7 +221,68 @@ Page({
     wx.previewImage({ urls: e.currentTarget.dataset.photos, current: e.currentTarget.dataset.src })
   },
 
-  /* 提交推荐（status 初始 pending，管理员审核后由云函数更新状态与回复） */
+  /* 编辑待审核推荐（预填表单，保存走更新；已审核的不允许改，走详情查看） */
+  openEdit(e) {
+    const id = e.currentTarget.dataset.id
+    const raw = (this._raw || []).find((d) => d._id === id)
+    if (!raw || (raw.status || 'pending') !== 'pending') return
+    this._editingId = id
+    this.setData({
+      formOpen: true,
+      submitting: false,
+      uploading: false,
+      editing: true,
+      form: {
+        kind: raw.kind || 'venue',
+        name: raw.name || '',
+        city: raw.city || store.getCity(),
+        category: raw.category || '',
+        services: (raw.services || []).slice(),
+        tags: (raw.tags || []).slice(),
+        address: raw.address || '',
+        latitude: raw.latitude,
+        longitude: raw.longitude,
+        phone: raw.phone || '',
+        hours: raw.hours || { open: '09:00', close: '21:00' },
+        note: raw.note || '',
+        photos: (raw.photos || []).slice(),
+      },
+    })
+  },
+
+  /* 详情查看（已通过/未通过，只读） */
+  openDetail(e) {
+    const id = e.currentTarget.dataset.id
+    const raw = (this._raw || []).find((d) => d._id === id)
+    if (!raw) return
+    const status = raw.status || 'pending'
+    this.setData({
+      detailOpen: true,
+      detail: {
+        kindText: raw.kind === 'shop' ? '门店与俱乐部' : '场地',
+        name: raw.name || '',
+        category: raw.category || '',
+        city: raw.city || '',
+        address: raw.address || '',
+        note: raw.note || '',
+        photos: raw.photos || [],
+        status: status,
+        statusText: STATUS_TEXT[status] || STATUS_TEXT.pending,
+        reply: raw.reply || '',
+        timeText: fmtRel(raw.at),
+      },
+    })
+  },
+
+  closeDetail() {
+    this.setData({ detailOpen: false })
+  },
+
+  previewDetailPhoto(e) {
+    wx.previewImage({ urls: this.data.detail.photos, current: e.currentTarget.dataset.src })
+  },
+
+  /* 提交推荐：新增（status 初始 pending）或编辑待审核（就地更新字段，状态/审核流字段不动） */
   submit() {
     if (this.data.submitting) return
     const f = this.data.form
@@ -221,7 +292,7 @@ Page({
     if (f.kind === 'shop' && f.services.length === 0) { wx.showToast({ title: '请选择服务项目', icon: 'none' }); return }
 
     this.setData({ submitting: true })
-    cloud.addSubmission({
+    const doc = {
       kind: f.kind,
       name: f.name.trim(),
       city: f.city,
@@ -236,12 +307,28 @@ Page({
       hours: f.kind === 'shop' ? f.hours : null,
       note: f.note.trim(),
       photos: f.photos,
+    }
+    if (this.data.editing && this._editingId) {
+      const editId = this._editingId
+      cloud.updateMySubmission(editId, doc).then(() => {
+        this._editingId = ''
+        this.setData({ formOpen: false, submitting: false, editing: false })
+        wx.showToast({ title: '已更新', icon: 'success' })
+        this.load()
+      }).catch((e) => {
+        this.setData({ submitting: false })
+        wx.showToast({ title: '更新失败，请重试', icon: 'none' })
+        console.warn('[recommend] 更新失败', (e && e.errCode) || (e && e.message))
+      })
+      return
+    }
+    cloud.addSubmission(Object.assign({}, doc, {
       status: 'pending',
       reply: '',
       replyAt: '',
       userName: store.getUser().nickname || '滑手',
       at: new Date().toISOString(),
-    }).then(() => {
+    })).then(() => {
       this.setData({ formOpen: false, submitting: false })
       wx.showToast({ title: '已提交，审核通过后上架', icon: 'success' })
       this.load()

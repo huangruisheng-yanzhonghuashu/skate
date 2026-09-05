@@ -457,7 +457,7 @@ Page({
 
   /* 推荐场地、门店与俱乐部入口（列表底部/空态引导） */
   goRecommend() {
-    wx.navigateTo({ url: '/pages/recommend/recommend' })
+    wx.navigateTo({ url: '/pages/submit/submit' })
   },
 
   /* 城市切换后：地图中心移到新城市第一个实体（当前实体优先，另一实体兜底）
