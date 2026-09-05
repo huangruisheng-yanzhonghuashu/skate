@@ -502,6 +502,31 @@ function saveProfile(profile) {
   })
 }
 
+/* 打卡媒体预览源（微博式混合预览用）：cloud:// 换取临时 https 链接（previewMedia 未承诺支持云文件 ID），
+ * 本地临时路径原样透传；换取失败降级为原 url */
+function getMediaPreviewSources(media) {
+  const list = media || []
+  if (!list.length) return Promise.resolve([])
+  const cloudIds = list
+    .filter(function (m) { return m.url.indexOf('cloud://') === 0 })
+    .map(function (m) { return m.url })
+  const build = function (urlMap) {
+    return list.map(function (m) {
+      return { url: urlMap[m.url] || m.url, type: m.type }
+    })
+  }
+  if (!cloudIds.length) return Promise.resolve(build({}))
+  return wx.cloud.getTempFileURL({ fileList: cloudIds })
+    .then(function (r) {
+      const map = {}
+      ;(r.fileList || []).forEach(function (f) {
+        if (f.fileID && f.tempFileURL) map[f.fileID] = f.tempFileURL
+      })
+      return build(map)
+    })
+    .catch(function () { return build({}) })
+}
+
 /* ===== 场地实时在线（方案 B：位置心跳） ===== */
 /* 两点球面距离（米），haversine 公式 */
 function distanceM(lat1, lng1, lat2, lng2) {
@@ -597,6 +622,7 @@ module.exports = {
   removeCheckinDoc: removeCheckinDoc,
   getPlaceCheckins: getPlaceCheckins,
   getPublicCheckins: getPublicCheckins,
+  getMediaPreviewSources: getMediaPreviewSources,
   getLikeCounts: getLikeCounts,
   getComments: getComments,
   addCommentDoc: addCommentDoc,

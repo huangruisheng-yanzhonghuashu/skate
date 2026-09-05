@@ -255,6 +255,21 @@
   background: #000000;
 }
 
+/* 视频封面播放按钮（微博式：九宫格内不内联播放，点击进混合查看器播放） */
+.video-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  width: 0;
+  height: 0;
+  border-left: 26rpx solid rgba(255, 255, 255, 0.92);
+  border-top: 16rpx solid transparent;
+  border-bottom: 16rpx solid transparent;
+  filter: drop-shadow(0 0 6rpx rgba(0, 0, 0, 0.4));
+}
+
 /* 视频异步上传中角标（微博式：本机可见临时视频，云端他人待上传完成后可见） */
 .photo-cell {
   position: relative;

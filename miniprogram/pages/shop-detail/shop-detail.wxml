@@ -103,13 +103,14 @@
         </view>
         <text class="fnote">{{item.note}}</text>
         <view wx:if="{{item.media.length}}" class="fphotos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
-          <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell">
+          <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell" catchtap="previewMedia" data-media="{{item.media}}" data-index="{{index}}">
             <video
               wx:if="{{p.type === 'video'}}"
               class="fvideo"
               src="{{p.url}}"
               object-fit="cover"
-              controls
+              controls="{{false}}"
+              show-center-play-btn="{{false}}"
             />
             <image
               wx:else
@@ -117,10 +118,8 @@
               src="{{p.url}}"
               mode="aspectFill"
               lazy-load
-              data-urls="{{item.photos}}"
-              data-url="{{p.url}}"
-              catchtap="previewFeedPhotos"
             />
+            <view wx:if="{{p.type === 'video'}}" class="video-play"></view>
             <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
           </view>
         </view>
