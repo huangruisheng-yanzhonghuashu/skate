@@ -36,11 +36,15 @@ Page({
     shops: [],
     viewVenues: [],
     viewShops: [],
-    /* 建议处理（你提我改）+ 场地报错处理 */
+    /* 建议处理（你提我改）+ 场地报错处理 + 推荐审核 */
     feedbacks: [],
     feedbackLoading: false,
     reports: [],
     reportsLoading: false,
+    submissions: [],
+    submissionsLoading: false,
+    /* 正在入库的推荐 id（非空时表单标题/按钮切换为入库态，保存成功后自动标记已通过） */
+    pendingSubmissionId: '',
     replyOpen: false,
     replying: false,
     replySource: 'feedback',
@@ -136,6 +140,7 @@ Page({
     this.setData({ entity: entity })
     if (entity === 'feedback') this.loadFeedback()
     else if (entity === 'report') this.loadReports()
+    else if (entity === 'submission') this.loadSubmissions()
     else this.applyFilter()
   },
 
@@ -194,6 +199,72 @@ Page({
     })
   },
 
+  /* ===== 推荐审核（滑手提交的场地/店铺） ===== */
+  loadSubmissions() {
+    if (this.data.submissionsLoading) return
+    this.setData({ submissionsLoading: true })
+    cloud.callManage('listSubmissions', {}).then((res) => {
+      const list = (res.list || []).map(function (d) {
+        const st = { pending: '待审核', done: '已通过', rejected: '已驳回' }[d.status || 'pending'] || '待审核'
+        return {
+          _id: d._id,
+          kind: d.kind || 'venue',
+          kindText: d.kind === 'shop' ? '门店与俱乐部' : '场地',
+          name: d.name || '',
+          category: d.category || '',
+          city: d.city || '',
+          address: d.address || '',
+          note: d.note || '',
+          services: d.services || [],
+          tags: d.tags || [],
+          latitude: d.latitude,
+          longitude: d.longitude,
+          phone: d.phone || '',
+          hours: d.hours,
+          photos: d.photos || [],
+          status: d.status || 'pending',
+          statusText: st,
+          reply: d.reply || '',
+          userName: d.userName || '滑手',
+          timeText: fmtRel(d.at),
+        }
+      })
+      this.setData({ submissions: list, submissionsLoading: false })
+    }).catch((e) => {
+      this.setData({ submissionsLoading: false })
+      wx.showToast({ title: (e && e.message) || '推荐加载失败', icon: 'none' })
+      console.warn('[admin] 推荐加载失败', (e && e.code) || '', (e && e.message) || e)
+    })
+  },
+
+  /* 入库：用推荐数据预填现有表单，核对/修正后保存（保存成功后自动标记已通过） */
+  ingest(e) {
+    const id = e.currentTarget.dataset.id
+    const item = this.data.submissions.find((x) => x._id === id)
+    if (!item) return
+    this.setData({
+      formOpen: true,
+      saving: false,
+      pendingSubmissionId: id,
+      form: {
+        id: '',
+        kind: item.kind,
+        name: item.name,
+        city: item.city,
+        category: item.category || '',
+        services: (item.services || []).slice(),
+        tags: (item.tags || []).slice(),
+        address: item.address || '',
+        latitude: item.latitude,
+        longitude: item.longitude,
+        phone: item.phone || '',
+        hours: item.hours || { open: '09:00', close: '21:00' },
+        photos: (item.photos || []).slice(),
+        hot: false,
+      },
+    })
+  },
+
   /* 报错关联场地，点击回详情页核对信息 */
   goVenueDetail(e) {
     const id = e.currentTarget.dataset.id
@@ -203,15 +274,20 @@ Page({
   openReply(e) {
     const source = e.currentTarget.dataset.source || 'feedback'
     const id = e.currentTarget.dataset.id
-    const list = source === 'report' ? this.data.reports : this.data.feedbacks
+    const list = source === 'report' ? this.data.reports
+      : source === 'submission' ? this.data.submissions : this.data.feedbacks
     const item = list.find((x) => x._id === id)
     if (!item) return
+    /* 推荐驳回弹窗引用原推荐摘要；默认结论：推荐=已驳回，建议/报错=已处理 */
+    const desc = source === 'submission'
+      ? item.name + '（' + item.kindText + ' · ' + item.city + '）' + (item.note ? '\n' + item.note : '')
+      : item.desc
     this.setData({
       replyOpen: true,
       replying: false,
       replySource: source,
-      replyTarget: { id: id, desc: item.desc },
-      replyForm: { status: 'done', reply: '' },
+      replyTarget: { id: id, desc: desc },
+      replyForm: { status: source === 'submission' ? 'rejected' : 'done', reply: '' },
     })
   },
 
@@ -234,11 +310,15 @@ Page({
     const f = this.data.replyForm
     if (!f.reply.trim()) { wx.showToast({ title: '请填写回复内容', icon: 'none' }); return }
     this.setData({ replying: true })
-    const action = this.data.replySource === 'report' ? 'replyReport' : 'replyFeedback'
+    const action = this.data.replySource === 'report'
+      ? 'replyReport'
+      : this.data.replySource === 'submission' ? 'reviewSubmission' : 'replyFeedback'
     cloud.callManage(action, { id: this.data.replyTarget.id, status: f.status, reply: f.reply }).then(() => {
       this.setData({ replyOpen: false, replying: false })
       wx.showToast({ title: '已提交', icon: 'success' })
-      if (this.data.replySource === 'report') this.loadReports()
+      const src = this.data.replySource
+      if (src === 'report') this.loadReports()
+      else if (src === 'submission') this.loadSubmissions()
       else this.loadFeedback()
     }).catch((e) => {
       this.setData({ replying: false })
@@ -253,7 +333,7 @@ Page({
 
   /* ===== 表单 ===== */
   openCreate() {
-    this.setData({ formOpen: true, saving: false, form: emptyForm(this.data.city) })
+    this.setData({ formOpen: true, saving: false, pendingSubmissionId: '', form: emptyForm(this.data.city) })
   },
 
   openEdit(e) {
@@ -264,6 +344,7 @@ Page({
     this.setData({
       formOpen: true,
       saving: false,
+      pendingSubmissionId: '',
       form: {
         id: item.id,
         kind: kind,
@@ -473,9 +554,24 @@ Page({
     }
 
     cloud.callManage(action, payload).then(() => {
-      this.setData({ formOpen: false, saving: false })
-      wx.showToast({ title: '已保存', icon: 'success' })
-      this.reload()
+      /* 入库来源的推荐：保存成功后自动标记已通过（标记失败不影响已入库结果，仅告警重试）
+       * after 里顺带清 pendingSubmissionId，防下次普通新增误标 */
+      const subId = this.data.pendingSubmissionId
+      const after = () => {
+        this.setData({ formOpen: false, saving: false, pendingSubmissionId: '' })
+        wx.showToast({ title: '已保存', icon: 'success' })
+        this.reload()
+        if (this.data.entity === 'submission') this.loadSubmissions()
+      }
+      if (subId) {
+        return cloud.callManage('reviewSubmission', { id: subId, status: 'done' })
+          .then(after)
+          .catch((err) => {
+            console.warn('[admin] 标记已通过失败', (err && err.code) || '', (err && err.message) || err)
+            after()
+          })
+      }
+      after()
     }).catch((e) => {
       this.setData({ saving: false })
       wx.showToast({ title: (e && e.message) || '保存失败', icon: 'none' })

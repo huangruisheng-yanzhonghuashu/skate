@@ -507,6 +507,10 @@
   color: #8C8C94;
 }
 
+.fb-status-pending {
+  color: #FF8A6E;
+}
+
 .fb-status-done {
   color: #00D4AA;
 }
@@ -565,6 +569,27 @@
 .fb-foot-user {
   font-size: 22rpx;
   color: #6E6E76;
+}
+
+/* 推荐卡片副行（类别 · 城市 · 地址） */
+.fb-sub {
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  color: #8C8C94;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+/* 推荐卡片操作区（入库/驳回并排） */
+.fb-foot-ops {
+  display: flex;
+  gap: 12rpx;
+}
+
+/* 驳回按钮：红色胶囊（.op-del 全局作用域只有 .row-ops 下生效，这里单独补） */
+.fb-foot-ops .op-del {
+  color: #FF3B30;
+  background: rgba(255, 59, 48, 0.12);
 }
 
 /* 处理弹窗内引用原建议 */

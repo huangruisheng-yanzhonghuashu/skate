@@ -104,6 +104,7 @@ const ICON = {
   checkCircleOrange: svg(P.checkCircle, { stroke: ORANGE }),
   editAsh: svg(P.edit, { stroke: ASH }),
   plusAsh: svg(P.plus, { stroke: ASH }),
+  plusOrange: svg(P.plus, { stroke: ORANGE }),
   xWhite: svg(P.x, { stroke: WHITE, sw: 2.5 }),
   cameraWhite: svg(P.camera, { stroke: WHITE }),
   imagePlusAsh: svg(P.imagePlus, { stroke: ASH }),

@@ -44,10 +44,13 @@
   <!-- 提交按钮 -->
   <view class="fab" bindtap="openForm">＋ 提一条</view>
 
-  <!-- 提交弹窗 -->
-  <view wx:if="{{formOpen}}" class="mask" bindtap="closeForm">
+  <!-- 提交弹窗（结构与运营管理表单弹窗一致：左侧标题 + 右上关闭） -->
+  <view wx:if="{{formOpen}}" class="mask" catchtouchmove="noop" bindtap="closeForm">
     <view class="sheet" catchtap="noop">
-      <view class="sheet-title">提一条</view>
+      <view class="sheet-head">
+        <text class="sheet-title">提一条</text>
+        <view class="sheet-close" catchtap="closeForm" aria-role="button" aria-label="关闭">×</view>
+      </view>
       <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
 
         <view class="f-row">

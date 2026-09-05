@@ -74,6 +74,16 @@
         <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
       </view>
     </view>
+    <view class="menu-item" hover-class="menu-hover" bindtap="goRecommend">
+      <view class="menu-left">
+        <image class="menu-icon" src="{{icons.plus}}" mode="aspectFit" />
+        <text class="menu-label">我的推荐</text>
+      </view>
+      <view class="menu-right">
+        <text class="menu-value">{{submissionCount}}条</text>
+        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
+      </view>
+    </view>
     <view class="menu-item" hover-class="menu-hover" bindtap="goAdmin">
       <view class="menu-left">
         <image class="menu-icon" src="{{icons.admin}}" mode="aspectFit" />

@@ -38,6 +38,7 @@ module.exports = {
       <view class="seg-item {{entity === 'shop' ? 'seg-active' : ''}}" data-entity="shop" bindtap="switchEntity">门店与俱乐部</view>
       <view class="seg-item {{entity === 'feedback' ? 'seg-active' : ''}}" data-entity="feedback" bindtap="switchEntity">建议</view>
       <view class="seg-item {{entity === 'report' ? 'seg-active' : ''}}" data-entity="report" bindtap="switchEntity">报错</view>
+      <view class="seg-item {{entity === 'submission' ? 'seg-active' : ''}}" data-entity="submission" bindtap="switchEntity">推荐审核</view>
     </view>
 
     <!-- 城市筛选 + 计数（建议 tab 无城市维度，仅显示计数）
@@ -50,7 +51,7 @@ module.exports = {
         </view>
       </view>
       <text wx:else>按提交时间倒序</text>
-      <text class="meta-count">共 {{entity === 'venue' ? viewVenues.length : entity === 'shop' ? viewShops.length : entity === 'feedback' ? feedbacks.length : reports.length}} 条</text>
+      <text class="meta-count">共 {{entity === 'venue' ? viewVenues.length : entity === 'shop' ? viewShops.length : entity === 'feedback' ? feedbacks.length : entity === 'submission' ? submissions.length : reports.length}} 条</text>
     </view>
 
     <!-- 列表 -->
@@ -161,6 +162,43 @@ module.exports = {
       <view wx:else class="state"><text>暂无场地报错</text></view>
     </block>
 
+    <!-- 推荐审核（滑手提交的场地/店铺：入库=预填表单核对后上架，驳回=填理由） -->
+    <block wx:elif="{{entity === 'submission'}}">
+      <view wx:if="{{submissionsLoading}}" class="state"><text>加载中...</text></view>
+      <block wx:elif="{{submissions.length}}">
+        <view wx:for="{{submissions}}" wx:key="_id" class="fb-card">
+          <view class="fb-head">
+            <text class="fb-type">{{item.kindText}} · {{item.name}}</text>
+            <text class="fb-status fb-status-{{item.status}}">{{item.statusText}}</text>
+          </view>
+          <text class="fb-sub">{{item.category}} · {{item.city}}{{item.address ? ' · ' + item.address : ''}}</text>
+          <view wx:if="{{item.note}}" class="fb-quote">{{item.note}}</view>
+          <view wx:if="{{item.photos.length}}" class="fb-photos">
+            <image
+              wx:for="{{item.photos}}"
+              wx:for-item="p"
+              wx:key="*this"
+              class="fb-photo"
+              src="{{p}}"
+              mode="aspectFill"
+              data-photos="{{item.photos}}"
+              data-src="{{p}}"
+              bindtap="previewFbPhoto"
+            />
+          </view>
+          <view wx:if="{{item.reply}}" class="fb-reply">已回复：{{item.reply}}</view>
+          <view class="fb-foot">
+            <text class="fb-foot-user">{{item.userName}} · {{item.timeText}}</text>
+            <view wx:if="{{item.status === 'pending'}}" class="fb-foot-ops">
+              <view class="op op-edit" data-id="{{item._id}}" bindtap="ingest">入库</view>
+              <view class="op op-del" data-source="submission" data-id="{{item._id}}" bindtap="openReply">驳回</view>
+            </view>
+          </view>
+        </view>
+      </block>
+      <view wx:else class="state"><text>暂无用户推荐</text></view>
+    </block>
+
     <!-- 新增按钮（仅场地/门店 tab 显示；左下角小号 ＋，能表达添加即可） -->
     <view wx:if="{{entity === 'venue' || entity === 'shop'}}" class="fab" bindtap="openCreate" aria-role="button" aria-label="新增">＋</view>
   </block>
@@ -169,7 +207,7 @@ module.exports = {
   <view wx:if="{{formOpen}}" class="mask" catchtouchmove="noop" bindtap="closeForm">
     <view class="sheet" catchtap="noop">
       <view class="sheet-head">
-        <view class="sheet-title">{{form.id ? '编辑' : '新增'}}{{form.kind === 'venue' ? '场地' : '门店与俱乐部'}}</view>
+        <view class="sheet-title">{{pendingSubmissionId ? '入库推荐' : (form.id ? '编辑' : '新增') + (form.kind === 'venue' ? '场地' : '门店与俱乐部')}}</view>
         <view class="sheet-close" catchtap="closeForm" aria-role="button" aria-label="关闭">×</view>
       </view>
       <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
@@ -179,7 +217,7 @@ module.exports = {
         <input class="f-input" value="{{form.name}}" maxlength="30" placeholder="必填，≤30字" placeholder-class="ph" bindinput="formName" />
       </view>
 
-      <!-- 城市 + 类型同行（设计稿：两列下拉） -->
+      <!-- 城市 + 类型：场地同行两列；门店与俱乐部类型单独一行 -->
       <view class="f-row">
         <text class="f-label">城市</text>
         <picker range="{{cities}}" bindchange="formCity">
@@ -191,12 +229,13 @@ module.exports = {
             <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
           </picker>
         </block>
-        <block wx:else>
-          <text class="f-label f-label-2">类型</text>
-          <picker range="{{orgCategories}}" bindchange="formOrgCategory">
-            <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
-          </picker>
-        </block>
+      </view>
+
+      <view wx:if="{{form.kind === 'shop'}}" class="f-row">
+        <text class="f-label">类型</text>
+        <picker range="{{orgCategories}}" bindchange="formOrgCategory">
+          <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
+        </picker>
       </view>
 
       <view wx:if="{{form.kind === 'shop'}}" class="f-row">
@@ -274,7 +313,7 @@ module.exports = {
         <text class="f-tip">地图 pin 高亮、列表优先</text>
       </view>
 
-      <button class="f-save {{saving ? 'f-saving' : ''}}" bindtap="saveForm">{{saving ? '保存中...' : '保存'}}</button>
+      <button class="f-save {{saving ? 'f-saving' : ''}}" bindtap="saveForm">{{saving ? '保存中...' : (pendingSubmissionId ? '保存并通过' : '保存')}}</button>
     </scroll-view>
     </view>
   </view>
@@ -283,14 +322,14 @@ module.exports = {
   <view wx:if="{{replyOpen}}" class="mask" catchtouchmove="noop" bindtap="closeReply">
     <view class="sheet" catchtap="noop">
       <view class="sheet-head">
-        <view class="sheet-title">{{replySource === 'report' ? '处理报错' : '处理建议'}}</view>
+        <view class="sheet-title">{{replySource === 'report' ? '处理报错' : replySource === 'submission' ? '驳回推荐' : '处理建议'}}</view>
         <view class="sheet-close" catchtap="closeReply" aria-role="button" aria-label="关闭">×</view>
       </view>
       <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
 
         <view class="fb-quote">{{replyTarget.desc}}</view>
 
-        <view class="f-row">
+        <view class="f-row" wx:if="{{replySource !== 'submission'}}">
           <text class="f-label">结论</text>
           <view class="chips">
             <view class="chip {{replyForm.status === 'done' ? 'chip-on' : ''}}" data-status="done" bindtap="setReplyStatus">已处理</view>

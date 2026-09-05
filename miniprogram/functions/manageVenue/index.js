@@ -226,6 +226,31 @@ exports.main = async (event) => {
         return { ok: true }
       }
 
+      /* ===== 推荐审核（滑手提交的场地/店铺，submissions 集合） ===== */
+      case 'listSubmissions': {
+        const r = await db.collection('submissions')
+          .orderBy('at', 'desc')
+          .limit(200)
+          .get()
+        return { ok: true, list: r.data || [] }
+      }
+      /* 审核结论：done=已通过（入库场景允许无回复），rejected=已驳回（reply 必填） */
+      case 'reviewSubmission': {
+        if (!data.id) invalid('缺少 id')
+        if (data.status !== 'done' && data.status !== 'rejected') invalid('状态必须是 done 或 rejected')
+        const reply = (data.reply || '').trim()
+        if (data.status === 'rejected' && !reply) invalid('驳回时回复内容必填')
+        if (reply.length > 200) invalid('回复最多 200 字')
+        await db.collection('submissions').doc(data.id).update({
+          data: {
+            status: data.status,
+            reply: reply,
+            replyAt: new Date().toISOString(),
+          },
+        })
+        return { ok: true }
+      }
+
       default:
         invalid('未知操作: ' + action)
     }

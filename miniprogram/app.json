@@ -11,6 +11,7 @@
     "pages/admin/admin",
     "pages/feedback/feedback",
     "pages/reports/reports",
+    "pages/recommend/recommend",
     "pages/city-picker/city-picker"
   ],
   "window": {

@@ -1,0 +1,190 @@
+<wxs module="util">
+module.exports = {
+  has: function (arr, item) {
+    if (!arr) return false
+    return arr.indexOf(item) >= 0
+  },
+  coord: function (lat, lng) {
+    if (lat === null || lat === undefined || lng === undefined) return ''
+    return lat.toFixed(4) + ',' + lng.toFixed(4)
+  },
+}
+</wxs>
+<view class="page">
+  <!-- 顶部说明 -->
+  <view class="hero">
+    <view class="hero-desc">发现好场地、门店与俱乐部？推荐给我们，审核通过后全城滑手都能看到，结果会回复在下方列表</view>
+  </view>
+
+  <!-- 我的推荐列表 -->
+  <view wx:if="{{loading}}" class="state"><text>加载中...</text></view>
+  <block wx:elif="{{list.length}}">
+    <view wx:for="{{list}}" wx:key="id" class="fb-card">
+      <view class="fb-head">
+        <text class="fb-type">{{item.kindText}} · {{item.name}}</text>
+        <text class="fb-status fb-status-{{item.status}}">{{item.statusText}}</text>
+      </view>
+      <text class="fb-sub">{{item.category}}{{item.address ? ' · ' + item.address : ''}}</text>
+      <view wx:if="{{item.photos.length}}" class="fb-photos">
+        <image
+          wx:for="{{item.photos}}"
+          wx:for-item="p"
+          wx:key="*this"
+          class="fb-photo"
+          src="{{p}}"
+          mode="aspectFill"
+          data-photos="{{item.photos}}"
+          data-src="{{p}}"
+          bindtap="previewPhoto"
+        />
+      </view>
+      <view wx:if="{{item.reply}}" class="fb-reply">
+        <view class="fb-reply-head">
+          <text class="fb-reply-label">审核意见</text>
+          <text wx:if="{{item.replyAt}}" class="fb-reply-time">{{item.replyAt}}</text>
+        </view>
+        <text class="fb-reply-text">{{item.reply}}</text>
+      </view>
+      <text class="fb-time">提交于 {{item.timeText}}</text>
+    </view>
+  </block>
+  <view wx:else class="state">
+    <text class="state-title">还没有推荐过</text>
+    <text class="state-desc">点下方按钮，推荐第一个场地、门店与俱乐部</text>
+  </view>
+
+  <!-- 推荐按钮 -->
+  <view class="fab" bindtap="openForm">＋ 推荐</view>
+
+  <!-- 推荐表单弹窗（结构与运营管理表单一致：左侧标题 + 右上关闭，字段同序） -->
+  <view wx:if="{{formOpen}}" class="mask" catchtouchmove="noop" bindtap="closeForm">
+    <view class="sheet" catchtap="noop">
+      <view class="sheet-head">
+        <text class="sheet-title">{{form.kind === 'venue' ? '推荐场地' : '推荐门店与俱乐部'}}</text>
+        <view class="sheet-close" catchtap="closeForm" aria-role="button" aria-label="关闭">×</view>
+      </view>
+      <scroll-view class="sheet-body" scroll-y enhanced show-scrollbar="{{false}}">
+
+        <!-- 类型切换（场地 / 门店与俱乐部） -->
+        <view class="f-row">
+          <text class="f-label">类型</text>
+          <view class="chips">
+            <view class="chip {{form.kind === 'venue' ? 'chip-on' : ''}}" data-kind="venue" bindtap="switchKind">场地</view>
+            <view class="chip {{form.kind === 'shop' ? 'chip-on' : ''}}" data-kind="shop" bindtap="switchKind">门店与俱乐部</view>
+          </view>
+        </view>
+
+        <view class="f-row">
+          <text class="f-label">名称</text>
+          <input class="f-input" value="{{form.name}}" maxlength="30" placeholder="必填，≤30字" placeholder-class="ph" bindinput="onNameInput" />
+        </view>
+
+        <!-- 场地：城市 + 类型同行（与管理表单一致）；门店与俱乐部：类型单独一行 -->
+        <view class="f-row">
+          <text class="f-label">城市</text>
+          <picker range="{{cities}}" bindchange="onCityChange">
+            <view class="f-picker">{{form.city}}</view>
+          </picker>
+          <block wx:if="{{form.kind === 'venue'}}">
+            <text class="f-label f-label-2">类型</text>
+            <picker range="{{venueCategories}}" bindchange="onCategoryChange">
+              <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
+            </picker>
+          </block>
+        </view>
+
+        <view wx:if="{{form.kind === 'shop'}}" class="f-row">
+          <text class="f-label">类型</text>
+          <picker range="{{orgCategories}}" bindchange="onCategoryChange">
+            <view class="f-picker {{form.category ? '' : 'f-empty'}}">{{form.category || '选择类型'}}</view>
+          </picker>
+        </view>
+
+        <view wx:if="{{form.kind === 'shop'}}" class="f-row">
+          <text class="f-label">服务</text>
+          <view class="chips">
+            <view
+              wx:for="{{services}}"
+              wx:key="*this"
+              class="chip {{util.has(form.services, item) ? 'chip-on' : ''}}"
+              data-svc="{{item}}"
+              bindtap="toggleService"
+            >{{item}}</view>
+          </view>
+        </view>
+
+        <view wx:if="{{form.kind === 'venue'}}" class="f-row">
+          <text class="f-label">标签</text>
+          <view class="chips">
+            <view
+              wx:for="{{venueTags}}"
+              wx:key="*this"
+              class="chip {{util.has(form.tags, item) ? 'chip-on' : ''}}"
+              data-tag="{{item}}"
+              bindtap="toggleTag"
+            >{{item}}</view>
+          </view>
+        </view>
+
+        <view class="f-row">
+          <text class="f-label">坐标</text>
+          <view class="f-btn {{form.latitude !== null ? 'f-btn-ok' : ''}}" bindtap="chooseLocation">
+            {{form.latitude !== null ? '已选点 ' + util.coord(form.latitude, form.longitude) : form.address ? '按地址打开地图选点' : '打开地图选点'}}
+          </view>
+        </view>
+
+        <view class="f-row">
+          <text class="f-label">地址</text>
+          <input class="f-input" value="{{form.address}}" placeholder="选点后自动填入，可修改" placeholder-class="ph" bindinput="onAddressInput" />
+        </view>
+
+        <view wx:if="{{form.kind === 'shop'}}">
+          <view class="f-row">
+            <text class="f-label">电话</text>
+            <input class="f-input" value="{{form.phone}}" type="number" placeholder="选填，详情页可拨打" placeholder-class="ph" bindinput="onPhoneInput" />
+          </view>
+          <view class="f-row">
+            <text class="f-label">营业</text>
+            <picker mode="time" value="{{form.hours.open}}" bindchange="onHoursOpen">
+              <view class="f-picker f-picker-half">{{form.hours.open}}</view>
+            </picker>
+            <text class="f-dash">至</text>
+            <picker mode="time" value="{{form.hours.close}}" bindchange="onHoursClose">
+              <view class="f-picker f-picker-half">{{form.hours.close}}</view>
+            </picker>
+          </view>
+        </view>
+
+        <view class="f-row">
+          <text class="f-label">照片</text>
+          <view class="photo-list">
+            <view wx:for="{{form.photos}}" wx:key="*this" class="photo-item">
+              <image class="photo-img" src="{{item}}" mode="aspectFill" data-src="{{item}}" bindtap="previewFormPhoto" />
+              <view class="photo-del" data-index="{{index}}" catchtap="removePhoto">×</view>
+            </view>
+            <view wx:if="{{form.photos.length < 6}}" class="photo-add {{uploading ? 'photo-uploading' : ''}}" bindtap="choosePhotos">
+              {{uploading ? '上传中' : '＋'}}
+            </view>
+          </view>
+          <text class="f-sub">最多 6 张</text>
+        </view>
+
+        <view class="f-row f-row-top">
+          <text class="f-label">补充</text>
+          <textarea
+            class="f-textarea"
+            value="{{form.note}}"
+            maxlength="200"
+            placeholder="收费情况、板面数量等补充说明（选填）"
+            placeholder-class="ph"
+            bindinput="onNoteInput"
+          />
+        </view>
+
+        <view class="f-tip">提交后由管理员审核，结果回复在列表中</view>
+
+        <button class="f-save {{submitting ? 'f-saving' : ''}}" bindtap="submit">{{submitting ? '提交中...' : '提交'}}</button>
+      </scroll-view>
+    </view>
+  </view>
+</view>

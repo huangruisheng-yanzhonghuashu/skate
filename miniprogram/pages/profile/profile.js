@@ -17,6 +17,7 @@ Page({
     checkinCount: 0,
     reportCount: 0,
     feedbackCount: 0,
+    submissionCount: 0,
     recent: [],
     /* 编辑资料弹窗 */
     editOpen: false,
@@ -33,6 +34,7 @@ Page({
       settings: ICON.settingsOrange,
       admin: ICON.venueOrange,
       send: ICON.sendOrange,
+      plus: ICON.plusOrange,
       close: ICON.xWhite,
       camera: ICON.cameraWhite,
     },
@@ -62,13 +64,16 @@ Page({
     })
   },
 
-  /* 报错/建议计数（真实云数据，互相独立） */
+  /* 报错/建议/推荐计数（真实云数据，互相独立） */
   loadCounts() {
     cloud.countMyReports().then((n) => {
       this.setData({ reportCount: n })
     })
     cloud.countMyFeedback().then((n) => {
       this.setData({ feedbackCount: n })
+    })
+    cloud.countMySubmissions().then((n) => {
+      this.setData({ submissionCount: n })
     })
   },
 
@@ -168,6 +173,7 @@ Page({
   goCheckins() { wx.switchTab({ url: '/pages/checkins/checkins' }) },
   goReports() { wx.navigateTo({ url: '/pages/reports/reports' }) },
   goFeedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }) },
+  goRecommend() { wx.navigateTo({ url: '/pages/recommend/recommend' }) },
   goAdmin() { wx.navigateTo({ url: '/pages/admin/admin' }) },
   goCityPicker() { wx.navigateTo({ url: '/pages/city-picker/city-picker' }) },
   goSettings() { wx.showToast({ title: '设置即将上线', icon: 'none' }) },

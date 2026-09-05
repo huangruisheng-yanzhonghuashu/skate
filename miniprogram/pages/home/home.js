@@ -455,6 +455,11 @@ Page({
     wx.navigateTo({ url: '/pages/city-picker/city-picker' })
   },
 
+  /* 推荐场地/店铺入口（列表底部/空态引导） */
+  goRecommend() {
+    wx.navigateTo({ url: '/pages/recommend/recommend' })
+  },
+
   /* 城市切换后：地图中心移到新城市第一个实体（当前实体优先，另一实体兜底）
    * 无场地的城市保持当前地图中心，列表按城市过滤自然呈现空态 */
   centerOnCity() {

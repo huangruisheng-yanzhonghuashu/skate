@@ -551,6 +551,31 @@ function countMyFeedback() {
     .catch(() => 0)
 }
 
+/* ===== 推荐（滑手推荐场地/店铺，submissions：仅创建者可读写，用户只能看自己的；管理员审核走 manageVenue 云函数） ===== */
+function addSubmission(doc) {
+  return db().collection('submissions').add({ data: doc }).then((r) => ({ id: r._id }))
+}
+
+/* 我的推荐列表（时间倒序） */
+function getMySubmissions() {
+  return db().collection('submissions')
+    .orderBy('at', 'desc')
+    .limit(100)
+    .get()
+    .then((r) => r.data || [])
+    .catch((e) => {
+      console.warn('[cloud] 推荐读取失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
+}
+
+/* 统计本人推荐条数（我的页菜单显示） */
+function countMySubmissions() {
+  return db().collection('submissions').count()
+    .then((r) => r.total || 0)
+    .catch(() => 0)
+}
+
 /* ===== 头像与资料 ===== */
 /* 上传头像到云存储，返回 fileID（image 组件可直接显示 cloud:// 路径） */
 function uploadAvatar(tempFilePath) {
@@ -719,6 +744,9 @@ module.exports = {
   addFeedback: addFeedback,
   getMyFeedback: getMyFeedback,
   countMyFeedback: countMyFeedback,
+  addSubmission: addSubmission,
+  getMySubmissions: getMySubmissions,
+  countMySubmissions: countMySubmissions,
   uploadAvatar: uploadAvatar,
   uploadFileTo: uploadFileTo,
   saveProfile: saveProfile,
