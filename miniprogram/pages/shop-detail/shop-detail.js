@@ -164,6 +164,7 @@ Page({
           avatarText: f.avatarText,
           color: '#FF9F2E',
           time: fmtAgo(f.at),
+          skateYears: f.skateYears || 0,
           note: f.note,
           photos: f.photos,
         })),

@@ -94,7 +94,10 @@
           <image wx:if="{{item.avatarFile}}" class="favatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
           <view wx:else class="favatar" style="background: {{item.color}}">{{item.avatarText}}</view>
           <view class="fuser">
-            <text class="fname">{{item.user}}</text>
+            <view class="fname-row">
+              <text class="fname">{{item.user}}</text>
+              <text wx:if="{{item.skateYears}}" class="checkin-years">滑龄{{item.skateYears}}</text>
+            </view>
             <text class="ftime">{{item.time}}</text>
           </view>
         </view>

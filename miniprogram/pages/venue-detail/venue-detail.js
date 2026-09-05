@@ -293,6 +293,7 @@ Page({
           avatarText: f.avatarText,
           color: '#FF5A36',
           time: fmtAgo(f.at),
+          skateYears: f.skateYears || 0,
           note: f.note,
           photos: f.photos,
         })),

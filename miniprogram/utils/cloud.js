@@ -97,6 +97,7 @@ function mapCheckin(d) {
     note: d.note || '',
     photos: d.photos || [],
     at: d.at,
+    skateYears: d.skateYears || 0,
     user: d.userName || '滑手',
     avatarFile: avatar.indexOf('cloud://') === 0 ? avatar : '',
     avatarText: avatar.indexOf('cloud://') === 0 ? (d.userName || '滑').slice(0, 1) : (avatar || (d.userName || '滑').slice(0, 1)),

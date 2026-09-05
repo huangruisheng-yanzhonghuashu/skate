@@ -97,7 +97,10 @@
           <image wx:if="{{item.avatarFile}}" class="checkin-avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
           <view wx:else class="checkin-avatar" style="background: {{item.color}}">{{item.avatarText}}</view>
           <view class="checkin-user">
-            <text class="checkin-name">{{item.user}}</text>
+            <view class="checkin-name-row">
+              <text class="checkin-name">{{item.user}}</text>
+              <text wx:if="{{item.skateYears}}" class="checkin-years">滑龄{{item.skateYears}}</text>
+            </view>
             <text class="checkin-time">{{item.time}}</text>
           </view>
         </view>

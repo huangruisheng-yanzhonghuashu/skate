@@ -220,10 +220,28 @@
   gap: 4rpx;
 }
 
+.fname-row {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+}
+
 .fname {
   font-size: 26rpx;
   font-weight: 600;
   color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* 滑龄：昵称右侧次级小字，与时间同色阶，不挤压昵称 */
+.checkin-years {
+  flex-shrink: 0;
+  margin-left: 10rpx;
+  font-size: 20rpx;
+  color: #8A8A93;
 }
 
 .ftime {

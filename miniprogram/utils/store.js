@@ -96,8 +96,9 @@ function migrateLocal() {
       at: c.at,
       userName: state.user.nickname || '滑手',
       avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
-    }
-  })
+      skateYears: c.skateYears || state.user.skateYears || 0,
+      }
+      })
   const likeIds = Object.keys(state.likes).filter(function (k) { return state.likes[k] })
   return Promise.all([
     cloud.pushCheckins(docs),
@@ -264,6 +265,7 @@ function addCheckin(venueId, venueName, note, photos, kind) {
     photos: photos || [],
     kind: kind || 'venue',
     at: at,
+    skateYears: state.user.skateYears || 0,
   })
   persist()
   notify()
@@ -276,6 +278,7 @@ function addCheckin(venueId, venueName, note, photos, kind) {
     at: at,
     userName: state.user.nickname || '滑手',
     avatar: state.user.avatarFileID || (state.user.nickname || '滑').slice(0, 1),
+    skateYears: state.user.skateYears || 0,
   }
   cloud.addCheckinDoc(doc).then(function (r) {
     if (r && r._id) {
@@ -343,6 +346,7 @@ function getLocalPlaceCheckins(placeId, noteOnly) {
         note: c.note || '',
         photos: c.photos || [],
         at: c.at,
+        skateYears: c.skateYears || 0,
         user: nickname,
         avatarFile: avatar.indexOf('cloud://') === 0 ? avatar : '',
         avatarText: avatar.indexOf('cloud://') === 0 ? nickname.slice(0, 1) : (avatar || nickname.slice(0, 1)),

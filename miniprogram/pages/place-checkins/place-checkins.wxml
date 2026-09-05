@@ -12,7 +12,10 @@
       <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
       <view wx:else class="avatar">{{item.avatarText}}</view>
       <view class="who">
-        <text class="name">{{item.user}}</text>
+        <view class="name-row">
+          <text class="name">{{item.user}}</text>
+          <text wx:if="{{item.skateYears > 0}}" class="checkin-years">滑龄{{item.skateYears}}年</text>
+        </view>
         <text class="time">{{item.time}}</text>
       </view>
     </view>
