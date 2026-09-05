@@ -1,5 +1,6 @@
 {
-  "navigationBarTitleText": "SkateSpot",
+  "navigationStyle": "custom",
+  "navigationBarTitleText": "滑哪儿",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "light"
 }

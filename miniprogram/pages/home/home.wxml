@@ -1,12 +1,19 @@
 <view class="page">
-  <!-- 头部：定位 + 搜索 -->
+  <!-- 头部：美团式两行——导航行左侧「定位城市」（原原生标题位置）+ 搜索框独占整行 -->
   <view class="header">
-    <view wx:if="{{!searchOpen}}" class="header-row">
-      <view class="city" hover-class="hv" bindtap="goCityPicker" aria-role="button" aria-label="选择城市">
-        <image class="city-pin" src="{{icons.pinOrange}}" mode="aspectFit" />
-        <text>{{city}}</text>
-        <image class="city-swap" src="{{icons.swap}}" mode="aspectFit" />
+    <!-- 导航行：左对齐定位城市，高度 = 状态栏 + 胶囊基准（JS 计算） -->
+    <view class="nav-row" style="padding-top: {{statusBarHeight}}px">
+      <view class="nav-row-inner" style="height: {{navContentHeight}}px">
+        <view class="city" hover-class="hv" bindtap="goCityPicker" aria-role="button" aria-label="选择城市">
+          <image class="city-pin" src="{{icons.pinOrange}}" mode="aspectFit" />
+          <text>{{city}}</text>
+          <image class="city-swap" src="{{icons.swap}}" mode="aspectFit" />
+        </view>
       </view>
+    </view>
+
+    <!-- 搜索行：占整行 -->
+    <view wx:if="{{!searchOpen}}" class="header-row">
       <view class="search-pill" hover-class="hv" bindtap="openSearch">
         <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
         <text class="search-pill-text">搜索场地、俱乐部、门店...</text>

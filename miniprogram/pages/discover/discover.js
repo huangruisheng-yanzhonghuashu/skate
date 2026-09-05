@@ -13,6 +13,7 @@ Page({
     loading: false,
     finished: false,
     empty: false,
+    error: false,
     icons: {
       heartAsh: ICON.heartAsh,
       heartOrange: ICON.heartOrange,
@@ -37,7 +38,7 @@ Page({
   reload() {
     this._skip = 0
     this._counts = {}
-    this.setData({ list: [], finished: false, empty: false })
+    this.setData({ list: [], finished: false, empty: false, error: false })
     return this.loadMore()
   },
 
@@ -74,9 +75,22 @@ Page({
           loading: false,
           finished: rows.length < PAGE_SIZE,
           empty: list.length === 0,
+          error: false,
         })
       })
+    }).catch(() => {
+      /* 首屏失败 → 失败态页面；加载更多失败 → toast 提示，保留已有内容 */
+      this.setData({ loading: false, error: this.data.list.length === 0 })
+      if (this.data.list.length) {
+        wx.showToast({ title: '加载失败，请重试', icon: 'none' })
+      }
     })
+  },
+
+  /* 失败态重试 */
+  onRetry() {
+    this.setData({ error: false })
+    this.loadMore()
   },
 
   /* 展开/收起评论区 */
@@ -173,10 +187,6 @@ Page({
 
   onViewerClose() {
     this.setData({ viewerShow: false })
-  },
-
-  goHome() {
-    wx.switchTab({ url: '/pages/home/home' })
   },
 
   /* 发打卡：无需在场，进发布页选地点后发内容 */

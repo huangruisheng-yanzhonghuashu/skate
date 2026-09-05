@@ -20,4 +20,11 @@ module.exports = {
   HEARTBEAT_INTERVAL_MS: 60000,
   /* 在场距离阈值：定位点距场地超过该距离不上报心跳（米） */
   PRESENCE_RADIUS_M: 500,
+
+  /* ===== 品牌字体 ===== */
+  /* 首页字标「滑哪儿」用字体：得意黑 Smiley Sans（开源 OFL 协议，斜体窄字、运动感）
+   * woff 文件需自行托管到 https 地址后填到这里（留空则跳过加载，回退系统粗体）。
+   * 真机生效还需在小程序后台把字体所在域名加入 downloadFile 合法域名。
+   * 获取：https://github.com/atelier-anchor/smiley-sans （releases 内含 woff2/woff） */
+  BRAND_FONT_URL: '',
 }

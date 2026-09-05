@@ -31,6 +31,9 @@ function haversine(lat1, lng1, lat2, lng2) {
 Page({
   data: {
     city: '嘉兴',
+    /* 自定义导航：状态栏高度 + 胶囊基准的导航内容高度（px） */
+    statusBarHeight: 20,
+    navContentHeight: 44,
     entity: 'venue',
     filters: FIELD_FILTERS,
     filter: '全部',
@@ -60,6 +63,15 @@ Page({
   },
 
   onLoad() {
+    /* 自定义导航：按胶囊按钮位置反推导航内容高度（与右上胶囊垂直居中对齐） */
+    try {
+      const win = wx.getWindowInfo()
+      const rect = wx.getMenuButtonBoundingClientRect()
+      if (win && win.statusBarHeight) this.setData({ statusBarHeight: win.statusBarHeight })
+      if (rect && rect.height && win && win.statusBarHeight) {
+        this.setData({ navContentHeight: rect.height + (rect.top - win.statusBarHeight) * 2 })
+      }
+    } catch (e) { /* 取不到时用默认 20/44 兜底 */ }
     this._online = {}
     this._venues = []
     this._shops = []

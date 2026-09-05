@@ -1,30 +1,33 @@
 <view class="page">
-  <!-- 头部：大标题 + 右侧发打卡 + 最新/热门切换（设计稿同款） -->
+  <!-- 吸顶工具条：最新/热门（左）+ 发打卡（右）；页面标题由原生导航栏承担，页内不重复 -->
   <view class="dis-header">
-    <text class="dis-title">发现</text>
-    <view class="dis-right">
-      <view class="dis-post" hover-class="dis-post-hover" bindtap="goPostPublish" aria-role="button" aria-label="发打卡">
-        <image class="dis-post-icon" src="{{icons.camera}}" mode="aspectFit" />
-        <text>发打卡</text>
+    <view class="dis-tabs">
+      <view
+        class="dis-tab {{tab === 'latest' ? 'dis-tab-active' : ''}}"
+        hover-class="dis-tab-hover"
+        data-tab="latest"
+        bindtap="switchTab"
+        aria-role="tab"
+        aria-label="最新"
+      >
+        <text>最新</text>
+        <view wx:if="{{tab === 'latest'}}" class="dis-tab-line"></view>
       </view>
-      <view class="dis-tabs">
-        <view
-          class="dis-tab {{tab === 'latest' ? 'dis-tab-active' : ''}}"
-          data-tab="latest"
-          bindtap="switchTab"
-        >
-          <text>最新</text>
-          <view wx:if="{{tab === 'latest'}}" class="dis-tab-line"></view>
-        </view>
-        <view
-          class="dis-tab {{tab === 'hot' ? 'dis-tab-active' : ''}}"
-          data-tab="hot"
-          bindtap="switchTab"
-        >
-          <text>热门</text>
-          <view wx:if="{{tab === 'hot'}}" class="dis-tab-line"></view>
-        </view>
+      <view
+        class="dis-tab {{tab === 'hot' ? 'dis-tab-active' : ''}}"
+        hover-class="dis-tab-hover"
+        data-tab="hot"
+        bindtap="switchTab"
+        aria-role="tab"
+        aria-label="热门"
+      >
+        <text>热门</text>
+        <view wx:if="{{tab === 'hot'}}" class="dis-tab-line"></view>
       </view>
+    </view>
+    <view class="dis-post" hover-class="dis-post-hover" bindtap="goPostPublish" aria-role="button" aria-label="发打卡">
+      <image class="dis-post-icon" src="{{icons.camera}}" mode="aspectFit" />
+      <text>发打卡</text>
     </view>
   </view>
 
@@ -73,11 +76,25 @@
       </view>
 
       <view class="feed-actions">
-        <view class="action {{item.liked ? 'action-liked' : ''}}" data-id="{{item.id}}" bindtap="toggleLike">
+        <view
+          class="action {{item.liked ? 'action-liked' : ''}}"
+          hover-class="action-hover"
+          data-id="{{item.id}}"
+          bindtap="toggleLike"
+          aria-role="button"
+          aria-label="点赞"
+        >
           <image class="action-icon" src="{{item.liked ? icons.heartOrange : icons.heartAsh}}" mode="aspectFit" />
           <text>{{item.likeCount}}</text>
         </view>
-        <view class="action {{item.commentsOpen ? 'action-liked' : ''}}" data-id="{{item.id}}" bindtap="toggleComments">
+        <view
+          class="action {{item.commentsOpen ? 'action-liked' : ''}}"
+          hover-class="action-hover"
+          data-id="{{item.id}}"
+          bindtap="toggleComments"
+          aria-role="button"
+          aria-label="评论"
+        >
           <image class="action-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
           <text>{{item.commentCount}}</text>
         </view>
@@ -96,12 +113,21 @@
     <view wx:if="{{finished && list.length}}" class="more">— 没有更多了 —</view>
   </view>
 
-  <!-- 空态 -->
-  <view wx:if="{{empty && !loading}}" class="empty">
-    <text class="empty-text">还没有打卡内容</text>
-    <text class="empty-sub">去场地或店铺打卡，你的分享会出现在这里</text>
-    <view class="empty-btn" bindtap="goHome">去打卡</view>
+  <!-- 失败态：首屏加载失败（下拉刷新也可恢复） -->
+  <view wx:if="{{error && !loading}}" class="error">
+    <text class="error-text">加载失败</text>
+    <view class="error-btn" hover-class="op-hover" bindtap="onRetry" aria-role="button" aria-label="重新加载">点击重试</view>
   </view>
+
+  <!-- 空态：CTA 直达发打卡（文案与行为一致） -->
+  <view wx:if="{{empty && !loading && !error}}" class="empty">
+    <text class="empty-text">还没有打卡内容</text>
+    <text class="empty-sub">去发一条打卡，你的分享会出现在这里</text>
+    <view class="empty-btn" hover-class="op-hover" bindtap="goPostPublish">发打卡</view>
+  </view>
+
+  <!-- 首屏加载中（列表为空时的独立提示） -->
+  <view wx:if="{{loading && !list.length}}" class="more">加载中...</view>
 </view>
 
 <!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播） -->

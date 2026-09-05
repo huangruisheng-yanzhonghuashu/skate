@@ -20,6 +20,18 @@
   padding: 0 32rpx;
 }
 
+/* ===== 自定义导航行：左侧定位城市（占原原生标题位置） ===== */
+.nav-row {
+  margin: 0 -32rpx; /* 抵消 .header 左右内边距，背景通栏 */
+  background: #111114;
+}
+
+.nav-row-inner {
+  display: flex;
+  align-items: center;
+  padding: 0 32rpx;
+}
+
 .header-row {
   display: flex;
   align-items: center;

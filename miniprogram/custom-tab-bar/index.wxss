@@ -47,3 +47,28 @@
   color: #FFFFFF;
   font-weight: 600;
 }
+
+/* 首页选中态品牌字标：「滑 / 哪儿」两行竖排，厚重字重贴近美团 Logo 观感 */
+.brand-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.15;
+}
+
+.brand-line {
+  font-weight: 800;
+  color: #FFFFFF;
+}
+
+/* 「滑」主字放大做视觉锚点，「哪儿」缩小为辅助，层级字标（约 1.2 倍克制对比） */
+.brand-big {
+  font-size: 29rpx;
+  line-height: 1.1;
+}
+
+.brand-small {
+  font-size: 24rpx;
+  line-height: 1.2;
+  letter-spacing: 2rpx;
+}
