@@ -17,14 +17,14 @@
 }
 
 .nav-row {
+  position: relative;
   height: 88rpx;
   display: flex;
   align-items: center;
   padding: 0 24rpx;
 }
 
-.nav-back-btn,
-.nav-post-btn {
+.nav-back-btn {
   width: 64rpx;
   height: 64rpx;
   margin-left: -12rpx;
@@ -33,19 +33,18 @@
   justify-content: center;
 }
 
-.nav-post-btn {
-  margin-left: 0;
-  margin-right: -12rpx;
-}
-
 .nav-btn-hover {
   opacity: 0.7;
 }
 
-.nav-back-icon,
-.nav-post-icon {
-  width: 40rpx;
-  height: 40rpx;
+.nav-back-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.nav-right {
+  width: 52rpx;
+  flex-shrink: 0;
 }
 
 .nav-title {

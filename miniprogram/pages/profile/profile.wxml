@@ -45,15 +45,6 @@
 
   <!-- 菜单（打卡/推荐入口已并入个人卡片统计，此处不再重复） -->
   <view class="menu">
-    <view class="menu-item" hover-class="menu-hover" bindtap="goPostPublish">
-      <view class="menu-left">
-        <image class="menu-icon" src="{{icons.camera}}" mode="aspectFit" />
-        <text class="menu-label">发打卡</text>
-      </view>
-      <view class="menu-right">
-        <image class="menu-arrow" src="{{icons.chevron}}" mode="aspectFit" />
-      </view>
-    </view>
     <view class="menu-item" hover-class="menu-hover" bindtap="goReports">
       <view class="menu-left">
         <image class="menu-icon" src="{{icons.file}}" mode="aspectFit" />

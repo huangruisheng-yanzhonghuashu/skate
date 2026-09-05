@@ -5,9 +5,7 @@
       <image class="nav-back-icon" src="{{icons.back}}" mode="aspectFit" />
     </view>
     <text class="nav-title">我的打卡</text>
-    <view class="nav-post-btn" hover-class="nav-btn-hover" bindtap="goPostPublish" aria-role="button" aria-label="发打卡">
-      <image class="nav-post-icon" src="{{icons.camera}}" mode="aspectFit" />
-    </view>
+    <view class="nav-right"></view>
   </view>
 </view>
 

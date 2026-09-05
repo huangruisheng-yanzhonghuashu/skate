@@ -8,9 +8,10 @@ const cloud = require('../../utils/cloud.js')
 const { ICON } = require('../../utils/icons.js')
 const nav = require('../../utils/nav.js')
 
-/* shops.category → 徽章文案 + 过滤 key（板店对外叫「门店」，与「场地、门店与俱乐部」文案统一） */
+/* shops.category → 徽章文案 + 过滤 key（板店对外叫「门店」；过滤维度按「场地、门店与俱乐部」
+ * 三分，培训机构并入俱乐部 chip） */
 const CAT_TEXT = { '板店': '门店', '俱乐部': '俱乐部', '培训机构': '培训机构' }
-const CAT_KEY = { '板店': 'shop', '俱乐部': 'club', '培训机构': 'training' }
+const CAT_KEY = { '板店': 'shop', '俱乐部': 'club', '培训机构': 'club' }
 
 /* 实体类型过滤 chips（客户端过滤，数据已全在本地） */
 const FILTERS = [
@@ -18,7 +19,6 @@ const FILTERS = [
   { key: 'venue', label: '场地' },
   { key: 'shop', label: '门店' },
   { key: 'club', label: '俱乐部' },
-  { key: 'training', label: '培训机构' },
 ]
 
 Page({
@@ -32,7 +32,7 @@ Page({
     statusBarHeight: 20,
     icons: {
       back: ICON.chevronLeftWhite,
-      camera: ICON.cameraWhite,
+      camera: ICON.cameraOrange,
       chevron: ICON.chevronRightAsh,
       heart: ICON.heartAsh,
       comment: ICON.commentAsh,

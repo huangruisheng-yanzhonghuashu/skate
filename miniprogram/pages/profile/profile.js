@@ -190,7 +190,6 @@ Page({
 
   /* ===== 菜单跳转 ===== */
   goCheckins() { wx.switchTab({ url: '/pages/checkins/checkins' }) },
-  goPostPublish() { wx.navigateTo({ url: '/pages/post-publish/post-publish' }) },
   goMyPosts() { wx.navigateTo({ url: '/pages/my-posts/my-posts' }) },
   goReports() { wx.navigateTo({ url: '/pages/reports/reports' }) },
   goFeedback() { wx.navigateTo({ url: '/pages/feedback/feedback' }) },
