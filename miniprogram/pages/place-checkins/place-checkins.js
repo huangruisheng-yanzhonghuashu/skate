@@ -2,6 +2,7 @@
 const cloud = require('../../utils/cloud.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
+const nav = require('../../utils/nav.js')
 
 const PAGE_SIZE = 20
 
@@ -13,16 +14,17 @@ Page({
     empty: false,
     finished: false, /* 没有更多 */
     loading: false,
-    icons: { commentAsh: ICON.commentAsh, chevronDown: ICON.chevronDownAsh },
+    statusBarHeight: 20,
+    icons: { commentAsh: ICON.commentAsh, chevronDown: ICON.chevronDownAsh, back: ICON.chevronLeftWhite },
   },
 
   onLoad(options) {
     this._id = options.id
     this._skip = 0
-    this.setData({ kind: options.kind || 'venue' })
-    /* 标题：场地优先取名称，失败兜底通用标题 */
+    this.setData({ kind: options.kind || 'venue', statusBarHeight: nav.getStatusBarHeight() })
+    /* 标题：场地/店铺名称（自定义导航栏绑定渲染，异步兜底在 onShow） */
     const name = this._resolveName(options.id, options.kind)
-    wx.setNavigationBarTitle({ title: (name || (options.kind === 'shop' ? '店铺' : '场地')) + ' · 全部打卡' })
+    if (name) this.setData({ placeName: name })
     this.loadMore()
   },
 
@@ -31,13 +33,15 @@ Page({
     return place ? place.name : ''
   },
 
+  /* 返回（自定义导航无系统返回键） */
+  goBack() {
+    nav.goBack()
+  },
+
   onShow() {
     if (!this.data.placeName) {
       const name = this._resolveName(this._id, this.data.kind)
-      if (name) {
-        this.setData({ placeName: name })
-        wx.setNavigationBarTitle({ title: name + ' · 全部打卡' })
-      }
+      if (name) this.setData({ placeName: name })
     }
   },
 

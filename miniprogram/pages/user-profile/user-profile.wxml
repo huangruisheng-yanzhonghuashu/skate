@@ -1,4 +1,15 @@
-<view class="page">
+<!-- 自定义导航栏（原生导航移除后自绘，media-viewer 预览可全屏覆盖） -->
+<view class="nav" style="padding-top: {{statusBarHeight}}px">
+  <view class="nav-row">
+    <view class="nav-back-btn" hover-class="nav-btn-hover" bindtap="goBack" aria-role="button" aria-label="返回">
+      <image class="nav-back-icon" src="{{icons.back}}" mode="aspectFit" />
+    </view>
+    <text class="nav-title">{{user}}的主页</text>
+    <view class="nav-right"></view>
+  </view>
+</view>
+
+<view class="page" style="padding-top: {{statusBarHeight + 44}}px">
   <!-- 头部资料卡 -->
   <view class="hero anim-fade-in">
     <view class="hero-top">

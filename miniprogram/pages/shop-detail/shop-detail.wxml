@@ -1,3 +1,15 @@
+<!-- 返回按钮（自定义导航，悬浮在状态栏下；照片沉浸式延伸到状态栏） -->
+<view
+  class="nav-back"
+  style="top: {{statusBarHeight + 8}}px"
+  hover-class="nav-back-hover"
+  bindtap="goBack"
+  aria-role="button"
+  aria-label="返回"
+>
+  <image class="nav-back-icon" src="{{icons.back}}" mode="aspectFit" />
+</view>
+
 <view class="page" wx:if="{{shop}}">
   <!-- 照片轮播（云存储 fileID，点击预览） -->
   <swiper class="photos" indicator-dots indicator-active-color="#FF5A36" circular>

@@ -1,4 +1,5 @@
 {
+  "navigationStyle": "custom",
   "navigationBarTitleText": "店铺详情",
   "usingComponents": {
     "media-viewer": "/components/media-viewer/media-viewer"

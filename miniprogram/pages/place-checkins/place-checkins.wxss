@@ -5,6 +5,58 @@
   box-sizing: border-box;
 }
 
+/* 自定义导航栏（原生导航移除后自绘，media-viewer 预览可全屏覆盖） */
+.nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 30;
+  background: #1A1A1E;
+}
+
+.nav-row {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  padding: 0 24rpx;
+}
+
+.nav-back-btn {
+  width: 64rpx;
+  height: 64rpx;
+  margin-left: -12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-btn-hover {
+  opacity: 0.7;
+}
+
+.nav-back-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.nav-title {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-right {
+  width: 52rpx;
+  flex-shrink: 0;
+}
+
 /* 空态 */
 .empty {
   display: flex;

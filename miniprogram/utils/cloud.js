@@ -137,17 +137,20 @@ function _updateCheckinDoc(id, patch) {
   return db().collection('checkins').doc(id).update({ data: patch })
 }
 
-/* 某地点（场地/店铺）的打卡流（所有人，按时间倒序）——只含"打卡"：
- * type=post，或旧数据（无 type）有留言/媒体的记录；纯签到不出现在打卡流
+/* 某地点（场地/店铺）的打卡流（所有人，按时间倒序）——只含"打卡"（有留言或媒体的内容记录）：
+ * 纯签到（type=checkin）与旧版签到（无 type、note/photos 字段缺失或 null）一律不出现。
+ * ⚠️ Mongo 的 neq 会命中"字段不存在"的文档，内容条件必须先 exists(true) 再排除 null/空值。
  * 需 checkins"所有用户可读"权限；无权限时仅返回自己的，行为仍正确 */
 function getPlaceCheckins(venueId, opts) {
   opts = opts || {}
   const cmd = db().command
+  const noteQ = cmd.exists(true).and(cmd.neq('')).and(cmd.neq(null))
+  const photosQ = cmd.exists(true).and(cmd.neq([])).and(cmd.neq(null))
+  const videosQ = cmd.exists(true).and(cmd.neq([])).and(cmd.neq(null))
   const where = cmd.or([
-    { venueId: venueId, type: 'post' },
-    { venueId: venueId, note: cmd.neq('') },
-    { venueId: venueId, photos: cmd.neq([]) },
-    { venueId: venueId, videos: cmd.neq([]) },
+    { venueId: venueId, note: noteQ },
+    { venueId: venueId, photos: photosQ },
+    { venueId: venueId, videos: videosQ },
   ])
   let q = db().collection('checkins').where(where)
   if (opts.skip) q = q.skip(opts.skip)
@@ -159,30 +162,33 @@ function getPlaceCheckins(venueId, opts) {
     })
 }
 
-/* 发现页社区流：所有人的"打卡"（type=post，或旧数据有留言/媒体），全量按时间倒序分页
+/* 发现页社区流：所有人的"打卡"（有留言或媒体的内容记录），全量按时间倒序分页
+ * 纯签到（含旧版字段缺失/null 的签到记录）不出现；type 不参与判断——补打卡更新不改 type。
+ * ⚠️ Mongo 的 neq 会命中"字段不存在"的文档，内容条件必须先 exists(true) 再排除 null/空值。
  * opts.openid 传入时限定为某位滑手的公开动态（滑手主页用） */
 function getPublicCheckins(opts) {
   opts = opts || {}
   const cmd = db().command
+  const noteQ = cmd.exists(true).and(cmd.neq('')).and(cmd.neq(null))
+  const photosQ = cmd.exists(true).and(cmd.neq([])).and(cmd.neq(null))
+  const videosQ = cmd.exists(true).and(cmd.neq([])).and(cmd.neq(null))
   const where = opts.openid
     ? cmd.or([
-        { _openid: opts.openid, type: 'post' },
-        { _openid: opts.openid, note: cmd.neq('') },
-        { _openid: opts.openid, photos: cmd.neq([]) },
-        { _openid: opts.openid, videos: cmd.neq([]) },
+        { _openid: opts.openid, note: noteQ },
+        { _openid: opts.openid, photos: photosQ },
+        { _openid: opts.openid, videos: videosQ },
       ])
     : cmd.or([
-        { type: 'post' },
-        { note: cmd.neq('') },
-        { photos: cmd.neq([]) },
-        { videos: cmd.neq([]) },
+        { note: noteQ },
+        { photos: photosQ },
+        { videos: videosQ },
       ])
   let q = db().collection('checkins').where(where)
   if (opts.skip) q = q.skip(opts.skip)
   return q.orderBy('at', 'desc').limit(opts.limit || 20).get()
     .then((r) => (r.data || []).map(mapCheckin))
     .catch((e) => {
-      console.warn('[cloud] 社区流读取失败', (e && e.errCode) || (e && e.message))
+      console.warn('[cloud] 社区流读取失败', (e && e.errCode) || (e && e.errMsg) || (e && e.message))
       return []
     })
 }

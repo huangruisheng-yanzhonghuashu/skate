@@ -1,4 +1,5 @@
 {
+  "navigationStyle": "custom",
   "navigationBarTitleText": "全部打卡",
   "usingComponents": {
     "media-viewer": "/components/media-viewer/media-viewer"

@@ -4,6 +4,29 @@
   padding-bottom: calc(160rpx + env(safe-area-inset-bottom));
 }
 
+/* 返回按钮（自定义导航悬浮，statusBarHeight 由 JS 注入） */
+.nav-back {
+  position: fixed;
+  left: 24rpx;
+  z-index: 30;
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: rgba(17, 17, 20, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-back-hover {
+  background: rgba(17, 17, 20, 0.9);
+}
+
+.nav-back-icon {
+  width: 36rpx;
+  height: 36rpx;
+}
+
 /* 照片轮播 */
 .photos {
   width: 100%;

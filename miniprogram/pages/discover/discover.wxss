@@ -2,18 +2,35 @@
   padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
 }
 
-/* ===== 吸顶工具条：Tab 左 + 发打卡右（标题由原生导航栏承担） ===== */
+/* ===== 吸顶头部：状态栏占位 + 自绘标题（自定义导航）+ 工具条 ===== */
 .dis-header {
   position: sticky;
   top: 0;
   z-index: 10;
+  background: #111114;
+  border-bottom: 1rpx solid #26262C;
+}
+
+/* 标题行：88rpx（44px）标准导航高度，避开右侧胶囊 */
+.dis-nav {
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dis-nav-title {
+  font-size: 34rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.dis-toolbar {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24rpx;
   padding: 8rpx 32rpx;
-  background: #111114;
-  border-bottom: 1rpx solid #26262C;
 }
 
 .dis-tabs {

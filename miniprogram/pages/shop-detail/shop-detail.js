@@ -4,6 +4,7 @@ const cloud = require('../../utils/cloud.js')
 const { PRESENCE_RADIUS_M } = require('../../utils/config.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
+const nav = require('../../utils/nav.js')
 
 /* 连签徽章里程碑（庆祝层提示用，与场地详情页一致） */
 const STREAK_MILESTONES = [3, 7, 30, 100]
@@ -32,6 +33,7 @@ Page({
     checked: false,
     rating: 0,
     ratingCount: 0,
+    statusBarHeight: 20,
     /* org↔venue 关联：合作/上课场地（partnerVenues 名称解析为 venue 引用） */
     partners: [],
     icons: {
@@ -39,6 +41,7 @@ Page({
       starGray: ICON.starGray,
       checkWhite: ICON.checkWhite,
       camera: ICON.cameraOrange,
+      back: ICON.chevronLeftWhite,
     },
     feed: [],
     /* 打卡弹窗 */
@@ -49,6 +52,7 @@ Page({
   },
 
   onLoad(options) {
+    this.setData({ statusBarHeight: nav.getStatusBarHeight() })
     /* 订阅 store 变更：视频后台异步上传完成后（notify）实时重载打卡动态，"上传中"角标消失 */
     this._unsubStore = store.subscribe(() => this.loadFeed())
     cloud.getShops().then((shops) => {
@@ -60,7 +64,6 @@ Page({
       }
       const status = cloud.openStatus(shop)
       this.setData({ shop: shop, status: status, openNow: status === '营业中' })
-      wx.setNavigationBarTitle({ title: shop.name })
       this.resolvePartners(shop)
       this.refresh()
       this.loadFeed()
@@ -85,6 +88,11 @@ Page({
   goVenue(e) {
     const id = e.currentTarget.dataset.id
     if (id) wx.navigateTo({ url: '/pages/venue-detail/venue-detail?id=' + id })
+  },
+
+  /* 返回（自定义导航无系统返回键） */
+  goBack() {
+    nav.goBack()
   },
 
   onShow() {

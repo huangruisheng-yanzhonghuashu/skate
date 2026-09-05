@@ -3,6 +3,7 @@ const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
+const { getStatusBarHeight } = require('../../utils/nav.js')
 
 const PAGE_SIZE = 20
 
@@ -14,6 +15,7 @@ Page({
     finished: false,
     empty: false,
     error: false,
+    statusBarHeight: 20,
     icons: {
       heartAsh: ICON.heartAsh,
       heartOrange: ICON.heartOrange,
@@ -25,12 +27,15 @@ Page({
   onLoad() {
     this._skip = 0
     this._counts = {} /* feedId → 点赞数（聚合结果缓存） */
+    this.setData({ statusBarHeight: getStatusBarHeight() })
     this.loadMore()
   },
 
   onShow() {
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
-    if (tb) tb.setData({ selected: 1 })
+    if (tb) {
+      tb.setData({ selected: 1, hidden: false }) /* 防御：任何路径回页都恢复 TabBar */
+    }
     /* 打卡/点赞可能已变化：重置分页重新加载 */
     this.reload()
   },
@@ -51,6 +56,7 @@ Page({
       return Promise.all([cloud.getLikeCounts(ids), cloud.getCommentCounts(ids)]).then((rs) => {
         Object.assign(this._counts, rs[0])
         const cCounts = rs[1]
+        /* 兜底过滤：只展示有内容的打卡（留言或媒体），无内容的签到类记录不出现在社区流 */
         const mapped = rows.map((r) => ({
           id: r.id,
           openid: r.openid,
@@ -68,7 +74,7 @@ Page({
           likeCount: this._counts[r.id] || 0,
           commentCount: cCounts[r.id] || 0,
           commentsOpen: false,
-        }))
+        })).filter((item) => item.note || (item.media && item.media.length))
         const list = this.data.list.concat(mapped)
         this.setData({
           list: this.sortList(list),
@@ -175,17 +181,22 @@ Page({
     }
   },
 
-  /* 打卡媒体预览（微博式混合查看器）：图视频混滑、视频封面点播不自动播放 */
+  /* 打卡媒体预览（微博式混合查看器）：图视频混滑、视频封面点播不自动播放
+   * Tab 页特有：预览期间隐藏底部 TabBar（全屏沉浸），关闭恢复 */
   previewMedia(e) {
     const media = e.currentTarget.dataset.media || []
     const current = e.currentTarget.dataset.index || 0
     cloud.getMediaPreviewSources(media).then((sources) => {
       if (!sources.length) return
+      const tb = typeof this.getTabBar === 'function' && this.getTabBar()
+      if (tb) tb.setData({ hidden: true })
       this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: current })
     })
   },
 
   onViewerClose() {
+    const tb = typeof this.getTabBar === 'function' && this.getTabBar()
+    if (tb) tb.setData({ hidden: false })
     this.setData({ viewerShow: false })
   },
 

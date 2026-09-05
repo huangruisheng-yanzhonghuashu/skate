@@ -1,7 +1,11 @@
 <view class="page">
-  <!-- 吸顶工具条：最新/热门（左）+ 发打卡（右）；页面标题由原生导航栏承担，页内不重复 -->
-  <view class="dis-header">
-    <view class="dis-tabs">
+  <!-- 吸顶头部：状态栏 + 自绘标题（自定义导航）+ 最新/热门（左）+ 发打卡（右） -->
+  <view class="dis-header" style="padding-top: {{statusBarHeight}}px">
+    <view class="dis-nav">
+      <text class="dis-nav-title">发现</text>
+    </view>
+    <view class="dis-toolbar">
+      <view class="dis-tabs">
       <view
         class="dis-tab {{tab === 'latest' ? 'dis-tab-active' : ''}}"
         hover-class="dis-tab-hover"
@@ -26,8 +30,9 @@
       </view>
     </view>
     <view class="dis-post" hover-class="dis-post-hover" bindtap="goPostPublish" aria-role="button" aria-label="发打卡">
-      <image class="dis-post-icon" src="{{icons.camera}}" mode="aspectFit" />
-      <text>发打卡</text>
+        <image class="dis-post-icon" src="{{icons.camera}}" mode="aspectFit" />
+        <text>发打卡</text>
+      </view>
     </view>
   </view>
 

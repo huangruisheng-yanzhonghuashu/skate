@@ -6,6 +6,7 @@ const cloud = require('../../utils/cloud.js')
 const store = require('../../utils/store.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
+const nav = require('../../utils/nav.js')
 
 const PAGE_SIZE = 20
 /* 常去场地：聚合上限 100（兼做足迹场地数统计），展示前 10 张 */
@@ -33,6 +34,7 @@ Page({
     loading: false,
     finished: false,
     empty: false,
+    statusBarHeight: 20,
     icons: {
       trophy: ICON.trophyOrange,
       venue: ICON.venueOrange,
@@ -40,6 +42,7 @@ Page({
       heartAsh: ICON.heartAsh,
       heartOrange: ICON.heartOrange,
       commentAsh: ICON.commentAsh,
+      back: ICON.chevronLeftWhite,
     },
   },
 
@@ -53,13 +56,18 @@ Page({
       avatarFile: decodeURIComponent(options.avatar || ''),
       skateYears: decodeURIComponent(options.years || ''),
       avatarText: user.slice(0, 1),
+      statusBarHeight: nav.getStatusBarHeight(),
     })
     this.updateMeta()
-    wx.setNavigationBarTitle({ title: user + '的主页' })
     this.initSelf()
     this.loadProfile()
     this.loadPlaces()
     this.loadMore()
+  },
+
+  /* 返回（自定义导航无系统返回键） */
+  goBack() {
+    nav.goBack()
   },
 
   updateMeta() {
@@ -88,7 +96,6 @@ Page({
           avatarText: (u.nickname || '滑').slice(0, 1),
         })
         this.updateMeta()
-        wx.setNavigationBarTitle({ title: (u.nickname || '滑手') + '的主页' })
       }
     })
   },
@@ -108,7 +115,6 @@ Page({
         avatarText: nickname.slice(0, 1),
       })
       this.updateMeta()
-      wx.setNavigationBarTitle({ title: nickname + '的主页' })
     })
   },
 
