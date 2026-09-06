@@ -1,6 +1,6 @@
 {
   "navigationStyle": "custom",
-  "navigationBarTitleText": "滑哪儿",
+  "navigationBarTitleText": "去哪滑",
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "light",
   "usingComponents": {

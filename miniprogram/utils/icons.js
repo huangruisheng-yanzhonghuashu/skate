@@ -75,6 +75,7 @@ const ICON = {
   flameOrange: svg(P.flame, { stroke: ORANGE }),
   flameWhite: svg(P.flame, { stroke: WHITE, sw: 2.2 }),
   compassAsh: svg(P.compass, { stroke: ASH }),
+  compassOrange: svg(P.compass, { stroke: ORANGE }),
   compassWhite: svg(P.compass, { stroke: WHITE, sw: 2.2 }),
   pinAsh: svg(P.pin, { stroke: ASH }),
   pinOrange: svg(P.pin, { stroke: ORANGE }),

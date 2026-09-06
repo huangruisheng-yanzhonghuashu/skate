@@ -1,7 +1,7 @@
 <view class="page">
-  <!-- 头部：美团式两行——导航行左侧「定位城市」（原原生标题位置）+ 搜索框独占整行 -->
+  <!-- 头部：导航行 + 品牌态度区 -->
   <view class="header">
-    <!-- 导航行：左对齐定位城市，高度 = 状态栏 + 胶囊基准（JS 计算） -->
+    <!-- 导航行：左侧城市入口，右侧为微信原生胶囊按钮保留区 -->
     <view class="nav-row" style="padding-top: {{statusBarHeight}}px">
       <view class="nav-row-inner" style="height: {{navContentHeight}}px">
         <view class="city" hover-class="hv" bindtap="goCityPicker" aria-role="button" aria-label="选择城市">
@@ -9,67 +9,30 @@
           <text>{{city}}</text>
           <image class="city-swap" src="{{icons.swap}}" mode="aspectFit" />
         </view>
-        <!-- 在线热度（presence 聚合合计；无人在线时隐藏避免噪音） -->
-        <view wx:if="{{heatCount > 0}}" class="heat" aria-label="今日 {{heatCount}} 人在滑">
-          <view class="heat-dot"></view>
-          <text class="heat-num">{{heatCount}}</text>
-          <text class="heat-label">人在滑</text>
-        </view>
       </view>
     </view>
 
-    <!-- 搜索行：占整行 -->
-    <view wx:if="{{!searchOpen}}" class="header-row">
-      <view class="search-pill" hover-class="hv" bindtap="openSearch">
-        <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
-        <text class="search-pill-text">搜索场地、俱乐部、门店...</text>
-      </view>
-    </view>
-
-    <view wx:else class="header-row">
-      <view class="search-input-wrap">
-        <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
-        <input
-          class="search-input"
-          value="{{query}}"
-          focus
-          confirm-type="search"
-          placeholder="搜索场地、俱乐部、门店..."
-          placeholder-class="search-ph"
-          bindinput="onQueryInput"
-        />
-        <view wx:if="{{query}}" class="search-clear" hover-class="hv" aria-role="button" aria-label="清空搜索" bindtap="clearQuery">
-          <image class="search-clear-icon" src="{{icons.xWhite}}" mode="aspectFit" />
+    <!-- 品牌态度区 -->
+    <view class="brand">
+      <view class="brand-wordmark">去哪滑</view>
+      <view class="brand-row">
+        <text class="brand-slogan">今天 street 起来。</text>
+        <!-- 在线热度：设计稿位于 slogan 右侧，无人时显示弱化态 -->
+        <view class="heat {{heatCount > 0 ? '' : 'heat-quiet'}}" aria-label="{{heatCount > 0 ? '今日 ' + heatCount + ' 人在滑' : '今日暂无人在滑'}}">
+          <view class="heat-dot {{heatCount > 0 ? '' : 'heat-dot-quiet'}}"></view>
+          <text wx:if="{{heatCount > 0}}" class="heat-num">{{heatCount}}</text>
+          <text class="heat-label">{{heatCount > 0 ? '人在滑' : '暂无人在滑'}}</text>
         </view>
       </view>
-      <view class="search-cancel" hover-class="hv" bindtap="closeSearch">取消</view>
+      <view class="brand-bar"></view>
     </view>
   </view>
 
-  <!-- 快捷入口：与一级 Tab 一致的 4 瓦片，点击切 Tab + 滚动到列表面板 -->
-  <view class="tiles">
-    <view class="tile" hover-class="hv" bindtap="quickTo" data-tab="venue" aria-role="button" aria-label="场地">
-      <image class="tile-icon" src="{{icons.tileVenue}}" mode="aspectFit" />
-      <text class="tile-text">场地</text>
-    </view>
-    <view class="tile" hover-class="hv" bindtap="quickTo" data-tab="俱乐部" aria-role="button" aria-label="俱乐部">
-      <image class="tile-icon" src="{{icons.tileClub}}" mode="aspectFit" />
-      <text class="tile-text">俱乐部</text>
-    </view>
-    <view class="tile" hover-class="hv" bindtap="quickTo" data-tab="培训机构" aria-role="button" aria-label="培训机构">
-      <image class="tile-icon" src="{{icons.tileTrain}}" mode="aspectFit" />
-      <text class="tile-text">培训机构</text>
-    </view>
-    <view class="tile" hover-class="hv" bindtap="quickTo" data-tab="板店" aria-role="button" aria-label="板店">
-      <image class="tile-icon" src="{{icons.tileShop}}" mode="aspectFit" />
-      <text class="tile-text">板店</text>
-    </view>
-  </view>
-
-  <!-- 最新打卡（改版新增）：发现页同源社区流，横滑轻卡；空数据整区隐藏 -->
+  <!-- 最新打卡（社区前置）：横滑轻卡；空数据整区隐藏 -->
   <view class="feed-sec" wx:if="{{feed.length}}">
     <view class="sec-head">
       <text class="sec-title">最新打卡</text>
+      <text class="sec-sub">实时社区</text>
     </view>
     <scroll-view class="feed-scroll" scroll-x enhanced show-scrollbar="{{false}}">
       <view
@@ -94,6 +57,7 @@
             wx:if="{{item.coverType === 'video'}}"
             class="feed-cover-media"
             src="{{item.cover}}"
+            poster="{{item.poster}}"
             object-fit="cover"
             controls="{{false}}"
             show-center-play-btn="{{false}}"
@@ -145,45 +109,93 @@
     </scroll-view>
   </view>
 
-  <!-- 地图卡片（圆角容器 + 城市计数 chip；可折叠：点分隔手柄切换；实例保留不销毁；改版默认收起） -->
-  <view class="map-card">
-    <map
-      id="map"
-      class="map {{mapCollapsed ? 'map-collapsed' : ''}}"
-      latitude="{{latitude}}"
-      longitude="{{longitude}}"
-      scale="{{scale}}"
-      markers="{{markers}}"
-      show-location
-      bindmarkertap="onMarkerTap"
-    >
-      <!-- 城市场地计数（设计稿：绿点 + 深色胶囊；折叠态隐藏避免溢出）。真机 cover-view flex/gap 会截断文字，文本直接撑开 -->
-      <cover-view wx:if="{{!mapCollapsed}}" class="map-chip">{{mapChip}}<cover-view class="map-chip-dot"></cover-view></cover-view>
-      <!-- 定位中提示 -->
-      <cover-view wx:if="{{locating}}" class="locating-tip">正在定位当前位置...</cover-view>
-      <!-- 定位按钮：回到当前位置并匹配城市（设计稿：地图右上白底圆钮；准星用 cover-view 原生绘制，真机 cover-image 不支持 SVG） -->
-      <cover-view wx:if="{{!mapCollapsed}}" class="locate-btn" aria-role="button" aria-label="回到当前定位" bindtap="onTapLocate">
-        <cover-view class="locate-ico">
-          <cover-view class="locate-ring"></cover-view>
-          <cover-view class="locate-dot"></cover-view>
-          <cover-view class="locate-tick locate-tick-n"></cover-view>
-          <cover-view class="locate-tick locate-tick-s"></cover-view>
-          <cover-view class="locate-tick locate-tick-w"></cover-view>
-          <cover-view class="locate-tick locate-tick-e"></cover-view>
-        </cover-view>
-      </cover-view>
-    </map>
-    <!-- 折叠手柄：点按收起/展开地图（地图实例保留不销毁） -->
-    <view class="map-handle" hover-class="hv" bindtap="toggleMap" aria-role="button" aria-label="{{mapCollapsed ? '展开地图' : '收起地图'}}">
-      <view class="map-handle-bar"></view>
+  <!-- 地图入口卡片（默认收起） -->
+  <view class="map-entry" hover-class="hv" bindtap="openMapSheet" aria-role="button" aria-label="展开附近场地地图">
+    <view class="map-entry-thumb">
+      <view class="map-entry-grid"></view>
+      <view class="map-entry-pin"></view>
+    </view>
+    <view class="map-entry-text">
+      <text class="map-entry-title">附近场地地图</text>
+      <text class="map-entry-sub">{{mapChip}}</text>
+    </view>
+    <view class="map-entry-arrow">
+      <image class="map-entry-arrow-icon" src="{{icons.chevronRightAsh}}" mode="aspectFit" />
     </view>
   </view>
 
-  <!-- 整合面板：一级轨道 + 二级筛选 + 三级列表同底一体（分隔线划层次） -->
+  <!-- 半屏地图 bottom-sheet -->
+  <view class="map-sheet" wx:if="{{mapSheetVisible}}" catchtouchmove="preventScroll">
+    <view class="map-sheet-mask" bindtap="closeMapSheet"></view>
+    <view class="map-sheet-body">
+      <view class="map-sheet-handle" hover-class="hv" bindtap="closeMapSheet" aria-role="button" aria-label="收起地图">
+        <view class="map-sheet-bar"></view>
+      </view>
+      <view class="map-sheet-head">
+        <text class="map-sheet-title">附近场地地图</text>
+        <view class="map-sheet-close" hover-class="hv" bindtap="closeMapSheet">收起</view>
+      </view>
+      <view class="map-sheet-map-wrap">
+        <map
+          id="map"
+          class="map-sheet-map"
+          latitude="{{latitude}}"
+          longitude="{{longitude}}"
+          scale="{{scale}}"
+          markers="{{markers}}"
+          show-location
+          enable-zoom
+          enable-scroll
+          enable-rotate
+          bindmarkertap="onMarkerTap"
+        >
+          <cover-view class="map-chip">{{mapChip}}<cover-view class="map-chip-dot"></cover-view></cover-view>
+          <cover-view wx:if="{{locating}}" class="locating-tip">正在定位当前位置...</cover-view>
+          <cover-view class="locate-btn" aria-role="button" aria-label="回到当前定位" bindtap="onTapLocate">
+            <cover-view class="locate-ico">
+              <cover-view class="locate-ring"></cover-view>
+              <cover-view class="locate-dot"></cover-view>
+              <cover-view class="locate-tick locate-tick-n"></cover-view>
+              <cover-view class="locate-tick locate-tick-s"></cover-view>
+              <cover-view class="locate-tick locate-tick-w"></cover-view>
+              <cover-view class="locate-tick locate-tick-e"></cover-view>
+            </cover-view>
+          </cover-view>
+        </map>
+      </view>
+    </view>
+  </view>
+
+  <!-- 整合面板：搜索 + 一级 Tab + 二级筛选 + 列表 -->
   <view class="panel">
-    <!-- 一级 + 二级（面板内控制区） -->
+    <!-- 面板内控制区 -->
     <view class="control-panel">
-      <!-- 一级 Tab：场地 / 板店 / 俱乐部 / 培训机构（文字 Tab + 橙色短指示条，轻导航让位内容） -->
+      <!-- 搜索胶囊 -->
+      <view wx:if="{{!searchOpen}}" class="panel-search" hover-class="hv" bindtap="openSearch" aria-role="button" aria-label="搜索">
+        <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
+        <text class="search-pill-text">搜场地 / 俱乐部 / 板店</text>
+      </view>
+
+      <view wx:else class="panel-search-row">
+        <view class="search-input-wrap">
+          <image class="search-icon" src="{{icons.search}}" mode="aspectFit" />
+          <input
+            class="search-input"
+            value="{{query}}"
+            focus
+            confirm-type="search"
+            placeholder="搜场地 / 俱乐部 / 板店"
+            placeholder-class="search-ph"
+            bindinput="onQueryInput"
+          />
+          <view wx:if="{{query}}" class="search-clear" hover-class="hv" aria-role="button" aria-label="清空搜索" bindtap="clearQuery">
+            <image class="search-clear-icon" src="{{icons.xWhite}}" mode="aspectFit" />
+          </view>
+        </view>
+        <view class="search-cancel" hover-class="hv" bindtap="closeSearch">取消</view>
+      </view>
+
+      <!-- 一级 Tab：场地 / 板店 / 俱乐部 / 培训机构 -->
       <view class="entity-seg" aria-role="tablist">
         <view
           wx:for="{{tabs}}"
@@ -199,7 +211,7 @@
         </view>
       </view>
 
-      <!-- 二级筛选：场地=类型 chips；机构 Tab 类型已锁定，只留服务 chips；右缘渐隐提示可横向滚动 -->
+      <!-- 二级筛选 -->
       <view wx:if="{{entity === 'venue'}}" class="filters-wrap">
         <scroll-view class="filters" scroll-x enhanced show-scrollbar="{{false}}">
           <view
@@ -238,9 +250,9 @@
       </view>
     </view>
 
-    <!-- 三级列表（行化：去卡融入面板，行间分隔线） -->
+    <!-- 列表 -->
     <view class="list">
-      <!-- 骨架屏（云数据返回前，按真实卡片结构：左图 + 4 行） -->
+      <!-- 骨架屏 -->
       <block wx:if="{{!loaded}}">
         <view wx:for="{{[0,1,2]}}" wx:key="*this" class="list-item">
           <view class="skel-card">
@@ -299,20 +311,19 @@
         </view>
       </block>
 
-      <!-- 推荐入口：列表非空时底部轻量引导（场地/机构共用） -->
+      <!-- 推荐入口 -->
       <view wx:if="{{loaded && !empty}}" class="submit-line" hover-class="hv" bindtap="goRecommend">
-        <text class="submit-line-text">还有漏掉的{{entityLabel === '场地' ? '场地、门店与俱乐部' : entityLabel}}？</text>
+        <text class="submit-line-text">还有漏掉的{{entityLabel === '场地' ? '场地' : entityLabel}}？</text>
         <text class="submit-line-cta">推荐给我们</text>
       </view>
     </view>
   </view>
 </view>
 
-<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播；与发现页同组件） -->
+<!-- 打卡媒体查看器 -->
 <media-viewer
   visible="{{viewerShow}}"
   sources="{{viewerSources}}"
   current="{{viewerCurrent}}"
   bind:close="onViewerClose"
 />
-

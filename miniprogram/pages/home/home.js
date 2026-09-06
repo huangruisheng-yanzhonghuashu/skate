@@ -8,12 +8,22 @@ const { ICON } = require('../../utils/icons.js')
 const FIELD_FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
 /* 机构服务筛选（拆 Tab 后每个机构 Tab 内的第二行 chips，toggle，无「全部」占位） */
 const ORG_SERVICE_FILTERS = ['卖板', '教学', '维修', '配件', '服装', '组织活动', '装备租赁', '场地运营']
-/* 一级 Tab：场地 + 机构类型三分，板店放最后（旧数据无 category 的店铺按约定落「俱乐部」） */
+
+/* 从地址字符串提取「xx区/县/市辖区」作为首页卡片展示用 */
+function extractDistrict(addr) {
+  if (!addr) return ''
+  const m = addr.match(/([^\s]+?区)/)
+  if (m) return m[1]
+  const m2 = addr.match(/([^\s]+?县)/)
+  if (m2) return m2[1]
+  return addr
+}
+/* 一级 Tab：场地 / 板店 / 俱乐部 / 培训机构（旧数据无 category 的店铺按约定落「俱乐部」） */
 const HOME_TABS = [
   { key: 'venue', label: '场地' },
+  { key: '板店', label: '板店' },
   { key: '俱乐部', label: '俱乐部' },
   { key: '培训机构', label: '培训机构' },
-  { key: '板店', label: '板店' },
 ]
 
 /* HH:mm（今日已签到时间展示用） */
@@ -60,7 +70,7 @@ Page({
     mapChip: '', /* 地图计数胶囊整串文案（city · N 个/家 xx，按 Tab 参数化） */
     loadmoreText: '', /* 列表尾文案（已展示 city 全部 N 个/家 xx） */
     locating: true,
-    mapCollapsed: false, /* 地图默认展开（保留折叠手柄可收起让位内容） */
+    mapSheetVisible: false, /* 地图默认收起为入口卡片，点击展开半屏 bottom-sheet */
     markers: [],
     heatCount: 0, /* 今日在滑总人数（presence 聚合求和） */
     feed: [], /* 最新打卡横滑卡（发现页同源前 10 条） */
@@ -79,11 +89,8 @@ Page({
       search: ICON.searchPh,
       xWhite: ICON.xWhite,
       venueFog: ICON.venueFog,
-      /* 快捷入口瓦片（与一级 Tab 一致）+ 打卡区 */
-      tileVenue: ICON.venueOrange,
-      tileShop: ICON.storeOrange,
-      tileClub: ICON.usersOrange,
-      tileTrain: ICON.gradCapOrange,
+      /* 地图入口箭头 */
+      chevronRightAsh: ICON.chevronRightAsh,
     },
   },
 
@@ -191,6 +198,11 @@ Page({
       const feed = rows.map((r) => {
         const media = toMedia(r.photos, r.videos, r.mediaOrder)
         const cover = media[0] || null
+        const coverType = cover ? cover.type : 'image'
+        /* 视频卡片取同条记录第一张图片做封面，避免直接显示视频内容 */
+        const poster = coverType === 'video'
+          ? (media.find((m) => m.type === 'image') || {}).url || ''
+          : (cover ? cover.url : '')
         return {
           id: r.id,
           openid: r.openid,
@@ -204,7 +216,8 @@ Page({
           timeText: fmtAgo(r.at),
           media: media,
           cover: cover ? cover.url : '',
-          coverType: cover ? cover.type : 'image',
+          coverType: coverType,
+          poster: poster,
         }
       }).filter((x) => x.cover || x.note)
       this.setData({ feed })
@@ -331,10 +344,26 @@ Page({
   onHide() {},
   onUnload() {},
 
-  /* 地图折叠/展开：点击分隔手柄切换（收起后列表全屏，地图实例保留不销毁） */
-  toggleMap() {
-    this.setData({ mapCollapsed: !this.data.mapCollapsed })
+  /* 地图入口卡片点击展开半屏 bottom-sheet */
+  openMapSheet() {
+    /* 打开前确保 markers 已生成；如当前为空则重建一次 */
+    if (!this.data.markers || this.data.markers.length === 0) {
+      this.buildMarkers()
+    }
+    /* 无定位时回退到当前城市第一个场地 */
+    if (!this.data.latitude || !this.data.longitude) {
+      this.centerOnCity()
+    }
+    this.setData({ mapSheetVisible: true })
   },
+
+  /* 收起半屏地图 */
+  closeMapSheet() {
+    this.setData({ mapSheetVisible: false })
+  },
+
+  /* 阻止 bottom-sheet 触摸事件向后穿透，避免底层列表滚动 */
+  preventScroll() {},
 
   /* 下拉刷新：强制重拉云端两实体 + 在线数 + 评分统计 */
   onPullDownRefresh() {
@@ -432,7 +461,7 @@ Page({
     this.switchTabTo(e.currentTarget.dataset.tab)
   },
 
-  /* Tab 切换内部实现（同 Tab 幂等跳过），快捷入口瓦片复用
+  /* Tab 切换内部实现（同 Tab 幂等跳过）
    * 机构 Tab：entity 固定 shop + orgType 锁定 category；filter 同步为 orgType 供地图/列表同口径 */
   switchTabTo(tab) {
     if (tab === this.data.activeTab) return
@@ -464,15 +493,6 @@ Page({
     this.setData(patch)
     this.refresh()
     this.buildMarkers()
-  },
-
-  /* ===== 快捷入口（改版新增） ===== */
-  /* 找场地 / 门店俱乐部瓦片：切到对应 Tab + 滚动到列表面板 */
-  quickTo(e) {
-    this.switchTabTo(e.currentTarget.dataset.tab)
-    wx.nextTick(() => {
-      wx.pageScrollTo({ selector: '.panel', offsetTop: -16, duration: 300, fail: () => {} })
-    })
   },
 
   /* 打卡卡内容点按：有媒体走 media-viewer 预览（Tab 页预览期间隐藏底部 TabBar）；
@@ -544,6 +564,8 @@ Page({
         const today = store.getTodayCheckin(v.id)
         /* 评分统一一位小数展示（设计稿 4.5/4.2 样式；整数种子分补 .0，无评分为 0 走「暂无」） */
         const rating = st ? st.avg : v.rating
+        /* 地址简化为「区名」，优先用 district，否则从地址提取「xx区」 */
+        const displayAddr = v.district || extractDistrict(v.shortAddr || v.address || '')
         return {
           id: v.id,
           name: v.name,
@@ -551,9 +573,11 @@ Page({
           ratingCount: st ? st.count : 0,
           distance: v.distance,
           shortAddr: v.shortAddr,
+          displayAddr: displayAddr,
           category: v.category,
           hot: v.hot,
-          tags: v.tags,
+          /* 将场地类型作为第一个标签高亮，其余标签保持组件默认样式 */
+          tags: (v.category ? [{ label: v.category }] : []).concat((v.tags || []).map((t) => typeof t === 'string' ? { label: t } : t)),
           photo: (v.photos && v.photos[0]) || '',
           online: this._online ? this._online[v.id] : v.online,
           checked: !!today,

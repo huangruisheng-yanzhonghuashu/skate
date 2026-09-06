@@ -9,19 +9,19 @@
   </view>
 
   <view class="body">
-    <!-- 名称 + 评分（设计稿：名称行右侧单颗橙星 + 分值） -->
+    <!-- 名称（首页设计稿无评分，仅在存在评分时显示） -->
     <view class="name-row">
       <view class="name">{{venue.name}}</view>
-      <view class="rate" aria-label="{{venue.rating ? venue.rating + ' 分评分' : '暂无评分'}}">
-        <image wx:if="{{venue.rating}}" class="rate-star" src="{{icons.star}}" mode="aspectFit" />
-        <text class="rate-num {{venue.rating ? '' : 'rate-num-empty'}}">{{venue.rating || '暂无'}}</text>
+      <view wx:if="{{venue.rating}}" class="rate" aria-label="{{venue.rating}} 分评分">
+        <image class="rate-star" src="{{icons.star}}" mode="aspectFit" />
+        <text class="rate-num">{{venue.rating}}</text>
       </view>
     </view>
 
-    <!-- 地址 · 距离 -->
+    <!-- 地址 · 距离（设计稿无定位图标，地址优先用简化区名） -->
     <view class="addr">
       <image class="addr-pin" src="{{icons.pin}}" mode="aspectFit" />
-      <text class="addr-text">{{venue.shortAddr}} · 距你 {{venue.distance}}</text>
+      <text class="addr-text">{{venue.displayAddr || venue.shortAddr}} · 距你 {{venue.distance}}</text>
     </view>
 
     <!-- 标签 -->

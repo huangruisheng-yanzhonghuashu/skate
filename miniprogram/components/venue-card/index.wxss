@@ -1,13 +1,14 @@
-/* 场地卡片 — 暗色街头风（左图通铺卡缘 + 内容 + 状态行靠左） */
+/* 场地卡片 — 暗色街头风（左图 + 内容 + 状态行靠左） */
 .card {
   position: relative;
   display: flex;
   gap: 0;
   padding: 0;
   background: #1E1E23;
-  border-radius: 20rpx;
+  border: 1rpx solid #26262C;
+  border-radius: 24rpx;
   overflow: hidden;
-  animation: card-in 0.4s ease-out backwards;
+  animation: card-in 0.25s ease-out backwards;
 }
 
 /* 按压态：hover-class 触发（view 的 :active 真机不可靠，与 shop-card 机制统一） */
@@ -21,13 +22,13 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== 左图：正方形照片，通铺卡片左缘（左圆右直角，撑满卡高，设计稿同款） ===== */
+/* ===== 左图：正方形照片，通铺卡片左缘（设计稿 100x100px ≈ 200rpx） ===== */
 .thumb {
   position: relative;
   width: 200rpx;
   min-height: 200rpx;
   align-self: stretch;
-  border-radius: 20rpx 0 0 20rpx;
+  border-radius: 24rpx 0 0 24rpx;
   overflow: hidden;
   flex-shrink: 0;
   background: #17171B;
@@ -89,7 +90,7 @@
 .name {
   min-width: 0;
   font-size: 30rpx;
-  font-weight: 700;
+  font-weight: 600;
   color: #FFFFFF;
   line-height: 1.35;
   overflow: hidden;
@@ -203,6 +204,34 @@
   border-radius: 50%;
   background: #3A3A42;
   flex-shrink: 0;
+}
+
+/* 在线脉冲绿点 */
+.dot-ping {
+  position: relative;
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #00D4AA;
+  flex-shrink: 0;
+}
+
+.dot-ping::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #00D4AA;
+  animation: ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes ping {
+  0% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.6); }
+  100% { opacity: 0; transform: scale(2); }
 }
 
 /* 已签到：绿色（设计稿「今日已签到 · 14:20」为绿色 + 绿点） */

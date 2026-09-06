@@ -15,7 +15,7 @@
   justify-content: center;
 }
 
-/* 激活/未激活统一竖排：图标上、文字下（设计稿同款） */
+/* 图标上、文字下，未选中灰色 */
 .tab-pill {
   display: flex;
   flex-direction: column;
@@ -24,13 +24,13 @@
   gap: 6rpx;
   padding: 14rpx 48rpx;
   border-radius: 999rpx;
-  color: #8C8C94;
+  color: #6B6B75;
 }
 
-/* 激活：橙渐变胶囊包住整组，图标文字变白（布局不变，仅配色变化） */
+/* 选中态仅改变颜色，无背景胶囊 */
 .tab-item.active .tab-pill {
-  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
-  box-shadow: 0 6rpx 20rpx rgba(255, 90, 54, 0.35);
+  background: transparent;
+  box-shadow: none;
 }
 
 .tab-icon {
@@ -44,6 +44,6 @@
 }
 
 .tab-item.active .tab-label {
-  color: #FFFFFF;
-  font-weight: 600;
+  color: #FF5A36;
+  font-weight: 500;
 }
