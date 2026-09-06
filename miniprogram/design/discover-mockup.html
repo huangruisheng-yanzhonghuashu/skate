@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="yGb39cZfzTT1XvD4TYMd4g">
+<head data-page-node-id="aUh4Lb9s4kJY2fRSukSIYy">
+  <meta charset="UTF-8" data-page-node-id="WSsIix2NRF0CGzTyV6G3Q2">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="InPN5zlwfZKpBcqrsbvhqj">
+  <title>去哪滑 - 发现页 UI 设计稿</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" data-page-node-id="4S4Gjzh7phx3hLRVeT4HBB">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#111114',
+            card: '#1E1E23',
+            inset: '#17171B',
+            sheet: '#232329',
+            line: '#26262C',
+            'sheet-line': '#2F2F36',
+            primary: '#FF5A36',
+            'primary-lt': '#FF8A6E',
+            success: '#00D4AA',
+            warning: '#FFB800',
+            error: '#FF3B30',
+            info: '#2A8CFF',
+            t1: '#FFFFFF',
+            t2: '#D9D9DE',
+            t3: '#A6A6AD',
+            t4: '#8C8C94',
+            t5: '#6E6E76',
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    }
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      border-radius: 48px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+      overflow: hidden;
+      position: relative;
+      background: #111114;
+      flex-shrink: 0;
+    }
+    .nav-bar {
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .status-bar {
+      height: 54px;
+      padding-top: 14px;
+    }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .gradient-orange { background: linear-gradient(135deg, #FF5A36 0%, #FF8A6E 100%); }
+    @keyframes feed-in {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .feed-in { animation: feed-in 0.25s ease backwards; }
+    @keyframes like-bounce {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.35); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+<body class="p-8" data-page-node-id="OZW82ODiNMBT4BVPIgUMZG">
+  <div class="flex gap-10 flex-wrap justify-center" data-page-node-id="ElY1bAH32tS16C9vBaNMhH">
+
+    <!-- 画板 1：发现页 - 最新 -->
+    <div class="flex flex-col items-center" data-page-node-id="4GEQiDMYvWDyVvtjQUpoFc">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="CSK7f5uLey4hQgVQzNkPeU">AB1 · 发现页 - 最新</p>
+      <div class="phone-frame" data-page-node-id="pkBgxNMzHSfxhVFdrkDwXH">
+        <!-- 状态栏 -->
+        <div class="status-bar bg-bg flex items-center justify-between px-6 text-t1 text-sm font-medium" data-page-node-id="BbJ3yHHL24f4XrfE4mAzk9">
+          <span data-page-node-id="QKuvbW3CwHUVgPT7RF8COj">9:41</span>
+          <div class="flex items-center gap-1.5" data-page-node-id="apqUGpUsDzZ7WE6qmGeMVs">
+            <i class="fas fa-signal text-xs" data-page-node-id="tfxGiNkVB6OEXsOax2ZFYG"></i>
+            <i class="fas fa-wifi text-xs" data-page-node-id="KqpPlADx48gbQzeQWcVgid"></i>
+            <i class="fas fa-battery-full text-xs" data-page-node-id="aLFI7iD4UB1gcsHtE1gyRs"></i>
+          </div>
+        </div>
+
+        <!-- 原生导航栏 -->
+        <div class="nav-bar bg-bg border-b border-line" data-page-node-id="GgU1oyGz0K5UOErK0hHQRV">
+          <span class="text-t1 text-[17px] font-semibold" data-page-node-id="4A6lIOcVhcaqTNxf6XsRHL">发现</span>
+        </div>
+
+        <!-- 顶部 Tab 工具条 -->
+        <div class="sticky top-0 bg-bg z-10 px-6 py-3 flex items-center justify-between border-b border-line" data-page-node-id="WrVZ8nCnzvlzJwTjN0fJuv">
+          <div class="flex items-center gap-8" data-page-node-id="SfUizZInyLyIUoWFfEx54C">
+            <div class="relative pb-2" data-page-node-id="3FMk4hJB5j6XXhHnrW8UNa">
+              <span class="text-[16px] font-bold text-primary" data-page-node-id="KE06zJSAAMMPDpaePhphX0">最新</span>
+              <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-1 gradient-orange rounded-full" data-page-node-id="Ro8xRtSiO6tzKbAzaxthqD"></div>
+            </div>
+            <span class="text-[16px] font-medium text-t4" data-page-node-id="n85ni9alrR85dAEqsBIRXx">热门</span>
+          </div>
+          <div class="w-9 h-9 rounded-full bg-inset flex items-center justify-center text-t4" data-page-node-id="hYpJqcGnoGjKGDqgwqPx1N">
+            <i class="fas fa-search text-sm" data-page-node-id="7NC7udK6uv0ArAPDoqxJJJ"></i>
+          </div>
+        </div>
+
+        <!-- Feed 列表 -->
+        <div class="h-[700px] overflow-y-auto hide-scrollbar p-6 pb-36 space-y-5" data-page-node-id="6OxmZaXJ7eX1ccoh6eXYIo">
+
+          <!-- 卡片 1：单张图 4:3 -->
+          <div class="bg-card rounded-3xl border border-line p-5 feed-in" style="animation-delay: 0ms" data-page-node-id="wvPP087Woe7rG1034Wd0hH">
+            <!-- 头部 -->
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="Omhqgr9ZlND38ImPOUbICx">
+              <div class="w-11 h-11 rounded-full gradient-orange flex items-center justify-center text-white text-base font-semibold" data-page-node-id="fFygAGVzQgO0oqyOCaBjb1">L</div>
+              <div class="flex-1 min-w-0" data-page-node-id="tMqrCBTz5N3l44nfACgVHJ">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="AlADbBDcOTrcnxj6Bkx5KR">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="WKP2foEo044wbupD5SpGIx">Li Ming</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="nBNWA0UNUMpfQMt7slCzGW">2h 前</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="jgwBTckOzrC4AyaHSPWS56">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="iAaUOXnyaeuJTpjQZj8xnS">南湖滑板公园</span>
+                </div>
+              </div>
+            </div>
+            <!-- 文字 -->
+            <p class="text-[15px] text-t2 leading-relaxed mb-3 line-clamp-3" data-page-node-id="BOzTtf5RIFrMbbiVXbYvWW">今晚夜滑光线绝了，碗池边缘的光影像电影截图。有人一起吗？</p>
+            <!-- 媒体：单张 4:3 -->
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="DOX6sxX0MDkpBK6YEJLFCp">
+              <img src="../generated-images/Skatepark_at_night_lit_by_floo_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="打卡图" data-page-node-id="S2Zz6cir5pkXz4NbDpAYIN">
+            </div>
+            <!-- 互动区 -->
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="aPEUIv5UKPODl5uryKfK5h">
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="QvNFIeyLQqVBeaGfq58MXX">
+                <i class="far fa-heart text-lg" data-page-node-id="LC9AegGKFAmwonvPEnt4hQ"></i>
+                <span class="text-sm" data-page-node-id="mA4CXy462wAW02lwGZyFoz">24</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="hDFC4v1v1TCPAVZ3fmgrXp">
+                <i class="far fa-comment text-lg" data-page-node-id="KfGmubZjYLLxHNhehgs1Kz"></i>
+                <span class="text-sm" data-page-node-id="neYPNfDS2gLZ16bSC9CgzA">6</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="F6I6u6dwEjckCKEAw5gAMD">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="pnwfRpzyIvZ8DCnoOuGa8l"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片 2：2 张图 -->
+          <div class="bg-card rounded-3xl border border-line p-5 feed-in" style="animation-delay: 60ms" data-page-node-id="QZEO0ExBQOgNGJnBm1kKEv">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="52JlJ9ZbPnYGkDU3E37VDL">
+              <img src="../generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-11 h-11 rounded-full object-cover" alt="头像" data-page-node-id="a7laA3Q3qeMIGsxYYekabl">
+              <div class="flex-1 min-w-0" data-page-node-id="DPH97nYpzfqwx4bvEQ1lfD">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="rUUPAV5lnQgM3uLVmImut8">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="KQQlsViXCgmjfF1pcujpGM">小泽</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="gtj2YdhVOU2AbG9cuNAhi7">4h 前</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="oVoOmDuPitwvzXvX9jmKWL">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="EmKbp1LfqeZvZgiwJTUx6G">体育中心碗池</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-[15px] text-t2 leading-relaxed mb-3" data-page-node-id="BzE3tz4OQm7Bcz4W3ky7Ey">下午练了一组 kickflip，终于稳了。</p>
+            <div class="flex gap-3" data-page-node-id="jjyHgCz6GXNnD7mLnWaloQ">
+              <div class="w-1/2 aspect-square rounded-2xl overflow-hidden bg-inset" data-page-node-id="jF4ZgyTOYkVXuHeFcqPSeX">
+                <img src="../generated-images/Empty_concrete_skatepark_bowl__2026-09-06T06-19-38.png" class="w-full h-full object-cover" alt="打卡图1" data-page-node-id="64YPobHG4EmmfQfMzYgFUa">
+              </div>
+              <div class="w-1/2 aspect-square rounded-2xl overflow-hidden bg-inset" data-page-node-id="hUqy5otdkJIRShNjATe6FU">
+                <img src="../generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="打卡图2" data-page-node-id="RjDnGnJpM36cLTitc2b5TF">
+              </div>
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="TquQeKXUqoC7kUw6hlzJ6Q">
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="J7DCznEDEAg5IpUFIl0i2k">
+                <i class="far fa-heart text-lg" data-page-node-id="CdHFXnTjg6CFHteFEL1wHq"></i>
+                <span class="text-sm" data-page-node-id="kfd7D56y49H8r9WYjIFYS3">18</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="dJf2wHGk8RY6uh9R64YC1S">
+                <i class="far fa-comment text-lg" data-page-node-id="FNvTI4kfgu4ybgTFsE5OOh"></i>
+                <span class="text-sm" data-page-node-id="t40qFVN6v4Tm4Azq3ejHcU">3</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="jTkG2J2Y8gqtwl8tKcm5dD">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="k1JQBY66ajekJVzHrqyzKL"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片 3：视频封面 -->
+          <div class="bg-card rounded-3xl border border-line p-5 feed-in" style="animation-delay: 120ms" data-page-node-id="5ayS3ASDYHeIvsEGnTacIX">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="3DUANxGuhXKcB9FKoBlU7m">
+              <div class="w-11 h-11 rounded-full bg-success/20 flex items-center justify-center text-success text-base font-semibold" data-page-node-id="AWcQz13mtjCRMvkAAwiiv4">A</div>
+              <div class="flex-1 min-w-0" data-page-node-id="0CzjCAoBG0a7ufVzhVS8YC">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="TjDmRNbJZF2ip74Gr6N1Hg">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="4plIzwwXxrAUvmLqTLNeKI">Allen</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="u2KrYQJzxnri06XSUReL55">刚刚</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="f3EXvIMtQ88y55KCCfbNw1">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="1a46N1IF1fu2VmdbHbqG94">梅湾街平地广场</span>
+                </div>
+              </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="GRdZkSOVJ1BCilpscTQeya">
+              <img src="../generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="视频封面" data-page-node-id="DhOx8ndvp3fy3XQq54L372">
+              <div class="absolute inset-0 flex items-center justify-center" data-page-node-id="JwElukDBI6V5xV0XqUIm54">
+                <div class="w-14 h-14 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center" data-page-node-id="wBrdwRDww8AOsxJkwG6qZx">
+                  <div class="w-0 h-0 border-l-[18px] border-l-white border-t-[11px] border-t-transparent border-b-[11px] border-b-transparent ml-1" data-page-node-id="9rzKBuAXzDfwyhEQ4nhgiq"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="VQ9EloDrS6PCwY50920xws">
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="ZkZxXYKi37axnT5w450ioU">
+                <i class="far fa-heart text-lg" data-page-node-id="kKHEilCEwVHYFHsf8LNMfD"></i>
+                <span class="text-sm" data-page-node-id="0Tm6A9ItHzkTxteEIh3iIG">56</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="UMXzoNmOSKQbqW6wbThTvX">
+                <i class="far fa-comment text-lg" data-page-node-id="uSg0dA9W1Om3fOuxJoFRFI"></i>
+                <span class="text-sm" data-page-node-id="o69I4ekwmQAk9IlkTQrqfA">12</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="J55dO1S00naj8KP0BVVFxn">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="4gZwIjw9b1YzAeRbSN3fbB"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片 4：九宫格 6 张 -->
+          <div class="bg-card rounded-3xl border border-line p-5 feed-in" style="animation-delay: 180ms" data-page-node-id="Nq3CP5ATFV8hXTFwZXywMT">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="fXzExExpCd1riTGp3eFryV">
+              <div class="w-11 h-11 rounded-full bg-warning/20 flex items-center justify-center text-warning text-base font-semibold" data-page-node-id="zwOdxIu6LG5sKURC5xxTty">K</div>
+              <div class="flex-1 min-w-0" data-page-node-id="bhQc7fJQbmDkBfKxzGSo8T">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="uGlEaDeclkB717aWAm5lzl">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="mxiuf8eD6As5TxVbHXfqOB">Kai</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="amF8vsvUFkB3DmJuuouIsN">昨天</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="0rEeYhu0DXGEqOXnvCxqoN">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="W7GQkRuS2eIvSkaqTcMcnu">嘉兴学院碗池</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-[15px] text-t2 leading-relaxed mb-3" data-page-node-id="KIApzTVDzjM3viLDsnS5Q2">一周打卡合集。</p>
+            <div class="grid grid-cols-3 gap-2" data-page-node-id="io1ngCq7wxZmXLZZ1zKlyh">
+              <div class="aspect-square rounded-xl overflow-hidden bg-inset" data-page-node-id="W18It5qBCpgaSihQ8gfNxF"><img src="../generated-images/Empty_concrete_skatepark_bowl__2026-09-06T06-19-38.png" class="w-full h-full object-cover" alt="图" data-page-node-id="wPubVja5jd2mXZgiOP9ZCA"></div>
+              <div class="aspect-square rounded-xl overflow-hidden bg-inset" data-page-node-id="e1Gkr5QMJ7dcxLo9CUVIfR"><img src="../generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="图" data-page-node-id="rkFDErwWIIPsD3MzjNioqY"></div>
+              <div class="aspect-square rounded-xl overflow-hidden bg-inset" data-page-node-id="89U518aFlkDlMxF9H54FbL"><img src="../generated-images/Skatepark_at_night_lit_by_floo_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="图" data-page-node-id="SzhnmqjEoBtOr37pYQyMFt"></div>
+              <div class="aspect-square rounded-xl overflow-hidden bg-inset" data-page-node-id="a2asXVb7zymKNwV12HoqFd"><img src="../generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="图" data-page-node-id="kSj4GGbe4MuNuXBAoBcBZb"></div>
+              <div class="aspect-square rounded-xl overflow-hidden bg-inset" data-page-node-id="9fa4H8X4t1tcwpuA8LEAim"><img src="../generated-images/Empty_concrete_skatepark_bowl__2026-09-06T06-19-38.png" class="w-full h-full object-cover" alt="图" data-page-node-id="TuzqzsrJZfafr4zWMkdmfd"></div>
+              <div class="aspect-square rounded-xl overflow-hidden bg-inset" data-page-node-id="fI2EzdnIpc7YknO9WPkaxr"><img src="../generated-images/Skatepark_at_night_lit_by_floo_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="图" data-page-node-id="0xyUQ06LTttB08h3J196oE"></div>
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="nqAQcSGjTezpILA9luDXEQ">
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="7CMuDOloFNnfA895EBaCWT">
+                <i class="far fa-heart text-lg" data-page-node-id="5nmAmtg5URHKx6i6viOoSU"></i>
+                <span class="text-sm" data-page-node-id="KMJMaTO5ETMaNcsxkmYLRm">31</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="LkQBdtxWT3ZBmHxr6Fj5RJ">
+                <i class="far fa-comment text-lg" data-page-node-id="8xcfneKnoocdGBmSkYTNap"></i>
+                <span class="text-sm" data-page-node-id="KoTr0vimAFCOnReOgQCN7r">8</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="miiehXyvii74hGQsh8XhOV">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="2lGOd555QoJ7aBQDcIYqPr"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center py-6 text-xs text-t5" data-page-node-id="hRFgtIsDP5GbGD2ZyavERb">— 没有更多了 —</div>
+        </div>
+
+        <!-- 发打卡 FAB -->
+        <div class="absolute right-5 bottom-28 w-14 h-14 rounded-full gradient-orange flex items-center justify-center shadow-[0_8px_32px_rgba(255,90,54,0.35)] z-20" data-page-node-id="LnzjdIhEHmsrU7nRW2ITEj">
+          <i class="fas fa-camera text-white text-xl" data-page-node-id="XQRpKJmhyXemFEXazKBkoa"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 2：发现页 - 热门 -->
+    <div class="flex flex-col items-center" data-page-node-id="AZbdHxUpgIfY8NPNG9TDO4">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="hAtIlBPU0tmwIHLtIOAOa5">AB2 · 发现页 - 热门</p>
+      <div class="phone-frame" data-page-node-id="6VPnUMwPtYn6XUynqolknO">
+        <div class="status-bar bg-bg flex items-center justify-between px-6 text-t1 text-sm font-medium" data-page-node-id="fAdVkigrToQgBVtxO49LZM">
+          <span data-page-node-id="jgoqjI45GHe5hihSsIBZcB">9:41</span>
+          <div class="flex items-center gap-1.5" data-page-node-id="nE4h5RCE7ZuZDlPWDxEaGK">
+            <i class="fas fa-signal text-xs" data-page-node-id="La2JfDpqBAw5BNmUaPUcDd"></i>
+            <i class="fas fa-wifi text-xs" data-page-node-id="p3Mgf6nmbA8yj0PAxa7ayC"></i>
+            <i class="fas fa-battery-full text-xs" data-page-node-id="0oRcEgt5ZolH71M3LAFGg2"></i>
+          </div>
+        </div>
+        <div class="nav-bar bg-bg border-b border-line" data-page-node-id="MJIjxQDKVuutLsF3cleAal">
+          <span class="text-t1 text-[17px] font-semibold" data-page-node-id="DWCuIs30GCvkSwRK9j3HGj">发现</span>
+        </div>
+        <div class="sticky top-0 bg-bg z-10 px-6 py-3 flex items-center justify-between border-b border-line" data-page-node-id="xta3obteHmGyQDEWgzOr5e">
+          <div class="flex items-center gap-8" data-page-node-id="fsH6v2JeRrHA2V8EVsTryb">
+            <span class="text-[16px] font-medium text-t4" data-page-node-id="b6OWeXsR2G1uzspnuWhYkG">最新</span>
+            <div class="relative pb-2" data-page-node-id="t7bTjv2jLVxApjxRlWXcAZ">
+              <span class="text-[16px] font-bold text-primary" data-page-node-id="In2DqYHapjtCeDz8lzDbC6">热门</span>
+              <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-1 gradient-orange rounded-full" data-page-node-id="Mw8JdbAhyJcO6R0AnTEhgf"></div>
+            </div>
+          </div>
+          <div class="w-9 h-9 rounded-full bg-inset flex items-center justify-center text-t4" data-page-node-id="nRlB4OyYnfhZQtdIX6sYyz">
+            <i class="fas fa-search text-sm" data-page-node-id="HxADf4AA7A36SScgbHvJmZ"></i>
+          </div>
+        </div>
+
+        <div class="h-[700px] overflow-y-auto hide-scrollbar p-6 pb-36 space-y-5" data-page-node-id="3wYbi422KFOmw23R6D4CUg">
+          <!-- 热门卡片 1：高互动 -->
+          <div class="bg-card rounded-3xl border border-line p-5 feed-in" style="animation-delay: 0ms" data-page-node-id="WkCwtEkqOpyHUx7BEiR4Jw">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="oVEsdYkA1MhP3WCDfNFaX9">
+              <div class="w-11 h-11 rounded-full bg-success/20 flex items-center justify-center text-success text-base font-semibold" data-page-node-id="xfMliGHosJ8tcCgT8R9NiA">A</div>
+              <div class="flex-1 min-w-0" data-page-node-id="m5Su1pbdtUfsPjm4Gw9Im2">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="dWBLNSBV6gMvy9EIfDzPT5">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="aiqyMiEOs0XhRsyolxl6Eg">Allen</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="vuaY5LyDPijmqCkRTi5Xlv">刚刚</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="jIrNjEdDY2jJm8SrhHncFM">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="bxR6ZQEp1FjtPHvzVSWFzl">梅湾街平地广场</span>
+                </div>
+              </div>
+            </div>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="NG4oWUCbzDC0OBcuGDVDDi">
+              <img src="../generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="视频封面" data-page-node-id="tsjz4wuJ4ju8g6C4BiCuh8">
+              <div class="absolute inset-0 flex items-center justify-center" data-page-node-id="OFFzmekpcU0RmPwuf1s4NA">
+                <div class="w-14 h-14 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center" data-page-node-id="SKB1bW6c38ypjZU9Pc825E">
+                  <div class="w-0 h-0 border-l-[18px] border-l-white border-t-[11px] border-t-transparent border-b-[11px] border-b-transparent ml-1" data-page-node-id="nVQ8eYjFknn8pmsMO2ln5L"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="wAui3NkCGB4ZSlYLy0BdJ3">
+              <div class="flex items-center gap-2 text-primary" data-page-node-id="lpiN2DpzaK35uUo2BHTCox">
+                <i class="fas fa-heart text-lg" data-page-node-id="b6voQLtE6Gx4Ym8hFi9Tu0"></i>
+                <span class="text-sm font-medium" data-page-node-id="lwJdVohR8owF10IBVwJ3sj">56</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="rZsHKKlLm2d9nZGN63sLcs">
+                <i class="far fa-comment text-lg" data-page-node-id="NBw8sr7DbkoIcPxe6MRmJD"></i>
+                <span class="text-sm" data-page-node-id="YHf6eVcpL6aiIEVIAbAMeO">12</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="CcMpjEJSbBCJjefSdNHBaK">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="YEyjtxKiocH5YDOhrBHEnH"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 热门卡片 2 -->
+          <div class="bg-card rounded-3xl border border-line p-5 feed-in" style="animation-delay: 60ms" data-page-node-id="elW2J0ZnHU880VRTrMcFJX">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="Ra93HTa9rnR0jNaDElkx7A">
+              <div class="w-11 h-11 rounded-full gradient-orange flex items-center justify-center text-white text-base font-semibold" data-page-node-id="xCAuF7y7E3BQqSCcBe0EJ5">L</div>
+              <div class="flex-1 min-w-0" data-page-node-id="IU8ChADnrP4zBUEFhDuLjY">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="22iQMydleECLB2yQayfQQX">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="jT2cVWEysOWWNcZAfCssBt">Li Ming</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="Uji7Axf5nqH7HOAD2K2jdI">2h 前</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="raivkIfVzbNG2qF05S0GVB">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="Aj4able3kdNDIKE4yjCKcz">南湖滑板公园</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-[15px] text-t2 leading-relaxed mb-3 line-clamp-3" data-page-node-id="3BTL7ESuEzErAAFzFTI5Ds">今晚夜滑光线绝了，碗池边缘的光影像电影截图。有人一起吗？</p>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="8whCq8MKg6FzDy5YecEPhQ">
+              <img src="../generated-images/Skatepark_at_night_lit_by_floo_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="打卡图" data-page-node-id="64ScFojCOYacwGQLUqW1DH">
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="viA5TO6QHrvXXx0rv7h7gx">
+              <div class="flex items-center gap-2 text-primary" data-page-node-id="6AQDzrl5N21tAX4yBDkA38">
+                <i class="fas fa-heart text-lg" data-page-node-id="Y1fRfA4Acjqshh2s47DWAX"></i>
+                <span class="text-sm font-medium" data-page-node-id="MNCxwhQkod625BnmN8xWZi">24</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="7kskVUV9hqLn1050hGfsBf">
+                <i class="far fa-comment text-lg" data-page-node-id="l6ceEYAiSWipAlqxPH05lu"></i>
+                <span class="text-sm" data-page-node-id="MNYi9W5LhgILkIIfm5AZ8K">6</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="W2ZFfFCATQ3t8cwYlmfP1n">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="B84jpIGFIqyPFB8FvHuSLE"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="absolute right-5 bottom-28 w-14 h-14 rounded-full gradient-orange flex items-center justify-center shadow-[0_8px_32px_rgba(255,90,54,0.35)] z-20" data-page-node-id="Wf2LA7PzC9nDw8DY0EHqJF">
+          <i class="fas fa-camera text-white text-xl" data-page-node-id="Yvb2MVqGGzQzG6DY3OABHD"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 3：空态（无签到，引导签到） -->
+    <div class="flex flex-col items-center" data-page-node-id="WH6Dsw5exl5JeAEDj7kVC2">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="mOqWksoNROUcgy76HPnHx8">AB3 · 空态（无签到引导）</p>
+      <div class="phone-frame" data-page-node-id="P7GQefDSlT0ka9Xg4upXXF">
+        <div class="status-bar bg-bg flex items-center justify-between px-6 text-t1 text-sm font-medium" data-page-node-id="aX5poLGoEnhKcPMwGbg5K1">
+          <span data-page-node-id="3UlmjPG85snnc232X0iq5t">9:41</span>
+          <div class="flex items-center gap-1.5" data-page-node-id="qn4JAAxuZaC1OigWJgQQuQ">
+            <i class="fas fa-signal text-xs" data-page-node-id="IaShFsAeOATXL1wgCFXEMU"></i>
+            <i class="fas fa-wifi text-xs" data-page-node-id="cEvN8XHNXG8V8LBIyB3Q7g"></i>
+            <i class="fas fa-battery-full text-xs" data-page-node-id="XpwMvCi3PEb9NrxfO2xox2"></i>
+          </div>
+        </div>
+        <div class="nav-bar bg-bg border-b border-line" data-page-node-id="2ahrgnVurtz9M1xHRPe8nv">
+          <span class="text-t1 text-[17px] font-semibold" data-page-node-id="8jl8AXi0wjDstCs4ndVNw5">发现</span>
+        </div>
+        <div class="sticky top-0 bg-bg z-10 px-6 py-3 flex items-center justify-between border-b border-line" data-page-node-id="czztxgLhWEnLRthRgzCnB4">
+          <div class="flex items-center gap-8" data-page-node-id="RXe7yj1GVAmBDWpyNKI8N0">
+            <div class="relative pb-2" data-page-node-id="K7vafxfRWgcDX1486AA0K5">
+              <span class="text-[16px] font-bold text-primary" data-page-node-id="V9rJBklgCcOAnvIfXWDg89">最新</span>
+              <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-1 gradient-orange rounded-full" data-page-node-id="n2SHSpiK0OCPOhttdvr7WN"></div>
+            </div>
+            <span class="text-[16px] font-medium text-t4" data-page-node-id="GobSISRxOiA6l8XQEjIstK">热门</span>
+          </div>
+        </div>
+
+        <div class="h-[700px] flex flex-col items-center justify-center px-10 text-center" data-page-node-id="UbIjVrx4bPLVHpcb1KID06">
+          <svg width="120" height="80" viewBox="0 0 120 80" fill="none" class="mb-6 opacity-30" data-page-node-id="YIAo10tVYiFnfkJAwFnZFe">
+            <path d="M10 70H110" stroke="#FF5A36" stroke-width="3" stroke-linecap="round" data-page-node-id="U6EstL0MZYVva8czFIKqrR"/>
+            <path d="M30 70V50C30 35 45 30 60 30C75 30 90 35 90 50V70" stroke="#FF5A36" stroke-width="3" stroke-linecap="round" data-page-node-id="8k4HXq8bHiG4BaGBt28I6i"/>
+            <circle cx="60" cy="20" r="12" stroke="#FF5A36" stroke-width="3" data-page-node-id="39xYP4ebNTDmWLRKpmSkIM"/>
+            <path d="M100 70L115 55" stroke="#FF5A36" stroke-width="3" stroke-linecap="round" data-page-node-id="kx6DB09e74ElRzwfiHaXPk"/>
+            <path d="M20 70L5 55" stroke="#FF5A36" stroke-width="3" stroke-linecap="round" data-page-node-id="mWA48P4FNR5rDQpH3oWf5u"/>
+          </svg>
+          <h3 class="text-xl font-semibold text-t1 mb-2" data-page-node-id="MhmiZMRzZx5Fbk9f2AAD05">这片场地还没人滑</h3>
+          <p class="text-sm text-t4 mb-8" data-page-node-id="Z9B5yndKBfDyI97wiGAS9m">先找个场地签到，再留下你的痕迹</p>
+          <button class="h-12 px-8 rounded-full gradient-orange text-white text-base font-semibold" data-page-node-id="essWAGWwYWa7awKsBZKO2u">去附近场地签到</button>
+        </div>
+
+        <div class="absolute right-5 bottom-28 w-14 h-14 rounded-full bg-card border-2 border-primary flex flex-col items-center justify-center shadow-[0_8px_32px_rgba(0,0,0,0.3)] z-20" data-page-node-id="J78zSQWdwreH3SEvMLTduG">
+          <i class="fas fa-location-dot text-primary text-lg leading-none" data-page-node-id="KEpkAlU3TpZYJSl7qaid4A"></i>
+          <span class="text-[9px] text-primary font-medium mt-0.5" data-page-node-id="NoCheckinFabText">去签到</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 4：帖子详情 + 评论 -->
+    <div class="flex flex-col items-center" data-page-node-id="PostDetailArtboard">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="PostDetailLabel">AB4 · 帖子详情 + 评论</p>
+      <div class="phone-frame" data-page-node-id="PostDetailFrame">
+        <div class="status-bar bg-bg flex items-center justify-between px-6 text-t1 text-sm font-medium" data-page-node-id="PostDetailStatus">
+          <span data-page-node-id="PostDetailTime">9:41</span>
+          <div class="flex items-center gap-1.5" data-page-node-id="PostDetailIcons">
+            <i class="fas fa-signal text-xs" data-page-node-id="PostDetailSignal"></i>
+            <i class="fas fa-wifi text-xs" data-page-node-id="PostDetailWifi"></i>
+            <i class="fas fa-battery-full text-xs" data-page-node-id="PostDetailBattery"></i>
+          </div>
+        </div>
+        <div class="nav-bar bg-bg border-b border-line px-4 flex items-center" data-page-node-id="PostDetailNav">
+          <i class="fas fa-chevron-left text-t1 text-sm w-8" data-page-node-id="PostDetailBack"></i>
+          <span class="flex-1 text-center text-t1 text-[17px] font-semibold" data-page-node-id="PostDetailTitle">帖子</span>
+          <div class="w-8" data-page-node-id="PostDetailNavPad"></div>
+        </div>
+
+        <div class="h-[700px] overflow-y-auto hide-scrollbar bg-bg pb-28" data-page-node-id="PostDetailScroll">
+          <!-- 帖子内容 -->
+          <div class="p-6" data-page-node-id="PostDetailContent">
+            <div class="flex items-center gap-3 mb-4" data-page-node-id="PostDetailHeader">
+              <div class="w-11 h-11 rounded-full gradient-orange flex items-center justify-center text-white text-base font-semibold" data-page-node-id="PostDetailAvatar">L</div>
+              <div class="flex-1 min-w-0" data-page-node-id="PostDetailMeta">
+                <div class="text-[15px] font-semibold text-t1" data-page-node-id="PostDetailName">Li Ming</div>
+                <div class="flex items-center gap-2 mt-1" data-page-node-id="PostDetailSubMeta">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="PostDetailVenue">南湖滑板公园</span>
+                  <span class="text-xs text-t5" data-page-node-id="PostDetailTimeText">2h 前</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-[15px] text-t2 leading-relaxed mb-4" data-page-node-id="PostDetailText">今晚夜滑光线绝了，碗池边缘的光影像电影截图。有人一起吗？</p>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="PostDetailMedia">
+              <img src="../generated-images/Skatepark_at_night_lit_by_floo_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="打卡图" data-page-node-id="PostDetailImg">
+            </div>
+            <!-- 互动统计 -->
+            <div class="flex items-center gap-8 mt-4" data-page-node-id="PostDetailActions">
+              <div class="flex items-center gap-2 text-primary" data-page-node-id="PostDetailLiked">
+                <i class="fas fa-heart text-lg" data-page-node-id="PostDetailLikedIcon"></i>
+                <span class="text-sm font-medium" data-page-node-id="PostDetailLikedCount">25</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="PostDetailCommentAction" aria-label="6 条评论">
+                <i class="fas fa-comment text-lg" data-page-node-id="PostDetailCommentIcon"></i>
+                <span class="text-sm" data-page-node-id="PostDetailCommentCount">6</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="PostDetailShare">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="PostDetailShareIcon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 评论列表 -->
+          <div class="border-t border-line mt-2" data-page-node-id="CommentListWrap">
+            <div class="px-6 py-3 text-sm text-t3 font-medium" data-page-node-id="CommentListTitle">全部评论</div>
+            <!-- 评论 1 -->
+            <div class="px-6 py-4 flex gap-3 border-b border-line" data-page-node-id="CommentItem1">
+              <div class="w-10 h-10 rounded-full bg-success/20 flex items-center justify-center text-success text-sm font-semibold flex-shrink-0" data-page-node-id="CommentAvatar1">A</div>
+              <div class="flex-1 min-w-0" data-page-node-id="CommentBody1">
+                <div class="flex items-center justify-between" data-page-node-id="CommentMeta1">
+                  <span class="text-[14px] font-semibold text-t1" data-page-node-id="CommentName1">Allen</span>
+                  <span class="text-[11px] text-t5" data-page-node-id="CommentTime1">1h 前</span>
+                </div>
+                <p class="text-[14px] text-t2 leading-relaxed mt-1" data-page-node-id="CommentText1">几点结束？我十一点到。</p>
+              </div>
+            </div>
+            <!-- 评论 2 带回复 -->
+            <div class="px-6 py-4 flex gap-3 border-b border-line" data-page-node-id="CommentItem2">
+              <div class="w-10 h-10 rounded-full gradient-orange flex items-center justify-center text-white text-sm font-semibold flex-shrink-0" data-page-node-id="CommentAvatar2">K</div>
+              <div class="flex-1 min-w-0" data-page-node-id="CommentBody2">
+                <div class="flex items-center justify-between" data-page-node-id="CommentMeta2">
+                  <span class="text-[14px] font-semibold text-t1" data-page-node-id="CommentName2">Kai</span>
+                  <span class="text-[11px] text-t5" data-page-node-id="CommentTime2">50min 前</span>
+                </div>
+                <p class="text-[14px] text-t2 leading-relaxed mt-1" data-page-node-id="CommentText2"><span class="text-primary-lt" data-page-node-id="CommentReply2">@Allen</span> 我们大概十二点走，你来了直接进碗池。</p>
+              </div>
+            </div>
+            <!-- 评论 3 -->
+            <div class="px-6 py-4 flex gap-3" data-page-node-id="CommentItem3">
+              <div class="w-10 h-10 rounded-full bg-info/20 flex items-center justify-center text-info text-sm font-semibold flex-shrink-0" data-page-node-id="CommentAvatar3">小</div>
+              <div class="flex-1 min-w-0" data-page-node-id="CommentBody3">
+                <div class="flex items-center justify-between" data-page-node-id="CommentMeta3">
+                  <span class="text-[14px] font-semibold text-t1" data-page-node-id="CommentName3">小泽</span>
+                  <span class="text-[11px] text-t5" data-page-node-id="CommentTime3">刚刚</span>
+                </div>
+                <p class="text-[14px] text-t2 leading-relaxed mt-1" data-page-node-id="CommentText3">灯光确实赞，今晚我也去。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部评论输入栏 -->
+        <div class="absolute bottom-0 left-0 right-0 bg-card border-t border-line px-4 py-3 flex items-center gap-3 z-20" data-page-node-id="CommentInputBar">
+          <div class="flex-1 h-11 bg-bg rounded-full px-4 flex items-center" data-page-node-id="CommentInputWrap">
+            <input type="text" placeholder="说点什么..." class="w-full bg-transparent text-t1 text-[15px] outline-none placeholder:text-t5" data-page-node-id="CommentInput">
+          </div>
+          <button class="h-9 px-5 rounded-full bg-primary text-white text-sm font-semibold" data-page-node-id="CommentSendBtn">发送</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 5：点赞动效标注 -->
+    <div class="flex flex-col items-center" data-page-node-id="LikeStateArtboard">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="LikeStateLabel">AB5 · 点赞态对比</p>
+      <div class="phone-frame p-6 flex flex-col justify-center gap-8" data-page-node-id="LikeStateFrame">
+        <div data-page-node-id="LikeStateRow1">
+          <p class="text-t3 text-sm mb-3" data-page-node-id="LikeStateDesc1">未点赞</p>
+          <div class="flex items-center gap-2 text-t4" data-page-node-id="LikeStateUnliked">
+            <i class="far fa-heart text-lg" data-page-node-id="LikeStateUnlikedIcon"></i>
+            <span class="text-sm" data-page-node-id="LikeStateUnlikedCount">24</span>
+          </div>
+        </div>
+        <div data-page-node-id="LikeStateRow2">
+          <p class="text-t3 text-sm mb-3" data-page-node-id="LikeStateDesc2">已点赞（数字 +1，图标变实心橙色）</p>
+          <div class="flex items-center gap-2 text-primary" data-page-node-id="LikeStateLiked">
+            <i class="fas fa-heart text-lg" data-page-node-id="LikeStateLikedIcon"></i>
+            <span class="text-sm font-medium" data-page-node-id="LikeStateLikedCount">25</span>
+          </div>
+        </div>
+        <div data-page-node-id="LikeStateRow3">
+          <p class="text-t3 text-sm mb-3" data-page-node-id="LikeStateDesc3">点击动画</p>
+          <div class="flex items-center gap-2 text-primary" data-page-node-id="LikeStateAnim">
+            <i class="fas fa-heart text-lg" style="animation: like-bounce 0.15s ease-in-out" data-page-node-id="LikeStateAnimIcon"></i>
+            <span class="text-sm font-medium" data-page-node-id="LikeStateAnimCount">25</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 6：操作反馈 Toast -->
+    <div class="flex flex-col items-center" data-page-node-id="ToastArtboard">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="ToastLabel">AB6 · 操作反馈 Toast</p>
+      <div class="phone-frame p-6 flex flex-col justify-center gap-6" data-page-node-id="ToastFrame">
+        <div data-page-node-id="ToastRow1">
+          <p class="text-t3 text-sm mb-3" data-page-node-id="ToastDesc1">点赞成功</p>
+          <div class="inline-flex items-center gap-2 bg-card border border-line rounded-full px-5 py-2.5" data-page-node-id="ToastLiked">
+            <i class="fas fa-heart text-primary text-sm" data-page-node-id="ToastLikedIcon"></i>
+            <span class="text-sm text-t1" data-page-node-id="ToastLikedText">已点赞</span>
+          </div>
+        </div>
+        <div data-page-node-id="ToastRow2">
+          <p class="text-t3 text-sm mb-3" data-page-node-id="ToastDesc2">评论成功</p>
+          <div class="inline-flex items-center gap-2 bg-card border border-line rounded-full px-5 py-2.5" data-page-node-id="ToastCommented">
+            <i class="fas fa-check text-success text-sm" data-page-node-id="ToastCommentIcon"></i>
+            <span class="text-sm text-t1" data-page-node-id="ToastCommentText">评论已发布</span>
+          </div>
+        </div>
+        <div data-page-node-id="ToastRow3">
+          <p class="text-t3 text-sm mb-3" data-page-node-id="ToastDesc3">失败 / 网络异常</p>
+          <div class="inline-flex items-center gap-2 bg-card border border-line rounded-full px-5 py-2.5" data-page-node-id="ToastError">
+            <i class="fas fa-triangle-exclamation text-error text-sm" data-page-node-id="ToastErrorIcon"></i>
+            <span class="text-sm text-t1" data-page-node-id="ToastErrorText">网络不太稳，再试一次</span>
+          </div>
+        </div>
+        <div data-page-node-id="ToastRow4">
+          <p class="text-t3 text-sm mb-3" data-page-node-id="ToastDesc4">发送中</p>
+          <button class="h-9 px-5 rounded-full bg-t5 text-white text-sm font-semibold flex items-center gap-1" data-page-node-id="ToastSendingBtn">
+            <span class="w-2 h-2 bg-white rounded-full animate-bounce" data-page-node-id="SendingDot1"></span>
+            <span class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: 0.1s" data-page-node-id="SendingDot2"></span>
+            <span class="w-2 h-2 bg-white rounded-full animate-bounce" style="animation-delay: 0.2s" data-page-node-id="SendingDot3"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
