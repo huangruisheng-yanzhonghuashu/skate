@@ -518,6 +518,11 @@ Page({
     const v = this.data.venue
     const note = this.data.note.trim()
     const media = this.data.checkinMedia
+    /* 留言必填 */
+    if (!note) {
+      wx.showToast({ title: '说点什么后再发布', icon: 'none' })
+      return
+    }
     /* 媒体互斥硬校验（防状态被绕过），正常流程触不到 */
     const invalidMsg = mediaPick.validate(media)
     if (invalidMsg) {

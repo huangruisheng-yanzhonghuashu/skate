@@ -234,8 +234,9 @@ Page({
     if (this.data.saving) return
     const note = this.data.editNote.trim()
     const media = this.data.editMedia
-    if (!note && !media.length) {
-      wx.showToast({ title: '说点什么或添加图片/视频', icon: 'none' })
+    /* 留言必填 */
+    if (!note) {
+      wx.showToast({ title: '说点什么后再保存', icon: 'none' })
       return
     }
     /* 媒体互斥硬校验（防状态被绕过），正常流程触不到 */

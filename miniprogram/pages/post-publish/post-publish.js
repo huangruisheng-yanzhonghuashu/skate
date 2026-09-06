@@ -175,8 +175,9 @@ Page({
     }
     const note = this.data.note.trim()
     const media = this.data.media
-    if (!note && !media.length) {
-      wx.showToast({ title: '说点什么或添加图片/视频', icon: 'none' })
+    /* 留言必填 */
+    if (!note) {
+      wx.showToast({ title: '说点什么后再发布', icon: 'none' })
       return
     }
     /* 媒体互斥硬校验（防状态被绕过），正常流程触不到 */
