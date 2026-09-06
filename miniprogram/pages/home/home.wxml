@@ -7,7 +7,7 @@
         <view class="city" hover-class="hv" bindtap="goCityPicker" aria-role="button" aria-label="选择城市">
           <image class="city-pin" src="{{icons.pinOrange}}" mode="aspectFit" />
           <text>{{city}}</text>
-          <image class="city-swap" src="{{icons.swap}}" mode="aspectFit" />
+          <image class="city-swap" src="{{icons.chevronDown}}" mode="aspectFit" />
         </view>
       </view>
     </view>

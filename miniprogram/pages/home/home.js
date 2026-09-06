@@ -85,7 +85,7 @@ Page({
     icons: {
       pinWhite: ICON.pinWhite,
       pinOrange: ICON.pinOrangeSmall,
-      swap: ICON.swapAsh,
+      chevronDown: ICON.chevronDownAsh,
       search: ICON.searchPh,
       xWhite: ICON.xWhite,
       venueFog: ICON.venueFog,

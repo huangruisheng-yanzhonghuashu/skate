@@ -1,4 +1,4 @@
-/* 场地卡片 — 暗色街头风（左图 + 内容 + 状态行靠左） */
+/* 场地卡片 — 暗色街头风（加宽左图 + 左侧态度线 + 在线角标） */
 .card {
   position: relative;
   display: flex;
@@ -11,7 +11,7 @@
   animation: card-in 0.25s ease-out backwards;
 }
 
-/* 按压态：hover-class 触发（view 的 :active 真机不可靠，与 shop-card 机制统一） */
+/* 按压态 */
 .card-hover {
   opacity: 0.7;
   transform: scale(0.99);
@@ -22,13 +22,26 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== 左图：正方形照片，通铺卡片左缘（设计稿 100x100px ≈ 200rpx） ===== */
+/* 左侧态度线：街头感装饰，高饱和橙 3rpx */
+.attitude-line {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6rpx;
+  background: #FF5A36;
+  border-radius: 24rpx 0 0 24rpx;
+  z-index: 2;
+}
+
+/* ===== 左图：5:4 画幅（120×100 约 240×200rpx），更像街头摄影 ===== */
 .thumb {
   position: relative;
-  width: 200rpx;
+  width: 240rpx;
   min-height: 200rpx;
   align-self: stretch;
-  border-radius: 24rpx 0 0 24rpx;
+  margin-left: 6rpx;
+  border-radius: 0 24rpx 24rpx 0;
   overflow: hidden;
   flex-shrink: 0;
   background: #17171B;
@@ -50,12 +63,12 @@
 }
 
 .thumb-icon {
-  width: 64rpx;
-  height: 64rpx;
+  width: 72rpx;
+  height: 72rpx;
   opacity: 0.9;
 }
 
-/* 热门角标（压图左上） */
+/* 热门角标（左上，倾斜贴纸） */
 .badge-hot {
   position: absolute;
   top: 12rpx;
@@ -69,6 +82,35 @@
   text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.25);
   border-radius: 8rpx;
   white-space: nowrap;
+  transform: rotate(-6deg);
+}
+
+/* 在线人数角标（右上） */
+.badge-online {
+  position: absolute;
+  top: 12rpx;
+  right: 12rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
+  background: rgba(17, 17, 20, 0.88);
+  backdrop-filter: blur(8rpx);
+}
+
+.badge-online-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: #00D4AA;
+}
+
+.badge-online-num {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+  line-height: 1;
 }
 
 /* ===== 内容 ===== */
@@ -77,7 +119,7 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  padding: 20rpx 24rpx;
+  padding: 22rpx 24rpx;
 }
 
 .name-row {
@@ -98,7 +140,7 @@
   white-space: nowrap;
 }
 
-/* 评分（设计稿：名称行右侧单颗橙星 + 分值，14px 星 / text-sm 半粗 / #FF5A36） */
+/* 评分（名称行右侧单颗橙星 + 分值） */
 .rate {
   display: flex;
   align-items: center;
@@ -118,29 +160,16 @@
   line-height: 1;
 }
 
-/* 无评分兜底：灰字「暂无」不配星 */
-.rate-num-empty {
-  color: #8C8C94;
-  font-weight: 400;
-  font-size: 24rpx;
-}
-
 /* 地址 · 距离 */
 .addr {
   display: flex;
   align-items: center;
   gap: 8rpx;
-  margin-top: 6rpx;
+  margin-top: 8rpx;
   font-size: 24rpx;
   color: #8C8C94;
   line-height: 1.4;
   min-width: 0;
-}
-
-.addr-pin {
-  width: 22rpx;
-  height: 22rpx;
-  flex-shrink: 0;
 }
 
 .addr-text {
@@ -155,12 +184,12 @@
   display: flex;
   flex-wrap: wrap;
   gap: 8rpx;
-  margin-top: 10rpx;
+  margin-top: 14rpx;
 }
 
 .tag {
   flex-shrink: 0;
-  padding: 6rpx 12rpx;
+  padding: 9rpx 14rpx;
   background: #26262C;
   color: #8C8C94;
   font-size: 22rpx;
@@ -169,12 +198,18 @@
   white-space: nowrap;
 }
 
-/* ===== 状态行（绿点+绿字，靠左对齐） ===== */
+/* 第一个标签用品牌色高亮 */
+.tag-primary {
+  background: rgba(255, 90, 54, 0.14);
+  color: #FF8A6E;
+}
+
+/* ===== 状态行 ===== */
 .foot {
   display: flex;
   align-items: center;
   margin-top: auto;
-  padding-top: 12rpx;
+  padding-top: 18rpx;
 }
 
 .state {
@@ -192,7 +227,6 @@
   color: #00D4AA;
 }
 
-/* 无人在场弱化态 */
 .state-quiet {
   color: #8C8C94;
   font-weight: 400;
@@ -234,7 +268,6 @@
   100% { opacity: 0; transform: scale(2); }
 }
 
-/* 已签到：绿色（设计稿「今日已签到 · 14:20」为绿色 + 绿点） */
 .state-checked {
   color: #00D4AA;
 }
@@ -244,11 +277,5 @@
   height: 12rpx;
   border-radius: 50%;
   background: #00D4AA;
-  flex-shrink: 0;
-}
-
-.state-icon {
-  width: 24rpx;
-  height: 24rpx;
   flex-shrink: 0;
 }

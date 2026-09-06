@@ -1,15 +1,26 @@
 <view class="card" style="animation-delay: {{delay}}ms" hover-class="card-hover" bindtap="go" aria-role="button" aria-label="{{venue.name}}，查看场地详情">
-  <!-- 左图：场地照片（无图回退图标位），热门角标压图 -->
+  <!-- 左侧态度线：街头感装饰，不承载信息 -->
+  <view class="attitude-line"></view>
+
+  <!-- 左图：加宽到 120×100（5:4），更像街头摄影画幅 -->
   <view class="thumb">
     <image wx:if="{{venue.photo}}" class="thumb-img" src="{{venue.photo}}" mode="aspectFill" lazy-load />
     <view wx:else class="thumb-fallback">
       <image class="thumb-icon" src="{{icons.venue}}" mode="aspectFit" />
     </view>
+
+    <!-- 热门角标：左上，倾斜贴纸感 -->
     <view wx:if="{{venue.hot}}" class="badge-hot">热门</view>
+
+    <!-- 在线人数角标：右上，绿色脉冲点 + 数字 -->
+    <view wx:if="{{online > 0}}" class="badge-online" aria-label="{{online}} 人在场">
+      <view class="badge-online-dot"></view>
+      <text class="badge-online-num">{{online}}</text>
+    </view>
   </view>
 
   <view class="body">
-    <!-- 名称（首页设计稿无评分，仅在存在评分时显示） -->
+    <!-- 名称 + 评分 -->
     <view class="name-row">
       <view class="name">{{venue.name}}</view>
       <view wx:if="{{venue.rating}}" class="rate" aria-label="{{venue.rating}} 分评分">
@@ -18,18 +29,17 @@
       </view>
     </view>
 
-    <!-- 地址 · 距离（设计稿无定位图标，地址优先用简化区名） -->
+    <!-- 地址 · 距离 -->
     <view class="addr">
-      <image class="addr-pin" src="{{icons.pin}}" mode="aspectFit" />
       <text class="addr-text">{{venue.displayAddr || venue.shortAddr}} · 距你 {{venue.distance}}</text>
     </view>
 
-    <!-- 标签 -->
+    <!-- 标签：最多展示 2 个，避免拥挤 -->
     <view class="tags">
-      <view wx:for="{{venue.tags}}" wx:key="label" class="tag">{{item.label}}</view>
+      <view wx:for="{{venue.tags}}" wx:key="label" wx:if="{{index < 2}}" class="tag {{index === 0 ? 'tag-primary' : ''}}">{{item.label}}</view>
     </view>
 
-    <!-- 状态行（绿点+绿字靠左，无右侧按钮） -->
+    <!-- 状态行 -->
     <view class="foot">
       <view wx:if="{{checked}}" class="state state-checked">
         <view class="dot-green"></view>

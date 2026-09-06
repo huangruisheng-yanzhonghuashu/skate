@@ -17,7 +17,7 @@
   top: 0;
   z-index: 20;
   background: #111114;
-  padding: 0 32rpx 20rpx;
+  padding: 0 32rpx 38rpx;
 }
 
 /* 导航行 */
@@ -44,13 +44,13 @@
 }
 
 .city-pin {
-  width: 28rpx;
-  height: 28rpx;
+  width: 24rpx;
+  height: 24rpx;
 }
 
 .city-swap {
-  width: 24rpx;
-  height: 24rpx;
+  width: 20rpx;
+  height: 20rpx;
   flex-shrink: 0;
 }
 
@@ -59,7 +59,7 @@
   display: flex;
   align-items: center;
   gap: 10rpx;
-  padding: 10rpx 22rpx;
+  padding: 12rpx 24rpx;
   border-radius: 999rpx;
   background: #1E1E23;
   border: 1rpx solid rgba(255, 90, 54, 0.4);
@@ -94,7 +94,7 @@
   font-size: 28rpx;
   font-weight: 700;
   color: #FFFFFF;
-  line-height: 1;
+  line-height: 1.5;
 }
 
 .heat-label {
@@ -109,11 +109,11 @@
 }
 
 .brand-wordmark {
-  font-size: 80rpx;
+  font-size: 84rpx;
   font-weight: 700;
   font-style: italic;
   color: #FFFFFF;
-  line-height: 1.05;
+  line-height: 1.25;
   letter-spacing: -2rpx;
 }
 
@@ -121,7 +121,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12rpx;
+  margin-top: 16rpx;
   gap: 16rpx;
 }
 
@@ -138,11 +138,11 @@
 }
 
 .brand-bar {
-  width: 64rpx;
-  height: 8rpx;
-  margin-top: 20rpx;
+  width: 120rpx;
+  height: 12rpx;
+  margin-top: 32rpx;
   border-radius: 999rpx;
-  background: linear-gradient(90deg, #FF5A36, #FF8A6E);
+  background: #FF5A36;
 }
 
 /* ===== 搜索（面板内） ===== */
@@ -152,7 +152,7 @@
   gap: 16rpx;
   height: 72rpx;
   padding: 0 28rpx;
-  margin-bottom: 16rpx;
+  margin-bottom: 30rpx;
   border-radius: 999rpx;
   background: #17171B;
   color: #6E6E76;
@@ -164,7 +164,7 @@
   display: flex;
   align-items: center;
   gap: 24rpx;
-  margin-bottom: 16rpx;
+  margin-bottom: 30rpx;
 }
 
 .search-pill-text {
@@ -232,7 +232,7 @@
   display: flex;
   align-items: center;
   gap: 24rpx;
-  margin: 24rpx 32rpx 0;
+  margin: 38rpx 32rpx 0;
   padding: 24rpx;
   border-radius: 24rpx;
   background: #1E1E23;
@@ -502,11 +502,11 @@
 
 /* ===== 整合面板 ===== */
 .panel {
-  margin: 24rpx 32rpx 0;
+  margin: 38rpx 32rpx 0;
 }
 
 .control-panel {
-  padding: 24rpx 0 8rpx;
+  padding: 0 0 16rpx;
 }
 
 /* 一级 Tab */
@@ -519,7 +519,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: 80rpx;
+  height: 64rpx;
   padding: 0;
   font-size: 30rpx;
   color: #A6A6AD;
@@ -528,16 +528,16 @@
 
 .entity-active {
   color: #FFFFFF;
-  font-weight: 700;
+  font-weight: 500;
 }
 
 .entity-bar {
   position: absolute;
   left: 50%;
   bottom: 2rpx;
-  width: 32rpx;
+  width: 48rpx;
   height: 6rpx;
-  margin-left: -16rpx;
+  margin-left: -24rpx;
   border-radius: 999rpx;
   background: linear-gradient(90deg, #FF5A36, #FF8A6E);
   opacity: 0;
@@ -603,7 +603,7 @@
 
 .filters {
   background: transparent;
-  padding: 20rpx 8rpx 12rpx;
+  padding: 24rpx 8rpx 16rpx;
   white-space: nowrap;
 }
 
@@ -619,8 +619,8 @@
 
 .filter-chip {
   display: inline-block;
-  height: 64rpx;
-  line-height: 60rpx;
+  height: 56rpx;
+  line-height: 52rpx;
   padding: 0 24rpx;
   margin-right: 20rpx;
   border-radius: 999rpx;
@@ -640,31 +640,16 @@
 }
 
 /* ===== 列表 ===== */
+/* 列表项卡片化：恢复 venue-card 默认圆角与背景，间距由 list-item 控制；左右不留白，与 Tab/筛选对齐到 32rpx 基准线 */
 .list-item {
-  margin: 0 20rpx;
-  padding: 20rpx 0;
-  border-top: 1rpx solid #2A2A31;
-}
-
-/* 列表项卡片化：恢复 venue-card 默认圆角与背景，间距由 list-item 控制 */
-.list-item {
-  margin: 0 20rpx 20rpx;
+  margin: 0 0 20rpx;
   padding: 0;
   border-top: none;
   border-radius: 24rpx;
   overflow: hidden;
 }
 
-/* 首页隐藏 venue-card 评分与地址 pin，匹配设计稿 */
-.panel .card .rate {
-  display: none;
-}
-
-.panel .card .addr-pin {
-  display: none;
-}
-
-/* 场地卡片视觉刷新：类型首标签高亮 */
+/* 场地卡片视觉刷新：类型首标签高亮（组件内已处理，此处兜底） */
 .panel .card .tag:first-child {
   background: rgba(255, 90, 54, 0.14);
   color: #FF8A6E;
@@ -752,7 +737,7 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  margin: 0 32rpx 20rpx;
+  margin: 0 32rpx 24rpx;
 }
 
 .sec-title {
@@ -763,7 +748,7 @@
 
 .sec-sub {
   font-size: 22rpx;
-  color: #6E6E76;
+  color: #8C8C94;
 }
 
 .feed-scroll {
@@ -774,8 +759,8 @@
 .feed-card {
   display: inline-flex;
   flex-direction: column;
-  width: 320rpx;
-  margin-right: 20rpx;
+  width: 328rpx;
+  margin-right: 24rpx;
   background: #1E1E23;
   border: 1rpx solid #26262C;
   border-radius: 20rpx;
@@ -797,8 +782,8 @@
 
 .feed-cover {
   position: relative;
-  width: 320rpx;
-  height: 220rpx;
+  width: 328rpx;
+  height: 212rpx;
   background: #111114;
 }
 
@@ -830,9 +815,9 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 40rpx;
-  height: 40rpx;
-  margin: -20rpx 0 0 -20rpx;
+  width: 72rpx;
+  height: 72rpx;
+  margin: -36rpx 0 0 -36rpx;
   border-radius: 50%;
   background: rgba(17, 17, 20, 0.55);
   backdrop-filter: blur(2rpx);
@@ -841,15 +826,15 @@
 .feed-play::after {
   content: '';
   position: absolute;
-  left: 15rpx;
-  top: 12rpx;
+  left: 28rpx;
+  top: 24rpx;
   border-style: solid;
-  border-width: 8rpx 0 8rpx 13rpx;
+  border-width: 12rpx 0 12rpx 20rpx;
   border-color: transparent transparent transparent #FFFFFF;
 }
 
 .feed-note {
-  padding: 14rpx 20rpx 0;
+  padding: 20rpx 24rpx 0;
   font-size: 24rpx;
   color: #D9D9DE;
   line-height: 1.4;
@@ -862,7 +847,7 @@
   display: flex;
   align-items: center;
   gap: 10rpx;
-  padding: 16rpx 20rpx 0;
+  padding: 16rpx 24rpx 0;
 }
 
 .feed-avatar-wrap {
@@ -906,7 +891,7 @@
 }
 
 .feed-place {
-  padding: 8rpx 20rpx 20rpx;
+  padding: 12rpx 24rpx 24rpx;
   font-size: 24rpx;
   color: #FF8A6E;
   overflow: hidden;
