@@ -5,6 +5,7 @@ const { PRESENCE_RADIUS_M } = require('../../utils/config.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 const nav = require('../../utils/nav.js')
+const mediaPick = require('../../utils/media-pick.js')
 
 /* 连签徽章里程碑（庆祝层提示用，与场地详情页一致） */
 const STREAK_MILESTONES = [3, 7, 30, 100]
@@ -42,12 +43,14 @@ Page({
       checkWhite: ICON.checkWhite,
       camera: ICON.cameraOrange,
       back: ICON.chevronLeftWhite,
+      play: ICON.playWhite,
     },
     feed: [],
     /* 打卡弹窗 */
     checkinOpen: false,
     note: '',
     checkinMedia: [],
+    checkinMediaMode: '', /* '' 未定 / image 图片态 / video 视频态（图视频互斥） */
     checkinSubmitting: false,
   },
 
@@ -325,6 +328,7 @@ Page({
       checkinMode: 'new',
       note: '',
       checkinMedia: [],
+      checkinMediaMode: '',
       checkinSubmitting: false,
     })
   },
@@ -332,11 +336,13 @@ Page({
   /* 编辑打卡：预填记录 */
   openEditPost(rec) {
     this._editId = rec.id
+    const media = toMedia(rec.photos, rec.videos, rec.mediaOrder)
     this.setData({
       checkinOpen: true,
       checkinMode: 'edit',
       note: rec.note || '',
-      checkinMedia: toMedia(rec.photos, rec.videos, rec.mediaOrder),
+      checkinMedia: media,
+      checkinMediaMode: mediaPick.modeOf(media),
       checkinSubmitting: false,
     })
   },
@@ -381,28 +387,32 @@ Page({
     this.setData({ note: e.detail.value })
   },
 
-  /* 选媒体：图片 + 视频混选（微博式），图+视频合计上限 9 */
+  /* 选媒体（图/视频互斥：图≤9张 或 视频1个），选择规则统一在 utils/media-pick.js */
   chooseCheckinMedia() {
-    const remain = 9 - this.data.checkinMedia.length
-    if (remain <= 0) return
-    wx.chooseMedia({
-      count: remain,
-      mediaType: ['mix'],
-      success: (res) => {
-        const added = res.tempFiles.map((f) => ({
-          type: f.fileType === 'video' ? 'video' : 'image',
-          url: f.tempFilePath,
-        }))
-        this.setData({ checkinMedia: [...this.data.checkinMedia, ...added] })
-      },
+    mediaPick.pick(this.data.checkinMedia).then(({ added }) => {
+      if (added.length) {
+        this._setCheckinMedia([...this.data.checkinMedia, ...added])
+      }
+    }).catch((e) => {
+      wx.showToast({ title: (e && e.msg) || '选择失败，请重试', icon: 'none' })
     })
+  },
+
+  /* 媒体统一写入口：同步派生媒体模式驱动添加格文案与视频大格形态 */
+  _setCheckinMedia(media) {
+    const list = media.map((m) => (
+      m.type === 'video' && !m.durationText
+        ? { ...m, durationText: mediaPick.fmtDuration(m.duration) }
+        : m
+    ))
+    this.setData({ checkinMedia: list, checkinMediaMode: mediaPick.modeOf(list) })
   },
 
   removeCheckinMedia(e) {
     const i = e.currentTarget.dataset.index
     const media = [...this.data.checkinMedia]
     media.splice(i, 1)
-    this.setData({ checkinMedia: media })
+    this._setCheckinMedia(media)
   },
 
   /* 拆分媒体为存储结构：photos（图片）/ videos（视频）/ order（混排顺序标记）。
@@ -428,12 +438,18 @@ Page({
     const s = this.data.shop
     const note = this.data.note.trim()
     const media = this.data.checkinMedia
+    /* 媒体互斥硬校验（防状态被绕过），正常流程触不到 */
+    const invalidMsg = mediaPick.validate(media)
+    if (invalidMsg) {
+      wx.showToast({ title: invalidMsg, icon: 'none' })
+      return
+    }
     const submit = () => {
       const m = this.splitCheckinMedia(media)
       if (this._editId) {
         store.updatePost(this._editId, note, m.photos, m.videos, m.order).then(() => {
           this._editId = ''
-          this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
+          this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], checkinMediaMode: '', note: '' })
           wx.showToast({ title: '打卡已更新', icon: 'success' })
           this.loadFeed()
         })
@@ -441,7 +457,7 @@ Page({
       }
       /* 发布打卡：本地立即生效，媒体由 store 后台队列异步上云（零等待，失败自动排队续传） */
       store.addPost(s.id, s.name, note, m.photos, 'shop', m.videos, m.order)
-      this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], note: '' })
+      this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], checkinMediaMode: '', note: '' })
       wx.showToast({ title: '打卡已发布', icon: 'success' })
       this.loadFeed()
     }

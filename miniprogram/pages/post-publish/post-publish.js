@@ -4,8 +4,8 @@
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
 const { ICON } = require('../../utils/icons.js')
+const mediaPick = require('../../utils/media-pick.js')
 
-const MAX_MEDIA = 9
 const LIST_LIMIT = 30
 
 Page({
@@ -17,6 +17,7 @@ Page({
     results: [],
     note: '',
     media: [],
+    mediaMode: '', /* '' 未定 / image 图片态 / video 视频态（图视频互斥） */
     submitting: false,
     icons: {
       pin: ICON.pinOrangeSmall,
@@ -24,6 +25,7 @@ Page({
       check: ICON.checkWhite,
       plus: ICON.plusAsh,
       imagePlus: ICON.imagePlusAsh,
+      play: ICON.playWhite,
       x: ICON.xWhite,
       close: ICON.xWhite,
       search: ICON.searchAsh,
@@ -109,29 +111,32 @@ Page({
     this.setData({ note: e.detail.value })
   },
 
-  /* 选媒体：图片 + 视频混选（微博式），图+视频合计上限 9 */
+  /* 选媒体（图/视频互斥：图≤9张 或 视频1个），选择规则统一在 utils/media-pick.js */
   chooseMedia() {
-    const remain = MAX_MEDIA - this.data.media.length
-    if (remain <= 0) return
-    wx.chooseMedia({
-      count: remain,
-      mediaType: ['mix'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        const added = res.tempFiles.map((f) => ({
-          type: f.fileType === 'video' ? 'video' : 'image',
-          url: f.tempFilePath,
-        }))
-        this.setData({ media: [...this.data.media, ...added] })
-      },
+    mediaPick.pick(this.data.media).then(({ added }) => {
+      if (added.length) {
+        this._setMedia([...this.data.media, ...added])
+      }
+    }).catch((e) => {
+      wx.showToast({ title: (e && e.msg) || '选择失败，请重试', icon: 'none' })
     })
+  },
+
+  /* 媒体统一写入口：同步派生媒体模式驱动添加格文案与视频大格形态 */
+  _setMedia(media) {
+    const list = media.map((m) => (
+      m.type === 'video' && !m.durationText
+        ? { ...m, durationText: mediaPick.fmtDuration(m.duration) }
+        : m
+    ))
+    this.setData({ media: list, mediaMode: mediaPick.modeOf(list) })
   },
 
   removeMedia(e) {
     const i = e.currentTarget.dataset.index
     const media = [...this.data.media]
     media.splice(i, 1)
-    this.setData({ media: media })
+    this._setMedia(media)
   },
 
   /* 拆分媒体为存储结构（与详情页打卡一致）：photos / videos / order */
@@ -172,6 +177,12 @@ Page({
     const media = this.data.media
     if (!note && !media.length) {
       wx.showToast({ title: '说点什么或添加图片/视频', icon: 'none' })
+      return
+    }
+    /* 媒体互斥硬校验（防状态被绕过），正常流程触不到 */
+    const invalidMsg = mediaPick.validate(media)
+    if (invalidMsg) {
+      wx.showToast({ title: invalidMsg, icon: 'none' })
       return
     }
     const submit = () => {

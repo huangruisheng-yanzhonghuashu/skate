@@ -514,9 +514,53 @@
   color: #8C8C94;
   font-size: 22rpx;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 6rpx;
+  padding: 0 8rpx;
+  box-sizing: border-box;
   text-align: center;
+}
+
+.padd-sub {
+  font-size: 18rpx;
+  color: #6E6E76;
+  line-height: 1.3;
+}
+
+/* 打卡视频态：单视频独占大格（弹窗满幅），与发现页 feed 单视频观感一致 */
+.ptile-lg {
+  width: 100%;
+  height: 400rpx;
+}
+
+.ptile-lg .ptile-img {
+  border-radius: 16rpx;
+}
+
+/* 视频角标：播放键 + 时长（黑底半透明圆角条，左下角） */
+.video-badge {
+  position: absolute;
+  left: 16rpx;
+  bottom: 16rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.video-badge-icon {
+  width: 22rpx;
+  height: 22rpx;
+}
+
+.video-badge-time {
+  font-size: 20rpx;
+  color: #FFFFFF;
+  line-height: 1.2;
 }
 
 .f-btn {

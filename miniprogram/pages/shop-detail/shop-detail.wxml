@@ -166,8 +166,9 @@
       </view>
 
       <view class="f-row">
+        <!-- 图/视频互斥：图≤9张 或 视频1个；视频态独占大格+时长角标、无添加格 -->
         <view class="pgrid">
-          <view wx:for="{{checkinMedia}}" wx:key="url" class="ptile">
+          <view wx:for="{{checkinMedia}}" wx:key="url" class="ptile {{checkinMediaMode === 'video' ? 'ptile-lg' : ''}}">
             <video
               wx:if="{{item.type === 'video'}}"
               class="ptile-img ptile-video"
@@ -177,9 +178,16 @@
               show-center-play-btn="{{false}}"
             />
             <image wx:else class="ptile-img" src="{{item.url}}" mode="aspectFill" />
+            <view wx:if="{{item.type === 'video'}}" class="video-badge">
+              <image class="video-badge-icon" src="{{icons.play}}" mode="aspectFit" />
+              <text wx:if="{{item.durationText}}" class="video-badge-time">{{item.durationText}}</text>
+            </view>
             <view class="ptile-del" data-index="{{index}}" catchtap="removeCheckinMedia">×</view>
           </view>
-          <view wx:if="{{checkinMedia.length < 9}}" class="padd" bindtap="chooseCheckinMedia">＋ 添加照片/视频</view>
+          <view wx:if="{{checkinMediaMode !== 'video'}}" class="padd" bindtap="chooseCheckinMedia">
+            <text>{{checkinMediaMode === 'image' ? '添加照片' : '添加照片/视频'}}</text>
+            <text class="padd-sub">{{checkinMediaMode === 'image' ? checkinMedia.length + '/9' : '图≤9张 或 视频1个'}}</text>
+          </view>
         </view>
       </view>
 

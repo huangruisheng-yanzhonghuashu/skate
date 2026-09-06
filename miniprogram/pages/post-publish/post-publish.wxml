@@ -30,10 +30,10 @@
     />
   </view>
 
-  <!-- 媒体 -->
+  <!-- 媒体（图/视频互斥：图≤9张 或 视频1个；视频态独占大格+时长角标、无添加格） -->
   <view class="field">
     <view class="photo-grid">
-      <view wx:for="{{media}}" wx:key="url" class="photo-tile">
+      <view wx:for="{{media}}" wx:key="url" class="photo-tile {{mediaMode === 'video' ? 'photo-tile-lg' : ''}}">
         <video
           wx:if="{{item.type === 'video'}}"
           class="photo-tile-img photo-tile-video"
@@ -43,14 +43,18 @@
           show-center-play-btn="{{false}}"
         />
         <image wx:else class="photo-tile-img" src="{{item.url}}" mode="aspectFill" />
+        <view wx:if="{{item.type === 'video'}}" class="video-badge">
+          <image class="video-badge-icon" src="{{icons.play}}" mode="aspectFit" />
+          <text wx:if="{{item.durationText}}" class="video-badge-time">{{item.durationText}}</text>
+        </view>
         <view class="photo-tile-del" data-index="{{index}}" catchtap="removeMedia">
           <image class="photo-tile-del-icon" src="{{icons.x}}" mode="aspectFit" />
         </view>
       </view>
-      <view wx:if="{{media.length < 9}}" class="photo-add" bindtap="chooseMedia">
+      <view wx:if="{{mediaMode !== 'video'}}" class="photo-add" bindtap="chooseMedia">
         <image class="photo-add-icon" src="{{icons.imagePlus}}" mode="aspectFit" />
-        <text class="photo-add-text">添加图片/视频</text>
-        <text class="photo-add-sub">最多 9 个</text>
+        <text class="photo-add-text">{{mediaMode === 'image' ? '添加图片' : '添加图片/视频'}}</text>
+        <text class="photo-add-sub">{{mediaMode === 'image' ? media.length + '/9' : '图最多 9 张 或 视频 1 个'}}</text>
       </view>
     </view>
   </view>

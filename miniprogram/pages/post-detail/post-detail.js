@@ -7,8 +7,7 @@ const cloud = require('../../utils/cloud.js')
 const { toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 const nav = require('../../utils/nav.js')
-
-const MAX_MEDIA = 9
+const mediaPick = require('../../utils/media-pick.js')
 
 /* shops.category → 徽章文案（板店对外叫「门店」，与「场地、门店与俱乐部」文案统一） */
 const CAT_TEXT = { '板店': '门店', '俱乐部': '俱乐部', '培训机构': '培训机构' }
@@ -32,6 +31,7 @@ Page({
     editOpen: false,
     editNote: '',
     editMedia: [],
+    editMediaMode: '', /* '' 未定 / image 图片态 / video 视频态（图视频互斥） */
     saving: false,
     icons: {
       back: ICON.chevronLeftWhite,
@@ -39,6 +39,7 @@ Page({
       x: ICON.xWhite,
       pin: ICON.pinOrangeSmall,
       plus: ICON.plusAsh,
+      play: ICON.playWhite,
       edit: ICON.editAsh,
       trash: ICON.trashRed,
       heartAsh: ICON.heartAsh,
@@ -165,10 +166,12 @@ Page({
   openEdit() {
     const rec = store.getState().checkins.find((c) => c.id === this.data.postId)
     if (!rec) return
+    const media = toMedia(rec.photos, rec.videos, rec.mediaOrder)
     this.setData({
       editOpen: true,
       editNote: rec.note || '',
-      editMedia: toMedia(rec.photos, rec.videos, rec.mediaOrder),
+      editMedia: media,
+      editMediaMode: mediaPick.modeOf(media),
       saving: false,
     })
   },
@@ -182,29 +185,32 @@ Page({
     this.setData({ editNote: e.detail.value })
   },
 
-  /* 选媒体：图片 + 视频混选（微博式），图+视频合计上限 9 */
+  /* 选媒体（图/视频互斥：图≤9张 或 视频1个），选择规则统一在 utils/media-pick.js */
   chooseMedia() {
-    const remain = MAX_MEDIA - this.data.editMedia.length
-    if (remain <= 0) return
-    wx.chooseMedia({
-      count: remain,
-      mediaType: ['mix'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        const added = res.tempFiles.map((f) => ({
-          type: f.fileType === 'video' ? 'video' : 'image',
-          url: f.tempFilePath,
-        }))
-        this.setData({ editMedia: this.data.editMedia.concat(added) })
-      },
+    mediaPick.pick(this.data.editMedia).then(({ added }) => {
+      if (added.length) {
+        this._setEditMedia(this.data.editMedia.concat(added))
+      }
+    }).catch((e) => {
+      wx.showToast({ title: (e && e.msg) || '选择失败，请重试', icon: 'none' })
     })
+  },
+
+  /* 媒体统一写入口：同步派生媒体模式驱动添加格文案与视频大格形态 */
+  _setEditMedia(media) {
+    const list = media.map((m) => (
+      m.type === 'video' && !m.durationText
+        ? { ...m, durationText: mediaPick.fmtDuration(m.duration) }
+        : m
+    ))
+    this.setData({ editMedia: list, editMediaMode: mediaPick.modeOf(list) })
   },
 
   removeMedia(e) {
     const i = e.currentTarget.dataset.index
     const media = this.data.editMedia.slice()
     media.splice(i, 1)
-    this.setData({ editMedia: media })
+    this._setEditMedia(media)
   },
 
   /* 拆分媒体为存储结构（与发布打卡一致）：photos / videos / order */
@@ -230,6 +236,12 @@ Page({
     const media = this.data.editMedia
     if (!note && !media.length) {
       wx.showToast({ title: '说点什么或添加图片/视频', icon: 'none' })
+      return
+    }
+    /* 媒体互斥硬校验（防状态被绕过），正常流程触不到 */
+    const invalidMsg = mediaPick.validate(media)
+    if (invalidMsg) {
+      wx.showToast({ title: invalidMsg, icon: 'none' })
       return
     }
     this.setData({ saving: true })

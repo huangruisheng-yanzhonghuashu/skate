@@ -456,6 +456,37 @@
   height: 24rpx;
 }
 
+/* 编辑视频态：单视频独占大格（弹窗满幅），与发现页 feed 单视频观感一致 */
+.photo-tile-lg {
+  width: 100%;
+  height: 440rpx;
+  border-radius: 20rpx;
+}
+
+/* 视频角标：播放键 + 时长（黑底半透明圆角条，左下角） */
+.video-badge {
+  position: absolute;
+  left: 12rpx;
+  bottom: 12rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.video-badge-icon {
+  width: 22rpx;
+  height: 22rpx;
+}
+
+.video-badge-time {
+  font-size: 20rpx;
+  color: #FFFFFF;
+  line-height: 1.2;
+}
+
 .photo-add {
   width: 160rpx;
   height: 160rpx;
