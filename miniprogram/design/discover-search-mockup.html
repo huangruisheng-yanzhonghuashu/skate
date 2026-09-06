@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="4FSZDkHWGwQ6y92oi5bdD2">
+<head data-page-node-id="XbfRp8fZ7CduwvhmJmXQyB">
+  <meta charset="UTF-8" data-page-node-id="DS3KYFddvmueBFewmCgQ3q">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="tLGwAJxWQORENyVCSCc95z">
+  <title>去哪滑 - 发现页搜索 UI 设计稿</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" data-page-node-id="RGdkDtvIgoZOrXufQp4fsp">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#111114',
+            card: '#1E1E23',
+            inset: '#17171B',
+            line: '#26262C',
+            primary: '#FF5A36',
+            'primary-lt': '#FF8A6E',
+            success: '#00D4AA',
+            t1: '#FFFFFF',
+            t2: '#D9D9DE',
+            t3: '#A6A6AD',
+            t4: '#8C8C94',
+            t5: '#6E6E76',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { background: #f0f0f0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif; }
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      border-radius: 48px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+      overflow: hidden;
+      position: relative;
+      background: #111114;
+      flex-shrink: 0;
+    }
+    .nav-bar { height: 44px; display: flex; align-items: center; justify-content: center; }
+    .status-bar { height: 54px; padding-top: 14px; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .gradient-orange { background: linear-gradient(135deg, #FF5A36 0%, #FF8A6E 100%); }
+    @keyframes skeleton {
+      0% { opacity: 0.4; }
+      50% { opacity: 0.7; }
+      100% { opacity: 0.4; }
+    }
+    .skeleton { animation: skeleton 1.2s ease-in-out infinite; }
+  </style>
+</head>
+<body class="p-8" data-page-node-id="39xq61dUbe2zq55Ij6cgWE">
+  <div class="flex gap-10 flex-wrap justify-center" data-page-node-id="ZnR2SGKWv28xCRR4hj1Lml">
+
+    <!-- 画板 A：搜索展开 - 最近搜索 -->
+    <div class="flex flex-col items-center" data-page-node-id="y14LwbmwFKD0AeUtc0uEeK">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="MUPleWMLf7DgD8t6obEu0R">搜索态 A · 最近搜索</p>
+      <div class="phone-frame" data-page-node-id="J46NUOdXeYZAoPDV3TQG3m">
+        <div class="status-bar bg-bg flex items-center justify-between px-6 text-t1 text-sm font-medium" data-page-node-id="QMX8HPirdXUFvCm2iPgzjl">
+          <span data-page-node-id="3pHiE751UjwdxP9Y8IuJSO">9:41</span>
+          <div class="flex items-center gap-1.5" data-page-node-id="awSq5SuK36hLP6IWLb7pk8">
+            <i class="fas fa-signal text-xs" data-page-node-id="EgfsZ6MRCN8YhVPIQCMAdi"></i>
+            <i class="fas fa-wifi text-xs" data-page-node-id="iK7flZgKWNn1wM4HHTh5KE"></i>
+            <i class="fas fa-battery-full text-xs" data-page-node-id="EeTjer5sXi2edPWBeCcHfy"></i>
+          </div>
+        </div>
+        <div class="nav-bar bg-bg border-b border-line" data-page-node-id="htoccGfGHypJrPU6498T0c">
+          <span class="text-t1 text-[17px] font-semibold" data-page-node-id="iyOFHUbbPqITY6bsKcBqHl">发现</span>
+        </div>
+
+        <!-- 搜索头 -->
+        <div class="sticky top-0 bg-bg z-20 px-6 py-3 border-b border-line" data-page-node-id="UjBaijYA6DByOS4hZAdIeO">
+          <div class="flex items-center gap-3" data-page-node-id="2lYFH2CXPAxcEchRR6K7Ji">
+            <div class="flex-1 h-10 bg-card rounded-full px-4 flex items-center gap-2 border border-line" data-page-node-id="GzYNBCH22GiGx37f8scLoe">
+              <i class="fas fa-search text-t4 text-sm" data-page-node-id="3T3HCbbzsHgqPvRocUEFRe"></i>
+              <input type="text" placeholder="搜索滑手、场地或打卡内容" class="flex-1 bg-transparent text-t1 text-[15px] outline-none placeholder:text-t5" data-page-node-id="kG8O68ADH7Djd1qmyDku72">
+            </div>
+            <span class="text-t3 text-sm" data-page-node-id="HciUPOJRbihlPRzoKf8L1S">取消</span>
+          </div>
+        </div>
+
+        <!-- 最近搜索 -->
+        <div class="p-6" data-page-node-id="A0KsjAdyWpPFwVvzU1T17s">
+          <div class="flex items-center justify-between mb-4" data-page-node-id="uYYMYKIriBkEPhAa4lHAiH">
+            <span class="text-t1 text-[15px] font-semibold" data-page-node-id="Ao4seVx0GCcbwgOgzuXIuf">最近搜索</span>
+            <span class="text-t4 text-xs" data-page-node-id="KYbBsRcAscCW7rVfBIYTM2">清除</span>
+          </div>
+          <div class="flex flex-wrap gap-3" data-page-node-id="H3rymSnjs1hIAMm05peXZZ">
+            <span class="px-3 py-1.5 rounded-full bg-card border border-line text-t2 text-xs" data-page-node-id="8iJ0T90FkBmnITtf9kH7wy">碗池</span>
+            <span class="px-3 py-1.5 rounded-full bg-card border border-line text-t2 text-xs" data-page-node-id="7prgHvz1EBC6stpLJNHk0Z">南湖滑板公园</span>
+            <span class="px-3 py-1.5 rounded-full bg-card border border-line text-t2 text-xs" data-page-node-id="NX8q1RwDucQi2cgUuVhRB6">Li Ming</span>
+            <span class="px-3 py-1.5 rounded-full bg-card border border-line text-t2 text-xs" data-page-node-id="0vP9agIlfP2NF6xysEfRNw">kickflip</span>
+            <span class="px-3 py-1.5 rounded-full bg-card border border-line text-t2 text-xs" data-page-node-id="uQJJTU3u3OyszgAa2UQuN8">夜滑</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 B：搜索中 / 有结果 -->
+    <div class="flex flex-col items-center" data-page-node-id="13wiJ6fhwFYqWqAkRpMKTw">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="Jt7TsDoDxgGywAdu7A6DE3">搜索态 B · 搜索结果</p>
+      <div class="phone-frame" data-page-node-id="lXR0roOuk2ItO2DMpPstYW">
+        <div class="status-bar bg-bg flex items-center justify-between px-6 text-t1 text-sm font-medium" data-page-node-id="SufKEzrDE59x10dQek3NwO">
+          <span data-page-node-id="LrXm5ZtKvdRmeyE3VO46wj">9:41</span>
+          <div class="flex items-center gap-1.5" data-page-node-id="lck3epDMAnyXvMbQkGrZC7">
+            <i class="fas fa-signal text-xs" data-page-node-id="KFLoa5qdXB9AnTL2LQ92aG"></i>
+            <i class="fas fa-wifi text-xs" data-page-node-id="S8JCwtBMBddnW2rmfNiVbF"></i>
+            <i class="fas fa-battery-full text-xs" data-page-node-id="56DhZSSe6sCKdZjAnHQrmF"></i>
+          </div>
+        </div>
+        <div class="nav-bar bg-bg border-b border-line" data-page-node-id="ujC3Ptxy2Dtd1R8aADDLEC">
+          <span class="text-t1 text-[17px] font-semibold" data-page-node-id="u1kbqJu7IrnJpG645wMCMl">发现</span>
+        </div>
+
+        <!-- 搜索头 -->
+        <div class="sticky top-0 bg-bg z-20 px-6 py-3 border-b border-line" data-page-node-id="LCEGTXhKaQ9xt4UiYABAeJ">
+          <div class="flex items-center gap-3" data-page-node-id="ZEQgAT1EyCn1IXCTFedUzw">
+            <div class="flex-1 h-10 bg-card rounded-full px-4 flex items-center gap-2 border border-line" data-page-node-id="xQGLCmSeTnJ4qmAOSzKknX">
+              <i class="fas fa-search text-t4 text-sm" data-page-node-id="cGoa5LHmnKtkidyRrQVID8"></i>
+              <input type="text" value="碗池" class="flex-1 bg-transparent text-t1 text-[15px] outline-none" data-page-node-id="drBLf0kRUkpS3G7UidiTl8">
+              <i class="fas fa-circle-xmark text-t4 text-sm" data-page-node-id="kSmYLu2NUkMebea2dJDVGR"></i>
+            </div>
+            <span class="text-t3 text-sm" data-page-node-id="IGIoYBpQ9qQ0eXMRYdrt6p">取消</span>
+          </div>
+        </div>
+
+        <div class="h-[700px] overflow-y-auto hide-scrollbar p-6 pb-36 space-y-5" data-page-node-id="yGc1NvLWfya2D9DmNV3eaj">
+          <div class="text-xs text-t4" data-page-node-id="wCLGeHzy0Cfm2UFE2ZAxUk">找到 2 条相关打卡</div>
+
+          <!-- 结果卡片 1 -->
+          <div class="bg-card rounded-3xl border border-line p-5" data-page-node-id="AZzgOoEaASMh82DG55Y6Rg">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="rXL2Tv8L9MnfmpgOXQHbRA">
+              <div class="w-11 h-11 rounded-full gradient-orange flex items-center justify-center text-white text-base font-semibold" data-page-node-id="eOcZTqE5Wq8yLPplnZ6Xno">L</div>
+              <div class="flex-1 min-w-0" data-page-node-id="SHs4iVNBkDbvJcyAyGmVJH">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="aKAEEBeGtCfh6DBejKtyty">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="RqElMYP2kOl6aS6WKY35Uc">Li Ming</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="uxnwT7CCUgJncXe60WpgxL">2h 前</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="avcfr8YDf5Asxe3kDTQs88">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="DuTamnEZdMOEpQ9FVDSIwx">体育中心碗池</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-[15px] text-t2 leading-relaxed mb-3" data-page-node-id="1MVgykV1xBoNVTFWC0sBZX">下午在<span class="text-primary" data-page-node-id="Yjt7GlgtZnnxBvW1elyhXW">碗池</span>练了一组 backside，摔了三次终于成招。</p>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="GHJ1WO3EllausXxRnWk377">
+              <img src="../generated-images/Empty_concrete_skatepark_bowl__2026-09-06T06-19-38.png" class="w-full h-full object-cover" alt="打卡图" data-page-node-id="Uz8FDibPDCo3zXCo9vCaFO">
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="9JQLgwfTPuX2N64Av0JG50">
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="S5d2smLeVcMkpluhzV75XM">
+                <i class="far fa-heart text-lg" data-page-node-id="Fe1MyZ5t9FOUqAii3nvNHR"></i>
+                <span class="text-sm" data-page-node-id="4WEnOndh4bVsDbVVlAbpzH">18</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="HUkkDHKZ0eARCEax2h3MVs">
+                <i class="far fa-comment text-lg" data-page-node-id="iLlGH1weLftsLGckgHLsAp"></i>
+                <span class="text-sm" data-page-node-id="g89Ds8opzOgfpqDdAUELE2">3</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="rDs29DdxGlScf0MUXhFjQD">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="Q5f4p7DpMbHTsR3R7HQdyJ"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 结果卡片 2 -->
+          <div class="bg-card rounded-3xl border border-line p-5" data-page-node-id="3P8MrFxybSRsmjBVJ0dWx6">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="XQth3Lo6bIA67gxnr3BLNj">
+              <div class="w-11 h-11 rounded-full bg-success/20 flex items-center justify-center text-success text-base font-semibold" data-page-node-id="QsNT64ap28IsH3pnmi8yyU">A</div>
+              <div class="flex-1 min-w-0" data-page-node-id="mfdLUNnmUQKCFKA4ROeNWm">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="6o8M32JH9m5cKsLLipBs3i">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="aCh4SdgZMrCrbndnxn44ph">Allen</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="1lpFlGQyNTDNGfEpf2tEEQ">5h 前</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="DrAuPeaofdjw8DYaaoDvqv">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="y4Xe2RhRBRfw3VZA4WtwdC">嘉兴学院<span class="text-primary" data-page-node-id="jMfumrCTmnJ5I2JaKDi7PX">碗池</span></span>
+                </div>
+              </div>
+            </div>
+            <p class="text-[15px] text-t2 leading-relaxed mb-3" data-page-node-id="SjREAlEQG5sTSdSV8VQ9nq">练碗池不是为了炫技，是为了找到飞起来的感觉。</p>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="aGOMTZHmRFtcuQzFMki32m">
+              <img src="../generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="视频封面" data-page-node-id="lN2oxEowWsItwiQn1FPEj9">
+              <div class="absolute inset-0 flex items-center justify-center" data-page-node-id="hx6CjosvxoXobDfbeIGZnK">
+                <div class="w-14 h-14 rounded-full bg-bg/55 backdrop-blur-sm flex items-center justify-center" data-page-node-id="ZAJqYW4qKORrBZp6xM95GQ">
+                  <div class="w-0 h-0 border-y-8 border-y-transparent border-l-[14px] border-l-white ml-1" data-page-node-id="t9pPiwvl4B9mDA2y72YdnJ"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="tWdYYc6QMxZrbSlTT8jSMY">
+              <div class="flex items-center gap-2 text-primary" data-page-node-id="ETLnpquLQaTNV2HLg7gwwh">
+                <i class="fas fa-heart text-lg" data-page-node-id="SNTNvSH1ZaNgknunWUi4qQ"></i>
+                <span class="text-sm font-medium" data-page-node-id="YM75CYVlNd0Yu3HzUgf8ya">42</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="kfstpGHVOKq14S5n4oDgHO">
+                <i class="far fa-comment text-lg" data-page-node-id="W3m20Zbwwn0TwWsz7OeSMI"></i>
+                <span class="text-sm" data-page-node-id="nQdXSLEGU61Qrk2qwJRici">7</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="ek2n8hkIrWBbU7EC3esbLV">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="xH6aDDk5LUiBznBfxVG02F"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 C：搜索无结果 -->
+    <div class="flex flex-col items-center" data-page-node-id="fDfnIzJUSBxYj6YI25R582">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="aoufISB3ZjTzIxy8VSepuD">搜索态 C · 无结果</p>
+      <div class="phone-frame" data-page-node-id="vkyKLND6koYgsbimFxeYmU">
+        <div class="status-bar bg-bg flex items-center justify-between px-6 text-t1 text-sm font-medium" data-page-node-id="n6dkEeJk72lfvH15KLJhD4">
+          <span data-page-node-id="2iYcG3c5L2fRlI13FMUThU">9:41</span>
+          <div class="flex items-center gap-1.5" data-page-node-id="a5fINSYwdgqjzSwj9IIUFB">
+            <i class="fas fa-signal text-xs" data-page-node-id="ACH4CMkbVemzKHQYHum1CH"></i>
+            <i class="fas fa-wifi text-xs" data-page-node-id="eJfxndldXCqg1FsXh9gFVH"></i>
+            <i class="fas fa-battery-full text-xs" data-page-node-id="nyJVbW95DmHW91swiGjZks"></i>
+          </div>
+        </div>
+        <div class="nav-bar bg-bg border-b border-line" data-page-node-id="1RSPXvePx5WTiMkyFYlfGz">
+          <span class="text-t1 text-[17px] font-semibold" data-page-node-id="m2di4JGOb3Z088Hel5fJRh">发现</span>
+        </div>
+
+        <!-- 搜索头 -->
+        <div class="sticky top-0 bg-bg z-20 px-6 py-3 border-b border-line" data-page-node-id="DwivEOYHw2ZKfOq9Om9nr1">
+          <div class="flex items-center gap-3" data-page-node-id="XS9zAqqlKDHklFm80ypsDX">
+            <div class="flex-1 h-10 bg-card rounded-full px-4 flex items-center gap-2 border border-line" data-page-node-id="rRGML2WQhSMZeaBFnBrTBe">
+              <i class="fas fa-search text-t4 text-sm" data-page-node-id="wZY4eNHjRq2LIHvxowzlDx"></i>
+              <input type="text" value="火星滑板" class="flex-1 bg-transparent text-t1 text-[15px] outline-none" data-page-node-id="rEJgOJizIWuOajBTAwkqoX">
+              <i class="fas fa-circle-xmark text-t4 text-sm" data-page-node-id="BLFRrpDv8ZRE5Mv6mVjJul"></i>
+            </div>
+            <span class="text-t3 text-sm" data-page-node-id="P1lifOdOVJCpqZD4pAmnhl">取消</span>
+          </div>
+        </div>
+
+        <!-- 无结果空态 -->
+        <div class="h-[700px] flex flex-col items-center justify-center px-10 text-center" data-page-node-id="FSHRqb7QnC1dHEFNUuJGZT">
+          <svg width="120" height="96" viewBox="0 0 120 96" fill="none" class="mb-6 opacity-30" data-page-node-id="oQBJvCIkvLXOSpRKImkD0t">
+            <circle cx="52" cy="40" r="26" stroke="#FF5A36" stroke-width="3" data-page-node-id="Pjk3OHymDhCTNYFVvTLGF6"/>
+            <path d="M71 59L104 92" stroke="#FF5A36" stroke-width="3" stroke-linecap="round" data-page-node-id="mtbqL7RSGZJmtdFLwDpmk2"/>
+            <path d="M10 80H110" stroke="#FF5A36" stroke-width="3" stroke-linecap="round" data-page-node-id="4jCLoMl7LcZCO4kfV4CHaf"/>
+            <path d="M30 80V65C30 52 42 48 52 48" stroke="#FF5A36" stroke-width="3" stroke-linecap="round" data-page-node-id="rDXxu4BTWvXM27z431hiwB"/>
+          </svg>
+          <h3 class="text-xl font-semibold text-t1 mb-2" data-page-node-id="WGXlDmkfXjJEvxwhWgShPH">没找到相关内容</h3>
+          <p class="text-sm text-t4" data-page-node-id="YVknNizSHdGWTlIEuiMu2q">换个关键词试试</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

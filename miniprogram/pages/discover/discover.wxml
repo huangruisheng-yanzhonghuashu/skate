@@ -59,7 +59,7 @@
       <text wx:if="{{item.note}}" class="feed-text">{{item.note}}</text>
 
       <view wx:if="{{item.media.length}}" class="feed-photos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
-        <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell" catchtap="previewMedia" data-media="{{item.media}}" data-index="{{index}}">
+        <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell" catchtap="previewMedia" data-id="{{item.id}}" data-index="{{index}}">
           <video
             wx:if="{{p.type === 'video'}}"
             class="feed-video"
