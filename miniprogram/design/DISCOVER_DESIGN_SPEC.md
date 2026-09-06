@@ -302,6 +302,65 @@ CTA：橙色渐变胶囊，文字「去附近场地签到」
 
 ---
 
+### 5.9 搜索功能
+
+发现页搜索用于从社区流中快速定位**滑手、场地、打卡内容**。不做全局场地搜索（那是首页的职责），也不做用户搜索的独立页面。
+
+#### 触发入口
+
+```
+位置：顶部 Tab 工具条最右侧
+图标：searchAsh，24rpx
+容器：w-72rpx，h-72rpx，rounded-full，bg #17171B
+```
+
+#### 搜索展开态
+
+点击搜索图标后，顶部工具条切换为搜索输入栏：
+
+```
+容器：fixed / sticky，top 0，z-index 20，bg #111114，border-bottom 1rpx #26262C，px 32rpx，py 24rpx
+输入框包裹：flex-1，h 80rpx，bg #1E1E23，border 1rpx #26262C，rounded-full，px 28rpx
+图标：搜索 icon 在左侧，20rpx，#8C8C94
+输入框：font-size 28rpx，color #FFFFFF，placeholder #6E6E76
+清空按钮：query 非空时右侧显示 ×，28rpx，#8C8C94
+取消按钮：右侧「取消」文字，28rpx，#8C8C94
+```
+
+输入时原 Tab / feed 被搜索态覆盖；点「取消」或返回按钮回到 Tab 浏览态。
+
+#### 搜索范围
+
+1. **滑手昵称**（`userName`）
+2. **场地/店铺/俱乐部/培训机构名称**（`venueName`）
+3. **打卡文字内容**（`note`）
+
+搜索按「或」关系匹配；不区分大小写。
+
+#### 搜索策略
+
+```
+输入为空：显示「最近搜索」历史 chips（最近 8 条，可一键清除）
+输入 ≥1 字符：300ms 防抖后触发云端搜索
+搜索中：列表顶部显示骨架屏（3 行 feed 占位）
+有结果：使用 feed 卡片模板渲染，按时间倒序
+无结果：空态插画 + 文案「没找到相关内容，换个关键词试试」
+```
+
+云端实现（MVP）：使用 `db.RegExp` 在 `checkins` 表中对 `userName`、`venueName`、`note` 做正则匹配，并叠加「有内容」过滤（note/photos/videos 非空）。结果集 ≤ 50 条，前端按时间倒序展示，不再分页。
+
+**搜索历史存储：** 使用 `wx.setStorageSync('discover_search_history', [...])`，上限 8 条，去重，新搜索置顶。
+
+#### 搜索空态
+
+```
+插画：放大镜 + 滑板场轮廓，stroke #FF5A36，opacity 0.25
+主文案：28rpx，#FFFFFF，font-weight 600
+副文案：26rpx，#8C8C94
+```
+
+---
+
 ## 6. 交互规则
 
 1. **进入页面**：默认「最新」Tab，加载 20 条；同步检查今日签到记录，决定 FAB 状态。

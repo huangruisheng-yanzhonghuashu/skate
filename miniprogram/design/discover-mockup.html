@@ -527,6 +527,116 @@
       </div>
     </div>
 
+    <!-- 画板 4：搜索态 -->
+    <div class="flex flex-col items-center" data-page-node-id="SearchArtboard">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="SearchLabel">AB4 · 搜索态</p>
+      <div class="phone-frame" data-page-node-id="SearchFrame">
+        <!-- 状态栏 -->
+        <div class="status-bar bg-bg flex items-center justify-between px-6 text-t1 text-sm font-medium" data-page-node-id="SearchStatusBar">
+          <span data-page-node-id="SearchTime">9:41</span>
+          <div class="flex items-center gap-1.5" data-page-node-id="SearchStatusIcons">
+            <i class="fas fa-signal text-xs" data-page-node-id="SearchSignal"></i>
+            <i class="fas fa-wifi text-xs" data-page-node-id="SearchWifi"></i>
+            <i class="fas fa-battery-full text-xs" data-page-node-id="SearchBattery"></i>
+          </div>
+        </div>
+
+        <!-- 原生导航栏 -->
+        <div class="nav-bar bg-bg border-b border-line" data-page-node-id="SearchNavBar">
+          <span class="text-t1 text-[17px] font-semibold" data-page-node-id="SearchNavTitle">发现</span>
+        </div>
+
+        <!-- 搜索展开头 -->
+        <div class="sticky top-0 bg-bg z-20 px-6 py-3 border-b border-line" data-page-node-id="SearchHeader">
+          <div class="flex items-center gap-3" data-page-node-id="SearchInputRow">
+            <div class="flex-1 h-10 bg-card rounded-full px-4 flex items-center gap-2 border border-line" data-page-node-id="SearchInputWrap">
+              <i class="fas fa-search text-t4 text-sm" data-page-node-id="SearchInputIcon"></i>
+              <input type="text" value="碗池" class="flex-1 bg-transparent text-t1 text-[15px] outline-none" data-page-node-id="SearchInput" />
+              <i class="fas fa-circle-xmark text-t4 text-sm" data-page-node-id="SearchClear"></i>
+            </div>
+            <span class="text-t3 text-sm" data-page-node-id="SearchCancel">取消</span>
+          </div>
+        </div>
+
+        <!-- 搜索结果 Feed -->
+        <div class="h-[700px] overflow-y-auto hide-scrollbar p-6 pb-36 space-y-5" data-page-node-id="SearchFeed">
+          <div class="text-xs text-t4 mb-1" data-page-node-id="SearchResultHint">找到 2 条相关打卡</div>
+
+          <!-- 结果卡片 1 -->
+          <div class="bg-card rounded-3xl border border-line p-5 feed-in" style="animation-delay: 0ms" data-page-node-id="SearchCard1">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="SearchCard1Head">
+              <div class="w-11 h-11 rounded-full gradient-orange flex items-center justify-center text-white text-base font-semibold" data-page-node-id="SearchCard1Avatar">L</div>
+              <div class="flex-1 min-w-0" data-page-node-id="SearchCard1User">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="SearchCard1NameRow">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="SearchCard1Name">Li Ming</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="SearchCard1Time">2h 前</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="SearchCard1VenueRow">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="SearchCard1Venue">体育中心碗池</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-[15px] text-t2 leading-relaxed mb-3" data-page-node-id="SearchCard1Note">下午在<span class="text-primary" data-page-node-id="SearchCard1Keyword1">碗池</span>练了一组 backside，摔了三次终于成招。</p>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="SearchCard1Media">
+              <img src="../generated-images/Empty_concrete_skatepark_bowl__2026-09-06T06-19-38.png" class="w-full h-full object-cover" alt="打卡图" data-page-node-id="SearchCard1Img">
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="SearchCard1Actions">
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="SearchCard1Like">
+                <i class="far fa-heart text-lg" data-page-node-id="SearchCard1LikeIcon"></i>
+                <span class="text-sm" data-page-node-id="SearchCard1LikeCount">18</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="SearchCard1Comment">
+                <i class="far fa-comment text-lg" data-page-node-id="SearchCard1CommentIcon"></i>
+                <span class="text-sm" data-page-node-id="SearchCard1CommentCount">3</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="SearchCard1Share">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="SearchCard1ShareIcon"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 结果卡片 2：视频封面 -->
+          <div class="bg-card rounded-3xl border border-line p-5 feed-in" style="animation-delay: 60ms" data-page-node-id="SearchCard2">
+            <div class="flex items-center gap-3 mb-3" data-page-node-id="SearchCard2Head">
+              <div class="w-11 h-11 rounded-full bg-success/20 flex items-center justify-center text-success text-base font-semibold" data-page-node-id="SearchCard2Avatar">A</div>
+              <div class="flex-1 min-w-0" data-page-node-id="SearchCard2User">
+                <div class="flex items-center justify-between gap-2" data-page-node-id="SearchCard2NameRow">
+                  <span class="text-[15px] font-semibold text-t1 truncate" data-page-node-id="SearchCard2Name">Allen</span>
+                  <span class="text-xs text-t5 flex-shrink-0" data-page-node-id="SearchCard2Time">5h 前</span>
+                </div>
+                <div class="mt-1.5 flex items-center gap-2" data-page-node-id="SearchCard2VenueRow">
+                  <span class="h-5 px-2 rounded-full bg-primary/15 text-[11px] text-primary-lt font-medium flex items-center" data-page-node-id="SearchCard2Venue">嘉兴学院<span class="text-primary" data-page-node-id="SearchCard2Keyword2">碗池</span></span>
+                </div>
+              </div>
+            </div>
+            <p class="text-[15px] text-t2 leading-relaxed mb-3" data-page-node-id="SearchCard2Note">练碗池不是为了炫技，是为了找到飞起来的感觉。</p>
+            <div class="relative rounded-2xl overflow-hidden aspect-[4/3] bg-inset" data-page-node-id="SearchCard2Media">
+              <img src="../generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="视频封面" data-page-node-id="SearchCard2Cover">
+              <div class="absolute inset-0 flex items-center justify-center" data-page-node-id="SearchCard2PlayWrap">
+                <div class="w-14 h-14 rounded-full bg-bg/55 backdrop-blur-sm flex items-center justify-center" data-page-node-id="SearchCard2Play">
+                  <div class="w-0 h-0 border-y-8 border-y-transparent border-l-[14px] border-l-white ml-1" data-page-node-id="SearchCard2PlayTri"></div>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center gap-10 mt-4" data-page-node-id="SearchCard2Actions">
+              <div class="flex items-center gap-2 text-primary" data-page-node-id="SearchCard2Like">
+                <i class="fas fa-heart text-lg" data-page-node-id="SearchCard2LikeIcon"></i>
+                <span class="text-sm font-medium" data-page-node-id="SearchCard2LikeCount">42</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="SearchCard2Comment">
+                <i class="far fa-comment text-lg" data-page-node-id="SearchCard2CommentIcon"></i>
+                <span class="text-sm" data-page-node-id="SearchCard2CommentCount">7</span>
+              </div>
+              <div class="flex items-center gap-2 text-t4" data-page-node-id="SearchCard2Share">
+                <i class="fas fa-share-nodes text-lg" data-page-node-id="SearchCard2ShareIcon"></i>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
     <!-- 画板 5：点赞动效标注 -->
     <div class="flex flex-col items-center" data-page-node-id="LikeStateArtboard">
       <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="LikeStateLabel">AB5 · 点赞态对比</p>
