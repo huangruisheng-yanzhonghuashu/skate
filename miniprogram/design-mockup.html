@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="edpyPsR2BhgaNwLN6HyTsR">
+<head data-page-node-id="IkbQUWPUjspX9vTdTjnvzF">
+  <meta charset="UTF-8" data-page-node-id="vyWlCiWYOLMFhEWAQwBFuR">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="kvmcxqMDZBHN68NIKtKFDE">
+  <title>去哪滑 - 首页 UI 设计稿</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" data-page-node-id="gbwfMobHbjU3S5MTRMwqYE">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#111114',
+            card: '#1E1E23',
+            inset: '#17171B',
+            sheet: '#232329',
+            line: '#26262C',
+            'sheet-line': '#2F2F36',
+            primary: '#FF5A36',
+            'primary-lt': '#FF8A6E',
+            success: '#00D4AA',
+            warning: '#FFB800',
+            error: '#FF3B30',
+            info: '#2A8CFF',
+            t1: '#FFFFFF',
+            t2: '#D9D9DE',
+            t3: '#A6A6AD',
+            t4: '#8C8C94',
+            t5: '#6E6E76',
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+          },
+          boxShadow: {
+            'glow': '0 0 20px rgba(255, 90, 54, 0.25)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    }
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      border-radius: 48px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+      overflow: hidden;
+      position: relative;
+      background: #111114;
+      flex-shrink: 0;
+    }
+    .status-bar {
+      height: 54px;
+      padding-top: 14px;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .gradient-orange {
+      background: linear-gradient(135deg, #FF5A36 0%, #FF8A6E 100%);
+    }
+    .sticker-tilt {
+      transform: rotate(-6deg);
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+    .pulse-dot {
+      animation: pulse-dot 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen p-8" data-page-node-id="hmszl23AIQORoP88SJCKDm">
+
+  <!-- 设计规范摘要 -->
+  <div class="max-w-6xl mx-auto mb-10" data-page-node-id="FgvwzDeR6t2KrNV5DGkQYF">
+    <h1 class="text-3xl font-medium text-gray-900 mb-2" data-page-node-id="6zczcyieZwbOmEeyrCYWMT">去哪滑 - 首页 UI 设计稿</h1>
+    <p class="text-gray-600 mb-6" data-page-node-id="TBm4O76j1E4iXQqlD84u0c">基于《去哪滑设计规范 v1.0》输出，暗色街头风格，社区前置，地图收起。</p>
+
+    <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8" data-page-node-id="1muSJoDyxkG1N82Lvw15fu">
+      <h2 class="text-lg font-medium text-gray-900 mb-4" data-page-node-id="ooIsXmxSU4CSAYpDhEBq2q">DESIGN SPECIFICATION</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm" data-page-node-id="CxSyzIpsvdeYhl8CewOb2m">
+        <div data-page-node-id="YnVBZ6AZkQv6eD8KFFIYeW">
+          <p class="text-gray-500 mb-1" data-page-node-id="USJpMyG3LDKBtZmAzxzhf8">1. Purpose Statement</p>
+          <p class="text-gray-800" data-page-node-id="VDoVtXCYCBs1eOTEtVmt6p">为滑板爱好者提供附近场地、俱乐部、板店信息，并营造「有人正在滑」的社区氛围。首页需要在 3 秒内让用户感受到街头能量。</p>
+        </div>
+        <div data-page-node-id="LgXpq5sgpauDmynCGYPqwU">
+          <p class="text-gray-500 mb-1" data-page-node-id="NLTtxEhGOso9QzzGLJqXEe">2. Aesthetic Direction</p>
+          <p class="text-gray-800" data-page-node-id="7JuJXNnCXZzvKD2Ae1EAXE"><span class="font-medium" data-page-node-id="PGWnEDhJmTC0cw6FR4BBEA">Brutalist/raw street</span> — 深色水泥灰底、荧光色点缀、粗粝排版、街头贴纸感。</p>
+        </div>
+        <div data-page-node-id="2lwIMrMPFBOvnNGbPPSg5C">
+          <p class="text-gray-500 mb-1" data-page-node-id="uUKgpUEKkYZn9TES52NGMz">3. Color Palette</p>
+          <div class="flex gap-2 mt-2" data-page-node-id="w1zqXPwgTUSoFitf1b0VKJ">
+            <div class="w-10 h-10 rounded-lg bg-[#111114] border border-gray-200" data-page-node-id="aYR8TCL4EcnybJ6TiPg6Ei"></div>
+            <div class="w-10 h-10 rounded-lg bg-[#1E1E23] border border-gray-200" data-page-node-id="lypEGSYvyXnAcBQoPsdQ9M"></div>
+            <div class="w-10 h-10 rounded-lg bg-[#FF5A36] border border-gray-200" data-page-node-id="u2M35OOnY5o65iHmCMicXs"></div>
+            <div class="w-10 h-10 rounded-lg bg-[#00D4AA] border border-gray-200" data-page-node-id="CiDIMBAH83oBhEHCzi5osU"></div>
+            <div class="w-10 h-10 rounded-lg bg-[#FFFFFF] border border-gray-200" data-page-node-id="PTkNastflgzfkgAhRJP4NE"></div>
+          </div>
+        </div>
+        <div data-page-node-id="hE8LIZH2oW5gMAycqsUfAl">
+          <p class="text-gray-500 mb-1" data-page-node-id="G1e5y6kWexfAwf8kpvlv3I">4. Typography</p>
+          <p class="text-gray-800" data-page-node-id="j6iUKpl6wzoTwW91BynpcI">系统字体栈：PingFang SC / Helvetica Neue / Arial。标题加粗、正文常规，户外可读优先。</p>
+        </div>
+        <div class="md:col-span-2" data-page-node-id="KCom53XQdEt4nDdeXAquh6">
+          <p class="text-gray-500 mb-1" data-page-node-id="dE2RMHhoCoDRY2vqjxvrvt">5. Layout Strategy</p>
+          <p class="text-gray-800" data-page-node-id="ABSsWLiId7A29WCNayHbJ6">纵向信息流：导航行 → 品牌态度区 → 在线热度 → 最新打卡 → 地图入口 → 搜索+Tab → 列表。社区内容前置，地图默认收起，避免标准工具 App 的搜索框居中布局。</p>
+        </div>
+      </div>
+      <p class="text-xs text-gray-400 mt-4" data-page-node-id="t1OSW2s2W4NU6wntXweyNy">* 本项目为微信小程序，使用系统字体栈作为品牌字体，覆盖 ui-design 默认字体限制。</p>
+    </div>
+  </div>
+
+  <!-- 手机画板区域 -->
+  <div class="flex flex-wrap justify-center gap-10 pb-20" data-page-node-id="WhlIqreH3kZXQ6DByLqiDq">
+
+    <!-- 画板 1：首屏默认态 -->
+    <div class="flex flex-col items-center" data-page-node-id="TAuDKFShI9zkgnCQILJoGs">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="WzEfralLW9XOmfPdEZhpX0">AB1 · 首屏默认态</p>
+      <div class="phone-frame" data-page-node-id="1nG1vaio6VlmFENkEOCSkv">
+        <!-- 状态栏 -->
+        <div class="status-bar bg-bg flex items-center justify-between px-6" data-page-node-id="95FSGbzq38xzYgDZnYW9Ii">
+          <div class="flex items-center gap-1 text-t1 text-sm font-medium" data-page-node-id="q2XcGnd0HhZRLQSi2m2g21">
+            <i class="fas fa-location-dot text-primary text-xs" data-page-node-id="d41DG9weDAYKjggLRPeUpP"></i>
+            <span data-page-node-id="5aLvFWYpyA4C8deXWHBIXJ">嘉兴</span>
+            <i class="fas fa-chevron-down text-t4 text-[10px] ml-0.5" data-page-node-id="QpDjnB41xCkTbMC2mOCKsL"></i>
+          </div>
+          <div class="flex items-center gap-1.5" data-page-node-id="DKGQJR7Spe6k8dHyFA6peH">
+            <div class="w-4 h-4 rounded-full bg-card border border-line" data-page-node-id="pKjPDslxRTCZrXtRT49xNB"></div>
+          </div>
+        </div>
+
+        <!-- 可滚动内容 -->
+        <div class="h-[790px] overflow-y-auto hide-scrollbar pb-32" data-page-node-id="cN6iIWZDwzAr5dLzNw9ssB">
+
+          <!-- 品牌态度区 -->
+          <div class="px-6 pt-2 pb-5" data-page-node-id="ALHNG71ImbdAFvNoV8uYUe">
+            <h1 class="text-[44px] font-medium text-t1 italic leading-tight" data-page-node-id="9OFeB1XOD8iqqfWEOWLgrM">去哪滑</h1>
+            <div class="flex items-center justify-between mt-2" data-page-node-id="SloganRow01">
+              <p class="text-[22px] text-primary font-medium leading-snug" data-page-node-id="cKpT8PYdeXI5St2cH3CgEJ">今天 street 起来。</p>
+              <!-- 在线热度 -->
+              <div class="inline-flex items-center gap-2 bg-card border border-primary/40 rounded-full px-3 py-1.5 flex-shrink-0 ml-3" data-page-node-id="oydmUrRBgbg5RFVRT8FnBU">
+                <div class="relative w-2.5 h-2.5" data-page-node-id="8Fi4qE5rTmHFtbhyv7ncOf">
+                  <div class="absolute inset-0 rounded-full bg-success pulse-dot" data-page-node-id="QulqjDWXaIeACcTJ0ek3rC"></div>
+                  <div class="absolute inset-0 rounded-full bg-success" data-page-node-id="yHg6OFG2vCtCPdQeD5i3j5"></div>
+                </div>
+                <span class="text-base font-medium text-t1" data-page-node-id="2nwo8alU7mJk480I1oDUr8">128</span>
+                <span class="text-xs text-t3" data-page-node-id="erjiF5iyyAMvhozdRKlwYJ">人在滑</span>
+              </div>
+            </div>
+            <div class="w-16 h-1.5 bg-primary rounded-full mt-4" data-page-node-id="HN6T3OqQ9wmQecOGR2QR5g"></div>
+          </div>
+
+          <!-- 最新打卡 -->
+          <div class="mb-5" data-page-node-id="PCCBuiN4An8IW5CCHYkgq7">
+            <div class="flex items-baseline justify-between px-6 mb-3" data-page-node-id="bP4CGc6H3dzWJKuOVPJkTK">
+              <h2 class="text-lg font-medium text-t1" data-page-node-id="QM6GxoInpclz1CG9SzgeiS">最新打卡</h2>
+              <span class="text-xs text-t4" data-page-node-id="vSQud9ykJ90ZJ08WyUKBI0">实时社区</span>
+            </div>
+            <div class="flex gap-3 overflow-x-auto hide-scrollbar px-6 pb-1" data-page-node-id="GOUP7XPWuHJ7Y8GTzaGqjz">
+              <!-- 打卡卡 1 -->
+              <div class="w-[170px] flex-shrink-0 bg-card rounded-2xl overflow-hidden border border-line" data-page-node-id="N7OGsqsdWp4BOHyO3xvqwz">
+                <div class="h-[110px] relative" data-page-node-id="8oK7NHshDXxuXoC0a4xUdl">
+                  <img src="generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="打卡封面" data-page-node-id="75FpdHHBR1rAbV0eRGf6Yi">
+                  <div class="absolute inset-0 flex items-center justify-center" data-page-node-id="jxc2ir1j5C6lu1rgzAjkCP">
+                    <div class="w-10 h-10 rounded-full bg-black/50 flex items-center justify-center" data-page-node-id="AgkbcMyFWglF8HGfRsTzzp">
+                      <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-white ml-1" data-page-node-id="hmRsG3JhKafjdFdT3fAcwk"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="p-3" data-page-node-id="e5rCcqvo09IfsM9ZB8O2e1">
+                  <p class="text-xs text-t2 line-clamp-1" data-page-node-id="BdWPIOft5cXazhscFwI9GT">ollie 终于稳了</p>
+                  <div class="flex items-center gap-1.5 mt-2" data-page-node-id="C4Feudz5l44yRsiDJbgDU2">
+                    <div class="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center text-[10px] text-primary font-medium" data-page-node-id="ivynRrcLhlVZmV5O4buRQA">杰</div>
+                    <span class="text-[10px] text-t3" data-page-node-id="zG2YHUydDt8VEBLqBOoKQF">南湖广场 · 2h</span>
+                  </div>
+                  <p class="text-[10px] text-primary-lt mt-1.5 truncate" data-page-node-id="oWijLzwNSmT1LBvwwaAt6a">南湖滑板公园</p>
+                </div>
+              </div>
+              <!-- 打卡卡 2 -->
+              <div class="w-[170px] flex-shrink-0 bg-card rounded-2xl overflow-hidden border border-line" data-page-node-id="guVc9uRhpmOjvFTGa0sV3P">
+                <div class="h-[110px] relative" data-page-node-id="XXFQvI92YbuJr6B0fGNam3">
+                  <img src="generated-images/Skatepark_at_night_lit_by_floo_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="打卡封面" data-page-node-id="bNeyeAmD6v3AYTXrTlfV1r">
+                </div>
+                <div class="p-3" data-page-node-id="EoVdBoigAgrd3REhfHYfmi">
+                  <p class="text-xs text-t2 line-clamp-1" data-page-node-id="TtU7ypxAewDL5zFjXDzHz4">夜场人少，练招正好</p>
+                  <div class="flex items-center gap-1.5 mt-2" data-page-node-id="E1mGmiU30PNKPAfYhNE1yA">
+                    <div class="w-5 h-5 rounded-full bg-success/20 flex items-center justify-center text-[10px] text-success font-medium" data-page-node-id="KT816Q2OGDJrACQWnB3VMe">K</div>
+                    <span class="text-[10px] text-t3" data-page-node-id="nObAF5yg5jb4rj95OyYhsL">体育中心 · 4h</span>
+                  </div>
+                  <p class="text-[10px] text-primary-lt mt-1.5 truncate" data-page-node-id="YNLPP4Df9sPrEdIeI5YuJF">体育中心碗池</p>
+                </div>
+              </div>
+              <!-- 更多 -->
+              <div class="w-[80px] flex-shrink-0 bg-card rounded-2xl border border-line flex flex-col items-center justify-center" data-page-node-id="k8hHHYPmDSIIzuT2yy7oMJ">
+                <span class="text-2xl text-t3 font-medium" data-page-node-id="zdloYNruhnplqXQ0gy2yXW">+9</span>
+                <span class="text-[10px] text-t4 mt-1" data-page-node-id="cqp98AgpuUyKpiudszZXib">更多打卡</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- 地图入口 -->
+          <div class="px-6 mb-5" data-page-node-id="9tYOFAzjx3hMAGorEZro5W">
+            <div class="bg-card rounded-2xl border border-line p-3 flex items-center gap-3" data-page-node-id="eWionnRvbXiDxx3TCGcXBu">
+              <div class="w-[76px] h-[56px] rounded-lg bg-[#26262C] relative overflow-hidden flex-shrink-0" data-page-node-id="9eMd9xME3RFAtk1lVci9rG">
+                <div class="absolute inset-0 opacity-30" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 7px, #3A3A42 7px, #3A3A42 8px), repeating-linear-gradient(90deg, transparent, transparent 7px, #3A3A42 7px, #3A3A42 8px);" data-page-node-id="qjtZIZzoYENe04o7mx4Q77"></div>
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-primary" data-page-node-id="yke9FgYiOUMeVoaYL8v6oQ"></div>
+              </div>
+              <div class="flex-1 min-w-0" data-page-node-id="zBmSrSouCZCMUnwexsbQj0">
+                <p class="text-sm font-medium text-t1" data-page-node-id="Perd2L73cvQ70dPE0qK1lB">附近场地地图</p>
+                <p class="text-xs text-t4 mt-0.5" data-page-node-id="uIAMTsES5GGdOWZEDDxntz">嘉兴 · 12 个场地</p>
+              </div>
+              <div class="w-7 h-7 rounded-full bg-primary/15 flex items-center justify-center text-primary text-sm" data-page-node-id="0CAYAuWrs8KEK1uVcfahpK">
+                <i class="fas fa-chevron-right text-xs" data-page-node-id="CAyaV681mV5kS5XIf6M1OG"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- 搜索 + Tab -->
+          <div class="px-6 mb-3" data-page-node-id="dKLFTFSZyEAQpsG4z5xKDl">
+            <div class="bg-inset rounded-full h-9 flex items-center px-3.5 gap-2 mb-4" data-page-node-id="p9vxBpAir2WWosETNimxfx">
+              <i class="fas fa-search text-t5 text-xs" data-page-node-id="m6MpxnymOwKloFptxBkfIB"></i>
+              <span class="text-xs text-t5" data-page-node-id="kTkR7sEW3qIVtvrLJUtb1u">搜场地 / 俱乐部 / 板店</span>
+            </div>
+            <div class="flex items-center gap-5" data-page-node-id="YqL5dEXFZPgnIQLpQvs7cx">
+              <div class="relative pb-2" data-page-node-id="cyiTr0NNkM54HG7L7HOhm1">
+                <span class="text-[15px] font-medium text-t1" data-page-node-id="GDifjSbiBQTCdGFUPzdk5L">场地</span>
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-1 gradient-orange rounded-full" data-page-node-id="tzUlPkSHv7XrLMRX5ro7gO"></div>
+              </div>
+              <span class="text-[15px] text-t3" data-page-node-id="56JkclR0dB5344D97CbXMk">板店</span>
+              <span class="text-[15px] text-t3" data-page-node-id="DNhIX2fo3owKAybCDN8A54">俱乐部</span>
+              <span class="text-[15px] text-t3" data-page-node-id="yFQWiPWRCt2BBS474lIuZD">培训</span>
+            </div>
+          </div>
+
+          <!-- 二级筛选 -->
+          <div class="px-6 mb-3" data-page-node-id="HMMRAoTI5Zz55D8bFC8yeA">
+            <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1" data-page-node-id="GylS1WiAEfYWhkW7Kt7DBD">
+              <span class="flex-shrink-0 h-7 px-3 rounded-full bg-primary/15 border border-primary/50 text-xs text-primary-lt flex items-center" data-page-node-id="2srVWM37Zbyho4ORbEgcS4">全部</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="cyd0A2fxCwEOua9G4yilFO">碗池</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="c7C5nA8HGol0axCT93x6KN">街式</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="L43b1aQT9LABwO6U3vlUYD">平地</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="lx2ernoIBKkezJZUEGIe1T">U池</span>
+            </div>
+          </div>
+
+          <!-- 列表首行（露头） -->
+          <div class="px-6" data-page-node-id="W6TxMEskbtkCRP5AY0ewWZ">
+            <div class="bg-card rounded-2xl overflow-hidden flex border border-line" data-page-node-id="vE200c11nAj70C7zskS7EK">
+              <div class="w-[100px] h-[100px] flex-shrink-0 relative" data-page-node-id="FzazyhC0fnz7GhF4AZ9Vnx">
+                <img src="generated-images/Empty_concrete_skatepark_bowl__2026-09-06T06-19-38.png" class="w-full h-full object-cover" alt="场地" data-page-node-id="jWcJn5cx3B3oz7KlUVAmm3">
+                <div class="absolute top-2 left-2 bg-primary text-white text-[10px] font-medium px-1.5 py-0.5 rounded sticker-tilt" data-page-node-id="OXVt5GnKyoiHF1ktye37OK">热门</div>
+              </div>
+              <div class="flex-1 p-3 flex flex-col justify-center min-w-0" data-page-node-id="OdMuMA87HRtflwHwhMRDt8">
+                <h3 class="text-[15px] font-medium text-t1 truncate" data-page-node-id="viXHkzP6aRlfWIsyOWHF9m">南湖滑板公园</h3>
+                <p class="text-xs text-t4 mt-0.5 truncate" data-page-node-id="kLbluqETLIBlh263sNf6LN">南湖区 · 距你 1.2km</p>
+                <div class="flex gap-1.5 mt-2" data-page-node-id="CffSZB6TDIq2jvOxgYGLPh">
+                  <span class="h-5 px-1.5 rounded bg-primary/15 text-[10px] text-primary-lt flex items-center" data-page-node-id="xtmzXB58Wyu3Y7ArgWKasd">街式</span>
+                  <span class="h-5 px-1.5 rounded bg-line text-[10px] text-t4 flex items-center" data-page-node-id="gPNQ3tEyZRUaOG0JNncmcL">碗池</span>
+                </div>
+                <div class="flex items-center gap-1.5 mt-2.5" data-page-node-id="HOUsI8vbZoRXEKg39nmIWW">
+                  <div class="relative w-2 h-2" data-page-node-id="3meZOOdlTQP7UKWXFQtVVN">
+                    <div class="absolute inset-0 rounded-full bg-success pulse-dot" data-page-node-id="a9dtUOVes2Al1fzploHBNp"></div>
+                    <div class="absolute inset-0 rounded-full bg-success" data-page-node-id="u0zBGdQ4zdgWlSADPisQmg"></div>
+                  </div>
+                  <span class="text-xs text-success font-medium" data-page-node-id="csQ6YbWgyaAyyharuoNcvb">此刻 8 人在场</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- TabBar -->
+        <div class="absolute bottom-0 left-0 right-0 h-[88px] bg-bg border-t border-line flex items-start justify-around pt-2 pb-6" data-page-node-id="BPRBzWUIBCf0lfsJieUOXL">
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="kOMHrfIPz2gtNV7PwS5ayP">
+            <i class="fas fa-house text-primary text-[15px]" data-page-node-id="8xOCydijb4fCodWVauEaBE"></i>
+            <span class="text-[10px] text-primary font-medium" data-page-node-id="8X4F80XAh4GXllcwWX5445">首页</span>
+            <div class="w-1 h-1 rounded-full bg-primary mt-0.5" data-page-node-id="DotHome01"></div>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="NeodZ8PrPPlom8K37kpb64">
+            <i class="fas fa-compass text-t4 text-[15px]" data-page-node-id="v7RUZEHepfGxjgpLcWNVCI"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="zaSeuVC54Y6pEy4lAv9qUm">发现</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="jJnXNXrCnDk1DR5DFu3dw8">
+            <i class="fas fa-calendar-check text-t4 text-[15px]" data-page-node-id="xquiO7EkqXHmj1bsfZaY7A"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="1k9FPATE5m3e6r4dQHLdlr">签到</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="x6CvX42Fs78PYLsqL2pH8z">
+            <i class="fas fa-user text-t4 text-[15px]" data-page-node-id="fPHSwQjVj904sWxYFWuXuH"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="Gt8ofG0BWmJj1Iyx4fZAH0">我的</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 2：列表滚动态 -->
+    <div class="flex flex-col items-center" data-page-node-id="TEAw1mjF7eCHQGsGRjVJPx">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="NcVS9y3T1gR9uaHGU1FJUW">AB2 · 列表滚动态</p>
+      <div class="phone-frame" data-page-node-id="wK0vK4XWHExNCVspENZwHY">
+        <div class="status-bar bg-bg flex items-center justify-between px-6" data-page-node-id="iIhrpsMA6NlpNAVzdUr0ih">
+          <div class="flex items-center gap-1 text-t1 text-sm font-medium" data-page-node-id="vvVIXIo1jR655ZVcs7Qwv1">
+            <i class="fas fa-location-dot text-primary text-xs" data-page-node-id="ACykIT247eCzgQGeNnpKiL"></i>
+            <span data-page-node-id="h5BSgLpzSPzEPEYzimTNUu">嘉兴</span>
+            <i class="fas fa-chevron-down text-t4 text-[10px] ml-0.5" data-page-node-id="YXZx75IdUN8uNAmpjEBELL"></i>
+          </div>
+          <div class="w-4 h-4 rounded-full bg-card border border-line" data-page-node-id="Q8VQCqjrjTdtwykaXBRy1n"></div>
+        </div>
+
+        <div class="h-[790px] overflow-y-auto hide-scrollbar pb-32 px-6" data-page-node-id="2fLck4AaHouITa3DFQpA6d">
+          <!-- 顶部回到简洁状态 -->
+          <div class="pt-3 pb-4" data-page-node-id="OZMcMSs3wSitckPARVALaX">
+            <h1 class="text-[28px] font-medium text-t1 italic" data-page-node-id="o2609L2Z1pzWrLezrgHt3X">去哪滑</h1>
+          </div>
+
+          <!-- Tab + 筛选 sticky -->
+          <div class="sticky top-0 bg-bg z-10 pb-2" data-page-node-id="ugYYEVrHVrzZSienUDb950">
+            <div class="flex items-center gap-5 mb-2" data-page-node-id="qRGoJQyxRbMUWtgpQQZZGX">
+              <div class="relative pb-2" data-page-node-id="WT6NEknB0AvM9fNAgWq5bK">
+                <span class="text-[15px] font-medium text-t1" data-page-node-id="1v1aHuS7cBAX5mwcn6QI4G">场地</span>
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-1 gradient-orange rounded-full" data-page-node-id="yGftbgv1S9jOwD3neDrNCV"></div>
+              </div>
+              <span class="text-[15px] text-t3" data-page-node-id="gNsSfmoIQBRrIuXFxjKkgV">板店</span>
+              <span class="text-[15px] text-t3" data-page-node-id="ETFJpknKGlnquqowOvDTCx">俱乐部</span>
+              <span class="text-[15px] text-t3" data-page-node-id="i73AhE3LhzyGdH18SWrC6f">培训</span>
+            </div>
+            <div class="flex gap-2 overflow-x-auto hide-scrollbar" data-page-node-id="PR1BJNuhvgF1umqXTsxfoJ">
+              <span class="flex-shrink-0 h-7 px-3 rounded-full bg-primary/15 border border-primary/50 text-xs text-primary-lt flex items-center" data-page-node-id="UO7Ss4PbrlmpIPCGp3n8zd">全部</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="Os7sNsm7eJKmLlCfyshCkH">碗池</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="vE2V9n0dX6DDCxnWMk9Sbi">街式</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="qTMQAprKjOEQgJ2p9hNwI8">平地</span>
+            </div>
+          </div>
+
+          <!-- 列表 -->
+          <div class="space-y-3 mt-2" data-page-node-id="w2jMnKC7BhJ39WHfnBVjFZ">
+            <!-- 场地 1 -->
+            <div class="bg-card rounded-2xl overflow-hidden flex border border-line" data-page-node-id="48jHNKZ7z9UbJzWwF7dYng">
+              <div class="w-[100px] h-[100px] flex-shrink-0 relative" data-page-node-id="7wxIydt7BbGHMLxDAACwGH">
+                <img src="generated-images/Empty_concrete_skatepark_bowl__2026-09-06T06-19-38.png" class="w-full h-full object-cover" alt="场地" data-page-node-id="Ys0sCxWuV0QaezKTVeVfxK">
+                <div class="absolute top-2 left-2 bg-primary text-white text-[10px] font-medium px-1.5 py-0.5 rounded sticker-tilt" data-page-node-id="vnHYpXQ1bKr9Z45tzn7xtO">热门</div>
+              </div>
+              <div class="flex-1 p-3 flex flex-col justify-center min-w-0" data-page-node-id="KhjV3yJOjqlNoAx2q6c5EY">
+                <h3 class="text-[15px] font-medium text-t1 truncate" data-page-node-id="BdSR3tinTgFMLaS8rASQ6x">南湖滑板公园</h3>
+                <p class="text-xs text-t4 mt-0.5 truncate" data-page-node-id="yieM3lHZVMeqpX735rkeF8">南湖区 · 距你 1.2km</p>
+                <div class="flex gap-1.5 mt-2" data-page-node-id="nlFeXyDOQladz67ZmwY57d">
+                  <span class="h-5 px-1.5 rounded bg-primary/15 text-[10px] text-primary-lt flex items-center" data-page-node-id="xyd9lmRRMnl1Ty2YaHj6jW">街式</span>
+                  <span class="h-5 px-1.5 rounded bg-line text-[10px] text-t4 flex items-center" data-page-node-id="RKKmOZLE5CGAEyswkub7lD">碗池</span>
+                </div>
+                <div class="flex items-center gap-1.5 mt-2.5" data-page-node-id="EwPOD5tHfYeg0ffiZjwK4u">
+                  <div class="relative w-2 h-2" data-page-node-id="gd3Ru90zfMSqTnHYGcLlJE">
+                    <div class="absolute inset-0 rounded-full bg-success pulse-dot" data-page-node-id="H6VCgsVIjfrwF1vAy8hPaU"></div>
+                    <div class="absolute inset-0 rounded-full bg-success" data-page-node-id="nxXPuSyKiLhgLYmSfHiCEA"></div>
+                  </div>
+                  <span class="text-xs text-success font-medium" data-page-node-id="BtfUmON0i4PFZIrKcrhmBp">此刻 8 人在场</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 场地 2 -->
+            <div class="bg-card rounded-2xl overflow-hidden flex border border-line" data-page-node-id="Y8fLrlELdgqGfwHRdHM7do">
+              <div class="w-[100px] h-[100px] flex-shrink-0 relative bg-inset" data-page-node-id="p6Obilb2G2HLxSqG7IhMlx">
+                <img src="generated-images/Skatepark_at_night_lit_by_floo_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="场地" data-page-node-id="NzSH6DzAdmSiU9zbwHa7p4">
+              </div>
+              <div class="flex-1 p-3 flex flex-col justify-center min-w-0" data-page-node-id="9eCkCtpFTXb0Sn9QVtzCEe">
+                <h3 class="text-[15px] font-medium text-t1 truncate" data-page-node-id="AAMf8lGmCCuQofCCAZrk9c">体育中心碗池</h3>
+                <p class="text-xs text-t4 mt-0.5 truncate" data-page-node-id="OuFxqCBEEgafsIp6diUJ4q">秀洲区 · 距你 3.5km</p>
+                <div class="flex gap-1.5 mt-2" data-page-node-id="cCxCbqthokLwTDtmqTzrhH">
+                  <span class="h-5 px-1.5 rounded bg-primary/15 text-[10px] text-primary-lt flex items-center" data-page-node-id="EFuTMR8rt87IVclbEpfpar">碗池</span>
+                </div>
+                <div class="flex items-center gap-1.5 mt-2.5" data-page-node-id="REdfMJ7YHxwVRtVv7iPFUx">
+                  <div class="w-2 h-2 rounded-full bg-[#3A3A42]" data-page-node-id="a6ZBwbSw9xQDLIM01EoECj"></div>
+                  <span class="text-xs text-t4" data-page-node-id="1Yo61GNMGlPJ8gEa0DG6Co">今日暂无人在场</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 场地 3 -->
+            <div class="bg-card rounded-2xl overflow-hidden flex border border-line" data-page-node-id="YlekQzbp7lkxAADTJQyIVm">
+              <div class="w-[100px] h-[100px] flex-shrink-0 relative bg-inset" data-page-node-id="lR0xJswvFxvCyGAfYUNwcv">
+                <img src="generated-images/Skateboarder_mid_air_doing_a_t_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="场地" data-page-node-id="F09EmSo4U5nTPrnHZLNXVU">
+              </div>
+              <div class="flex-1 p-3 flex flex-col justify-center min-w-0" data-page-node-id="8B8Yyqlr8qP9q98f77nBmZ">
+                <h3 class="text-[15px] font-medium text-t1 truncate" data-page-node-id="gyj7coPPrHY3In0ggAN7Au">梅湾街平地广场</h3>
+                <p class="text-xs text-t4 mt-0.5 truncate" data-page-node-id="wCpSJ5kSlZDTL7bmAKPMSv">南湖区 · 距你 0.8km</p>
+                <div class="flex gap-1.5 mt-2" data-page-node-id="GyS88F5nxEbSn9MS1005Or">
+                  <span class="h-5 px-1.5 rounded bg-line text-[10px] text-t4 flex items-center" data-page-node-id="spGvhqEz5Sn4EU93W8FBhm">平地</span>
+                </div>
+                <div class="flex items-center gap-1.5 mt-2.5" data-page-node-id="BxYVY6z7PC20DFaC2SHeam">
+                  <div class="w-2 h-2 rounded-full bg-success" data-page-node-id="RyjgktKFo0WkQFVFwxNpiJ"></div>
+                  <span class="text-xs text-success font-medium" data-page-node-id="AQPgeselB8BXbmsUdzvmjH">今日已签到 · 14:20</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 底部提示 -->
+          <div class="text-center py-6" data-page-node-id="XdGMDl7cY6FHHA9GQqGYRJ">
+            <p class="text-xs text-t5" data-page-node-id="bUWYCHOdca6FIDZhiPh0lk">已展示嘉兴全部 8 个场地</p>
+          </div>
+          <div class="text-center pb-4" data-page-node-id="iudMZRyhPXbg9gsqCYjXpA">
+            <span class="text-xs text-t5" data-page-node-id="xmzIwHCQMAdeRIuOpCgoxT">还有漏掉的场地？</span>
+            <span class="text-xs text-primary-lt font-medium ml-1" data-page-node-id="f5SGGO8SnXWws0jM2zm8WC">推荐给我们</span>
+          </div>
+        </div>
+
+        <!-- TabBar -->
+        <div class="absolute bottom-0 left-0 right-0 h-[88px] bg-bg border-t border-line flex items-start justify-around pt-2 pb-6" data-page-node-id="FPB4aMnDqN1B5TCWhKKbtX">
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="g6YjHhvdbZaG2iEaLGpIQM">
+            <i class="fas fa-house text-primary text-[15px]" data-page-node-id="OpU61CFPEWXviImB4xRH55"></i>
+            <span class="text-[10px] text-primary font-medium" data-page-node-id="WrQHNYk86a1PAChzTkcnOd">首页</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="SiV1RzOVyKwCFdlILDSXZ7">
+            <i class="fas fa-compass text-t4 text-[15px]" data-page-node-id="LpLEcyKq2aTtYuVOevUStf"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="4IDFoFrMqep72azdlEyj9T">发现</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="497iCh5KorSibFJTtGZAip">
+            <i class="fas fa-calendar-check text-t4 text-[15px]" data-page-node-id="E9sD5sgRuBszlXWYwQsbw3"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="dOpGGTIaKnNvAz660726pE">签到</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="Mcfxck36f69mVpqKi8muLS">
+            <i class="fas fa-user text-t4 text-[15px]" data-page-node-id="MjIwxTz9zkOSnGFS9IGmml"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="DCLwTezH6EIMhu5XasIXhE">我的</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 画板 3：筛选态 + 地图展开 -->
+    <div class="flex flex-col items-center" data-page-node-id="gQxUAkdbPw6z7nd3z8o7OD">
+      <p class="text-gray-600 text-sm mb-3 font-medium" data-page-node-id="sDy78Vp4LAKqrGYtLqM8eZ">AB3 · 地图半屏展开</p>
+      <div class="phone-frame" data-page-node-id="SXCCG2MFBaNh8xMksMbRcv">
+        <div class="status-bar bg-bg flex items-center justify-between px-6" data-page-node-id="HWCeW9itxDCKuZpy3xlCSk">
+          <div class="flex items-center gap-1 text-t1 text-sm font-medium" data-page-node-id="6GozXH8Z7VniUUjWF24oNf">
+            <i class="fas fa-location-dot text-primary text-xs" data-page-node-id="9ElnYxsIssFXao8ZvwQSMf"></i>
+            <span data-page-node-id="5yE8Cikx4Dqu5AXW7YirVl">嘉兴</span>
+            <i class="fas fa-chevron-down text-t4 text-[10px] ml-0.5" data-page-node-id="eQMSfyq9OFFAjOD1IafgRY"></i>
+          </div>
+          <div class="w-4 h-4 rounded-full bg-card border border-line" data-page-node-id="O2JhEPaymB31Ikis7tFOA8"></div>
+        </div>
+
+        <div class="h-[790px] overflow-y-auto hide-scrollbar pb-32" data-page-node-id="hfFbkl0HGelZNUsJErhb4X">
+          <!-- 搜索 + Tab -->
+          <div class="px-6 pt-3 pb-3" data-page-node-id="eEuUpkd8rkbIVHejvBkmrz">
+            <div class="bg-inset rounded-full h-9 flex items-center px-3.5 gap-2 mb-4" data-page-node-id="TqrcKsfcAyFJYSN8upucoS">
+              <i class="fas fa-search text-t5 text-xs" data-page-node-id="OATpRabBCoN72UCE7Jnv37"></i>
+              <span class="text-xs text-t5" data-page-node-id="lCJ11vY23llycN1zG0WsOb">搜场地 / 俱乐部 / 板店</span>
+            </div>
+            <div class="flex items-center gap-5" data-page-node-id="neu54xRuc7dq8DXxhVO30r">
+              <div class="relative pb-2" data-page-node-id="eVnRVvLbliHcXIXC56JwWH">
+                <span class="text-[15px] font-medium text-t1" data-page-node-id="JhkcmIMjJSKI3wtCIgjee1">场地</span>
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-7 h-1 gradient-orange rounded-full" data-page-node-id="kdqIkLWbOBhCJplmJpqnfQ"></div>
+              </div>
+              <span class="text-[15px] text-t3" data-page-node-id="RS6Jex5TnAxBeOxhbILOq0">板店</span>
+              <span class="text-[15px] text-t3" data-page-node-id="tBTG0rn7YS0a6bTcLglHk7">俱乐部</span>
+              <span class="text-[15px] text-t3" data-page-node-id="qMtmExZ91QNkcbxRFmSpRQ">培训</span>
+            </div>
+          </div>
+
+          <!-- 二级筛选：碗池激活 -->
+          <div class="px-6 mb-3" data-page-node-id="bipmfiBqrIah0wZkBT0x2J">
+            <div class="flex gap-2 overflow-x-auto hide-scrollbar pb-1" data-page-node-id="hJtVEjqujErO7oEVChLNiy">
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="AN3dpecxGiKSgE4IxcBt6L">全部</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full bg-primary/15 border border-primary/50 text-xs text-primary-lt flex items-center" data-page-node-id="XAxNaBGCgDEQkYhazCCt2p">碗池</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="1aOAPjvfFlClYqJ064u6lH">街式</span>
+              <span class="flex-shrink-0 h-7 px-3 rounded-full border border-line text-xs text-t3 flex items-center" data-page-node-id="HWOFoBgHqGEJooajn0bjAQ">平地</span>
+            </div>
+          </div>
+
+          <!-- 筛选后列表 -->
+          <div class="px-6 space-y-3" data-page-node-id="sE4YFuMhTs6ztyaRGrO9WV">
+            <div class="bg-card rounded-2xl overflow-hidden flex border border-line" data-page-node-id="NZxow9yaejyVxXf8L4x5pL">
+              <div class="w-[100px] h-[100px] flex-shrink-0 relative bg-inset" data-page-node-id="BxDsDM44tbim93NU9OC6iT">
+                <img src="generated-images/Skatepark_at_night_lit_by_floo_2026-09-06T06-19-39.png" class="w-full h-full object-cover" alt="场地" data-page-node-id="RQNB3ttkGEyLGbHukIGuPK">
+              </div>
+              <div class="flex-1 p-3 flex flex-col justify-center min-w-0" data-page-node-id="QG8IdnbeIf90C0vtjt1Myz">
+                <h3 class="text-[15px] font-medium text-t1 truncate" data-page-node-id="aC92rJBDbDo8EzwnEwDlzG">体育中心碗池</h3>
+                <p class="text-xs text-t4 mt-0.5 truncate" data-page-node-id="Bnd469b4bB05fb0AzmUun6">秀洲区 · 距你 3.5km</p>
+                <div class="flex gap-1.5 mt-2" data-page-node-id="8daRESAeJxyVUk4xc7jpEI">
+                  <span class="h-5 px-1.5 rounded bg-primary/15 text-[10px] text-primary-lt flex items-center" data-page-node-id="nuxePXm8DzEQ305XkAUOwM">碗池</span>
+                </div>
+                <div class="flex items-center gap-1.5 mt-2.5" data-page-node-id="MLEkwnZSmhZHbeyeV8PzV2">
+                  <div class="w-2 h-2 rounded-full bg-[#3A3A42]" data-page-node-id="OX5853rDhiAFLTl7mqc9ex"></div>
+                  <span class="text-xs text-t4" data-page-node-id="k5HcUnKouZUaTHcdp3wX3V">今日暂无人在场</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-card rounded-2xl overflow-hidden flex border border-line" data-page-node-id="v0d5VaVUcgRiRm0PXoZikN">
+              <div class="w-[100px] h-[100px] flex-shrink-0 relative bg-inset" data-page-node-id="vbEF50dOpXmBuwy1ey8jcM">
+                <div class="w-full h-full flex items-center justify-center" data-page-node-id="xFjCgHgaMGm1DxmAPMSDjx">
+                  <i class="fas fa-image text-t5 text-2xl" data-page-node-id="Kdfe7bQl2QnZAfYdeJ2E79"></i>
+                </div>
+              </div>
+              <div class="flex-1 p-3 flex flex-col justify-center min-w-0" data-page-node-id="H0N5d2M5squATrO537X4wR">
+                <h3 class="text-[15px] font-medium text-t1 truncate" data-page-node-id="MT6vLMJuMINWbMkkBfmOUB">嘉兴学院碗池</h3>
+                <p class="text-xs text-t4 mt-0.5 truncate" data-page-node-id="BLATrTbMPEQe6daUwcEdMT">南湖区 · 距你 2.1km</p>
+                <div class="flex gap-1.5 mt-2" data-page-node-id="m59Y0DZsghqig5ZTnuuEx2">
+                  <span class="h-5 px-1.5 rounded bg-primary/15 text-[10px] text-primary-lt flex items-center" data-page-node-id="eczpLojiNSCvBwblI6Llne">碗池</span>
+                </div>
+                <div class="flex items-center gap-1.5 mt-2.5" data-page-node-id="DVGXxSA8hJRjXYyC3GcNN6">
+                  <div class="relative w-2 h-2" data-page-node-id="4wvy2RVp6yopTI8EqBJY6L">
+                    <div class="absolute inset-0 rounded-full bg-success pulse-dot" data-page-node-id="VhD7GRn4s4yBc90KFBHhTq"></div>
+                    <div class="absolute inset-0 rounded-full bg-success" data-page-node-id="AXvlfoJdifwU1ImaszodaK"></div>
+                  </div>
+                  <span class="text-xs text-success font-medium" data-page-node-id="EpECeRkGH3RDX71hKxov8F">此刻 2 人在场</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center py-6" data-page-node-id="nmlFtezMHbWX5MQeP1ZCli">
+            <p class="text-xs text-t5" data-page-node-id="wGFcG9E3DFvvCuaFvggb1F">已展示嘉兴全部 3 个碗池</p>
+          </div>
+        </div>
+
+        <!-- 地图半屏展开 -->
+        <div class="absolute bottom-[88px] left-0 right-0 h-[420px] bg-card rounded-t-3xl border-t border-line shadow-2xl z-20 flex flex-col" data-page-node-id="MapSheetRoot">
+          <!-- 手柄 + 标题 -->
+          <div class="px-5 pt-3 pb-2 flex items-center justify-between border-b border-line" data-page-node-id="MapSheetHandle">
+            <div class="flex items-center gap-3" data-page-node-id="MapSheetTitleWrap">
+              <div class="w-10 h-1 bg-line rounded-full" data-page-node-id="MapSheetDragBar"></div>
+              <span class="text-sm font-medium text-t1" data-page-node-id="MapSheetTitle">附近场地地图</span>
+            </div>
+            <button class="text-xs text-t4 px-3 py-1.5 rounded-full border border-line" data-page-node-id="MapSheetCloseBtn">收起</button>
+          </div>
+          <!-- 地图 -->
+          <div class="flex-1 relative overflow-hidden" data-page-node-id="MapSheetMap">
+            <div class="absolute inset-0" style="background-image: repeating-linear-gradient(0deg, transparent, transparent 14px, #26262C 14px, #26262C 15px), repeating-linear-gradient(90deg, transparent, transparent 14px, #26262C 14px, #26262C 15px);" data-page-node-id="MapSheetGrid"></div>
+            <div class="absolute top-3 left-3 bg-bg/90 rounded-full px-3 py-1.5 flex items-center gap-1.5" data-page-node-id="MapSheetBadge">
+              <div class="w-2 h-2 rounded-full bg-success" data-page-node-id="MapSheetDot"></div>
+              <span class="text-xs text-t1" data-page-node-id="MapSheetBadgeText">嘉兴 · 3 个碗池</span>
+            </div>
+            <div class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center" data-page-node-id="MapSheetLocate">
+              <i class="fas fa-crosshairs text-[#1A1A1E] text-xs" data-page-node-id="MapSheetLocateIcon"></i>
+            </div>
+            <!-- markers -->
+            <div class="absolute top-[42%] left-[35%] flex flex-col items-center" data-page-node-id="MapSheetMarker1">
+              <div class="w-9 h-10 relative" data-page-node-id="MapSheetPin1">
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[5px] border-l-transparent border-r-[5px] border-r-transparent border-t-[10px] border-t-primary" data-page-node-id="MapSheetPin1Tail"></div>
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-7 h-7 rounded-full gradient-orange flex items-center justify-center" data-page-node-id="MapSheetPin1Head">
+                  <i class="fas fa-location-dot text-white text-xs" data-page-node-id="MapSheetPin1Icon"></i>
+                </div>
+              </div>
+              <div class="bg-white text-[#1A1A1E] text-[10px] px-2 py-1 rounded-lg mt-1 font-medium whitespace-nowrap" data-page-node-id="MapSheetPin1Label">体育中心碗池 ›</div>
+            </div>
+            <div class="absolute top-[58%] left-[62%] flex flex-col items-center" data-page-node-id="MapSheetMarker2">
+              <div class="w-7 h-8 relative" data-page-node-id="MapSheetPin2">
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[4px] border-l-transparent border-r-[4px] border-r-transparent border-t-[8px] border-t-t4" data-page-node-id="MapSheetPin2Tail"></div>
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-5 rounded-full bg-t4 flex items-center justify-center" data-page-node-id="MapSheetPin2Head">
+                  <i class="fas fa-location-dot text-white text-[8px]" data-page-node-id="MapSheetPin2Icon"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TabBar -->
+        <div class="absolute bottom-0 left-0 right-0 h-[88px] bg-bg border-t border-line flex items-start justify-around pt-2 pb-6" data-page-node-id="dui0Nb7IkGl0oGUXjmG63a">
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="g39JL6lACAKDRZOFp7H5PF">
+            <i class="fas fa-house text-primary text-[15px]" data-page-node-id="tliTkZrMwGkp2cZPd4PSQO"></i>
+            <span class="text-[10px] text-primary font-medium" data-page-node-id="datyjhWCtETIEbiM0WrhYl">首页</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="xKhgC0eBPkfnChurlZeTRk">
+            <i class="fas fa-compass text-t4 text-[15px]" data-page-node-id="0ipMiFGaZAZlOXnPNFBbjC"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="k5LWpI11IrpDWFioLBCSS0">发现</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="07Gi3eP4SO134ZRkCWKgzU">
+            <i class="fas fa-calendar-check text-t4 text-[15px]" data-page-node-id="LVMxAaLvFoRXmxSKdJFMrF"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="kVxhsUwhs7EPkpAflEuram">签到</span>
+          </div>
+          <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="TDfW2C11kFTpAWLjq22D4q">
+            <i class="fas fa-user text-t4 text-[15px]" data-page-node-id="rKxyZqSw3gtVjjAHVQHkHJ"></i>
+            <span class="text-[10px] text-t4" data-page-node-id="NX4ytKgaGhaS3IYlzcJPzh">我的</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

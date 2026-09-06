@@ -316,10 +316,12 @@
   right: 0;
   bottom: 0;
   z-index: 50;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  pointer-events: auto;
+  animation: sheet-fade-in 0.25s ease-out;
+}
+
+@keyframes sheet-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .map-sheet-mask {
@@ -332,15 +334,17 @@
 }
 
 .map-sheet-body {
-  position: relative;
-  display: flex;
-  flex-direction: column;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   height: 65vh;
   background: #1E1E23;
   border-radius: 32rpx 32rpx 0 0;
   border-top: 1rpx solid #26262C;
   padding-bottom: env(safe-area-inset-bottom);
   animation: sheet-up 0.25s ease-out;
+  overflow: hidden;
 }
 
 @keyframes sheet-up {
@@ -348,7 +352,23 @@
   to { transform: translateY(0); }
 }
 
-.map-sheet-handle {
+.map-sheet-map {
+  width: 100%;
+  height: 100%;
+}
+
+/* 顶部操作区：放在 map 内部的 cover-view 里，避免被原生 map 覆盖 */
+.sheet-top-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background: rgba(30, 30, 35, 0.96);
+  border-bottom: 1rpx solid #26262C;
+}
+
+.sheet-handle-cover {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -356,50 +376,40 @@
   padding-bottom: 12rpx;
 }
 
-.map-sheet-bar {
+.sheet-bar-cover {
   width: 64rpx;
   height: 8rpx;
   border-radius: 999rpx;
   background: #2A2A31;
 }
 
-.map-sheet-head {
+.sheet-head-cover {
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 32rpx 16rpx;
-  border-bottom: 1rpx solid #26262C;
 }
 
-.map-sheet-title {
+.sheet-title-cover {
   font-size: 30rpx;
   font-weight: 500;
   color: #FFFFFF;
+  line-height: 1.4;
 }
 
-.map-sheet-close {
+.sheet-close-cover {
   padding: 12rpx 24rpx;
   border-radius: 999rpx;
   border: 1rpx solid #26262C;
   color: #8C8C94;
   font-size: 24rpx;
-}
-
-.map-sheet-map-wrap {
-  flex: 1;
-  position: relative;
-  overflow: hidden;
-}
-
-.map-sheet-map {
-  width: 100%;
-  height: 100%;
+  line-height: 1.4;
 }
 
 /* 地图内 chip */
 .map-chip {
   position: absolute;
-  top: 20rpx;
+  top: 140rpx;
   left: 20rpx;
   padding: 12rpx 24rpx 12rpx 44rpx;
   border-radius: 999rpx;

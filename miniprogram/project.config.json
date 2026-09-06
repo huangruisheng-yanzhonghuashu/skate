@@ -42,6 +42,7 @@
       { "type": "folder", "value": "codebuddy-plugin" },
       { "type": "folder", "value": "rules" },
       { "type": "folder", "value": "scripts" },
+      { "type": "folder", "value": "generated-images" },
       { "type": "file", "value": "README.md" },
       { "type": "file", "value": "CODEBUDDY.md" },
       { "type": "file", "value": "UIUX-分析报告.md" },

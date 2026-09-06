@@ -125,44 +125,46 @@
   </view>
 
   <!-- 半屏地图 bottom-sheet -->
-  <view class="map-sheet" wx:if="{{mapSheetVisible}}" catchtouchmove="preventScroll">
+  <view class="map-sheet" wx:if="{{mapSheetVisible}}">
     <view class="map-sheet-mask" bindtap="closeMapSheet"></view>
     <view class="map-sheet-body">
-      <view class="map-sheet-handle" hover-class="hv" bindtap="closeMapSheet" aria-role="button" aria-label="收起地图">
-        <view class="map-sheet-bar"></view>
-      </view>
-      <view class="map-sheet-head">
-        <text class="map-sheet-title">附近场地地图</text>
-        <view class="map-sheet-close" hover-class="hv" bindtap="closeMapSheet">收起</view>
-      </view>
-      <view class="map-sheet-map-wrap">
-        <map
-          id="map"
-          class="map-sheet-map"
-          latitude="{{latitude}}"
-          longitude="{{longitude}}"
-          scale="{{scale}}"
-          markers="{{markers}}"
-          show-location
-          enable-zoom
-          enable-scroll
-          enable-rotate
-          bindmarkertap="onMarkerTap"
-        >
-          <cover-view class="map-chip">{{mapChip}}<cover-view class="map-chip-dot"></cover-view></cover-view>
-          <cover-view wx:if="{{locating}}" class="locating-tip">正在定位当前位置...</cover-view>
-          <cover-view class="locate-btn" aria-role="button" aria-label="回到当前定位" bindtap="onTapLocate">
-            <cover-view class="locate-ico">
-              <cover-view class="locate-ring"></cover-view>
-              <cover-view class="locate-dot"></cover-view>
-              <cover-view class="locate-tick locate-tick-n"></cover-view>
-              <cover-view class="locate-tick locate-tick-s"></cover-view>
-              <cover-view class="locate-tick locate-tick-w"></cover-view>
-              <cover-view class="locate-tick locate-tick-e"></cover-view>
-            </cover-view>
+      <map
+        id="map"
+        class="map-sheet-map"
+        latitude="{{latitude}}"
+        longitude="{{longitude}}"
+        scale="{{scale}}"
+        markers="{{markers}}"
+        show-location
+        enable-zoom
+        enable-scroll
+        enable-rotate
+        bindmarkertap="onMarkerTap"
+      >
+        <!-- 顶部操作区：map 原生组件会盖住普通 view，必须用 cover-view -->
+        <cover-view class="sheet-top-cover">
+          <cover-view class="sheet-handle-cover" bindtap="closeMapSheet">
+            <cover-view class="sheet-bar-cover"></cover-view>
           </cover-view>
-        </map>
-      </view>
+          <cover-view class="sheet-head-cover">
+            <cover-view class="sheet-title-cover">附近场地地图</cover-view>
+            <cover-view class="sheet-close-cover" bindtap="closeMapSheet">收起</cover-view>
+          </cover-view>
+        </cover-view>
+
+        <cover-view class="map-chip">{{mapChip}}<cover-view class="map-chip-dot"></cover-view></cover-view>
+        <cover-view wx:if="{{locating}}" class="locating-tip">正在定位当前位置...</cover-view>
+        <cover-view class="locate-btn" aria-role="button" aria-label="回到当前定位" bindtap="onTapLocate">
+          <cover-view class="locate-ico">
+            <cover-view class="locate-ring"></cover-view>
+            <cover-view class="locate-dot"></cover-view>
+            <cover-view class="locate-tick locate-tick-n"></cover-view>
+            <cover-view class="locate-tick locate-tick-s"></cover-view>
+            <cover-view class="locate-tick locate-tick-w"></cover-view>
+            <cover-view class="locate-tick locate-tick-e"></cover-view>
+          </cover-view>
+        </cover-view>
+      </map>
     </view>
   </view>
 

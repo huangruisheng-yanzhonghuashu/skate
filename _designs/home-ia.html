@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>去哪滑首页 · 信息架构（改版方案 C）</title>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f5f5f5;
+    --ink: #2d3142;
+    --muted: #4f5d75;
+    --soft: #7a8399;
+    --rule: rgba(45, 49, 66, 0.12);
+    --accent: #eb6c36;
+    --accent-tint: rgba(235, 108, 54, 0.07);
+    --accent-line: rgba(235, 108, 54, 0.45);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Geist', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    padding: 48px 32px 40px;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+
+  /* ===== Header ===== */
+  .eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  h1 {
+    font-family: 'Instrument Serif', 'Songti SC', serif;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  .sub { font-size: 14px; color: var(--muted); margin-bottom: 40px; }
+  .sub em { font-family: 'Instrument Serif', serif; font-style: italic; }
+
+  /* ===== Two-column: page flow + side notes ===== */
+  .grid { display: grid; grid-template-columns: 1.25fr 0.75fr; gap: 32px; align-items: start; }
+
+  /* Page column = scroll order rail */
+  .zone {
+    background: #ffffff;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 20px 24px 18px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+  .zone.new { border-color: var(--accent-line); }
+  .zone-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  .zone-no {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--soft);
+    letter-spacing: 0.08em;
+  }
+  .zone.new .zone-no { color: var(--accent); }
+  .zone-name { font-size: 17px; font-weight: 600; }
+  .zone-tag {
+    margin-left: auto;
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    border: 1px solid var(--rule);
+    color: var(--soft);
+    white-space: nowrap;
+  }
+  .zone.new .zone-tag { border-color: var(--accent-line); color: var(--accent); }
+  .zone-desc { font-size: 12px; color: var(--muted); margin-bottom: 14px; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; flex-direction: column; gap: 2px;
+    border: 1px solid rgba(45, 49, 66, 0.28);
+    border-radius: 4px;
+    padding: 8px 12px;
+    background: rgba(45, 49, 66, 0.03);
+  }
+  .chip-name { font-size: 12px; font-weight: 600; white-space: nowrap; }
+  .chip-target {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    color: var(--soft);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+  .chip.new { border-color: var(--accent-line); background: var(--accent-tint); }
+  .chip.new .chip-target { color: var(--accent); opacity: 0.75; }
+
+  /* ===== Side column ===== */
+  .side-card {
+    background: #ffffff;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 20px 24px 18px;
+    margin-bottom: 24px;
+  }
+  .side-eyebrow {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--soft);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .side-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot.coral { background: var(--accent); }
+  .dot.ink { background: var(--ink); }
+  .side-card ul { list-style: none; }
+  .side-card li {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 7px 0;
+    border-top: 1px solid var(--rule);
+    line-height: 1.5;
+  }
+  .side-card li:first-child { border-top: none; }
+  .side-card li b { color: var(--ink); font-weight: 600; }
+
+  /* ===== Legend ===== */
+  .legend {
+    border-top: 1px solid var(--rule);
+    margin-top: 8px;
+    padding-top: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: center;
+  }
+  .legend-label {
+    font-family: 'Geist Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--soft);
+  }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--muted); }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(45,49,66,0.28); background: rgba(45,49,66,0.03); }
+  .legend-swatch.is-new { border-color: var(--accent-line); background: var(--accent-tint); }
+  .legend-swatch.is-mono { border-radius: 2px; background: none; border-style: dashed; }
+
+  /* ===== Footer ===== */
+  .colophon {
+    margin-top: 40px;
+    padding-top: 14px;
+    border-top: 1px solid var(--rule);
+    font-family: 'Geist Mono', monospace;
+    font-size: 10px;
+    color: var(--soft);
+    letter-spacing: 0.06em;
+  }
+
+  @media (max-width: 860px) {
+    .grid { grid-template-columns: 1fr; }
+    h1 { font-size: 30px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">去哪滑小程序 · 首页改版方案 C · pages/home</p>
+    <h1>首页信息架构</h1>
+    <p class="sub">自上而下 = 页面滚动顺序。橙色为本次新增区块，黑框为现有保留（含小改造）。<em>工具找场与社区氛围在同一页互相导流。</em></p>
+  </header>
+
+  <div class="grid">
+    <!-- ===== 左列：页面滚动顺序 ===== -->
+    <main>
+
+      <section class="zone">
+        <div class="zone-head">
+          <span class="zone-no">01</span>
+          <span class="zone-name">头部 · 常驻 sticky</span>
+          <span class="zone-tag">保留 · 仅加热度</span>
+        </div>
+        <p class="zone-desc">导航行（已有）左侧即城市切换，本次只新增右侧热度胶囊；搜索态整行切换输入框 + 取消。</p>
+        <div class="chips">
+          <span class="chip">
+            <span class="chip-name">导航行 · 城市切换（已有）</span>
+            <span class="chip-target">→ pages/city-picker（全局 store）</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">搜索行 · 搜索胶囊（已有）</span>
+            <span class="chip-target">场地 + 门店同搜 · 结果分组展示</span>
+          </span>
+          <span class="chip new">
+            <span class="chip-name">导航行右侧 · 在线热度</span>
+            <span class="chip-target">今日 N 人在滑 · presence 聚合</span>
+          </span>
+        </div>
+      </section>
+
+      <section class="zone new">
+        <div class="zone-head">
+          <span class="zone-no">02</span>
+          <span class="zone-name">快捷入口</span>
+          <span class="zone-tag">新增</span>
+        </div>
+        <p class="zone-desc">横滑瓦片 × 4，把高频动作提到首屏，一键到达。</p>
+        <div class="chips">
+          <span class="chip">
+            <span class="chip-name">找场地</span>
+            <span class="chip-target">锚点滚动 → 05 列表区</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">门店与俱乐部</span>
+            <span class="chip-target">切实体 Tab → 05</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">打卡去</span>
+            <span class="chip-target">switchTab → pages/checkins</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">推荐场地</span>
+            <span class="chip-target">→ pages/submit</span>
+          </span>
+        </div>
+      </section>
+
+      <section class="zone new">
+        <div class="zone-head">
+          <span class="zone-no">03</span>
+          <span class="zone-name">最新打卡</span>
+          <span class="zone-tag">新增</span>
+        </div>
+        <p class="zone-desc">社区氛围核心区：横滑打卡卡，让首页永远有内容可逛。</p>
+        <div class="chips">
+          <span class="chip">
+            <span class="chip-name">打卡卡</span>
+            <span class="chip-target">封面 / 头像 / 昵称 / 场地名 / 留言 → post-detail</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">更多</span>
+            <span class="chip-target">switchTab → pages/discover</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">数据源</span>
+            <span class="chip-target">getPublicCheckins(limit 10) · 复用发现页</span>
+          </span>
+        </div>
+      </section>
+
+      <section class="zone">
+        <div class="zone-head">
+          <span class="zone-no">04</span>
+          <span class="zone-name">地图卡</span>
+          <span class="zone-tag">保留 · 降级</span>
+        </div>
+        <p class="zone-desc">从首屏主角降为中段卡片，默认收起让位内容，保留折叠手柄。</p>
+        <div class="chips">
+          <span class="chip">
+            <span class="chip-name">折叠手柄</span>
+            <span class="chip-target">展开 / 收起（实例保留不销毁）</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">城市计数 chip</span>
+            <span class="chip-target">{{city}} · N 个场地</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">定位 + marker</span>
+            <span class="chip-target">marker → venue-detail / shop-detail</span>
+          </span>
+        </div>
+      </section>
+
+      <section class="zone">
+        <div class="zone-head">
+          <span class="zone-no">05</span>
+          <span class="zone-name">列表面板</span>
+          <span class="zone-tag">保留</span>
+        </div>
+        <p class="zone-desc">一级实体 Tab + 二级筛选 + 三级行化列表，一体同底。</p>
+        <div class="chips">
+          <span class="chip">
+            <span class="chip-name">实体 Tab</span>
+            <span class="chip-target">滑板场地 / 门店与俱乐部</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">筛选 chips</span>
+            <span class="chip-target">类型（场地）/ 类目 + 服务（机构）</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">venue-card 行</span>
+            <span class="chip-target">→ venue-detail · 评分 / 在线 / 签到态</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">shop-card 行</span>
+            <span class="chip-target">→ shop-detail · 营业状态</span>
+          </span>
+          <span class="chip">
+            <span class="chip-name">推荐入口</span>
+            <span class="chip-target">空态 + 列表尾 → pages/submit</span>
+          </span>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===== 右列：全局规则 ===== -->
+    <aside>
+      <section class="side-card">
+        <h3><span class="dot coral"></span>全局兜底状态</h3>
+        <ul>
+          <li><b>骨架屏</b> — 云数据返回前，按真实卡片结构占位</li>
+          <li><b>空态行动</b> — 清除搜索 / 查看全部 / 切换城市，按场景给出路</li>
+          <li><b>自定义导航</b> — 胶囊基准反推高度，全页沉浸</li>
+        </ul>
+      </section>
+
+      <section class="side-card">
+        <h3><span class="dot ink"></span>数据依赖（零新接口）</h3>
+        <ul>
+          <li><b>venues / shops</b> — 列表 + 地图 marker + 城市推断</li>
+          <li><b>presence</b> — getOnlineMap() 聚合 → 热度胶囊 + 卡片在线数</li>
+          <li><b>checkins</b> — getPublicCheckins() → 最新打卡流（与发现页同源）</li>
+          <li><b>ratings</b> — getRatingStats() → 场地评分</li>
+        </ul>
+      </section>
+
+      <section class="side-card">
+        <h3><span class="dot ink"></span>设计原则</h3>
+        <ul>
+          <li>暗色体系 / 主色 #FF5A36 / SVG 图标体系不动</li>
+          <li>橙色仅用于 2 个新增区块（视觉信号唯一）</li>
+          <li>打卡卡无图时降级为文字卡，不出空白卡</li>
+          <li>动效 150–300ms，尊重系统减弱动效</li>
+        </ul>
+      </section>
+    </aside>
+  </div>
+
+  <!-- ===== Legend ===== -->
+  <div class="legend">
+    <span class="legend-label">LEGEND</span>
+    <span class="legend-item"><span class="legend-swatch is-new"></span>新增区块 / 元素</span>
+    <span class="legend-item"><span class="legend-swatch"></span>现有保留（含小改造）</span>
+    <span class="legend-item"><span class="legend-swatch is-mono"></span>等宽小字 = 跳转目标 / 数据来源</span>
+  </div>
+
+  <footer class="colophon">HUA-NA-ER · HOMEPAGE IA REV-C · 2026-09</footer>
+</div>
+</body>
+</html>

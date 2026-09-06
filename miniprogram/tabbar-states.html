@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="CjAxoNssBKxsb2Ka9rRIdz">
+<head data-page-node-id="PLrMzzQlmaJ0JTmbiNVKP1">
+  <meta charset="UTF-8" data-page-node-id="qszMsFVp9PujnOF6XG3NKT">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="KC1EzxMtVWJdXf05G1pyBx">
+  <title>去哪滑 - 底部 TabBar 选中/未选中态</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" data-page-node-id="KVJrBBCbqAmenH8Cr6c579">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#111114',
+            card: '#1E1E23',
+            line: '#26262C',
+            primary: '#FF5A36',
+            'primary-lt': '#FF8A6E',
+            t1: '#FFFFFF',
+            t3: '#9A9AA3',
+            t4: '#6B6B75',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+    body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
+    .device-frame { box-shadow: 0 25px 80px rgba(0,0,0,0.35); }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-100 p-6 md:p-10" data-page-node-id="a4ew3ymFx3DOIc4pWAfoMi">
+  <div class="max-w-6xl mx-auto" data-page-node-id="glbj9mhBZ10h32Ma5qEGp7">
+    <div class="mb-8" data-page-node-id="FuBJNE9kvpcGSYNGxPhidu">
+      <h1 class="text-2xl font-medium text-gray-900 mb-2" data-page-node-id="pC0oSM7dbNNIrWyvHBEU3x">去哪滑 · 底部 TabBar 状态设计</h1>
+      <p class="text-gray-600 text-sm" data-page-node-id="6obVjGzzf68RWGXv5lZ3B3">选中态仅通过颜色区分，结构与未选中态完全一致，不使用任何选中点或背景胶囊。</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start" data-page-node-id="bNj0bLwJ5FoPAHomxEhWRT">
+
+      <!-- 未选中态（默认） -->
+      <div class="bg-white rounded-2xl p-6 border border-gray-200" data-page-node-id="BqAH3ooE3B8bFkxiUIWXtD">
+        <h2 class="text-sm font-medium text-gray-900 mb-4" data-page-node-id="sDW5Ji8eK3HGjal3ZHgV9u">1. 未选中态</h2>
+        <div class="device-frame w-[280px] h-[120px] bg-bg border border-line rounded-[28px] mx-auto flex items-end justify-center overflow-hidden" data-page-node-id="Vc6KsNIo5KVaKaeC5CI7XQ">
+          <div class="w-full h-[88px] bg-bg border-t border-line flex items-start justify-around pt-2 pb-6" data-page-node-id="CCroedlvPMZMkU0hMYtsjk">
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="MJhxgf09Yc3jPpfUBjW6A8">
+              <i class="fas fa-house text-t4 text-[15px]" data-page-node-id="xwSWeHusM8L0bBKgUYHenQ"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="JFVHPd9i2DtHShQB9IJ8JJ">首页</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="hxmdHipHfmd5ktnffvZ7L1">
+              <i class="fas fa-compass text-t4 text-[15px]" data-page-node-id="pazlB9Bvv8sI1oqQB4K15x"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="HveLUtoHE7g6ZZIn8gB9WY">发现</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="xvx8jnPglNbkatIqFtuT9N">
+              <i class="fas fa-calendar-check text-t4 text-[15px]" data-page-node-id="XofNkO7oyBV8k2Z2DtbOig"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="91JApF0ITHbsAV1nAw3X1g">签到</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="ekv322SO2iIiXJ4WLknMVw">
+              <i class="fas fa-user text-t4 text-[15px]" data-page-node-id="UNoPYixjiWwH3FwFWnsQys"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="5iymphq8JIbyyMwGAm5NHT">我的</span>
+            </div>
+          </div>
+        </div>
+        <ul class="mt-4 text-xs text-gray-600 space-y-1.5" data-page-node-id="JFM61C02BrLUGTqgR3HUNu">
+          <li data-page-node-id="VVGkQVXtCC5juLmDtUtoJZ">图标颜色：#6B6B75（t4）</li>
+          <li data-page-node-id="53YZ10OTNq5oJJK8RBhKVB">文字颜色：#6B6B75（t4）</li>
+          <li data-page-node-id="kzRRedfF27EW4SHNWy2sTh">图标字号：15px</li>
+          <li data-page-node-id="nC5LyVtaljpSikWZlZCouD">文字字号：10px</li>
+          <li data-page-node-id="NyjQn07hYrTTPJs7GyGbdY">结构：图标在上，文字在下</li>
+        </ul>
+      </div>
+
+      <!-- 选中态「首页」 -->
+      <div class="bg-white rounded-2xl p-6 border border-gray-200" data-page-node-id="Q6M8WdeBUpqDmC5okmtrQe">
+        <h2 class="text-sm font-medium text-gray-900 mb-4" data-page-node-id="RjONSlKiuYn277EJ8ryFZD">2. 选中态「首页」</h2>
+        <div class="device-frame w-[280px] h-[120px] bg-bg border border-line rounded-[28px] mx-auto flex items-end justify-center overflow-hidden" data-page-node-id="H4THTFafmB01OOrcpSvGWV">
+          <div class="w-full h-[88px] bg-bg border-t border-line flex items-start justify-around pt-2 pb-6" data-page-node-id="2IH7Hpdazck0sHcxZM7Tma">
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="TUIeeRgPtcbhaAey8Mhq27">
+              <i class="fas fa-house text-primary text-[15px]" data-page-node-id="dZuHhJdGniMbKlNH7RHOnG"></i>
+              <span class="text-[10px] text-primary font-medium" data-page-node-id="neBlmCmxJSG6OKF0KbktxK">首页</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="dgIH4Fp5D6WY28pdV7ImHn">
+              <i class="fas fa-compass text-t4 text-[15px]" data-page-node-id="yea7ruoap3CNeOEVTtBY6l"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="vi8vbZyVM2jxY8TGmEgBCu">发现</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="xIwpa3tmG6FSCJi0Teqa1E">
+              <i class="fas fa-calendar-check text-t4 text-[15px]" data-page-node-id="zH0r5j79QEnXw8hmixhPpB"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="F7i5bIdTvrZXhmC0zmBfFI">签到</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="bHOJlpCKDreXZe02pXtOuq">
+              <i class="fas fa-user text-t4 text-[15px]" data-page-node-id="VILkzbcBqPofcGCWeZfCol"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="2GRUBGG69mMYSVZfdbJDgI">我的</span>
+            </div>
+          </div>
+        </div>
+        <ul class="mt-4 text-xs text-gray-600 space-y-1.5" data-page-node-id="tOqQwbmSAKR7U2f06wXJ18">
+          <li data-page-node-id="WLWHcrFXAoKlEVTTBtk6SI">图标颜色：#FF5A36（primary）</li>
+          <li data-page-node-id="afABmUxDFlzMXB5RzZCaqt">文字颜色：#FF5A36，font-medium</li>
+          <li data-page-node-id="LRzeBDASWY6vE5umqY36Kl">无额外选中标记，仅通过颜色区分</li>
+          <li data-page-node-id="Tf2YQkTfIEtIUj40Y7t0xR">结构保持与未选中完全一致</li>
+        </ul>
+      </div>
+
+      <!-- 选中态其他 Tab -->
+      <div class="bg-white rounded-2xl p-6 border border-gray-200" data-page-node-id="W39mAHC0drqgOglaRJcVmX">
+        <h2 class="text-sm font-medium text-gray-900 mb-4" data-page-node-id="jfcADDn6YzeLVxyCdUdSJc">3. 选中态「发现」示例</h2>
+        <div class="device-frame w-[280px] h-[120px] bg-bg border border-line rounded-[28px] mx-auto flex items-end justify-center overflow-hidden" data-page-node-id="CaoE4kyXqxZqL5xSa5NYEl">
+          <div class="w-full h-[88px] bg-bg border-t border-line flex items-start justify-around pt-2 pb-6" data-page-node-id="UTMobVj7MOJLC2vE31Uxwb">
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="bxh6tny2EC5zpgQ0pt4EbE">
+              <i class="fas fa-house text-t4 text-[15px]" data-page-node-id="RLSE3184c9yym8FEPzbh8z"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="iAHzDX9khqhS5qkAqeouK3">首页</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="1BaZlCfoKWW7uE73sfrVoH">
+              <i class="fas fa-compass text-primary text-[15px]" data-page-node-id="etdTJHkJcSdKjNb3CmrZAT"></i>
+              <span class="text-[10px] text-primary font-medium" data-page-node-id="jdGayBAvuyu6NrjDuGWlyg">发现</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="ljsxnlhZpG0btAFHnwitJ3">
+              <i class="fas fa-calendar-check text-t4 text-[15px]" data-page-node-id="Z8hhVUT2D9TlJ6YPJ4JFof"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="hjtjEWndkmYXlihEVvUmJG">签到</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 pt-1.5" data-page-node-id="RRwdVHXJFbCHyTKuJl4M83">
+              <i class="fas fa-user text-t4 text-[15px]" data-page-node-id="Ie6Sa16fnqhsXMIvRqGxra"></i>
+              <span class="text-[10px] text-t4" data-page-node-id="wtAB8wXRgCEj75rML8FwGt">我的</span>
+            </div>
+          </div>
+        </div>
+        <ul class="mt-4 text-xs text-gray-600 space-y-1.5" data-page-node-id="Ycp6a6lYUZxsAg5Bo5S5D5">
+          <li data-page-node-id="80sv4HoG5AFLOJz350pScg">任意 Tab 选中态结构一致</li>
+          <li data-page-node-id="TvPMmK1j0lguybyoESz5HJ">仅当前选中项：图标 + 文字变橙色</li>
+          <li data-page-node-id="RhbCc0e3JT34fPn9XmWO9B">无选中点、无背景胶囊</li>
+          <li data-page-node-id="SYFbKpoDxcDSPkC94QrFQo">四 Tab 视觉重心完全对齐</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- 设计标注 -->
+    <div class="mt-10 bg-white rounded-2xl p-6 border border-gray-200" data-page-node-id="Ddf3tCuLBKYrNPIVNjhhIU">
+      <h2 class="text-sm font-medium text-gray-900 mb-4" data-page-node-id="mDADqepF57jQJt6G6ElwXO">设计标注</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-gray-600" data-page-node-id="M6dflfNnxcS3JD4wMT5Bfh">
+        <div class="space-y-2" data-page-node-id="aN1x8cqvZuc7Kz7NFJ2GPd">
+          <p data-page-node-id="eOpe5Hp9pTeP47BzqXv6Sr"><span class="inline-block w-24 text-gray-400" data-page-node-id="D13EBbs4slS2G3iEuhYJBA">容器高度</span>88px（含 iPhone 底部安全区）</p>
+          <p data-page-node-id="w6hbQgFb6vO2w3dt5zMhYy"><span class="inline-block w-24 text-gray-400" data-page-node-id="MhtJ680am1wrS1qrnmBnHG">图标字号</span>15px</p>
+          <p data-page-node-id="T6ESihMBI1wgYydZbw5Nya"><span class="inline-block w-24 text-gray-400" data-page-node-id="EcOgUUTumlvK8wPCuc0Gm2">文字字号</span>10px</p>
+          <p data-page-node-id="rHE3YIIGcDdvXJdzJtH1bm"><span class="inline-block w-24 text-gray-400" data-page-node-id="7ExUdU3T7WfpqAdEMaqVSX">项间距</span>justify-around 四等分</p>
+          <p data-page-node-id="iU35rZsTPHbwVeB5PAuINW"><span class="inline-block w-24 text-gray-400" data-page-node-id="Y7PEriJY5duJ0JCvFjjjXY">垂直结构</span>图标 → 文字</p>
+        </div>
+        <div class="space-y-2" data-page-node-id="k93VzvFo4qgwHTNjfVTfEW">
+          <p data-page-node-id="IGhpgHQcfW5gaSmj9MMMjA"><span class="inline-block w-24 text-gray-400" data-page-node-id="rKZBgOzQ2Y5VSqgNFUdUov">未选中图标</span>#6B6B75</p>
+          <p data-page-node-id="oYkll3tzg9oyWjC96amF8T"><span class="inline-block w-24 text-gray-400" data-page-node-id="rATof3hCSt1RDvwLCCkWbX">未选中文字</span>#6B6B75</p>
+          <p data-page-node-id="k4cG8F3gJ4VjfD57Ns1Zum"><span class="inline-block w-24 text-gray-400" data-page-node-id="R7jCUAXov3dzpsWMpvdxWO">选中图标</span>#FF5A36</p>
+          <p data-page-node-id="SfRSoxKfnRwJ8zj2TdVoC7"><span class="inline-block w-24 text-gray-400" data-page-node-id="V1AqE3u8JIDvu4zf1Yn9pE">选中文字</span>#FF5A36，font-medium</p>
+          <p data-page-node-id="kxHbyXh4ymV3wHW81cyKw4"><span class="inline-block w-24 text-gray-400" data-page-node-id="5Iy6iuoIJDaHvwBXhC4baZ">选中指示</span>无</p>
+        </div>
+      </div>
+      <div class="mt-5 pt-5 border-t border-gray-100 text-xs text-gray-500" data-page-node-id="fI6byTcW1IKe57c8UxXXla">
+        规则：选中态不使用任何背景胶囊或选中点；仅通过颜色变化表达，结构完全统一。
+      </div>
+    </div>
+  </div>
+</body>
+</html>
