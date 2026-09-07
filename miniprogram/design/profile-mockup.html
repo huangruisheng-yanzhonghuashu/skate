@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="GAhp9fuI8etiXbSCGlSxeu">
+<head data-page-node-id="53ABbtfe2mRCoi8H7ATHuB">
+  <meta charset="UTF-8" data-page-node-id="TmfD1V4ZREMrCe6T5EHM9U">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="ykmzccfayIhnubHKGwFcwf">
+  <title>去哪滑 - 我的页 UI 设计稿 v2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" data-page-node-id="97JJnazJ4gP0jT3OHbx47r">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#111114',
+            card: '#1E1E23',
+            inset: '#17171B',
+            sheet: '#232329',
+            line: '#26262C',
+            'sheet-line': '#2F2F36',
+            primary: '#FF5A36',
+            'primary-lt': '#FF8A6E',
+            success: '#00D4AA',
+            warning: '#FFB800',
+            error: '#FF3B30',
+            info: '#2A8CFF',
+            t1: '#FFFFFF',
+            t2: '#D9D9DE',
+            t3: '#A6A6AD',
+            t4: '#8C8C94',
+            t5: '#6E6E76',
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    }
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      border-radius: 48px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+      overflow: hidden;
+      position: relative;
+      background: #111114;
+      flex-shrink: 0;
+    }
+    .status-bar { height: 54px; padding-top: 14px; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .wordmark { font-style: italic; font-weight: 700; letter-spacing: -1px; }
+    .display-num { font-style: italic; font-weight: 700; line-height: 1; }
+    .gradient-orange { background: linear-gradient(135deg, #FF5A36 0%, #FF8A6E 100%); }
+    .top-strip { background: linear-gradient(90deg, #FF5A36, #FF8A6E); }
+    .sticker-tilt { transform: rotate(-3deg); }
+  </style>
+</head>
+<body class="min-h-screen p-6 md:p-10" data-page-node-id="XLWgddrmHdPFWRy0NEM46r">
+
+  <!-- 设计规范摘要 -->
+  <div class="max-w-6xl mx-auto mb-10" data-page-node-id="kxpOPkD1CX2VisyoKFE1Oj">
+    <h1 class="text-3xl font-medium text-gray-900 mb-2" data-page-node-id="agfmCqCVVqEFvyT5UwtOII">去哪滑 - 我的页 UI 设计稿 v2</h1>
+    <p class="text-gray-600 mb-6" data-page-node-id="40eoExAFiFAhrV4T2DtqBu">v2 重构：抛弃「系统设置页」思路，做成「滑手身份牌」——斜体大字标「档案」+ 顶部橙条 ID 卡 + 无卡数据带 + 贴纸式标签。</p>
+
+    <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8" data-page-node-id="Y1pzzjCjgjcWI5W8T6JeF1">
+      <h2 class="text-lg font-medium text-gray-900 mb-4" data-page-node-id="oO3FQOU9y9Wb4eWwYCFHHd">v1 → v2 核心变化</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-sm text-gray-700" data-page-node-id="hLZOhFGIGCzIQjCFnkMp93">
+        <p data-page-node-id="YZVHb5VX0zs3NCEp7SJF8H"><span class="text-primary font-bold" data-page-node-id="OgMctRBQdrvdGFBMEoLbEA">页面头</span>：无 → 72rpx 斜体大字标「档案」+ slogan + 橙条</p>
+        <p data-page-node-id="O3lAVbO1LkhDYq66jiIhAA"><span class="text-primary font-bold" data-page-node-id="VMyx6AHSyvTdVuaFG7Np3X">身份区</span>：左图右文紧凑行 → ID 卡（顶部橙渐变条 + 144rpx 橙环头像 + 48rpx 斜体昵称）</p>
+        <p data-page-node-id="b29IHZ1VPuJjzZJzPfBgN5"><span class="text-primary font-bold" data-page-node-id="NGspR7ziDrsbUJNsXMON1Q">数据带</span>：卡片三列 40rpx → 无卡三列 48rpx 斜体，签到橙色聚焦</p>
+        <p data-page-node-id="F3kiN6HKrDQ7nKqd6A23Em"><span class="text-primary font-bold" data-page-node-id="9JfL1LMQH7XO3fFTOxYkfm">擅长标签</span>：橙底胶囊 → 描边贴纸（2rpx 橙边 + 微倾斜）</p>
+        <p data-page-node-id="aJhYr7hFAECiHjqsaRPCjL"><span class="text-primary font-bold" data-page-node-id="hBQYjYCegTMm9980XzChxW">菜单</span>：裸图标 → 72rpx 橙色图标方块</p>
+        <p data-page-node-id="vcHKBSo0tMYpizSspK9uJP"><span class="text-primary font-bold" data-page-node-id="6oIO44dywqT1qMAbdomZce">编辑资料</span>：居中卡片 → 底部 sheet（与全站弹层统一）</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 手机预览 -->
+  <div class="max-w-[1400px] mx-auto" data-page-node-id="Rp1QBoHf2tBTPwPZ9XxNBa">
+    <div class="flex flex-wrap gap-10 justify-center items-start" data-page-node-id="blE4z7zh6DE41Mk8uGD4Om">
+
+      <!-- 状态 A：资料完善 -->
+      <div data-page-node-id="x5GD7RZlygUlmEXV9XuNsE">
+        <p class="text-center text-gray-700 font-medium mb-3" data-page-node-id="j3Lztg6VP0GTEiSBnaYZjG">A. 资料完善</p>
+        <div class="phone-frame" data-page-node-id="qcPG24i9CVHSNT847B3Ahf">
+          <div class="status-bar flex items-center justify-between px-8 text-t1 text-xs font-medium" data-page-node-id="TaIvMHEVvLLvxiUxclTIru">
+            <span data-page-node-id="fJzEQPHBBbkZvGJh7ywVzv">22:44</span>
+            <div class="flex gap-2 items-center" data-page-node-id="FqwNKVT0SkZHj4SZzg7t7L">
+              <i class="fas fa-signal" data-page-node-id="V3nwlsFGiaoZqOh7LSx9pP"></i>
+              <i class="fas fa-wifi" data-page-node-id="3B4IOyvgCrsXmKtWd1CJJP"></i>
+              <i class="fas fa-battery-full" data-page-node-id="aIW94q5JUxNdQA9Kzle7Wr"></i>
+            </div>
+          </div>
+
+          <!-- 自定义导航行：右侧胶囊保留区 -->
+          <div class="h-11 flex items-center justify-end px-8" data-page-node-id="b5mKdvlrNV7Y7rLeBboVuw">
+            <div class="w-[87px] h-[32px] rounded-full border border-dashed border-t5/50 flex items-center justify-center gap-2" data-page-node-id="hWdcOR9NasmRj8vPZ2znT3">
+              <i class="fas fa-ellipsis text-t5 text-xs" data-page-node-id="H5lpMoUnkzHC5ZZT9ak7bY"></i>
+              <i class="far fa-circle text-t5 text-xs" data-page-node-id="Y47LAMX6WNcXzpNj1XjYHg"></i>
+            </div>
+          </div>
+
+          <div class="h-[calc(100%-54px-44px)] overflow-y-auto hide-scrollbar px-8 pb-32" data-page-node-id="E9GrQ6CXuH0rB3lYYvgJT6">
+
+            <!-- 态度头 -->
+            <div class="mt-2 mb-8" data-page-node-id="tcILQW0RW6TrLCyxDY2nFa">
+              <h2 class="wordmark text-t1 text-[68px] leading-none" data-page-node-id="N7iRaUZ0UQ0gaRh9Ebl8gE">档案</h2>
+              <p class="text-primary text-[32px] font-medium mt-3" data-page-node-id="4p46lfCcMDjKFB3099k0ad">这是你的轨迹。</p>
+              <div class="w-20 h-2 bg-primary rounded-full mt-6" data-page-node-id="ssEFyA6Si0AQhkUiks3zOy"></div>
+            </div>
+
+            <!-- 滑手 ID 卡 -->
+            <div class="bg-card border border-line rounded-[24px] overflow-hidden mb-10 hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="E6PblCBSF1C4uRbDRpgWdy">
+              <div class="top-strip h-[8px]" data-page-node-id="jDq2EjcHA3goiRp06G2XOI"></div>
+              <div class="p-8 flex items-center gap-7" data-page-node-id="JjF3OpNgJq28u0HbuLqOuZ">
+                <div class="w-[144px] h-[144px] rounded-full border-4 border-primary gradient-orange flex items-center justify-center text-t1 text-[56px] font-bold flex-shrink-0" data-page-node-id="q5F4A32E91lcUZGhXly0xY">阿</div>
+                <div class="flex-1 min-w-0" data-page-node-id="A7m3DXC2XGoHmDAp1GlOSd">
+                  <div class="flex items-center justify-between" data-page-node-id="dENXwveR2EFNOmRXnkVNp5">
+                    <span class="wordmark text-t1 text-[48px] truncate" data-page-node-id="afA3OjahWodFa8prt0HtHc">阿强</span>
+                    <i class="fas fa-chevron-right text-t3 text-[28px] ml-3 flex-shrink-0" data-page-node-id="vGWHG3AGMwHZypmA584Nhx"></i>
+                  </div>
+                  <div class="flex items-center gap-3 mt-3 text-t3 text-[26px]" data-page-node-id="EeQrXaWRkCIgKecu6nivrX">
+                    <span class="flex items-center gap-2" data-page-node-id="umhNHQ3wmaYwYzXC0kRJ0J"><i class="fas fa-location-dot text-primary-lt text-[22px]" data-page-node-id="3duF5d7yNOBz96wp0GiLEw"></i>深圳</span>
+                    <span class="text-t5" data-page-node-id="5zuBrQ0vOOU5S3xiKHJc6Y">·</span>
+                    <span data-page-node-id="9pqyzpYg0ArUD62pu9aWPz">滑龄 3-5 年</span>
+                  </div>
+                  <div class="flex flex-wrap gap-3 mt-5" data-page-node-id="YJr220B8bOIprvfueKUejw">
+                    <span class="sticker-tilt text-primary-lt text-[20px] font-bold border-2 border-primary/60 rounded-lg px-3 py-1" data-page-node-id="BpW9yNSD35fJY2N5LChRmF">街式</span>
+                    <span class="text-primary-lt text-[20px] font-bold border-2 border-primary/60 rounded-lg px-3 py-1" data-page-node-id="td1qR50CO5ukEPHZ8zBDG3">碗池</span>
+                    <span class="text-primary-lt text-[20px] font-bold border-2 border-primary/60 rounded-lg px-3 py-1" data-page-node-id="HbaZCQpRNFXosWSlJQVFax">平花</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 数据带（无卡） -->
+            <div class="grid grid-cols-3 mb-10" data-page-node-id="k5hKJ4zQxCt4AUaBUxLaeN">
+              <div class="flex flex-col items-center py-2 border-r border-line hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="jaORJdiCqalvJCcZ05O65G">
+                <span class="display-num text-primary text-[48px]" data-page-node-id="7AYWnfs4zlmr3vdIr1v5bk">86</span>
+                <span class="text-t4 text-[24px] mt-2" data-page-node-id="6hItg8DspRPlUlCs54QO41">签到</span>
+              </div>
+              <div class="flex flex-col items-center py-2 border-r border-line hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="CfhjWe0h5cwXlQUauX1wCa">
+                <span class="display-num text-t1 text-[48px]" data-page-node-id="EfSDJWuHRCXLAsxYA43QsM">12</span>
+                <span class="text-t4 text-[24px] mt-2" data-page-node-id="FLZLjxorL1HQWWsJfxFxpb">打卡</span>
+              </div>
+              <div class="flex flex-col items-center py-2 hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="F0rKb1LymaQwrtLVBAUlN8">
+                <span class="display-num text-t1 text-[48px]" data-page-node-id="73D3AOuwoTyqtLAy6x1B3q">3</span>
+                <span class="text-t4 text-[24px] mt-2" data-page-node-id="1v2v5ZL9h7FI0VTzCgKrUF">推荐</span>
+              </div>
+            </div>
+
+            <!-- 我的参与 -->
+            <div class="bg-card border border-line rounded-[24px] overflow-hidden mb-8" data-page-node-id="PpNuPQ8GQugObN2IPHNevk">
+              <div class="px-8 pt-7 pb-3" data-page-node-id="1znVxc9cyux2C1iOtXAzGc">
+                <span class="text-t1 text-[28px] font-bold" data-page-node-id="2PBZiaoPt2a3yYOCzRL4oz">我的参与</span>
+              </div>
+
+              <div class="h-[104px] flex items-center justify-between px-8 border-b border-line hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="4Kthc00yQ4Hdt1i16yaG4v">
+                <div class="flex items-center gap-5" data-page-node-id="Tnrbr45GcsRNkNsU6dVKkg">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="mm3hnHkJooRBRVxI9E7Etx"><i class="fas fa-image text-primary-lt text-[30px]" data-page-node-id="CfE1eXcP4T9eyFDBkrXF1A"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="jSQmR7AlpEHwqps4tFOFHw">我的打卡</span>
+                </div>
+                <div class="flex items-center gap-2" data-page-node-id="kFqiCTIb3xLPLx1Gf3Sh95">
+                  <span class="text-t4 text-[28px]" data-page-node-id="G4uvGzZpTy84zEDfMJalpv">12 条</span>
+                  <i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="HM6Cb5VgpGOLKM0HsLeQDD"></i>
+                </div>
+              </div>
+
+              <div class="h-[104px] flex items-center justify-between px-8 border-b border-line hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="98YywAgcEBGeDfhzeFh5q9">
+                <div class="flex items-center gap-5" data-page-node-id="r5blq1knklzT7mWVuYXfkZ">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="DyA04oYfcBRA33LpAQy5Mo"><i class="fas fa-map-pin text-primary-lt text-[30px]" data-page-node-id="P4BJk3qYE0kl6PelaVduRt"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="cmtEbGiEXLPve97r0TMkuK">我的推荐</span>
+                </div>
+                <div class="flex items-center gap-2" data-page-node-id="fJX7A9rYAfvwHKXk1kQ6Ly">
+                  <span class="text-t4 text-[28px]" data-page-node-id="chTuYS2qmEnimaaEOAw2EZ">3 条</span>
+                  <i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="9U0ITLUWBd8qrhB7v6rBdB"></i>
+                </div>
+              </div>
+
+              <div class="h-[104px] flex items-center justify-between px-8 border-b border-line hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="reC6PrK1UGwvE2aSotDx0B">
+                <div class="flex items-center gap-5" data-page-node-id="5f5rzaMAwF3ERZiSqCnRVT">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="QqfRQQDTtoyNUsD6452vdB"><i class="fas fa-flag text-primary-lt text-[30px]" data-page-node-id="u7ht0iobPv8MjKLFEMEIq2"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="kBz9FpKQXKCer2HxcmUwde">我的报错</span>
+                </div>
+                <div class="flex items-center gap-2" data-page-node-id="ZUp6tq8gwuwHAL3zBzL980">
+                  <span class="text-t4 text-[28px]" data-page-node-id="5Loz3NUPhzVLLQQPRwGg9a">1 条</span>
+                  <i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="ng2ZTCApIICdl8CbfRgTga"></i>
+                </div>
+              </div>
+
+              <div class="h-[104px] flex items-center justify-between px-8 hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="UEQOYES52MVAq7PwAj0zXK">
+                <div class="flex items-center gap-5" data-page-node-id="AGiEVP5LscGGxCRUHprpCA">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="09eJuZ1wBKgg0P9pL2cDIl"><i class="fas fa-paper-plane text-primary-lt text-[30px]" data-page-node-id="1svlY74TfsU5qDu8A9pWqv"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="oQWWWKxfs1ajdFEd4w2Y71">你提我改</span>
+                </div>
+                <div class="flex items-center gap-2" data-page-node-id="bzk7FzzVwaDLLurMutP4Fs">
+                  <span class="text-t4 text-[28px]" data-page-node-id="IVsB4a0gVSeRUUOIUzVHAL">2 条</span>
+                  <i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="BJcaSalJFqwwxg4VTrafEV"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- 管理 -->
+            <div class="bg-card border border-line rounded-[24px] overflow-hidden" data-page-node-id="nXmHCQ4zi5M26ON5azvYvD">
+              <div class="px-8 pt-7 pb-3" data-page-node-id="iIJFhsonlejASJbpAZC7CR">
+                <span class="text-t1 text-[28px] font-bold" data-page-node-id="bRH45dZNlodx5ACZYfTynz">管理</span>
+              </div>
+              <div class="h-[104px] flex items-center justify-between px-8 hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="JLlG5CdRwGIxuCENUt64lI">
+                <div class="flex items-center gap-5" data-page-node-id="ndXGavP2fcezOR3mBm0O0F">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="2piv6aOnxcFbbki8xu6rDv"><i class="fas fa-gear text-primary-lt text-[30px]" data-page-node-id="lgRLbOkIQLwiBa1i6ctWdn"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="AuwkWsK7EajcExcV9QSnJZ">运营管理</span>
+                </div>
+                <i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="viJaCKGMPoCU5nEBZZFUkj"></i>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 底部 Tab Bar -->
+          <div class="absolute bottom-0 left-0 right-0 h-[100px] bg-[#1A1A1E] border-t border-line flex items-start justify-around pt-3" data-page-node-id="b3un1649WSmWEpts5HvM2t">
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="4QKqbZtomg61HEcqTOYeJf"><i class="fas fa-map-marker-alt text-[26px]" data-page-node-id="Kurz0PQrhzm46kC280S3Xx"></i><span data-page-node-id="09EvDn6xdjOyqBEMpIu8uC">首页</span></div>
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="zSvD93hSJxhs9fOjBPa2Ls"><i class="fas fa-compass text-[26px]" data-page-node-id="zTtqfwqxMesM1ObvTPbj3N"></i><span data-page-node-id="HdCIBaumTbMKIQOpJ5jGiM">发现</span></div>
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="c9Pb8FyyiwTsS0DBqAdFlj"><i class="fas fa-check-circle text-[26px]" data-page-node-id="FhvI0Dkmv133VfS5vAgopH"></i><span data-page-node-id="9fp63rxrIXDOarPIcRfWWo">签到</span></div>
+            <div class="flex flex-col items-center gap-1 text-primary text-[20px]" data-page-node-id="SFp0ZKPBytI2MPSwiuBNby"><i class="fas fa-user text-[26px]" data-page-node-id="sVWAB57HqoTdCXyYNNI5RQ"></i><span data-page-node-id="Eez7HVM12dLPKhdGTD6HUO">我的</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 状态 B：新用户未完善 -->
+      <div data-page-node-id="ZaFQHsD6fKAUjbDaW7vM58">
+        <p class="text-center text-gray-700 font-medium mb-3" data-page-node-id="2H4jpiEEr2F3bGm3RiNUKG">B. 新用户未完善</p>
+        <div class="phone-frame" data-page-node-id="jCJMtyal0s9DDCfxniWNvE">
+          <div class="status-bar flex items-center justify-between px-8 text-t1 text-xs font-medium" data-page-node-id="rQGDj6k79aOqGtAaaMcSDH">
+            <span data-page-node-id="JlGabEdfTlrDcKhjq28rVV">22:44</span>
+            <div class="flex gap-2 items-center" data-page-node-id="sab1Gaj8gx6nyCutmuHj9F">
+              <i class="fas fa-signal" data-page-node-id="O3UTAOUaI6MR5vU3RHFTJB"></i>
+              <i class="fas fa-wifi" data-page-node-id="clfkBMDDKtR2wk1tDC1Cac"></i>
+              <i class="fas fa-battery-full" data-page-node-id="OO0zgAudHWkHMHMuLrafBI"></i>
+            </div>
+          </div>
+
+          <div class="h-11 flex items-center justify-end px-8" data-page-node-id="OK4SNBWgYV8h5d1rRje9Bz">
+            <div class="w-[87px] h-[32px] rounded-full border border-dashed border-t5/50 flex items-center justify-center gap-2" data-page-node-id="jvAmasdEODlHm59mwHGmkj">
+              <i class="fas fa-ellipsis text-t5 text-xs" data-page-node-id="KEeYOHeQS0R5i5HPffUILw"></i>
+              <i class="far fa-circle text-t5 text-xs" data-page-node-id="VutCF97FwNOkNGx1f30kbz"></i>
+            </div>
+          </div>
+
+          <div class="h-[calc(100%-54px-44px)] overflow-y-auto hide-scrollbar px-8 pb-32" data-page-node-id="YFW1bSse7YGn6STsIDRqoF">
+
+            <div class="mt-2 mb-8" data-page-node-id="RE3gYMzNI0W6PCadVk1trJ">
+              <h2 class="wordmark text-t1 text-[68px] leading-none" data-page-node-id="bvnNtuzAJKPAOm4VUb2dXs">档案</h2>
+              <p class="text-primary text-[32px] font-medium mt-3" data-page-node-id="jXKJFwJrUfFiOk1Y8hljvi">这是你的轨迹。</p>
+              <div class="w-20 h-2 bg-primary rounded-full mt-6" data-page-node-id="dArV6xMjP0ca1RUmE8Zj74"></div>
+            </div>
+
+            <!-- ID 卡（空身份牌也保留橙条） -->
+            <div class="bg-card border border-line rounded-[24px] overflow-hidden mb-10 hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="EalzdwyJrKekEJzSHGM7vG">
+              <div class="top-strip h-[8px]" data-page-node-id="ZISX9yPonSXyFa12kXi2Lb"></div>
+              <div class="p-8 flex items-center gap-7" data-page-node-id="PDGRjAe5Ky75qlI59Gtwd1">
+                <div class="w-[144px] h-[144px] rounded-full border-4 border-primary gradient-orange flex items-center justify-center text-t1 text-[56px] font-bold flex-shrink-0" data-page-node-id="krZ7cYLaAckcp3Sq03o0hS">滑</div>
+                <div class="flex-1 min-w-0" data-page-node-id="MyNuNoHO4tXB5iBfeGbCkJ">
+                  <div class="flex items-center justify-between" data-page-node-id="8sW1MHcoB90kvQdnXFKx16">
+                    <span class="wordmark text-t1 text-[48px] truncate" data-page-node-id="HwHOfhpXGeuQw1JUWM6A6F">滑手</span>
+                    <i class="fas fa-chevron-right text-t3 text-[28px] ml-3 flex-shrink-0" data-page-node-id="54YxoylNNdyfZwsPrg1Gow"></i>
+                  </div>
+                  <div class="flex items-center gap-3 mt-3 text-t3 text-[26px]" data-page-node-id="sa6APPbbyzHRs2yaaHyTN4">
+                    <span class="flex items-center gap-2" data-page-node-id="rIKatW5cyow504bP4VED7L"><i class="fas fa-location-dot text-primary-lt text-[22px]" data-page-node-id="73KIQWtAShxvlxrW2Z7dyh"></i>未设置</span>
+                    <span class="text-t5" data-page-node-id="rYR5cm0xenjaxWOeyrECTF">·</span>
+                    <span data-page-node-id="vHy4qgiYgVKLL9Hk0uTvnv">滑龄 未设置</span>
+                  </div>
+                  <p class="text-primary-lt text-[24px] mt-5" data-page-node-id="JYDV6orjPc73k66TAWZCQl">点击完善资料</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- 数据带 -->
+            <div class="grid grid-cols-3 mb-10" data-page-node-id="3B66TUpojcnUtIyeKG9wVx">
+              <div class="flex flex-col items-center py-2 border-r border-line" data-page-node-id="vf6iLqVQp1clW58S6hblo1">
+                <span class="display-num text-primary text-[48px]" data-page-node-id="L6tkDjCUzPh9KVhal4aBzw">0</span>
+                <span class="text-t4 text-[24px] mt-2" data-page-node-id="PhW8DPklRdSinUo8svfvLx">签到</span>
+              </div>
+              <div class="flex flex-col items-center py-2 border-r border-line" data-page-node-id="K5MC2lVJYZNEIx8Q9b6M8F">
+                <span class="display-num text-t1 text-[48px]" data-page-node-id="mgGMUkw3xud7Z32XgV2b64">0</span>
+                <span class="text-t4 text-[24px] mt-2" data-page-node-id="AaJtmMLuvErXl4F0vamKhe">打卡</span>
+              </div>
+              <div class="flex flex-col items-center py-2" data-page-node-id="w6oQ2GSSo62d0PJ3c1YFeo">
+                <span class="display-num text-t1 text-[48px]" data-page-node-id="zLpx3zE0aL4n35qcJbS7JF">0</span>
+                <span class="text-t4 text-[24px] mt-2" data-page-node-id="PsT0TSLfjH1ICoxYsTGptQ">推荐</span>
+              </div>
+            </div>
+
+            <!-- 我的参与 -->
+            <div class="bg-card border border-line rounded-[24px] overflow-hidden" data-page-node-id="XhCVnve9dHiDFib5QEgU56">
+              <div class="px-8 pt-7 pb-3" data-page-node-id="owOpTSAmIQdkOdRlpK8eka">
+                <span class="text-t1 text-[28px] font-bold" data-page-node-id="KCqlQGniueFIbOQbC1hyvM">我的参与</span>
+              </div>
+              <div class="h-[104px] flex items-center justify-between px-8 border-b border-line" data-page-node-id="H1AbpRHNlkxvdFzS2gZcj4">
+                <div class="flex items-center gap-5" data-page-node-id="S22tX6sWdK4IZSlNhpgcTi">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="qUFTeChmWil1uQTo3Nuae4"><i class="fas fa-image text-primary-lt text-[30px]" data-page-node-id="YXtWgoUBiVD3BbUN7F1SvA"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="kBuvWHWZmbcxxrd3yMLWMd">我的打卡</span>
+                </div>
+                <div class="flex items-center gap-2" data-page-node-id="JqeOGl3uAMDTW7wDh78OnL"><span class="text-t4 text-[28px]" data-page-node-id="Tzf3FlGMoxw5FwrgW43VQY">0 条</span><i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="ZtDYT7TD2LnehdVrBKwcc8"></i></div>
+              </div>
+              <div class="h-[104px] flex items-center justify-between px-8 border-b border-line" data-page-node-id="bEVQ2SKQo9mqMIuVBCyrYd">
+                <div class="flex items-center gap-5" data-page-node-id="B4TG7tOZkxim44s5mAPvfI">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="6zhPMJxwFJIhny4xnC7xiF"><i class="fas fa-map-pin text-primary-lt text-[30px]" data-page-node-id="01qDUX0nZJDMgLZOC6cqE5"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="u6Ej83MX0bSQvAcNy0NrMb">我的推荐</span>
+                </div>
+                <div class="flex items-center gap-2" data-page-node-id="BoqbzeuJPjgDTDfyCoceT0"><span class="text-t4 text-[28px]" data-page-node-id="JupfXctsZORBLkjixKKmuY">0 条</span><i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="au4FoGLfAm6ODa3n0aL5w7"></i></div>
+              </div>
+              <div class="h-[104px] flex items-center justify-between px-8 border-b border-line" data-page-node-id="BI6jfvzM3KXBTRQfDbxmEm">
+                <div class="flex items-center gap-5" data-page-node-id="Q9GT0X3HyzMbVRfg3zfcie">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="LZVAFMn3N8xhWkgkmD9Hbt"><i class="fas fa-flag text-primary-lt text-[30px]" data-page-node-id="HPC47MuDQpCJYUnxodeEN6"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="nGWZVRmdMBWEUgkN3IpPG3">我的报错</span>
+                </div>
+                <div class="flex items-center gap-2" data-page-node-id="sHnANjmnqenhV56C90oX53"><span class="text-t4 text-[28px]" data-page-node-id="PLfoC7gza7d89JFSRcuGuZ">0 条</span><i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="a7F9bmXFoxWZjZ5yS0KeRb"></i></div>
+              </div>
+              <div class="h-[104px] flex items-center justify-between px-8" data-page-node-id="UqjBbJBk7vDjoh14QxECAj">
+                <div class="flex items-center gap-5" data-page-node-id="pKk6aZtLhAMsztXCOmcEB4">
+                  <div class="w-[72px] h-[72px] rounded-2xl bg-primary/12 flex items-center justify-center flex-shrink-0" data-page-node-id="mFnLSyJc9Q9pBPPQ5K89Af"><i class="fas fa-paper-plane text-primary-lt text-[30px]" data-page-node-id="AgFeXaMKckqDgO34YVBtHd"></i></div>
+                  <span class="text-t1 text-[30px]" data-page-node-id="DSMrMLdlEaVNAHWhV3yUkb">你提我改</span>
+                </div>
+                <div class="flex items-center gap-2" data-page-node-id="mKY5Gp8afq4ttXJyXAsBfg"><span class="text-t4 text-[28px]" data-page-node-id="5eDn1LGkrW1YF3hkvOpuHb">0 条</span><i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="a4LaNjeapbCCfnDM6cfUWs"></i></div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="absolute bottom-0 left-0 right-0 h-[100px] bg-[#1A1A1E] border-t border-line flex items-start justify-around pt-3" data-page-node-id="WyJGTud7hzJfcEsZkjcDIa">
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="1NMKGltJRf1TlwUxBRqVc7"><i class="fas fa-map-marker-alt text-[26px]" data-page-node-id="g0vnv72O2IIebmXeJHrBC1"></i><span data-page-node-id="TytYDjW3Uakb7iqgTVyW7l">首页</span></div>
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="juBJavuzu2X4nAShj2t25q"><i class="fas fa-compass text-[26px]" data-page-node-id="RelgapkZBAy752wKDrisIk"></i><span data-page-node-id="1WyFBqHH2WzaHbSbLpwuCC">发现</span></div>
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="4plJ57MLdEkUTjAG9Mho8U"><i class="fas fa-check-circle text-[26px]" data-page-node-id="nQCSx3d5CYECe0BKNEICtA"></i><span data-page-node-id="eqlDT5PaSTw53Ykt9jgyv5">签到</span></div>
+            <div class="flex flex-col items-center gap-1 text-primary text-[20px]" data-page-node-id="oi4PpEifw7Z4HYOzbJJAYw"><i class="fas fa-user text-[26px]" data-page-node-id="t00pFoHPtGY6l3Xm4H8JQF"></i><span data-page-node-id="CqIxHDa7PcI5D1A42zzIG9">我的</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 状态 C：编辑资料 Sheet -->
+      <div data-page-node-id="glL3JNelKGs38tKSrH5TFD">
+        <p class="text-center text-gray-700 font-medium mb-3" data-page-node-id="1AClTRqyechio8e4Wa3Jzy">C. 编辑资料 Sheet</p>
+        <div class="phone-frame" data-page-node-id="KpppCFwBYMVACuRCQNzR2z">
+          <div class="status-bar flex items-center justify-between px-8 text-t1 text-xs font-medium" data-page-node-id="F7GFB0EREfF2B7nc32rO0m">
+            <span data-page-node-id="D9U9gwS3V9XCZHKKosLbkm">22:44</span>
+            <div class="flex gap-2 items-center" data-page-node-id="J9kVJi0XRR0RqhTKpaDbNY">
+              <i class="fas fa-signal" data-page-node-id="ffUCaqE8KuZB8erpaxLEoq"></i>
+              <i class="fas fa-wifi" data-page-node-id="amBptiFyQKDQTdfNHt0YsL"></i>
+              <i class="fas fa-battery-full" data-page-node-id="Z3mtSiz6sco7kx9CzVws3G"></i>
+            </div>
+          </div>
+
+          <div class="h-11 flex items-center justify-end px-8" data-page-node-id="DvAG5GPqYrayIrzLfseLHl">
+            <div class="w-[87px] h-[32px] rounded-full border border-dashed border-t5/50 flex items-center justify-center gap-2" data-page-node-id="mPtGAHNhx8nlPhnDhOz4Qt">
+              <i class="fas fa-ellipsis text-t5 text-xs" data-page-node-id="ZiGKde66BBTjtxcjGH4Q5w"></i>
+              <i class="far fa-circle text-t5 text-xs" data-page-node-id="KEQm14E7uxPcr5u2UF6wid"></i>
+            </div>
+          </div>
+
+          <!-- 背景遮罩 -->
+          <div class="absolute inset-0 top-[98px] bg-black/55 z-10" data-page-node-id="wIHxOXxxFELGauzIYYrRzi"></div>
+
+          <!-- Sheet -->
+          <div class="absolute bottom-0 left-0 right-0 h-[85%] bg-sheet border-t border-sheet-line rounded-t-[32px] z-20 flex flex-col" data-page-node-id="E68i0BS6gRVF3RSMF5evdr">
+            <div class="flex justify-center pt-4 pb-2" data-page-node-id="c5xRu5kReO3JhWRcGsukhm">
+              <div class="w-16 h-2 bg-[#2A2A31] rounded-full" data-page-node-id="pgzgG1uD7OCE0h0QvYSm7C"></div>
+            </div>
+
+            <div class="flex items-center justify-between px-8 py-4" data-page-node-id="cYNdNCQHELCCz1VMnCjkFh">
+              <span class="text-t1 text-[34px] font-bold" data-page-node-id="QbHtzZrTC3HaxSJVKcxEzZ">编辑资料</span>
+              <span class="text-primary-lt text-[30px] font-medium" data-page-node-id="0x1g0RBEowQj6dMKWzVrUz">保存</span>
+            </div>
+
+            <div class="flex-1 overflow-y-auto hide-scrollbar px-8 pb-8" data-page-node-id="huFXVggDvEW5A6zgkCWvWt">
+              <!-- 头像 -->
+              <div class="flex flex-col items-center py-6" data-page-node-id="rHNhIcTN33noQWWYBrbPXg">
+                <div class="relative w-[152px] h-[152px]" data-page-node-id="OMRKmdRmwfuRsdJ19j4sG8">
+                  <div class="w-full h-full rounded-full gradient-orange flex items-center justify-center text-t1 text-[56px] font-bold" data-page-node-id="cR0zFcwJz3LmjE7YyAWPfX">阿</div>
+                  <div class="absolute bottom-1 right-1 w-[52px] h-[52px] rounded-full gradient-orange border-4 border-sheet flex items-center justify-center" data-page-node-id="QW0uiJYIkRlq87aHHDnrqm">
+                    <i class="fas fa-camera text-t1 text-[24px]" data-page-node-id="QcQ51LqZKrUfK0gPFehHIz"></i>
+                  </div>
+                </div>
+                <span class="text-t4 text-[24px] mt-4" data-page-node-id="Sa9PyPSoiH7RmWnN8tzyIv">点击更换头像</span>
+              </div>
+
+              <!-- 昵称 -->
+              <div class="flex items-center gap-6 py-6 border-b border-line" data-page-node-id="E6fm5bFKG6WYZWjh1qKGll">
+                <span class="text-t1 text-[30px] w-[90px] flex-shrink-0" data-page-node-id="ksvZy6VF0yDACXt5eUGBdS">昵称</span>
+                <input type="text" value="阿强" class="flex-1 bg-transparent text-t1 text-[30px] outline-none" data-page-node-id="wGITAYAVhEJQ0lFEM2APyc" />
+                <span class="text-t4 text-[22px]" data-page-node-id="KpvCsYq6OZBgSguNa5t0Xf">2/12</span>
+              </div>
+
+              <!-- 城市 -->
+              <div class="flex items-center justify-between py-6 border-b border-line" data-page-node-id="nnUdgocMyM1sowImJ0tkqB">
+                <span class="text-t1 text-[30px]" data-page-node-id="cOrPVIVRmMrxP4vvbyFY11">城市</span>
+                <div class="flex items-center gap-3" data-page-node-id="OllG1fXxqkg9TQUyooclHB">
+                  <span class="text-t1 text-[30px]" data-page-node-id="GrcwrAUAvHThQKQrZKkKIG">深圳</span>
+                  <i class="fas fa-chevron-right text-t3 text-[26px]" data-page-node-id="fCPi4KlJVkEbQlCwwuzhaY"></i>
+                </div>
+              </div>
+
+              <!-- 滑龄 -->
+              <div class="py-6 border-b border-line" data-page-node-id="3K4oPLNPIIvjhlgU8yQzey">
+                <span class="text-t1 text-[30px] block mb-4" data-page-node-id="zz23WmWcveOCyL3BppNtaq">滑龄</span>
+                <div class="flex flex-wrap gap-4" data-page-node-id="AGqi45ZXUjz84h0bFCYKac">
+                  <span class="text-t3 text-[26px] bg-line px-7 py-[10px] rounded-full border border-line" data-page-node-id="aEyuZJXDMYWGRdGmx8G9xm">1年内</span>
+                  <span class="text-t3 text-[26px] bg-line px-7 py-[10px] rounded-full border border-line" data-page-node-id="JqHGh9R4tnpg9whN0hDeLx">1-3年</span>
+                  <span class="text-t1 text-[26px] bg-primary/20 px-7 py-[10px] rounded-full border border-primary" data-page-node-id="iBAoMTCtTHED10eXkoCJPE">3-5年</span>
+                  <span class="text-t3 text-[26px] bg-line px-7 py-[10px] rounded-full border border-line" data-page-node-id="eK8lNPx8GZaqpm2Fqt8QbY">5年以上</span>
+                </div>
+              </div>
+
+              <!-- 擅长 -->
+              <div class="py-6" data-page-node-id="mOfjFbkuh33nFyfzzZ9tLi">
+                <span class="text-t1 text-[30px] block mb-4" data-page-node-id="X7reQgjsH447qUhjpdGERJ">擅长</span>
+                <div class="flex flex-wrap gap-4" data-page-node-id="fbHecQISgES7oSSPW9mgKj">
+                  <span class="text-t1 text-[26px] bg-primary/20 px-7 py-[10px] rounded-full border border-primary" data-page-node-id="p9ArPkBNam7uMm4tGtMd4n">街式</span>
+                  <span class="text-t1 text-[26px] bg-primary/20 px-7 py-[10px] rounded-full border border-primary" data-page-node-id="EAcASNz7386tkdAsMcpVzK">碗池</span>
+                  <span class="text-t1 text-[26px] bg-primary/20 px-7 py-[10px] rounded-full border border-primary" data-page-node-id="xiwjhy9uBxfmNZimlgSkvs">平花</span>
+                  <span class="text-t3 text-[26px] bg-line px-7 py-[10px] rounded-full border border-line" data-page-node-id="XABlVCBekCwcDZKXnAF6a3">U池</span>
+                  <span class="text-t3 text-[26px] bg-line px-7 py-[10px] rounded-full border border-line" data-page-node-id="hLMpwj9ToDOX7uVlxs5ql5">长板</span>
+                  <span class="text-t3 text-[26px] bg-line px-7 py-[10px] rounded-full border border-line" data-page-node-id="REXSRONcStxUs8tKFy23Rx">鱼板</span>
+                  <span class="text-t3 text-[26px] bg-line px-7 py-[10px] rounded-full border border-line" data-page-node-id="BPP5IFSXuCDDFS3D9iDlZr">速降</span>
+                  <span class="text-t3 text-[26px] bg-line px-7 py-[10px] rounded-full border border-line" data-page-node-id="konAhwmAgUT2lDZM4A8jVt">刷街</span>
+                </div>
+                <p class="text-t5 text-[22px] mt-4" data-page-node-id="D2QSFHiAcTHGClT25nQWom">最多选 5 个</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 设计说明 -->
+  <div class="max-w-6xl mx-auto mt-12 mb-20" data-page-node-id="LZgIdQb7HjzK6e8ouyPZIj">
+    <div class="bg-white rounded-xl border border-gray-200 p-6" data-page-node-id="fgQG7UarDWWPSvj5emAlt5">
+      <h2 class="text-lg font-medium text-gray-900 mb-4" data-page-node-id="aqe43hkc0HJCkK3FDlBzu6">v2 设计说明</h2>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700" data-page-node-id="oEqNAwr6tbj3HjN8lj0svN">
+        <li class="flex gap-3" data-page-node-id="S4fjZ9wEjIIGVrTtcmPkSw"><span class="text-primary font-bold" data-page-node-id="UTk43wXBcDy6OtuEQw8LmP">01</span> 态度头与签到页同语系：「档案 / 这是你的轨迹。」与「轨迹 / 把每天留在街头。」呼应。</li>
+        <li class="flex gap-3" data-page-node-id="MoDn37HtI8qQwpU1xltBTK"><span class="text-primary font-bold" data-page-node-id="RvxCDB9y0eXJAGhLbeow1w">02</span> 滑手 ID 卡：顶部 8rpx 橙渐变卡缘 + 144rpx 橙环头像 + 48rpx 斜体昵称，身份感来源；空身份牌也保留橙条。</li>
+        <li class="flex gap-3" data-page-node-id="dEqDlRYxDjsYJaHp3JBAqe"><span class="text-primary font-bold" data-page-node-id="PFHVFiEDcLohQiPxbADpZ9">03</span> 擅长标签从橙底胶囊改为描边贴纸（2rpx 橙边、首个微倾斜），与全站贴纸语言一致。</li>
+        <li class="flex gap-3" data-page-node-id="sfBfmXZuUWK9R7cGETv3n6"><span class="text-primary font-bold" data-page-node-id="O3leYVXB4jtDvW3q44DwCn">04</span> 数据带去卡化：数字本身就是内容，48rpx 斜体、签到橙色聚焦，包装减半。</li>
+        <li class="flex gap-3" data-page-node-id="WkrnihJyKH1SqL2KG5aGvX"><span class="text-primary font-bold" data-page-node-id="N1HloBAsbD4syutKR4XPpQ">05</span> 菜单图标统一 72rpx 橙色方块，与首页胶囊/贴纸语言连通，按压统一 opacity 0.7。</li>
+        <li class="flex gap-3" data-page-node-id="bpm5s3PaaXh7F1HX2NvFR8"><span class="text-primary font-bold" data-page-node-id="c69DsUu4tzrEl5Ny6e8LCK">06</span> 编辑资料底部 sheet：85vh、把手、保存放右上角，避免键盘遮挡，与全站弹层形态统一。</li>
+      </ul>
+    </div>
+  </div>
+
+</body>
+</html>

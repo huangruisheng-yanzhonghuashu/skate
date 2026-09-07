@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="xOnqIYk1QoipuayTO1KjVE">
+<head data-page-node-id="payGB8Bin3yNcDNbBrW3O6">
+  <meta charset="UTF-8" data-page-node-id="YLiFANNTNVmmdn4bnGcsDJ">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="SBGnwTzxs1stccxOJFOF4D">
+  <title>去哪滑 - 签到页 UI 设计稿 v2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" data-page-node-id="BGiRhcSbwhbupcnBa3Dg5L">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            bg: '#111114',
+            card: '#1E1E23',
+            inset: '#17171B',
+            sheet: '#232329',
+            line: '#26262C',
+            'sheet-line': '#2F2F36',
+            primary: '#FF5A36',
+            'primary-lt': '#FF8A6E',
+            success: '#00D4AA',
+            warning: '#FFB800',
+            error: '#FF3B30',
+            info: '#2A8CFF',
+            t1: '#FFFFFF',
+            t2: '#D9D9DE',
+            t3: '#A6A6AD',
+            t4: '#8C8C94',
+            t5: '#6E6E76',
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'Arial', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background: #f0f0f0;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    }
+    .phone-frame {
+      width: 390px;
+      height: 844px;
+      border-radius: 48px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.25);
+      overflow: hidden;
+      position: relative;
+      background: #111114;
+      flex-shrink: 0;
+    }
+    .status-bar { height: 54px; padding-top: 14px; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .wordmark { font-style: italic; font-weight: 700; letter-spacing: -1px; }
+    .hero-num { font-style: italic; font-weight: 700; letter-spacing: -2px; line-height: 1; }
+    .sticker { transform: rotate(-6deg); }
+    .avatar-0 { background: linear-gradient(135deg, #3A3140 0%, #2C2534 100%); }
+    .avatar-1 { background: linear-gradient(135deg, #40342A 0%, #33291F 100%); }
+    .avatar-2 { background: linear-gradient(135deg, #2A3A38 0%, #20302E 100%); }
+    .avatar-3 { background: linear-gradient(135deg, #302B33 0%, #3B3540 100%); }
+  </style>
+</head>
+<body class="min-h-screen p-6 md:p-10" data-page-node-id="ttgWo7Z78d5g5vBMmwFNQr">
+
+  <!-- 设计规范摘要 -->
+  <div class="max-w-6xl mx-auto mb-10" data-page-node-id="0Cxm22FQYnWdRB4UzA6aKB">
+    <h1 class="text-3xl font-medium text-gray-900 mb-2" data-page-node-id="DT9SEb314sdrdNFGFtK1uQ">去哪滑 - 签到页 UI 设计稿 v2</h1>
+    <p class="text-gray-600 mb-6" data-page-node-id="EgbiRp5dAChEHfHcyDagD9">v2 重构：抛弃「中性报表页」思路，把首页品牌态度区基因带进签到页——斜体大字标 + 连续天数 Hero + 倾斜贴纸，日历/榜单/记录强化层级。</p>
+
+    <div class="bg-white rounded-xl border border-gray-200 p-6 mb-8" data-page-node-id="vLzoaKaDV16ecXyCYD2F41">
+      <h2 class="text-lg font-medium text-gray-900 mb-4" data-page-node-id="kszGcjjp7gxYUCknap2oqf">v1 → v2 核心变化</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-sm text-gray-700" data-page-node-id="GDuOOYiDSn5668ikP0BY0N">
+        <p data-page-node-id="Co7I0Nhpym5E1DUJ9VFIaN"><span class="text-primary font-bold" data-page-node-id="nbayAatEluBFfYLSCblCQi">页面头</span>：34rpx 小标题 → 72rpx 斜体大字标「轨迹」+ slogan + 橙条 + STREAK 贴纸</p>
+        <p data-page-node-id="hsQIcPTpwIB8fJo5CYqWUC"><span class="text-primary font-bold" data-page-node-id="BMZG3mKldAmRgWh5F2gCfc">统计带</span>：删除三列卡片 → 连续 Hero（120rpx 斜体橙数字）+ 一行次数据</p>
+        <p data-page-node-id="w3a85MLwITza2YDgycKEBZ"><span class="text-primary font-bold" data-page-node-id="msp7XWgCATz4lf7mI404hB">日历已签</span>：白字+小点 → 橙实心圆白字（户外可扫读）</p>
+        <p data-page-node-id="5fOOLcwgjirIpz5EpwU9lr"><span class="text-primary font-bold" data-page-node-id="2tqT4QET0EAwQtsL6xkC68">我的行</span>：橙底橙边 → 青绿左缘（已签到语义色合规）</p>
+        <p data-page-node-id="PInXTz3AGwWhBASqT8Yx9s"><span class="text-primary font-bold" data-page-node-id="DvspYMoe7AHNLgdHCS4eau">记录徽章</span>：场地绿 → 场地灰（修正「绿仅在场/已签到」纪律）</p>
+        <p data-page-node-id="phWDqWnr1HKAjzC87shogl"><span class="text-primary font-bold" data-page-node-id="E9KruvAa869wRHNBSBQrzA">导航</span>：原生标题 → 自定义导航（胶囊区完全避让）</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 手机预览 -->
+  <div class="max-w-6xl mx-auto" data-page-node-id="gfxoFpQC9VV9CFjLPt4OoO">
+    <div class="flex flex-wrap gap-10 justify-center items-start" data-page-node-id="Cd8T2CXld3tvQ7YWNQeJik">
+
+      <!-- 状态 A：有数据 -->
+      <div data-page-node-id="r9ZVrqjmPrTigzFUCiwzTm">
+        <p class="text-center text-gray-700 font-medium mb-3" data-page-node-id="Lvc1339B9EREFrBUxFX9Fz">A. 有数据（连续 12 天）</p>
+        <div class="phone-frame" data-page-node-id="xZkGJ6j4GWtSv0je3HLAJf">
+          <!-- 状态栏 -->
+          <div class="status-bar flex items-center justify-between px-8 text-t1 text-xs font-medium" data-page-node-id="noTy1ThgFyii2LNWL06rRZ">
+            <span data-page-node-id="q9SKS3mbsBFf7wSJXIGZoV">22:44</span>
+            <div class="flex gap-2 items-center" data-page-node-id="CErmzSGMYU6zd7sslPFjkY">
+              <i class="fas fa-signal" data-page-node-id="gHdGK2VoxYpBH57SkcBJxi"></i>
+              <i class="fas fa-wifi" data-page-node-id="AuO3IzHSm5KM6yGk8B80c9"></i>
+              <i class="fas fa-battery-full" data-page-node-id="kSPkiUjN5iKNmrFbVMRy0v"></i>
+            </div>
+          </div>
+
+          <!-- 自定义导航行：左侧留空，右侧胶囊保留区（虚线示意） -->
+          <div class="h-11 flex items-center justify-end px-8" data-page-node-id="zV0MqQBnBI5uFLqrDto66D">
+            <div class="w-[87px] h-[32px] rounded-full border border-dashed border-t5/50 flex items-center justify-center gap-2" data-page-node-id="VKxEBi4TKJXB6gHez9f0Uw">
+              <i class="fas fa-ellipsis text-t5 text-xs" data-page-node-id="z0Rmi0xY0jx8aSFQ348KQs"></i>
+              <i class="far fa-circle text-t5 text-xs" data-page-node-id="Q4YLHVjc0B50NvWthaEg2m"></i>
+            </div>
+          </div>
+
+          <!-- 内容区 -->
+          <div class="h-[calc(100%-54px-44px)] overflow-y-auto hide-scrollbar px-8 pb-32" data-page-node-id="7Cep0yVQFRsRFYZ24EaBAu">
+
+            <!-- 态度头 -->
+            <div class="mt-2 mb-8 relative" data-page-node-id="ylETEYITjQvgWrgkSCQhpV">
+              <h2 class="wordmark text-t1 text-[68px] leading-none" data-page-node-id="U3P3anXDou18typ0DPDlmZ">轨迹</h2>
+              <div class="flex items-center justify-between mt-3" data-page-node-id="61SvQwAy1IUIuhhNeXP6st">
+                <p class="text-primary text-[32px] font-medium" data-page-node-id="UKrYcWp5AgQHwxJPoR9bye">把每天留在街头。</p>
+                <span class="sticker text-primary text-[20px] font-bold border-2 border-primary rounded-lg px-3 py-1" data-page-node-id="7aRuvfstsIFfATCFpgGa6o">STREAK · 12 天</span>
+              </div>
+              <div class="w-20 h-2 bg-primary rounded-full mt-6" data-page-node-id="s4TG6kcQV08vH9tih3BCu6"></div>
+            </div>
+
+            <!-- 连续 Hero -->
+            <div class="mb-10 flex items-end gap-5" data-page-node-id="mvNuNWQyWmEcT0WO5C2zrr">
+              <span class="hero-num text-primary text-[120px]" data-page-node-id="phIA80Oy9jwcS6PNW2LOn3">12</span>
+              <div class="pb-3" data-page-node-id="0Ywj3Fijy0ozaIdjhq6SMN">
+                <p class="text-t3 text-[28px]" data-page-node-id="Llutpt5H2qnCnV3aKawmrL">连续滑了（天）</p>
+                <p class="text-t5 text-[24px] mt-1" data-page-node-id="xpMZRkOvnSYBG9f17nOK9C">累计 86 次 · 本月 7 次</p>
+              </div>
+            </div>
+
+            <!-- 日历 -->
+            <div class="bg-card border border-line rounded-[20px] p-8 mb-8" data-page-node-id="vWanspdRqWp58PHZw69l1u">
+              <div class="flex items-center justify-between mb-6" data-page-node-id="TceBabJgWe2PcsqG32BF5A">
+                <span class="text-t1 text-[30px] font-semibold" data-page-node-id="EP73vdstyRs3aKFGgAHCLR">2026年9月</span>
+                <div class="flex gap-2" data-page-node-id="rEOy5KnCVSKSkabPHtaraj">
+                  <div class="w-14 h-14 rounded-full bg-inset flex items-center justify-center" data-page-node-id="aogiFAjbWeTq0FTTXTXHjT">
+                    <i class="fas fa-chevron-left text-t3 text-[22px]" data-page-node-id="yVYWcM111d347aL6l8S6f5"></i>
+                  </div>
+                  <div class="w-14 h-14 rounded-full bg-inset flex items-center justify-center opacity-35" data-page-node-id="LCVO7qXqSw51hG9wZDp4z3">
+                    <i class="fas fa-chevron-right text-t3 text-[22px]" data-page-node-id="tf2WV17nrxK8DdFEYCdoBN"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-7 text-center mb-4" data-page-node-id="kTf8NNbuWdXvLS3LRqyNlj">
+                <span class="text-t5 text-[22px]" data-page-node-id="Wtb0hGXOHIeYLq5y3s5qQO">一</span><span class="text-t5 text-[22px]" data-page-node-id="U8cBTDhSyK9LN2WFwk8MKx">二</span><span class="text-t5 text-[22px]" data-page-node-id="sB4PAoRLgfpybbQBTRFteU">三</span><span class="text-t5 text-[22px]" data-page-node-id="kMRM6rc9x1f0BXI2zvIbOJ">四</span><span class="text-t5 text-[22px]" data-page-node-id="Axi1x0h847HZlfoeuKFwMX">五</span><span class="text-t5 text-[22px]" data-page-node-id="cO870uRfEPC9oUJe5V9DnC">六</span><span class="text-t5 text-[22px]" data-page-node-id="1sjwpwx34Lz91fkXHveSLz">日</span>
+              </div>
+              <div class="grid grid-cols-7 text-center gap-y-2" data-page-node-id="yJgCd9iGQ8q3rFSRByArd9">
+                <span class="h-14" data-page-node-id="r9hE9BAcBk2hwrEMKxFVB2"></span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="a8Ur17RJGD6eX69tbRBfUn">1</span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="95LuVQDhwBAXtI2MZq5Io1">2</span>
+                <span class="h-14 flex items-center justify-center" data-page-node-id="OVwPxbzWct5U6K0sjcSYzO"><span class="w-14 h-14 rounded-full bg-primary text-t1 text-[24px] font-semibold italic flex items-center justify-center" data-page-node-id="Uqk4EBSEfZ2Fqpg0KEb9aV">3</span></span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="TtGMVupsHzBZKL0GHr3HJ7">4</span>
+                <span class="h-14 flex items-center justify-center" data-page-node-id="nrwmoc5JoRM0blDnEi6oyl"><span class="w-14 h-14 rounded-full bg-primary text-t1 text-[24px] font-semibold italic flex items-center justify-center" data-page-node-id="UmL7RF8b6K7KBAxQH6GBxz">5</span></span>
+                <span class="h-14 flex items-center justify-center" data-page-node-id="pImjSjuOA3N1WVDNtIagFv"><span class="w-14 h-14 rounded-full bg-primary text-t1 text-[24px] font-semibold italic flex items-center justify-center" data-page-node-id="rzl3rNzjK0xxgKkBBBPqxw">6</span></span>
+                <span class="h-14 flex items-center justify-center" data-page-node-id="ATwLKNNZ09GCfDu295nLUj">
+                  <span class="w-14 h-14 rounded-full bg-primary text-t1 text-[24px] font-semibold italic flex items-center justify-center relative" data-page-node-id="KUwtrdhpNIn1OPsNZGLUX5">7
+                    <span class="absolute bottom-[6px] right-[6px] w-2 h-2 rounded-full bg-t1" data-page-node-id="VXsF53FQ1C0XHPc6r7hyHE"></span>
+                  </span>
+                </span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="RxqJx19TCAofVyAAWhKSVO">8</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="5Pw0FXM4g5IHYpBBaIGLCE">9</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="1rza6AZPOk7hAsxRLSLoBa">10</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="Q6AmrFqbj2KBUOOINZhOrz">11</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="s1wPvx930cNlepJo0GNUgM">12</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="Aj2hENEgVWI0MnmqDqKDHF">13</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="J0xh1X81hk3l54SBCy7jdA">14</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="uM0teu0chi1id12Wkx2hvM">15</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="4Z6D3Nw5e68Qo6tDFAOiOy">16</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="KchIYrbvu5Z1vttI3a4zz6">17</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="K7zTteUj6PKhlCMYGuJFWz">18</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="oamuWnuy0Gu5diXxV9GIUh">19</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="J8ZCXb2fOChmHDNpcz7HDF">20</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="CEhHFlBrYSmtRAtIFM1CYP">21</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="0Z6WPAgsHSZ8P73ppUx7mG">22</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="ClcpmZKMvadlN50h6F6umD">23</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="DWiZSHIZAy1hMHndFId1wb">24</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="9Y3zdcwPUCuy29VdPEAhtx">25</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="vRrzHY1RiwNlsun5cJuQRi">26</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="FF5fiQ6fwsAIUX3iX9RBCC">27</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="fH46Ci8luIHlGTuvjVAyiH">28</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="AMj4T97swobnFXxSI5Ap93">29</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="vcAAIj1tjXGKWOD5RiCMjF">30</span>
+              </div>
+            </div>
+
+            <!-- 本月签到榜 -->
+            <div class="bg-card border border-line rounded-[20px] p-8 mb-8" data-page-node-id="VZgtupQfvhUo6NTdsDom2I">
+              <div class="flex items-center justify-between mb-4" data-page-node-id="wifxwfWdbqOmfeM4tfukel">
+                <span class="text-t1 text-[30px] font-semibold" data-page-node-id="RfUdDW4x2dGriIxAK9xoMi">本月签到榜</span>
+                <span class="text-primary-lt text-[20px] bg-primary/15 px-4 py-1 rounded-full" data-page-node-id="5HAS2qXhmvuZDpRMmBCi9w">9月</span>
+              </div>
+
+              <div class="flex items-center h-[96px] gap-5 border-b border-line" data-page-node-id="CQAZOsFfNWQpmlCIOW8eFI">
+                <div class="w-10 h-10 rounded-full bg-primary text-t1 text-[22px] font-bold italic flex items-center justify-center flex-shrink-0" data-page-node-id="bSMBGT0ucbWDO1uyAt66ff">1</div>
+                <div class="w-12 h-12 rounded-full avatar-0 text-t1 text-[22px] flex items-center justify-center flex-shrink-0" data-page-node-id="rJRDQkDPBXOf7xdurHqOPp">阿</div>
+                <span class="flex-1 text-t1 text-[28px] truncate" data-page-node-id="b7qOIFr2BeBak1tCjuE46Y">阿强</span>
+                <div data-page-node-id="dAlSUf6zK04ogEZNysjm19"><span class="text-t1 text-[28px] font-semibold" data-page-node-id="uninmiQozEadOpE7JaiNab">18</span><span class="text-t5 text-[22px] ml-1" data-page-node-id="rmupOqEZckpF7qfZqPAxJd">次</span></div>
+              </div>
+
+              <div class="flex items-center h-[96px] gap-5 border-b border-line" data-page-node-id="6KWxTYigdSiaBHIaHGV5ib">
+                <div class="w-10 h-10 rounded-full border border-t3 text-t3 text-[22px] font-semibold flex items-center justify-center flex-shrink-0" data-page-node-id="jfHNGNdH0GKyrOlU2E6ivX">2</div>
+                <div class="w-12 h-12 rounded-full avatar-1 text-t1 text-[22px] flex items-center justify-center flex-shrink-0" data-page-node-id="BFeTSkvvOnKYBCh8iskixZ">小</div>
+                <span class="flex-1 text-t1 text-[28px] truncate" data-page-node-id="jzOztKDqT6lslB6MgSXhaL">小宇</span>
+                <div data-page-node-id="pRG4dJlsGaWplbW2RlUfTp"><span class="text-t1 text-[28px] font-semibold" data-page-node-id="NwxIw9IG53ajKTYEPRxlmI">15</span><span class="text-t5 text-[22px] ml-1" data-page-node-id="yP9b2KlUKGmzbIPzTEU28A">次</span></div>
+              </div>
+
+              <div class="flex items-center h-[96px] gap-5 border-b border-line" data-page-node-id="sTGhrFV8EpOhIhswfLo6GB">
+                <div class="w-10 h-10 rounded-full border border-warning text-warning text-[22px] font-semibold flex items-center justify-center flex-shrink-0" data-page-node-id="JIhTXtdLXaTv0kCo4NHtdo">3</div>
+                <div class="w-12 h-12 rounded-full avatar-2 text-t1 text-[22px] flex items-center justify-center flex-shrink-0" data-page-node-id="fgdu40efdN9IDoUZHlGVds">L</div>
+                <span class="flex-1 text-t1 text-[28px] truncate" data-page-node-id="WZi4HSTiHmjROkm4sTkEBj">Leo</span>
+                <div data-page-node-id="K4IRujYHUa8SUGWcQMGSjG"><span class="text-t1 text-[28px] font-semibold" data-page-node-id="2xXjy8q4HQ6nqdpOPzUGIf">12</span><span class="text-t5 text-[22px] ml-1" data-page-node-id="BLyn2jdPyH2N5LQvQX4Le7">次</span></div>
+              </div>
+
+              <div class="flex items-center h-[96px] gap-5" data-page-node-id="1GLYVPXulEQNUXHDxFubyG">
+                <div class="w-10 h-10 rounded-full border border-t5 text-t5 text-[22px] font-semibold flex items-center justify-center flex-shrink-0" data-page-node-id="Jh3MW0nm66W9MQYQFCWivI">4</div>
+                <div class="w-12 h-12 rounded-full avatar-3 text-t1 text-[22px] flex items-center justify-center flex-shrink-0" data-page-node-id="XFS7SSBO4y9lbRSa9VHmM1">饼</div>
+                <span class="flex-1 text-t1 text-[28px] truncate" data-page-node-id="Ya2FGE55iwjOedFTgaSJGO">饼干</span>
+                <div data-page-node-id="ZYzN5jXBOLtlB8g0VAOSG5"><span class="text-t1 text-[28px] font-semibold" data-page-node-id="KclHntAqiy8ZiuhJ8yNftE">10</span><span class="text-t5 text-[22px] ml-1" data-page-node-id="MQHGHYLjgUhsRcT4fPT0gY">次</span></div>
+              </div>
+
+              <!-- 我的行：青绿左缘 -->
+              <div class="mt-5 h-[80px] rounded-xl bg-success/10 border-l-[6px] border-success flex items-center gap-3 px-6" data-page-node-id="jCmi6vhoLkFJPW8yW2Y5cH">
+                <span class="text-t1 text-[28px] font-semibold" data-page-node-id="AtWuveuHtX9NIPBaYWaVei">我</span>
+                <span class="text-t5 text-[26px]" data-page-node-id="FSCqpTWjWOg2zFuaSjw61V">·</span>
+                <span class="text-t3 text-[26px]" data-page-node-id="3oZ1IDkgNEjB9FfWiSd5iH">7 次</span>
+                <span class="text-t5 text-[26px]" data-page-node-id="kHgwJNkxSPAIdx6VTQKrnN">·</span>
+                <span class="text-t3 text-[26px]" data-page-node-id="xeMyFCVCEREWiAVg72BPJz">第 8 名</span>
+              </div>
+
+              <div class="mt-4 text-center text-t4 text-[24px] py-1" data-page-node-id="gOWNxXuRSOOUJH2GsFQLiX">展开完整榜单</div>
+            </div>
+
+            <!-- 最近记录 -->
+            <div data-page-node-id="SBNW280jIhsYSCZPT2BeQr">
+              <div class="flex items-baseline justify-between mb-1" data-page-node-id="j343llERT8Z99CsA0SxI6g">
+                <span class="text-t1 text-[30px] font-bold" data-page-node-id="3nnYdUwzFSELLh27XjNSaK">最近记录</span>
+                <span class="text-t4 text-[22px]" data-page-node-id="uZTw8GBSyI4SDlD8thpYnF">近 30 天 · 12 条</span>
+              </div>
+
+              <div class="border-b border-line" data-page-node-id="p5hBFKisQIryUblVorOEAI">
+                <div class="h-[104px] flex items-center gap-5 hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="qrV6RFYEnor3q1DhvmF0xp">
+                  <span class="text-t4 text-[26px] w-[88px] flex-shrink-0" data-page-node-id="BvXMoPUPwA6CzXxilog8v6">09-07</span>
+                  <span class="flex-1 text-t1 text-[28px] truncate" data-page-node-id="adsP68gF84vg8l9ScwRw7A">深圳湾滑板公园</span>
+                  <span class="text-t3 text-[20px] bg-line px-3 py-1 rounded-md flex-shrink-0" data-page-node-id="qBvmRDxjtpZlBsVtki76Eq">场地</span>
+                  <i class="fas fa-chevron-right text-t3 text-[22px] opacity-60 flex-shrink-0" data-page-node-id="mSfTtnUG5FXXAM4ATIDgZN"></i>
+                </div>
+              </div>
+
+              <div class="border-b border-line" data-page-node-id="jZ0AbojNW50lDf0nmLkciT">
+                <div class="h-[104px] flex items-center gap-5 hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="sunC36VHc3UpLuYfmB3zF2">
+                  <span class="text-t4 text-[26px] w-[88px] flex-shrink-0" data-page-node-id="XugBMwgnLNjXNyozNjBUio">09-06</span>
+                  <span class="flex-1 text-t1 text-[28px] truncate" data-page-node-id="yTRCpVkVEZk56WgYAlwBLG">华强北街头地形</span>
+                  <span class="text-t3 text-[20px] bg-line px-3 py-1 rounded-md flex-shrink-0" data-page-node-id="j88mIT7GaSs3yz61zG3IXY">场地</span>
+                  <i class="fas fa-chevron-right text-t3 text-[22px] opacity-60 flex-shrink-0" data-page-node-id="RhH9fZGfJgcMyi0exUNhEC"></i>
+                </div>
+              </div>
+
+              <div class="border-b border-line" data-page-node-id="cJWd5d2f6HOHRaeiHjsDnK">
+                <div class="h-[104px] flex items-center gap-5 hover:opacity-70 transition-opacity cursor-pointer" data-page-node-id="lZDpbcDh9HpqXa8gDhuxI3">
+                  <span class="text-t4 text-[26px] w-[88px] flex-shrink-0" data-page-node-id="wqpQ0VKpRQhPGhevKQQcCA">09-05</span>
+                  <span class="flex-1 text-t1 text-[28px] truncate" data-page-node-id="zOJylkU6snw1O4j31dlJMn">88 滑板店</span>
+                  <span class="text-primary-lt text-[20px] bg-primary/15 px-3 py-1 rounded-md flex-shrink-0" data-page-node-id="0Rh1lxVUYal86H5dBRmzi9">店铺</span>
+                  <i class="fas fa-chevron-right text-t3 text-[22px] opacity-60 flex-shrink-0" data-page-node-id="r4dDQXiRq7mGu0pTX3GlCC"></i>
+                </div>
+              </div>
+
+              <div class="mt-3 text-right text-t5 text-[20px]" data-page-node-id="VmgCQPhfQA4BIVyMwuDjdH">长按记录可删除</div>
+            </div>
+
+          </div>
+
+          <!-- 底部 Tab Bar -->
+          <div class="absolute bottom-0 left-0 right-0 h-[100px] bg-[#1A1A1E] border-t border-line flex items-start justify-around pt-3" data-page-node-id="iNeonjJWY9oHfAB3G0S80M">
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="Qigz7c0fOEvvULvfv0aWyU"><i class="fas fa-map-marker-alt text-[26px]" data-page-node-id="kAhkGh4El1TMzmmOlxkyQ4"></i><span data-page-node-id="0Y0oADrGD7WT3iQYNg42j8">首页</span></div>
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="LrDKP5N0jbYzRU6X9yJ14F"><i class="fas fa-compass text-[26px]" data-page-node-id="xXVcVGKdLltoDdbgFMos9L"></i><span data-page-node-id="8OUcuFVtE6XGfcAR1RS4IO">发现</span></div>
+            <div class="flex flex-col items-center gap-1 text-primary text-[20px]" data-page-node-id="ouKLeSjwWEo0Y8hR8VnPto"><i class="fas fa-check-circle text-[26px]" data-page-node-id="TnUSq2REC34j7TuNAY1AhZ"></i><span data-page-node-id="6U1IUjMgiumGqA0YxWKwgu">签到</span></div>
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="e4CHtUsSPnsvJ4Pz8NVvtK"><i class="fas fa-user text-[26px]" data-page-node-id="JPAArfkSyHOKTJsYlTpz3K"></i><span data-page-node-id="GHNuwMH4frwAK9iGmG0GPQ">我的</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 状态 B：新用户空势态 -->
+      <div data-page-node-id="L6JYGNLHEa0LFdMNuVxDPB">
+        <p class="text-center text-gray-700 font-medium mb-3" data-page-node-id="M5qehOWp0ZU2S3jdDAMtpV">B. 新用户（连续 0 天，无贴纸）</p>
+        <div class="phone-frame" data-page-node-id="KyvJVnnGNTybvjna7dYpt0">
+          <div class="status-bar flex items-center justify-between px-8 text-t1 text-xs font-medium" data-page-node-id="qkQ1JLxaajYfm2Oam8QwWv">
+            <span data-page-node-id="XQxJFbEMzNTEpQWpRKUZT0">22:44</span>
+            <div class="flex gap-2 items-center" data-page-node-id="S3ctf7BYqjg3Bxa7qpCU7u">
+              <i class="fas fa-signal" data-page-node-id="ErC2IXjWFZiFg94U7Kzgt9"></i>
+              <i class="fas fa-wifi" data-page-node-id="bw49n4OxFbzJaWw0WitXwG"></i>
+              <i class="fas fa-battery-full" data-page-node-id="ZzrKCHkbXqgFUJHqB6Wnok"></i>
+            </div>
+          </div>
+
+          <div class="h-11 flex items-center justify-end px-8" data-page-node-id="dEZvHivU5Kdv3rqWh2IEOg">
+            <div class="w-[87px] h-[32px] rounded-full border border-dashed border-t5/50 flex items-center justify-center gap-2" data-page-node-id="f98H31bA5OBgD1NXJd4rJT">
+              <i class="fas fa-ellipsis text-t5 text-xs" data-page-node-id="q9FqlttH1NAZgEnG6bsaLp"></i>
+              <i class="far fa-circle text-t5 text-xs" data-page-node-id="Et6xnFdEBlaE2fkW2g5x1Z"></i>
+            </div>
+          </div>
+
+          <div class="h-[calc(100%-54px-44px)] overflow-y-auto hide-scrollbar px-8 pb-32" data-page-node-id="6EzD0tkpVPTJKFYcZETXFa">
+
+            <!-- 态度头（无贴纸） -->
+            <div class="mt-2 mb-8" data-page-node-id="ZKL31SV6AWv8EC6m0WQ44C">
+              <h2 class="wordmark text-t1 text-[68px] leading-none" data-page-node-id="TDi7wsr8pLhb3DAnPRhDse">轨迹</h2>
+              <p class="text-primary text-[32px] font-medium mt-3" data-page-node-id="trEhqUzUjtu6dBMMilBSRU">把每天留在街头。</p>
+              <div class="w-20 h-2 bg-primary rounded-full mt-6" data-page-node-id="VUexXU6A3zZIGexI81VF9s"></div>
+            </div>
+
+            <!-- 连续 Hero（0 天弱化） -->
+            <div class="mb-10 flex items-end gap-5" data-page-node-id="jNrTtGHMPXufIoRYRux8mI">
+              <span class="hero-num text-[#3A3A42] text-[120px]" data-page-node-id="rVlVf2raU8pduuTWwcvpRo">0</span>
+              <div class="pb-3" data-page-node-id="7oBwIlKoFE54QdR3BAZNS2">
+                <p class="text-t3 text-[28px]" data-page-node-id="BYtI86oNpZ55nDCNHXHuQY">连续滑了（天）</p>
+                <p class="text-t5 text-[24px] mt-1" data-page-node-id="DjeZdF6LjENo4aXclqJrhl">累计 0 次 · 本月 0 次</p>
+              </div>
+            </div>
+
+            <!-- 日历（今日未签 = 橙描边） -->
+            <div class="bg-card border border-line rounded-[20px] p-8 mb-8" data-page-node-id="H3WarItgyKuYZPo1dbRP8Y">
+              <div class="flex items-center justify-between mb-6" data-page-node-id="hTsezEJCsv9STCNlSGtY6V">
+                <span class="text-t1 text-[30px] font-semibold" data-page-node-id="HTpKQszYuAloGKVaZdWe8D">2026年9月</span>
+                <div class="flex gap-2" data-page-node-id="l2zaOFLfSD9Pqiw0C92jzc">
+                  <div class="w-14 h-14 rounded-full bg-inset flex items-center justify-center" data-page-node-id="VwQULVEiZy3hutRZfz4aQJ">
+                    <i class="fas fa-chevron-left text-t3 text-[22px]" data-page-node-id="nxZ1sAlefnrUymUBOM5y5H"></i>
+                  </div>
+                  <div class="w-14 h-14 rounded-full bg-inset flex items-center justify-center opacity-35" data-page-node-id="kiaLx9dtnDGyyFkDxlZ3A6">
+                    <i class="fas fa-chevron-right text-t3 text-[22px]" data-page-node-id="bcwR5BZkURTEElE9F5aeAq"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="grid grid-cols-7 text-center mb-4" data-page-node-id="kjS34ZmkpS5e4I0JjQ0GvN">
+                <span class="text-t5 text-[22px]" data-page-node-id="gan1Qp0VihFIB46JwOEXvg">一</span><span class="text-t5 text-[22px]" data-page-node-id="o40Eapu1LBMyze4IGtvCej">二</span><span class="text-t5 text-[22px]" data-page-node-id="RZ0TXxiFt178IsA7GerD7T">三</span><span class="text-t5 text-[22px]" data-page-node-id="ZazkxCJE9zctioi2BzUkQn">四</span><span class="text-t5 text-[22px]" data-page-node-id="fZSTtC2NjDzGNMcWAGa2TA">五</span><span class="text-t5 text-[22px]" data-page-node-id="nTjqu3DkSTOEZ34hLEl8IG">六</span><span class="text-t5 text-[22px]" data-page-node-id="BZtVVM04VTuNwR4yP5b5Jk">日</span>
+              </div>
+              <div class="grid grid-cols-7 text-center gap-y-2" data-page-node-id="dcjBv74ThifcPS1qnRoKOp">
+                <span class="h-14" data-page-node-id="hiB89IQjTMBBuJFo0szDqw"></span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="aHa7ELgbd3LCQlBSLFkrfs">1</span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="zDBvgd7H4V4gO6AAOklnuI">2</span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="TMn9ov2CPEEquKjERhzAtJ">3</span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="4bMkrsFIlVHmVBbOgGVYyA">4</span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="7w6ElGkawDUy1BH91SzM10">5</span>
+                <span class="h-14 flex items-center justify-center text-t3 text-[24px]" data-page-node-id="WgAIib94WTLFccEurvHZVZ">6</span>
+                <span class="h-14 flex items-center justify-center" data-page-node-id="YjGQGd9Hfj0Fy5sPSdRAKt"><span class="w-14 h-14 rounded-full border-2 border-primary text-primary text-[24px] font-semibold flex items-center justify-center" data-page-node-id="uiBftrj2IgsKKrS3rP2fug">7</span></span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="Et5EoLRToCELBfFNcrFSAQ">8</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="iMUTSNj8zD6p6pvi7ZCiTF">9</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="IpdRN5YuLDMVDAimwP2BWC">10</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="vfN0K7t5nE36jm5s87aCxk">11</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="VFrd6eBpl0ESWMM2hnPHfa">12</span>
+                <span class="h-14 flex items-center justify-center text-t3/40 text-[24px]" data-page-node-id="1IePpSlIDbKAfKoLyTe5dC">13</span>
+              </div>
+            </div>
+
+            <!-- 榜单空态 -->
+            <div class="bg-card border border-line rounded-[20px] p-8 mb-8" data-page-node-id="i4CvZJcK06gpsLrxOkEnO7">
+              <div class="flex items-center justify-between mb-6" data-page-node-id="wLEpqq6TMqLVoAAQ8Z8zIg">
+                <span class="text-t1 text-[30px] font-semibold" data-page-node-id="UhZrJRg63aCXGDuISl3Ddc">本月签到榜</span>
+                <span class="text-primary-lt text-[20px] bg-primary/15 px-4 py-1 rounded-full" data-page-node-id="bQ46KxiWaIMAOjjMRXKexW">9月</span>
+              </div>
+              <div class="text-center py-4" data-page-node-id="L84MFPadSZ5ZBCEYdv1HCK">
+                <p class="text-t5 text-[26px] mb-5" data-page-node-id="Tsjx3gEagfpAovzoe8F4TH">本月还没有人签到，快去抢第一</p>
+                <button class="border-2 border-primary text-primary text-[26px] font-medium px-8 py-2 rounded-full bg-transparent" data-page-node-id="3SIAEAyvkfGFdFdsVMMYBF">去看看附近场地</button>
+              </div>
+            </div>
+
+            <!-- 记录空态 -->
+            <div data-page-node-id="tTwwMu2td4mnH629k15xwP">
+              <div class="flex items-baseline justify-between mb-1" data-page-node-id="R8evNTHrVXaB2OZeA1ycTr">
+                <span class="text-t1 text-[30px] font-bold" data-page-node-id="yXa5edZCE6T8Cc84bOLLrv">最近记录</span>
+                <span class="text-t4 text-[22px]" data-page-node-id="uxkZ08Xqoxc6YT66tz52Kv">近 30 天 · 0 条</span>
+              </div>
+              <div class="text-center py-8" data-page-node-id="4ylDccBbELHrmT74qt8Djw">
+                <p class="text-t5 text-[26px] mb-5" data-page-node-id="83ctmHXkPlciAVNlzYOXy2">还没有签到记录</p>
+                <button class="border-2 border-primary text-primary text-[26px] font-medium px-8 py-2 rounded-full bg-transparent" data-page-node-id="u5EX4xDfPp8BDNaOqBind0">去看看附近场地</button>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="absolute bottom-0 left-0 right-0 h-[100px] bg-[#1A1A1E] border-t border-line flex items-start justify-around pt-3" data-page-node-id="uwZbORhMiy3dMN1us1nEah">
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="JcLjFLYhTN7we6VeupbNlv"><i class="fas fa-map-marker-alt text-[26px]" data-page-node-id="FrLRPYUXZr2wtL5u4yWXFt"></i><span data-page-node-id="BoCGouo5znpoqQrYC5mSal">首页</span></div>
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="1gyhrTJbMEjNVJKIEr6Vcg"><i class="fas fa-compass text-[26px]" data-page-node-id="8DMxrhKiPOfUowOJkbDVj7"></i><span data-page-node-id="EApz6T3rM3kAUBMs1cWvjO">发现</span></div>
+            <div class="flex flex-col items-center gap-1 text-primary text-[20px]" data-page-node-id="ZdSfgZeX7gCO47fBrJ8BUz"><i class="fas fa-check-circle text-[26px]" data-page-node-id="sx9D0aD8gXPbJhgdwsRDYq"></i><span data-page-node-id="uHmofozVa0fpi0myCZwAC8">签到</span></div>
+            <div class="flex flex-col items-center gap-1 text-t4 text-[20px]" data-page-node-id="MoVf8oqtHmfToQKndvvvco"><i class="fas fa-user text-[26px]" data-page-node-id="BIufbk0mlwoCt2zRp1ZCO0"></i><span data-page-node-id="UmbBKQQ0CrDEw2UX1q8p70">我的</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 设计说明 -->
+  <div class="max-w-6xl mx-auto mt-12 mb-20" data-page-node-id="2bV9HcqVIK0QHVHAuXR5Ev">
+    <div class="bg-white rounded-xl border border-gray-200 p-6" data-page-node-id="hTBGCOpAesEQEqoO98vLwj">
+      <h2 class="text-lg font-medium text-gray-900 mb-4" data-page-node-id="9QCuR7SlnLIi9bB7Kr2PTn">v2 设计说明</h2>
+      <ul class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-700" data-page-node-id="TtKCE4zV4dXOeHdrK62trf">
+        <li class="flex gap-3" data-page-node-id="JepQZB8bL9mGmYhehjzek2"><span class="text-primary font-bold" data-page-node-id="MdcazSkXhFKljX4nWJbd4i">01</span> 态度头与首页 brand-wordmark 同构：72rpx 斜体大字标「轨迹」+ 橙色 slogan + 品牌橙短条，子页降一档不抢首页。</li>
+        <li class="flex gap-3" data-page-node-id="PGc73GLbC0608xj6MFimun"><span class="text-primary font-bold" data-page-node-id="ZRhvD6742LV3sAeIIderhs">02</span> 连续天数是唯一 Hero：120rpx 斜体橙数字；累计/本月压缩为一行次数据，信息无损、卡片减半。</li>
+        <li class="flex gap-3" data-page-node-id="mT3japDeeXiVCUQ5DO1V1k"><span class="text-primary font-bold" data-page-node-id="XbNvk5R0ebT6a4Ltbs07xE">03</span> STREAK 贴纸仅在 streak ≥ 3 显示，真实数据驱动，新用户不看到「0 天」的尴尬。</li>
+        <li class="flex gap-3" data-page-node-id="l9p1CjKMICzm2wyVOJVNSQ"><span class="text-primary font-bold" data-page-node-id="0oKAvHd1R76LAU9tIP7igT">04</span> 日历已签 = 橙实心圆 italic 白字；今日未签 = 橙描边；今日已签 = 橙实心 + 白点，三态一眼可辨。</li>
+        <li class="flex gap-3" data-page-node-id="lkqSKLAmyCSQKRH6S7KD0S"><span class="text-primary font-bold" data-page-node-id="0laGMPMqMemANfIdTrXh2h">05</span> 绿色纪律修正：我的行（已签到语义）用青绿左缘；场地类型徽章从绿改灰。</li>
+        <li class="flex gap-3" data-page-node-id="yRiMFAWa2tUVqfBJfLbLw0"><span class="text-primary font-bold" data-page-node-id="Kk0piK6k99PdgcD4rGgDKW">06</span> 空态按钮统一幽灵形态（2rpx 橙描边），跳转首页，页面全程无「去签到」CTA。</li>
+      </ul>
+    </div>
+  </div>
+
+</body>
+</html>

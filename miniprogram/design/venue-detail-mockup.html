@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-page-node-id="u38rIW7j7a2W0BVErVEcog">
+<head data-page-node-id="d79CVWHkIPeEjo3yOQdNhn">
+  <meta charset="UTF-8" data-page-node-id="XrSv7DiHCYnU1xxXj6DrCO">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="BDe0SY9qV5zTiiUAR7mGc7">
+  <title>去哪滑 · 场地详情页高保真稿 v1.0</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 40px;
+      background: #f2f2f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      padding: 40px;
+      flex-wrap: wrap;
+    }
+    .wrap { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+    .label { font-size: 14px; color: #6b6b75; font-weight: 500; }
+    .phone {
+      width: 375px;
+      height: 812px;
+      background: #111114;
+      border-radius: 40px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    }
+    .scroll { width: 100%; height: 100%; overflow: hidden; position: relative; }
+
+    /* ===== 头图区 38vh ===== */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 308px; /* ≈38vh of 812 */
+      background: #1A1A1E;
+    }
+    .hero-img {
+      position: absolute; inset: 0;
+      background: linear-gradient(160deg, #2a2a31 0%, #1a1a1e 60%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-grad {
+      position: absolute; left: 0; right: 0; bottom: 0; height: 80px;
+      background: linear-gradient(180deg, rgba(17,17,20,0) 0%, rgba(17,17,20,0.85) 100%);
+    }
+    .nav-back {
+      position: absolute; top: 52px; left: 16px; z-index: 10;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(17,17,20,0.55);
+      backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .capsule-hint {
+      position: absolute; top: 54px; right: 12px; z-index: 10;
+      width: 87px; height: 32px; border: 1px dashed rgba(255,255,255,0.2); border-radius: 16px;
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(255,255,255,0.3); font-size: 10px;
+    }
+    .hero-name-row {
+      position: absolute; left: 16px; right: 16px; bottom: 14px; z-index: 2;
+      display: flex; align-items: flex-end; gap: 10px;
+    }
+    .hero-name {
+      font-size: 24px; font-weight: 700; color: #fff; line-height: 1.25;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+    }
+    .hot-sticker {
+      flex-shrink: 0;
+      padding: 3px 10px;
+      background: #FF5A36;
+      color: #fff; font-size: 11px; font-weight: 600;
+      border-radius: 4px;
+      transform: rotate(-6deg);
+      margin-bottom: 4px;
+    }
+    .hero-counter {
+      position: absolute; right: 16px; top: 96px; z-index: 2;
+      padding: 3px 10px; border-radius: 999px;
+      background: rgba(0,0,0,0.5); color: #fff; font-size: 11px;
+    }
+
+    /* ===== 信息卡 ===== */
+    .info-card {
+      margin: 12px 16px 0;
+      padding: 16px;
+      background: #1E1E23;
+      border-radius: 8px;
+      position: relative;
+    }
+    .report-entry {
+      position: absolute; top: 12px; right: 12px;
+      display: flex; align-items: center; gap: 3px;
+      color: #6E6E76; font-size: 11px;
+    }
+    .rate-row { display: flex; align-items: center; gap: 8px; }
+    .stars { display: flex; gap: 2px; }
+    .rate-num { font-size: 15px; font-weight: 600; color: #FF5A36; }
+    .rate-count { font-size: 11px; color: #8C8C94; }
+    .dist-pill {
+      margin-left: auto;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(255,90,54,0.16); color: #FF8A6E;
+      font-size: 12px; font-weight: 600;
+    }
+    .addr-row {
+      display: flex; align-items: flex-start; gap: 6px;
+      margin-top: 12px; font-size: 14px; color: #A6A6AD; line-height: 1.5;
+    }
+    .tag-row { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 4px 10px; border-radius: 999px;
+      background: #26262C; color: #A6A6AD; font-size: 12px;
+    }
+    .tag-first {
+      background: rgba(255,90,54,0.16);
+      border: 1px solid rgba(255,90,54,0.4);
+      color: #FF8A6E;
+    }
+    .op-row {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 12px; padding: 11px 12px;
+      background: #17171B; border-radius: 6px;
+      border-left: 3px solid #FF5A36;
+    }
+    .op-label { font-size: 11px; color: #8C8C94; flex-shrink: 0; }
+    .op-name { flex: 1; font-size: 13px; font-weight: 600; color: #FF8A6E; }
+    .op-arrow { color: #8C8C94; font-size: 15px; }
+
+    /* ===== 在场卡 ===== */
+    .live-card {
+      margin: 12px 16px 0;
+      padding: 14px 16px;
+      background: #1E1E23;
+      border-radius: 8px;
+      border-left: 3px solid #00D4AA;
+    }
+    .live-card.off { border-left-color: #3A3A42; }
+    .live-line { display: flex; align-items: center; gap: 8px; }
+    .pulse {
+      width: 8px; height: 8px; border-radius: 50%; background: #00D4AA;
+    }
+    .pulse.gray { background: #6E6E76; }
+    .live-text { font-size: 14px; font-weight: 500; color: #fff; }
+    .live-text .n { color: #00D4AA; font-weight: 600; }
+    .live-text.gray { color: #8C8C94; font-weight: 400; }
+    .live-avatars { display: flex; margin-top: 12px; padding-left: 6px; }
+    .l-ava {
+      width: 36px; height: 36px; border-radius: 50%;
+      border: 3px solid #1E1E23; margin-left: -6px;
+      background: #2A2A30;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 12px; font-weight: 600;
+    }
+    .l-ava.c1 { background: #FF5A36; } .l-ava.c2 { background: #2A8CFF; }
+    .l-ava.c3 { background: #FFB800; } .l-ava.c4 { background: #00D4AA; }
+    .l-ava.more { background: #26262C; color: #A6A6AD; }
+
+    /* ===== 打卡动态 ===== */
+    .feed-sec { margin: 16px 16px 0; }
+    .feed-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .feed-title { font-size: 16px; font-weight: 700; color: #fff; }
+    .feed-more { font-size: 14px; color: #8C8C94; }
+    .feed-card { background: #1E1E23; border-radius: 8px; padding: 12px; margin-bottom: 12px; }
+    .feed-head-row { display: flex; align-items: center; gap: 12px; }
+    .f-ava {
+      width: 36px; height: 36px; border-radius: 50%; background: #FF5A36;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 14px; font-weight: 600; flex-shrink: 0;
+    }
+    .f-name { font-size: 14px; font-weight: 500; color: #fff; }
+    .f-years { font-size: 10px; color: #8A8A93; margin-left: 5px; }
+    .f-time { font-size: 12px; color: #8C8C94; margin-top: 2px; }
+    .f-text { margin-top: 8px; font-size: 14px; color: #D9D9DE; line-height: 1.6; }
+    .f-media { display: flex; gap: 6px; margin-top: 8px; }
+    .f-cell {
+      width: 108px; height: 108px; border-radius: 6px; background: #17171B;
+      display: flex; align-items: center; justify-content: center; position: relative;
+    }
+
+    /* ===== 底部操作栏 ===== */
+    .action-bar {
+      position: absolute; left: 0; right: 0; bottom: 0; z-index: 20;
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 16px 22px;
+      background: rgba(17,17,20,0.96);
+      border-top: 1px solid #26262C;
+    }
+    .ab-side {
+      width: 64px; display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 7px 0; border-radius: 10px; background: #1E1E23; color: #A6A6AD;
+    }
+    .ab-side .t { font-size: 11px; }
+    .ab-main {
+      flex: 1; height: 48px; border-radius: 999px;
+      background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+      color: #fff; font-size: 15px; font-weight: 600;
+      box-shadow: 0 4px 12px rgba(255,90,54,0.3);
+    }
+    .ab-ghost {
+      width: 64px; display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 7px 0; border-radius: 10px;
+      border: 1px solid rgba(255,90,54,0.35); color: #FF8A6E;
+    }
+    .ab-ghost .t { font-size: 11px; }
+    .ab-done {
+      width: 64px; display: flex; flex-direction: column; align-items: center; gap: 3px;
+      padding: 7px 0; border-radius: 10px;
+      border: 1px solid rgba(0,212,170,0.5); color: #00D4AA;
+    }
+    .ab-done .t { font-size: 11px; }
+    .home-bar {
+      position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+      width: 134px; height: 5px; background: rgba(255,255,255,0.3); border-radius: 3px;
+    }
+
+    /* ===== 庆祝层 ===== */
+    .cel-mask {
+      position: absolute; inset: 0; z-index: 50;
+      background: rgba(0,0,0,0.55);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cel-card {
+      width: 240px;
+      background: #1E1E23;
+      border-radius: 16px;
+      padding: 24px 22px;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 6px;
+    }
+    .cel-badge {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+      border: 3px solid rgba(255,90,54,0.35);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 6px;
+    }
+    .cel-title { font-size: 19px; font-weight: 700; color: #fff; }
+    .cel-streak { font-size: 14px; font-weight: 600; color: #00D4AA; }
+
+    /* ===== 评分 sheet ===== */
+    .sheet-mask {
+      position: absolute; inset: 0; z-index: 50;
+      background: rgba(0,0,0,0.6);
+      display: flex; align-items: flex-end;
+    }
+    .sheet {
+      width: 100%; background: #232329;
+      border-top: 1px solid #2F2F36;
+      border-radius: 16px 16px 0 0;
+      padding: 8px 16px 24px;
+    }
+    .sheet-handle {
+      width: 36px; height: 4px; border-radius: 999px;
+      background: #3A3A42; margin: 4px auto 12px;
+    }
+    .sheet-title { text-align: center; font-size: 16px; font-weight: 700; color: #fff; }
+    .sheet-hint { text-align: center; margin-top: 6px; font-size: 12px; color: #8C8C94; }
+    .sheet-stars { display: flex; justify-content: center; gap: 10px; margin: 20px 0 8px; }
+    .sheet-desc { text-align: center; font-size: 13px; color: #A6A6AD; min-height: 20px; }
+    .sheet-btn {
+      margin-top: 16px; height: 44px; border-radius: 999px;
+      background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 15px; font-weight: 600;
+    }
+  </style>
+</head>
+<body data-page-node-id="fKF8Iwvd5OA65YG3PBXFHH">
+
+  <!-- ===== 画板 A：未签到主状态 ===== -->
+  <div class="wrap" data-page-node-id="q8epWlZUm78rY2jqZ26fKa">
+    <div class="label" data-page-node-id="fmVEHRBjKqPkRqkuGEumN4">A · 详情页主状态（未签到）：首屏 = 决策信息全可见</div>
+    <div class="phone" data-page-node-id="CT04pBc1ItXhFbvjsdxiXz">
+      <div class="scroll" data-page-node-id="5kAxTWQZObT0ATTKj6cl7k">
+        <div class="hero" data-page-node-id="LYQvmqOkaC2Ejr3GlinLMt">
+          <div class="hero-img" data-page-node-id="aERXcsrsnIcCY7qlSObVE9">
+            <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#3a3a42" stroke-width="1" data-page-node-id="NgQVLKJDx80El9nqEAZcT4">
+              <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="OdAFexbcmWm6qagLSE1gXW"/><circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="nYtiAgkaD7Vk6GBOCtNnrh"/><path d="M21 15l-5-5L5 21" data-page-node-id="ZGKRhC7jIQnQ4GNn8ML0CR"/>
+            </svg>
+          </div>
+          <div class="hero-grad" data-page-node-id="eyvZN5HF2o2k8tVbaEHre6"></div>
+          <div class="nav-back" data-page-node-id="5Ec8xmaWWCE92FCStzaVuc">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="9tvjgsBDZaXN79XLACvY6x"><polyline points="15 18 9 12 15 6" data-page-node-id="NioHmhAuiC3Y2CgASZvyRj"/></svg>
+          </div>
+          <div class="capsule-hint" data-page-node-id="WLRqU414xRGHUHlDwleWFe">胶囊区</div>
+          <div class="hero-counter" data-page-node-id="cE3p29NRutKmmqJT6NMQAF">1/3</div>
+          <div class="hero-name-row" data-page-node-id="FriiSd5gKpIHEYqEqKUITO">
+            <div class="hero-name" data-page-node-id="eOtV4BnJfnKbRoD3Mrx4XF">南湖广场板场</div>
+            <div class="hot-sticker" data-page-node-id="pXwQbRxIi5lFkQFJTYZUoD">热门</div>
+          </div>
+        </div>
+
+        <div class="info-card" data-page-node-id="4qq8t7fM1GlS9AjyH8ggr7">
+          <div class="report-entry" data-page-node-id="iBMlfqRPcnmAh14hfwhRH6">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6E6E76" stroke-width="2" data-page-node-id="2sfgg0DK5H3gLhJbT3Ub1Q"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" data-page-node-id="ZCgVes0cAHkg9MOVFyuX93"/><line x1="4" y1="22" x2="4" y2="15" data-page-node-id="M7QE0zcWgJTKVBt2Q5QCFP"/></svg>
+            报错
+          </div>
+          <div class="rate-row" data-page-node-id="PVy4id6FjlWzdkdknjnXHL">
+            <div class="stars" data-page-node-id="bfftl2Zo441DVGsph6Cet5">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="YyzZE2sN7mJJnanETCmSv4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="AMgO1ApRwZz6OLZI8V1bG8"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="eXGbC9v1djJrKubcjAHqlG"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="QnXuGUoBR7IJjSwW5fCdKg"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="AuPEBWS8pHPFJg8KXkTGBi"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="KvkHixXtXEWkWmiNwM6z2Y"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="O3Rt2sX8Ubl4bmhhqaA7DV"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="EmYYieiIRsMrih0ynsnkmD"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#3A3A42" data-page-node-id="YsKS356CDXtITF9FBU9hwT"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="LmSXd7TvFDfVWk6blrFO01"/></svg>
+            </div>
+            <span class="rate-num" data-page-node-id="TYGAsXn2trOaL2ukZjxJC9">4.8</span>
+            <span class="rate-count" data-page-node-id="x1lVaOAIAwWF4PBWabDl4e">· 236人评价</span>
+            <span class="dist-pill" data-page-node-id="dXaHzO9bVJCJB9bSLJbNNz">距你 1.2km</span>
+          </div>
+          <div class="addr-row" data-page-node-id="S0JWHhT8v7FYpdKjUbzZbI">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF8A6E" stroke-width="2" style="flex-shrink:0;margin-top:2px" data-page-node-id="loqhsH0eoh43NF1u4j2xk8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-page-node-id="fcD6bB0WmHojqt6sRrGfh1"/><circle cx="12" cy="10" r="3" data-page-node-id="YQ6yXchGtn1r1sWJKOh7PM"/></svg>
+            洪山区南湖大道 128 号南湖幸福湾公园东南角
+          </div>
+          <div class="tag-row" data-page-node-id="D54T0PsnAXsWMg4yY0SgaZ">
+            <span class="tag tag-first" data-page-node-id="TuG08P00FptpgCVodnSxOG">街式</span>
+            <span class="tag" data-page-node-id="TpoOrrWCiGPmANksTqoVRy">免费开放</span>
+            <span class="tag" data-page-node-id="0OMv0yDU3VHglA1M3mf70E">夜间灯光</span>
+          </div>
+          <div class="op-row" data-page-node-id="Zf4R06OnHVUuENrHAU1ad0">
+            <span class="op-label" data-page-node-id="Ap9YA02VrwQsfGxwQdNULe">运营方</span>
+            <span class="op-name" data-page-node-id="F2oF7EepUEePcWwD0cjVk4">WH滑板俱乐部</span>
+            <span class="op-arrow" data-page-node-id="NsJ6h0WPJ7d0kYtmyagqkS">›</span>
+          </div>
+        </div>
+
+        <div class="live-card" data-page-node-id="HfRwKUWHNTOKT8QHNzNaYy">
+          <div class="live-line" data-page-node-id="iboPvge557pgQbKOjWYdmF">
+            <span class="pulse" data-page-node-id="XAEsa23eUixwsA9ZptiAAj"></span>
+            <span class="live-text" data-page-node-id="pVlSZt6tCEozqjn2Aczvkk">此刻 <span class="n" data-page-node-id="5hWIrC6wqHFOA0cYKKiSmG">6</span> 位滑手在此</span>
+          </div>
+          <div class="live-avatars" data-page-node-id="HMxMihzIhulTmdQj5UkPFu">
+            <span class="l-ava c1" data-page-node-id="Fbt5FCDgZTEpnWsTujWeQ5">伟</span><span class="l-ava c2" data-page-node-id="yfqYGhjj0DMYYtdstY0bbh">鹿</span><span class="l-ava c3" data-page-node-id="54w8iSSQ5sDxr2b8PHoIVr">C</span><span class="l-ava c4" data-page-node-id="HeOzcGYZzFJCEWXrJ3ducP">K</span><span class="l-ava more" data-page-node-id="EZB7N4wwo1ry00QhutuFSx">+2</span>
+          </div>
+        </div>
+
+        <div class="feed-sec" data-page-node-id="jya9LbToUmJmztHoERlbb7">
+          <div class="feed-head" data-page-node-id="Zll4FF3DOENAlK7YHB3gJ1">
+            <span class="feed-title" data-page-node-id="B7FjTtrxln2iqhcnmNDPng">打卡动态</span>
+            <span class="feed-more" data-page-node-id="wPMHtQrp18Y78JoxfEWxCf">查看全部 ›</span>
+          </div>
+          <div class="feed-card" data-page-node-id="mwRifhXTLFYyVNVZ1JlO9T">
+            <div class="feed-head-row" data-page-node-id="2JR9jqOoxLhSmtOIERySNv">
+              <span class="f-ava" data-page-node-id="IAKBcUralpPzbqcphUUHOy">伟</span>
+              <div data-page-node-id="Tk7F1IQ8c1t5X6Eece1YFj">
+                <span class="f-name" data-page-node-id="ALjjO1BboXI2rxmsYQCRZe">滑板阿伟</span><span class="f-years" data-page-node-id="eL7MAaMXu6cqsRJHEnGr0n">滑龄3年</span>
+                <div class="f-time" data-page-node-id="4tZnYZnaHklKvLgjAoCc6b">2小时前</div>
+              </div>
+            </div>
+            <div class="f-text" data-page-node-id="x8enTOfpTU11AWMgst10mX">这个地形太舒服了，周末冲！</div>
+            <div class="f-media" data-page-node-id="dtOq4MkoHiYaOnUhY0S9Wp">
+              <div class="f-cell" data-page-node-id="IJie4blSKV0EfWBtFCteMT">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3a3a42" stroke-width="1" data-page-node-id="D5jmjAPlEEQhh56s7rNZW1"><rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="5mYFLyE1aoozCBCYCxEMS2"/><circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="1kOkUy4FR1pAogKjwkOtsh"/><path d="M21 15l-5-5L5 21" data-page-node-id="2OBqwGAWu65wjGS6vbCneG"/></svg>
+              </div>
+              <div class="f-cell" data-page-node-id="r0IFTy3Buo3JVcDwDcFtru">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3a3a42" stroke-width="1" data-page-node-id="PGSXIRnQOCpGzeRmR2LBke"><rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="1UO6giUYlUgPyd7pBRNyQz"/><circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="bYBk70VOB2lRBzyaQdjhbo"/><path d="M21 15l-5-5L5 21" data-page-node-id="iBzHqPGvZV9FqcHopnzcTM"/></svg>
+              </div>
+              <div class="f-cell" data-page-node-id="bHCppJVEZU7H1rkQ6ybcBC">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#3a3a42" stroke-width="1" data-page-node-id="iChgEGbCE4uJ0T8pK3A6bQ"><rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="OEaJJ6ALgttwgwU5Nb2kxp"/><circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="CI60xMvXDoENo2OVdky7sa"/><path d="M21 15l-5-5L5 21" data-page-node-id="cegVUYgpOhJEGBjs9MyQvb"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-bar" data-page-node-id="TXglos7QtAcs6US95QzWrP">
+        <div class="ab-side" data-page-node-id="7cuGuZvDD8vdtbbEbzXHtc">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A6A6AD" stroke-width="2" data-page-node-id="vqLpGb8LSBBDkkCiBjqpqT"><path d="M22 2L11 13" data-page-node-id="hVVBrYCzD99ySlquYP6Q1a"/><path d="M22 2l-7 20-4-9-9-4 20-7z" data-page-node-id="ENG4TTZ3ahrnEVgcVdIEUH"/></svg>
+          <span class="t" data-page-node-id="WMxEnyOCTPeTXJf8Jn7mks">导航</span>
+        </div>
+        <div class="ab-main" data-page-node-id="iFcdrCUTqMvWVltVpGMGTi">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="E123DPTIRptakc1l1LUn4R"><polyline points="20 6 9 17 4 12" data-page-node-id="rvxjR8YCNuzBHt82qMjlIA"/></svg>
+          签到
+        </div>
+        <div class="ab-ghost" data-page-node-id="XaCE3v4fIf73b2hp8YGJbs">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FF8A6E" stroke-width="2" data-page-node-id="z8WEAsqvRYxGFK16UE1Xee"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" data-page-node-id="gxYVa8uXjgVmX00W2wuOff"/><circle cx="12" cy="13" r="4" data-page-node-id="yBnA8wXSt6CGzPD6HHfxVX"/></svg>
+          <span class="t" data-page-node-id="XEDTZrLg0fMEhvKxxGIVxh">发打卡</span>
+        </div>
+      </div>
+      <div class="home-bar" data-page-node-id="4J2ZIj9gm14mcOeTZyDKes"></div>
+    </div>
+  </div>
+
+  <!-- ===== 画板 B：已签到状态 ===== -->
+  <div class="wrap" data-page-node-id="T6OCfe7DDkZVjfTu70DhE6">
+    <div class="label" data-page-node-id="x3ryEydMWdFSKrWGNBIFZE">B · 已签到状态：主键=发打卡，副键=已签到（键位不跳）</div>
+    <div class="phone" data-page-node-id="FF8G9BHAUrZAQ6zMwMaNDo">
+      <div class="scroll" data-page-node-id="pqzzpkGCHzlp9RAhp5gMlC">
+        <div class="hero" data-page-node-id="84EWvYsVYaecbXd6yta5Gg">
+          <div class="hero-img" data-page-node-id="FZ0kvZ1UikZEl0FawYAuDT">
+            <svg width="90" height="90" viewBox="0 0 24 24" fill="none" stroke="#3a3a42" stroke-width="1" data-page-node-id="zLD5ozGl7YC7IzhVEpwsgh">
+              <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="hVbPSOtcV6K1pvcOsUA3zP"/><circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="AGcGyXBZHGVLJhHxchRi31"/><path d="M21 15l-5-5L5 21" data-page-node-id="MlwN0S6mkWdQXsNhsxRUaW"/>
+            </svg>
+          </div>
+          <div class="hero-grad" data-page-node-id="fKvi7V8Zvqi1cnpzNdzBq5"></div>
+          <div class="nav-back" data-page-node-id="jkF92CEZ3Y9XrCfdRWttGN">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="NVmGaGGBVRrpaqaK8JfmvC"><polyline points="15 18 9 12 15 6" data-page-node-id="UqKWeQ08GC6pwJ8ttgBnEZ"/></svg>
+          </div>
+          <div class="capsule-hint" data-page-node-id="t4uuLUbNqAqMgD5CV8gb2V">胶囊区</div>
+          <div class="hero-counter" data-page-node-id="A6KqHsYj55qMbj0byP3wRE">1/3</div>
+          <div class="hero-name-row" data-page-node-id="u6lXaB5BVlmtgxwtwfhnLf">
+            <div class="hero-name" data-page-node-id="1ccTXkNu8ze5BFaTrBjT7d">南湖广场板场</div>
+            <div class="hot-sticker" data-page-node-id="Wawod8YGZAGCwvs4u1uEvk">热门</div>
+          </div>
+        </div>
+
+        <div class="info-card" data-page-node-id="cGKeDRw1TH0CgTX9p6Tfqi">
+          <div class="report-entry" data-page-node-id="SEB6BKJlHx0aaAlRSDQlRc">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#6E6E76" stroke-width="2" data-page-node-id="48bE3Tx2FJE8eYnERRbKpX"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" data-page-node-id="Ilam271MJJuWbDjlvRBI1Q"/><line x1="4" y1="22" x2="4" y2="15" data-page-node-id="U4HJzPJKNfHoGY9Bi6DB2d"/></svg>
+            报错
+          </div>
+          <div class="rate-row" data-page-node-id="8WdOJrJ5LtZ01VmFAEp9nC">
+            <div class="stars" data-page-node-id="VnGs5aFoFEiK6h8JIDGAbM">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="ReJS5augpyMIrr9CXoFnXm"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="vPJ8NdfRU1IGKGGtHB0SEo"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="5xrAppMDC6UBW8CAbBzObs"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="h9jsyD6VT38G9L520J58XW"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="ieW9C5eQmh5QrYEfg46JUc"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="08AcKSbV7yn4AgM7xD4GH2"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="Xc8UmCXvVJ4a39mbV3UyLg"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="NsU5gcR5rtKXVGaxNrifGh"/></svg>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="#3A3A42" data-page-node-id="vijg3WjBwbPKUK9eZTGtpt"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="0hezgAahpVNJT1KaDgnYLl"/></svg>
+            </div>
+            <span class="rate-num" data-page-node-id="mc6ro4Y8m2NdMedTWek6RE">4.8</span>
+            <span class="rate-count" data-page-node-id="yIhg60xs1BHYDFoSo6dHPE">· 236人评价</span>
+            <span class="dist-pill" data-page-node-id="WDx8DJMVYWhJeVBBJzFOlO">距你 1.2km</span>
+          </div>
+          <div class="addr-row" data-page-node-id="mVDGFtyEn1dOoAfiFGhp3P">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF8A6E" stroke-width="2" style="flex-shrink:0;margin-top:2px" data-page-node-id="2C9Wq14corGJrdCnZPJ2Ca"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" data-page-node-id="yEXxainsqiNQVea1YfDKIN"/><circle cx="12" cy="10" r="3" data-page-node-id="ByGGZ7XXkWjVRD1fYN0aAn"/></svg>
+            洪山区南湖大道 128 号南湖幸福湾公园东南角
+          </div>
+          <div class="tag-row" data-page-node-id="D67j9cpYAlxhuqxzYfWvB6">
+            <span class="tag tag-first" data-page-node-id="GDd1dQoQy4SvG7tCgw5kvx">街式</span>
+            <span class="tag" data-page-node-id="fi5jK1Nma1gkzzIFliLiKn">免费开放</span>
+            <span class="tag" data-page-node-id="SlwW5iFsvuCL3iSarPfqpk">夜间灯光</span>
+          </div>
+        </div>
+
+        <!-- 无人在场弱化态 -->
+        <div class="live-card off" data-page-node-id="2hsEcuC50cbMSXzzknjC3H">
+          <div class="live-line" data-page-node-id="qOdveniNqHijejbNkuEm5y">
+            <span class="pulse gray" data-page-node-id="PZqHcmWdWhDAQTxz5J8jG0"></span>
+            <span class="live-text gray" data-page-node-id="NlxeWpL3iI3LTrCH0W0ioF">近 30 分钟暂无滑手在场</span>
+          </div>
+        </div>
+
+        <div class="feed-sec" data-page-node-id="4dPZXB70qaKGtT1yN7Vv5B">
+          <div class="feed-head" data-page-node-id="xTKf6IDlK3xj91AOOMLYCB">
+            <span class="feed-title" data-page-node-id="2bA0Fq6GW4BYKc2zkVx4zV">打卡动态</span>
+            <span class="feed-more" data-page-node-id="my2EH0ctLQ9ONV0SJvo15D">查看全部 ›</span>
+          </div>
+          <div class="feed-card" data-page-node-id="GSiIkf8SQvhdysrxAyL5Gs">
+            <div class="feed-head-row" data-page-node-id="HfUwA5fael7Ip6e0odre2n">
+              <span class="f-ava" style="background:#2A8CFF" data-page-node-id="As4cMtDNPy5GNw6ulaWaxx">鹿</span>
+              <div data-page-node-id="puzTzdXsaEjD5iO5jMuBGA">
+                <span class="f-name" data-page-node-id="3GhrtcKcNkIriGtH2YvQeL">小鹿不会滑</span><span class="f-years" data-page-node-id="7CoNhoMX5IKqVgOydicEOL">滑龄1年</span>
+                <div class="f-time" data-page-node-id="s4WlFNzoepmjEb9PlEBiJv">5小时前</div>
+              </div>
+            </div>
+            <div class="f-text" data-page-node-id="h8Y8FQ7zg76ESMaybUCNGz">求地址，想过去练 ollie</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-bar" data-page-node-id="AaTbfnk7dJFbhuEEZ2ps9k">
+        <div class="ab-side" data-page-node-id="cmecG3swfzCUzPFSK4Z4Gu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#A6A6AD" stroke-width="2" data-page-node-id="edIflw4RzFTBwjYGAXCfMn"><path d="M22 2L11 13" data-page-node-id="FzWtiQ4GJ6h7xQsR8zygFO"/><path d="M22 2l-7 20-4-9-9-4 20-7z" data-page-node-id="xRMmRc14WUlgm05Z90B3S5"/></svg>
+          <span class="t" data-page-node-id="GhcrKGHVmElix6p2DnjDg5">导航</span>
+        </div>
+        <div class="ab-main" data-page-node-id="GAEgs3SvNIvzUygi4HQnF4">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" data-page-node-id="jCWAEGWkGH8lt4EItntSta"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" data-page-node-id="rSJnFPqhUb5BoeMHFs3ESw"/><circle cx="12" cy="13" r="4" data-page-node-id="OPiPSIw6d62IfTF5m0bEZP"/></svg>
+          发打卡
+        </div>
+        <div class="ab-done" data-page-node-id="G9ZHuJA1B2MylgDWp8GIrs">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4AA" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="GdTF58fdnJyycujqzoEbd7"><polyline points="20 6 9 17 4 12" data-page-node-id="uPtACfJHQwctyNHOyiQuos"/></svg>
+          <span class="t" data-page-node-id="TDjRa6tSWNReW7YhKr7B5R">已签到</span>
+        </div>
+      </div>
+      <div class="home-bar" data-page-node-id="tTItLcdjbVP8NMlhAQlCik"></div>
+    </div>
+  </div>
+
+  <!-- ===== 画板 C：签到庆祝层（瘦身版） ===== -->
+  <div class="wrap" data-page-node-id="Q6IhYvvVR0U8s3kWVhT0G4">
+    <div class="label" data-page-node-id="tHy9xaUD5VjrOeTFv6hRWg">C · 签到庆祝层（瘦身版：无彩纸、无激励文案、1.2s 自动消失）</div>
+    <div class="phone" data-page-node-id="dzwvWAQNNxELwaZfnAAt1q">
+      <div class="scroll" data-page-node-id="anWYthb5qIwRKLudAlCAys">
+        <div class="hero" data-page-node-id="hTJQjcYWCkW81JUtMnN3uz">
+          <div class="hero-img" data-page-node-id="aiheyXgbAe2t8EmwAiDuBm"></div>
+          <div class="hero-grad" data-page-node-id="iRG3QAu9yL764xadkYWgj1"></div>
+          <div class="hero-name-row" data-page-node-id="k4V8CX8QtAyf9lITo5G7IJ">
+            <div class="hero-name" data-page-node-id="fPRfozCCFYZbDM8C0O2EgW">南湖广场板场</div>
+          </div>
+        </div>
+        <div class="info-card" style="opacity:0.6" data-page-node-id="COzYtlaiMqv0WCBG5ogfzt">
+          <div class="rate-row" data-page-node-id="cD9Z5ArteJnCXwpRWehUF8">
+            <span class="rate-num" data-page-node-id="oPOOy2SrpkETfGPslHQ8bT">4.8</span>
+            <span class="rate-count" data-page-node-id="sHBhGlAEgcYvEOUoGCMy8x">· 236人评价</span>
+          </div>
+        </div>
+      </div>
+      <div class="cel-mask" data-page-node-id="60IGwAfTfGC8fwY0VWAie0">
+        <div class="cel-card" data-page-node-id="3cOsqwPJoPbepvbMqgOB7q">
+          <div class="cel-badge" data-page-node-id="nQ9aKrKN2ep1rGfnfOPcq0">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ERFNsXxqmeRrJTc3AQsElO"><polyline points="20 6 9 17 4 12" data-page-node-id="4DoO2ECWNUU8harmNisvCZ"/></svg>
+          </div>
+          <div class="cel-title" data-page-node-id="he8Ze5fvaN7S4mRFp7AthI">签到成功</div>
+          <div class="cel-streak" data-page-node-id="7PptjzymEcv74OzpUCDcrj">已连续签到 5 天</div>
+        </div>
+      </div>
+      <div class="home-bar" data-page-node-id="2KjsAIHvPoDyOq6jL8ekwA"></div>
+    </div>
+  </div>
+
+  <!-- ===== 画板 D：评分底部 sheet ===== -->
+  <div class="wrap" data-page-node-id="q4DMGDMWJPY5xGwWEgxMQJ">
+    <div class="label" data-page-node-id="hBA2RWDBowCkzd8PZcDaQj">D · 评分弹层（统一底部 sheet，替代原居中卡片）</div>
+    <div class="phone" data-page-node-id="kGgYDCNl1WksIVA58OO9Bc">
+      <div class="scroll" data-page-node-id="Ra5MZnWfozzBBXQNq4L3JH">
+        <div class="hero" data-page-node-id="SROBx1xnJLPgApoSy8ruJF">
+          <div class="hero-img" data-page-node-id="FcTpZb56Pt7XKXf77pZyGi"></div>
+          <div class="hero-grad" data-page-node-id="8A1lBdF9f7gFCp4VET9PMA"></div>
+          <div class="hero-name-row" data-page-node-id="bb8tqsAqk6gGkNPiP39AG9">
+            <div class="hero-name" data-page-node-id="TnlpuPx74DsoKvjO46cJKB">南湖广场板场</div>
+          </div>
+        </div>
+        <div class="info-card" style="opacity:0.6" data-page-node-id="RxXsBdbfPI0kg2mNHyji2v">
+          <div class="rate-row" data-page-node-id="AAnU7lzKXoueBosjSeqPgF">
+            <span class="rate-num" data-page-node-id="xGLB4DjDwlu3nMmDTQ4svr">4.8</span>
+            <span class="rate-count" data-page-node-id="vJ1n13dqeUIGShZwuzOSlf">· 236人评价</span>
+          </div>
+        </div>
+      </div>
+      <div class="sheet-mask" data-page-node-id="GFSqRruapPzAX8lvVLBX1b">
+        <div class="sheet" data-page-node-id="vBUzHCwUswjZ6w3yw191mK">
+          <div class="sheet-handle" data-page-node-id="LAcLTiB38vT8PgCrAEpHFr"></div>
+          <div class="sheet-title" data-page-node-id="y7OojhCA4FHLOPg6Ps0Vw1">给「南湖广场板场」评分</div>
+          <div class="sheet-hint" data-page-node-id="TgJTDQKayApXoRVpd0omDx">你当前评分 4 星，点击星星可修改</div>
+          <div class="sheet-stars" data-page-node-id="G6g7BpsPeVgEKuiC63ChNn">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="vgdBY8n368hk2rwmEu3WWu"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="nuZUjIqfRfiyxYUFYCsyOm"/></svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="Z1ywh0EXApaTJiqSIemVlB"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="UXTU7TdvbrPT8XMj0HcCb4"/></svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="dufLDZLnc3UGJt8VKIGCCN"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="8V5BxVogv9V9i1OaPadIUq"/></svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#FF5A36" data-page-node-id="5bbGq0rScJQclem59kHKKY"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="eAipsnr19GT289wPmfty0l"/></svg>
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="#3A3A42" data-page-node-id="otQWcVJyIQWQD8rLMmAOYT"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01z" data-page-node-id="5oACOnZI66owJxyFDp6HFE"/></svg>
+          </div>
+          <div class="sheet-desc" data-page-node-id="mY0IjpurYxHen1uUGax4pc">4 星</div>
+          <div class="sheet-btn" data-page-node-id="CFuqxhArJi8Ve4xyFQXQLs">提交评分</div>
+        </div>
+      </div>
+      <div class="home-bar" data-page-node-id="gc4O6GtJKFYLr8q2liZPmG"></div>
+    </div>
+  </div>
+
+</body>
+</html>
