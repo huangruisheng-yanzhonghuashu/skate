@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-page-node-id="DDV21OW9EfFEDF2ZSPWAHl">
-<head data-page-node-id="M5ZYTl0fBNA5RhrexP7NcJ">
-  <meta charset="UTF-8" data-page-node-id="norROa4lUP1NA7QvoudDwV">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="IQn7GgwMAusJRHBAeuRrpL">
-  <title>去哪滑 · 发现页内容预览高保真稿 v1.4</title>
+<html lang="zh-CN" data-page-node-id="U3rxBLcgIqE3Gy2BsEe7jS">
+<head data-page-node-id="a1tdT6B0ojEXOGMZRIAhYE">
+  <meta charset="UTF-8" data-page-node-id="BJzNSfnAWdGi5Cn0QAhiwF">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="2lezk6lUm7SXpyICUnW9Qv">
+  <title>去哪滑 · 发现页内容预览高保真稿 v1.5</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -38,6 +38,42 @@
       font-weight: 500;
     }
     .status-bar { height: 44px; width: 100%; }
+
+    /* 视频预览页：自定义导航栏 */
+    .navbar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 88px; /* 状态栏 44 + 导航栏 44 */
+      display: flex;
+      align-items: flex-end;
+      z-index: 100;
+      padding-bottom: 0;
+    }
+    .nav-back {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 8px;
+    }
+    .nav-capsule-hint {
+      position: absolute;
+      right: 8px;
+      bottom: 6px;
+      width: 87px;
+      height: 32px;
+      border: 1px dashed rgba(255,255,255,0.25);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,0.35);
+      font-size: 10px;
+    }
+
     .top-counter {
       position: absolute;
       top: 44px;
@@ -66,11 +102,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-    .placeholder img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
     .play-overlay {
       position: absolute;
@@ -171,7 +202,7 @@
       right: 0;
       bottom: 0;
       background: rgba(0,0,0,0.55);
-      z-index: 20;
+      z-index: 200;
     }
     .comment-sheet {
       position: absolute;
@@ -181,7 +212,7 @@
       height: 60%;
       background: #1E1E23;
       border-radius: 32px 32px 0 0;
-      z-index: 21;
+      z-index: 201;
       display: flex;
       flex-direction: column;
       padding: 0 24px;
@@ -299,182 +330,172 @@
     }
   </style>
 </head>
-<body data-page-node-id="yti5ASN9pMkLFyofe4xXrK">
+<body data-page-node-id="apgP6oNc8gBcYrcSJuq4zg">
 
-  <!-- 状态 A：单视频预览（右下角操作组：点赞 / 评论 / 转发） -->
-  <div class="wrap" data-page-node-id="dd9U6nqeM9iwxiEw52OEqX">
-    <div class="label" data-page-node-id="pTAmTBMACKCm1E9XdMMR8U">状态 A：单视频预览 · 右下角点赞 / 评论 / 转发</div>
-    <div class="phone" data-page-node-id="NyXaoeZoO9ftFMhvkSy4h9">
-      <div class="status-bar" data-page-node-id="VfCeWC2PuzomzhDE3fDv6f"></div>
-      <div class="media-area" data-page-node-id="GgbGLLNAjz9RznCAiL7Z7T">
-        <div class="placeholder" data-page-node-id="etD7AC5QWnky6jCBYO5uSF">
-          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ubgHR9aoZD7dBhgDmur88e">
-            <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="fnqVj2pXiwMEhyh5VRdSDs"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="ztQ5kglYRk0V924FDn8Bva"></circle>
-            <path d="M21 15l-5-5L5 21" data-page-node-id="7k90uF0DaDAW80nQYT6hZn"></path>
+  <!-- 状态 A：单视频预览（独立页面：导航栏返回 + 右下角点赞/评论/转发） -->
+  <div class="wrap" data-page-node-id="hfBDHe3PUJPfngwHHCeYlN">
+    <div class="label" data-page-node-id="zYvPjlRTMS6dixYMB4VUWT">状态 A：视频预览页 · 导航栏返回 · 右滑返回 · 右下角操作组</div>
+    <div class="phone" data-page-node-id="9AvykclVhrBQ2giZMDauXO">
+      <div class="media-area" data-page-node-id="xgpC80fW9ikMSdva0iO0Is">
+        <div class="placeholder" data-page-node-id="datg5hGhRCq4nQvQpcLjud">
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="APvtU4o0B1XBAeFDgGcJPy">
+            <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="bO3djyJHhMfM7hEbt3geAG"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="DRwG65Etg9EDnXjiRcC7nI"></circle>
+            <path d="M21 15l-5-5L5 21" data-page-node-id="MtCYG6tTTqqfmDtRWi7KMh"></path>
           </svg>
         </div>
       </div>
-      <div class="play-overlay" data-page-node-id="qanNlaEOZFxOSSPrGBVkiQ">
-        <div class="play-btn" data-page-node-id="NnRAD2nA47HWFaRs5eF2IF">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="0" data-page-node-id="LbVlEGfvepBBZP9kFzhsv0">
-            <polygon points="7,4 21,12 7,20" data-page-node-id="cbdFu3d83X9eNGdd1HXRhJ"></polygon>
+
+      <!-- 自定义导航栏：左侧返回，右侧胶囊保留区 -->
+      <div class="navbar" data-page-node-id="boLDifPnol424lHzE9Ff9L">
+        <div class="nav-back" data-page-node-id="9X08iob42dS29c8qEEL8QJ">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ObtXV5baSbRl48QTvB0KXe">
+            <polyline points="15 18 9 12 15 6" data-page-node-id="UJMl6H31MqjDuwQkl4uI8b"></polyline>
+          </svg>
+        </div>
+        <div class="nav-capsule-hint" data-page-node-id="m7VgQjFua2QdW35KBI6aML">胶囊区</div>
+      </div>
+
+      <div class="play-overlay" data-page-node-id="K8V4outI96JLLkcziuga76">
+        <div class="play-btn" data-page-node-id="lSoLPPvfcPeSklH4sQcJAj">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="0" data-page-node-id="1V0nkGleP9YESQhU5OszzK">
+            <polygon points="7,4 21,12 7,20" data-page-node-id="dGXA6eOxNTmMrA1wNBJdXJ"></polygon>
           </svg>
         </div>
       </div>
-      <div class="actions" data-page-node-id="FVfTJHEyFLHwOmRXq6iG9D">
-        <div class="action-btn" title="点赞" data-page-node-id="KDYGIG81oZ60EjoubFCfdm">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="HxlElLEN2c5Q522IlGbifI">
-            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="FRu115FjPP3511wCi6jGvm"></path>
+
+      <div class="actions" data-page-node-id="QYrgr3Fj2d0OquutS4EXtu">
+        <div class="action-btn" title="点赞" data-page-node-id="hV6Lyiqr6OHcRIiRuSXGKx">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ZUAx2TFPWUSfVxVYWUGFZ6">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="hQLSJTsGUb7gOBXoma5Jck"></path>
           </svg>
         </div>
-        <div class="action-btn" title="评论" data-page-node-id="Sijh4m3GOJTHOeEWya80FC">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ASXtDg3l8oNlSvjVfYPWDU">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" data-page-node-id="scHjEhvImfo4Vck5kZlfn1"></path>
+        <div class="action-btn" title="评论" data-page-node-id="boP8iDS1sLC4EEEpzzCHx3">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="m3PFtios8CZzXoZAeCoOJA">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" data-page-node-id="QQS1LfoCa6pPEpvCzSqQF5"></path>
           </svg>
-          <span class="badge" data-page-node-id="Hzjh3gZUfptkA5OTN7gguK">128</span>
+          <span class="badge" data-page-node-id="j5AjvVOISQC9yDrLvJVDio">128</span>
         </div>
-        <div class="action-btn" title="转发" data-page-node-id="qTOo6D9hFxUcvVynEF98yY">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="MELM4ZrVNPCtxxemjQ29Bo">
-            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" data-page-node-id="Vt5vdJXSJ73BfOHriaU9Il"></path>
-            <path d="M16 6l-4-4-4 4" data-page-node-id="qx5SBQMBatZWzZ94k3IrEh"></path>
-            <path d="M12 2v13" data-page-node-id="R4P9GQbs1eGH1KJQ7M8q5m"></path>
+        <div class="action-btn" title="转发" data-page-node-id="qCFFmCAr0H1lWtGqfdC1hL">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="6Ba7Ltr8wNaEBSwn5j6cjZ">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" data-page-node-id="Arz4rt8RDqNadaxF3gwQdj"></path>
+            <path d="M16 6l-4-4-4 4" data-page-node-id="RPeOKB7QnoTLVidFtsLRLR"></path>
+            <path d="M12 2v13" data-page-node-id="7pEdL2IJSCAIgVQUtp2QiK"></path>
           </svg>
         </div>
       </div>
-      <div class="tag" data-page-node-id="jipTmGst6t43CPNKVNwjMn">单视频 · 返回关闭 · 右下角操作组</div>
-      <div class="home-bar" data-page-node-id="YANiy2HsyXlPfsnElGyftd"></div>
+      <div class="tag" data-page-node-id="41DBCidoi6GSQeL83l749S">独立页面 · ← 返回 / 右滑返回</div>
+      <div class="home-bar" data-page-node-id="2DakbmepBKbgMGygsGMRFU"></div>
     </div>
   </div>
 
-  <!-- 状态 B：多图预览 3/5（点击图片关闭） -->
-  <div class="wrap" data-page-node-id="59o7eWGvWFmya4QiXB4pBi">
-    <div class="label" data-page-node-id="7dtUZunuX7BVDvDxjCHJ3M">状态 B：多图预览 · 点击图片任意区域关闭</div>
-    <div class="phone" data-page-node-id="GTcYiwOlBbNcdawJrKErdi">
-      <div class="status-bar" data-page-node-id="rrTkDxfqm2TkRrQv4mQ4Io"></div>
-      <div class="top-counter" data-page-node-id="mS5QyNLoJYAAGJn1C72FuD">3 / 5</div>
-      <div class="media-area" data-page-node-id="DXjHF8VQjHuynaayctEuim">
-        <div class="placeholder" data-page-node-id="E9G6TJs9Ixgcj4qA4SeQoC">
-          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="xuVAdMcytaRcW1nLAn3fPB">
-            <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="40gcgqMLepqkSlIEPuBzhN"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="UUURJYc7y5ezxl2PEwy9PR"></circle>
-            <path d="M21 15l-5-5L5 21" data-page-node-id="ut7TaXt6xQhIKMWyWnru1M"></path>
+  <!-- 状态 B：多图预览 3/5（页面内遮罩，点击图片关闭） -->
+  <div class="wrap" data-page-node-id="jGmcPzzrXRGIsyN5poCiGt">
+    <div class="label" data-page-node-id="jQTl39eHAlIFFsNyUFVeKz">状态 B：多图预览（遮罩）· 点击图片任意区域关闭</div>
+    <div class="phone" data-page-node-id="qhx4yHRE8C5EY4nIWEC2dl">
+      <div class="status-bar" data-page-node-id="HeAvNmY19MAd5qXw7Ngvcb"></div>
+      <div class="top-counter" data-page-node-id="4moQlSVgB4o7RoBKyPnYRm">3 / 5</div>
+      <div class="media-area" data-page-node-id="gCpVwVAdR8wXBuWz6H3JgF">
+        <div class="placeholder" data-page-node-id="hIyF4yKblHLMryJHhpJtfI">
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="nqwJP9BWaaO6QL9vktMYJT">
+            <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="fw2SRhT1cCXReuEKdXCeUx"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="MNHTc4jXV6wzyB8ipvC24H"></circle>
+            <path d="M21 15l-5-5L5 21" data-page-node-id="UuPgmMnUC9RyIlMBX6QO8f"></path>
           </svg>
         </div>
       </div>
-      <div class="dots" data-page-node-id="f71s9J6nrVl9OVtOuagn7X">
-        <div class="dot" data-page-node-id="Jk1jSbFCzOAyC2dsD4cSGG"></div>
-        <div class="dot" data-page-node-id="n04ngGZPgtkWwF2s6Vf1FT"></div>
-        <div class="dot active" data-page-node-id="8CSYbLuIi5punu7CBaXIdV"></div>
-        <div class="dot" data-page-node-id="tUIz3svBcWAK2t9rCADrKt"></div>
-        <div class="dot" data-page-node-id="TW0Y801lDGBlDOc8gBtOKe"></div>
+      <div class="dots" data-page-node-id="EdVP7DsWkeDRqkhULJBJqj">
+        <div class="dot" data-page-node-id="FeVp33mopZrgntJqMOrQNg"></div>
+        <div class="dot" data-page-node-id="FKNfBh5c1eWcmYq2QGBtK0"></div>
+        <div class="dot active" data-page-node-id="fNab5ZI3uqMzFGPKOGmae5"></div>
+        <div class="dot" data-page-node-id="AsK1t9EvCaZEe3fN3Bqhp1"></div>
+        <div class="dot" data-page-node-id="wIPb6Hhw4mA9yYAHGRwWJo"></div>
       </div>
-      <div class="tag" data-page-node-id="Vy8jHjp1h01cXRmVrI164o">多图 · 顶部计数器 · 底部圆点</div>
-      <div class="home-bar" data-page-node-id="qBEKEObSUk8Hnb0gKTQlnk"></div>
+      <div class="tag" data-page-node-id="zM9pSE8cqSKpIjVkx94nTX">多图遮罩 · 顶部计数器 · 底部圆点</div>
+      <div class="home-bar" data-page-node-id="rafTIDy3WwCy1HDQaCHYMf"></div>
     </div>
   </div>
 
-  <!-- 状态 C：视频预览 + 评论面板 -->
-  <div class="wrap" data-page-node-id="mCZkOD4oKrZp26fSq8V8gQ">
-    <div class="label" data-page-node-id="BiN1e9UPa1KhdYFqaosMNx">状态 C：视频预览 · 点击评论拉起半屏评论面板</div>
-    <div class="phone" data-page-node-id="Ux9e88isLQBzGIzBaU24xu">
-      <div class="status-bar" data-page-node-id="VCtZf8wzVnnEaBQIaMQ5vg"></div>
-      <div class="media-area" data-page-node-id="HQ2wIVpqGdQiYfID3CLbIZ">
-        <div class="placeholder" data-page-node-id="e2BXqYcVUDL2cxsmEbMwE6">
-          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="MNTvWw316OYJEAn7KczYj2">
-            <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="BiZyfO9JD8Seb7TZtTQxyN"></rect>
-            <circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="C8sQ3Haqt4nB1z7TfLjiO5"></circle>
-            <path d="M21 15l-5-5L5 21" data-page-node-id="Y31X4qWS1KgR5SaSqW9f9O"></path>
-          </svg>
-        </div>
-      </div>
-      <div class="actions" style="bottom: 55%;" data-page-node-id="j6yiV7kQj6BnUDSm1HOZWD">
-        <div class="action-btn" title="点赞" data-page-node-id="xgua8tGEVmmdZKyxbAU1VG">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="dnb2c9ZqDcYQ2Tm7wPzHF6">
-            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="gND32CiBZ12ACFZe02XNsl"></path>
-          </svg>
-        </div>
-        <div class="action-btn" title="评论" data-page-node-id="wcjQXGmwquBgRCGXaQhC0y">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="5ye76xQ99clbno34JxEQPX">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" data-page-node-id="BMhe5SItLe0zWPnLvdkttM"></path>
-          </svg>
-          <span class="badge" data-page-node-id="K4tfDXvGpt7UGtC7aUcj5j">128</span>
-        </div>
-        <div class="action-btn" title="转发" data-page-node-id="WIqaJJPaPAogGLxGO4KwAu">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="JBubaVWe0NFILB4w7EByAt">
-            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" data-page-node-id="rEGFVgXcfZCHt6p84O5mLG"></path>
-            <path d="M16 6l-4-4-4 4" data-page-node-id="1KfhPrqMAQATrvXiKB6Qy2"></path>
-            <path d="M12 2v13" data-page-node-id="aqeltI3MzMed0qBSUZhT6E"></path>
+  <!-- 状态 C：视频预览页 + 评论面板 -->
+  <div class="wrap" data-page-node-id="CAXoqomiWa1DYFbMzIwogW">
+    <div class="label" data-page-node-id="kCK0KUX1v3A0RT1L64bD5F">状态 C：视频预览页 · 点击评论拉起半屏评论面板</div>
+    <div class="phone" data-page-node-id="2XESVZRxlEo6e6XqRBHPRO">
+      <div class="media-area" data-page-node-id="1POFwT2ogQbBBO7lpXlKly">
+        <div class="placeholder" data-page-node-id="OgAWzsGgdnz8v16fEw9fXP">
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="f7DFwmIbmXUgbVfJCgKjDL">
+            <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="PIit6qOsAc7X4agMv93qAY"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="qZAXel6AaozD4iKTV3kVEf"></circle>
+            <path d="M21 15l-5-5L5 21" data-page-node-id="GWTayafDuqEvB155RB9jGB"></path>
           </svg>
         </div>
       </div>
 
-      <!-- 评论面板 -->
-      <div class="comment-mask" data-page-node-id="rvLRmXNYsbxXx0KfIUYenT"></div>
-      <div class="comment-sheet" data-page-node-id="hA2mPvjUo3n91SZ7PQfCAT">
-        <div class="sheet-handle" data-page-node-id="x4GWCoBHnlQHkoyPjIhv1d"><div class="handle-bar" data-page-node-id="nLumK1bBOdNnDdbQ1LxTVi"></div></div>
-        <div class="sheet-header" data-page-node-id="W2kDzXxshOZKyRKGc1vBrl">
-          <div class="sheet-title" data-page-node-id="KWDtsD1hv3rQPBQeWZva8C">128 条评论</div>
-          <div class="sheet-close" data-page-node-id="HXa1RDfua4IBDKqQyhslVW">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="ehVIjnNA4D8ydIX1YNpIBg">
-              <line x1="18" y1="6" x2="6" y2="18" data-page-node-id="ee7suu99bo56KZZrQ6BrmK"></line>
-              <line x1="6" y1="6" x2="18" y2="18" data-page-node-id="VN7I0OjV00MeO0oRqO1z7a"></line>
+      <!-- 评论面板（遮罩覆盖导航栏，先关面板再返回） -->
+      <div class="comment-mask" data-page-node-id="3QM4l3pdW5ve6f1rMOBPyX"></div>
+      <div class="comment-sheet" data-page-node-id="qwTHB4ByXld3qJMvLbqOAy">
+        <div class="sheet-handle" data-page-node-id="xZD8XicBs0L3fZJCS2qNVp"><div class="handle-bar" data-page-node-id="FLncGHVusCK00VKvSWmoMl"></div></div>
+        <div class="sheet-header" data-page-node-id="lgBa4xlS7CJ9uGKSJnLFHw">
+          <div class="sheet-title" data-page-node-id="JdldDpKoBrzBPxxX9tZZUn">128 条评论</div>
+          <div class="sheet-close" data-page-node-id="lHeH7MM9QLiH0PWQAiCpzj">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="qXAdyHXK6EAr6SRd1HiiW7">
+              <line x1="18" y1="6" x2="6" y2="18" data-page-node-id="ERwEZ8fHVRIMkwO0FiZJF6"></line>
+              <line x1="6" y1="6" x2="18" y2="18" data-page-node-id="1qb6XPby8IdsWDnFwimZL3"></line>
             </svg>
           </div>
         </div>
-        <div class="comment-list" data-page-node-id="fOJvaDqd1Fd7En4HUQgyn0">
-          <div class="comment-item" data-page-node-id="5JotOhepeU9QcN6I4vHIhv">
-            <div class="comment-avatar" data-page-node-id="WGDWfItgDHfemmRECaxToJ"></div>
-            <div class="comment-body" data-page-node-id="JHYYgHhQoa4owuQiLAGPad">
-              <div class="comment-meta" data-page-node-id="XV8D5r7G2PUaKFSsstgZHL">
-                <span class="comment-name" data-page-node-id="iIn5PIWNmXsi0M0Dgb7Spq">滑板阿伟</span>
-                <span class="comment-time" data-page-node-id="ddfpCdA8dAKCdctKA2KFB9">2小时前</span>
+        <div class="comment-list" data-page-node-id="lttyZDocqgfPoP1A9M8tot">
+          <div class="comment-item" data-page-node-id="AWJUrZsY8OGmw3q5azSFEi">
+            <div class="comment-avatar" data-page-node-id="Sw0ExQoVRWBGCbhXCbyVLm"></div>
+            <div class="comment-body" data-page-node-id="GBwJyTKPHhlpqKfY65j5OG">
+              <div class="comment-meta" data-page-node-id="oTQpXGNfb2Tesc2crBdfTa">
+                <span class="comment-name" data-page-node-id="ZgDFiEeGzzZOzOmmdlK0sc">滑板阿伟</span>
+                <span class="comment-time" data-page-node-id="SYVljGLwbenHIPoggu71bl">2小时前</span>
               </div>
-              <div class="comment-text" data-page-node-id="Cn8BieHWkkFGdKDr80dcw1">这个地形太舒服了，周末冲！</div>
+              <div class="comment-text" data-page-node-id="bmv8rnDF1lIrfvKTPNEzvu">这个地形太舒服了，周末冲！</div>
             </div>
-            <div class="comment-like active" data-page-node-id="uWDWEQDDneBrUOVwDB7OTp">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF5A36" stroke="#FF5A36" stroke-width="2" data-page-node-id="TFrhemYJo3k4qvzQDMeNR2">
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="9laR3kb5UBXvMMH5cUBd4Z"></path>
+            <div class="comment-like active" data-page-node-id="KKohLi2FrQYpOUrX4OxJw1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF5A36" stroke="#FF5A36" stroke-width="2" data-page-node-id="bDSmrNvmIZ4HZi9jA4ms7b">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="rZc37posvV33WQCwO8Y2xA"></path>
               </svg>
-              <span data-page-node-id="E2rbHGoukSDLPCzD3ZUJkO">24</span>
+              <span data-page-node-id="vXLt2SJdIexhMWOFQTHDY1">24</span>
             </div>
           </div>
-          <div class="comment-item" data-page-node-id="uHMKPz9wwAzUG62INQq1hE">
-            <div class="comment-avatar" data-page-node-id="Js3AMF16pP0BlK2dZUQARe"></div>
-            <div class="comment-body" data-page-node-id="HI7PJlR76PrmByMQm9ogvT">
-              <div class="comment-meta" data-page-node-id="9kY9nAjBPFpMHAKLhv3B7u">
-                <span class="comment-name" data-page-node-id="NgAlx72d9bNTA6OhpAmaJ8">小鹿不会滑</span>
-                <span class="comment-time" data-page-node-id="gKRmLzHPlxDt3v6Vxx40Yi">5小时前</span>
+          <div class="comment-item" data-page-node-id="S2ndCBHjb3tvZQnAZg4S9e">
+            <div class="comment-avatar" data-page-node-id="54RmI6cHEycqcvFcGvP27C"></div>
+            <div class="comment-body" data-page-node-id="zKydTfOn1d0wD6xiqhYmxO">
+              <div class="comment-meta" data-page-node-id="s1TI2s1MKdc9CKXXl8fOgq">
+                <span class="comment-name" data-page-node-id="5HWL37AKnvO1bOSddDrEv7">小鹿不会滑</span>
+                <span class="comment-time" data-page-node-id="TWHNMjQwVn8xKpG0ngYeIX">5小时前</span>
               </div>
-              <div class="comment-text" data-page-node-id="xjZoJfghWtFUHoZuMeglaT">求地址，想过去练 ollie</div>
+              <div class="comment-text" data-page-node-id="DiQTI6jOv0XLnU5Plgg3g0">求地址，想过去练 ollie</div>
             </div>
-            <div class="comment-like" data-page-node-id="4plpxArVmNAFxgwMxojzCQ">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="9w7xnjIjX7ZIFbUNGP0jAt">
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="TLK6uyZTH96FQkayWpvGjr"></path>
+            <div class="comment-like" data-page-node-id="fU4rG0SwHgD40waMngiuXM">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="guPaCNgYLK5sp6FOhNJIsc">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="RuVMlFkvbETEqZF0a1F4VS"></path>
               </svg>
-              <span data-page-node-id="mo1dmonGy3ZOiyYnbX8Myx">3</span>
+              <span data-page-node-id="BXPG3RfkQVM9un08NJzTHB">3</span>
             </div>
           </div>
-          <div class="comment-item" data-page-node-id="ZNSpCJBTFXeW4oFxDaATeY">
-            <div class="comment-avatar" data-page-node-id="Psq9DA9lqBXgUuquXsRlUE"></div>
-            <div class="comment-body" data-page-node-id="vS0RNG9PhUpaLiJMdBUSB0">
-              <div class="comment-meta" data-page-node-id="v17PvR22eGoqJsd0QlHNka">
-                <span class="comment-name" data-page-node-id="2TRyQkqChOg3dxvb94luiA">OldSchoolChen</span>
-                <span class="comment-time" data-page-node-id="Z52No24fnvX5JJAz6RJP1b">昨天</span>
+          <div class="comment-item" data-page-node-id="Tp2735p1HcpKQGfTIyDEIM">
+            <div class="comment-avatar" data-page-node-id="g3H2B5BStn91y3rv3bJZha"></div>
+            <div class="comment-body" data-page-node-id="8jG8I7AxZbUG2hQDhiAaaO">
+              <div class="comment-meta" data-page-node-id="zk6tFG6lurvdwfQsJtwo1i">
+                <span class="comment-name" data-page-node-id="3Blrb0Wvi5WMndTXXRJwYM">OldSchoolChen</span>
+                <span class="comment-time" data-page-node-id="CFD1IF1on7s56IqFBRyMSn">昨天</span>
               </div>
-              <div class="comment-text" data-page-node-id="vFRChfWHH3DxM5Akzb7izh">晚上人不多，灯光也够，适合练招</div>
+              <div class="comment-text" data-page-node-id="wWNlUedO7pgAkI5AqWjh5b">晚上人不多，灯光也够，适合练招</div>
             </div>
-            <div class="comment-like" data-page-node-id="sh5jW6AavqQiFq7iso4O1E">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="TcW8IpE6beMdby5q835Dmz">
-                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="jjmDHBUeExcTGtwo6Usvuq"></path>
+            <div class="comment-like" data-page-node-id="RkuO8DUE6y2B40JNwq4UI1">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" data-page-node-id="WNKqeOHI3VIAsRigCvBnR3">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="vl5ZC0kIvGNoPhUmOllBe2"></path>
               </svg>
-              <span data-page-node-id="FwvSXxgIrInwaW2NcaFmSh">8</span>
+              <span data-page-node-id="QBgmFE0bnQ9c4C7cYcCsV5">8</span>
             </div>
           </div>
         </div>
-        <div class="comment-input-bar" data-page-node-id="G8DKePbnN3jGuEs3CnHb0L">
-          <div class="comment-input" data-page-node-id="N316w6cCVrdMOQzf86HB2V">说点什么…</div>
-          <div class="comment-send disabled" data-page-node-id="UYE9J3tfnyUNj7tQPEBCXU">发送</div>
+        <div class="comment-input-bar" data-page-node-id="aZ2BOhfjGE3JiJNWuQ5APq">
+          <div class="comment-input" data-page-node-id="2Vlr8evN18vBh6k4kA3faJ">说点什么…</div>
+          <div class="comment-send disabled" data-page-node-id="sVFHFekXDRxo1gqwGkY7dX">发送</div>
         </div>
       </div>
     </div>
