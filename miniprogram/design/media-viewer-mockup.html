@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>去哪滑 · 发现页内容预览高保真稿</title>
+<html lang="zh-CN" data-page-node-id="UYDKxoxG3aMUAXCA2pGd1Z">
+<head data-page-node-id="mTV0YqCbgl8PqsKTeuHnCg">
+  <meta charset="UTF-8" data-page-node-id="qv0rwYmT82mhuFMfNfSGpf">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" data-page-node-id="MtnZ0ZqWMHD3DBddUUEWlS">
+  <title>去哪滑 · 发现页内容预览高保真稿 v1.3</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -17,6 +17,12 @@
       padding: 40px;
       flex-wrap: wrap;
     }
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+    }
     .phone {
       width: 375px;
       height: 812px;
@@ -27,15 +33,12 @@
       box-shadow: 0 20px 60px rgba(0,0,0,0.25);
     }
     .label {
-      position: absolute;
-      top: -32px;
-      left: 0;
       font-size: 14px;
       color: #6b6b75;
       font-weight: 500;
     }
     .status-bar { height: 44px; width: 100%; }
-    .top-bar {
+    .top-counter {
       position: absolute;
       top: 44px;
       left: 0;
@@ -44,22 +47,10 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 20px;
       z-index: 10;
-    }
-    .counter {
       color: rgba(255,255,255,0.9);
       font-size: 15px;
       font-weight: 500;
-    }
-    .close {
-      position: absolute;
-      right: 16px;
-      width: 44px;
-      height: 44px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
     .media-area {
       width: 100%;
@@ -80,6 +71,58 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+    .play-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .play-btn {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: rgba(17,17,20,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+    .actions {
+      position: absolute;
+      right: 20px;
+      bottom: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      z-index: 10;
+    }
+    .action-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(30,30,35,0.72);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .action-btn .badge {
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 500;
+      white-space: nowrap;
     }
     .dots {
       position: absolute;
@@ -102,28 +145,6 @@
       height: 7px;
       background: #FF5A36;
     }
-    .play-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      z-index: 5;
-    }
-    .play-btn {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: rgba(17,17,20,0.55);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: auto;
-    }
     .home-bar {
       position: absolute;
       bottom: 8px;
@@ -134,78 +155,88 @@
       background: rgba(255,255,255,0.3);
       border-radius: 3px;
     }
+    .tag {
+      position: absolute;
+      bottom: 100px;
+      left: 20px;
+      color: rgba(255,255,255,0.4);
+      font-size: 12px;
+    }
   </style>
 </head>
-<body>
+<body data-page-node-id="IlYpNZSyMptRICg2LkspCd">
 
-  <!-- 状态 A：图片预览（第 3/5 张） -->
-  <div class="phone">
-    <div class="label">图片预览 · 3/5</div>
-    <div class="status-bar"></div>
-    <div class="top-bar">
-      <div class="counter">3 / 5</div>
-      <div class="close">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+  <!-- 状态 A：单视频预览（右下角操作组：点赞 / 评论 / 转发） -->
+  <div class="wrap" data-page-node-id="fvtdXrjomjVzqVX9uaUHHH">
+    <div class="label" data-page-node-id="TySxPpApEQUjNhOXyTrTWM">状态 A：单视频预览 · 右下角点赞 / 评论 / 转发</div>
+    <div class="phone" data-page-node-id="VTha71vfPjIbuNglozR9ym">
+      <div class="status-bar" data-page-node-id="swPno4OB26jE9lo1YJ1IKL"></div>
+      <div class="media-area" data-page-node-id="mc8A6WZUQjAn29HbH7b0Yb">
+        <div class="placeholder" data-page-node-id="qqyIfm4uZCTCxyXUInYXMm">
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="k2ozbHe2xZq7I7eMcaABrc">
+            <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="NZaVlER353RS5XiTBne6BJ"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="lJT12zIibcJh6HGWV4X6iI"></circle>
+            <path d="M21 15l-5-5L5 21" data-page-node-id="1VzDrtE7dpr0AOJR4xvqbJ"></path>
+          </svg>
+        </div>
       </div>
-    </div>
-    <div class="media-area">
-      <div class="placeholder">
-        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-          <circle cx="8.5" cy="8.5" r="1.5"></circle>
-          <path d="M21 15l-5-5L5 21"></path>
-        </svg>
+      <div class="play-overlay" data-page-node-id="JNE4AdtJ2oZL24lHfP8rtH">
+        <div class="play-btn" data-page-node-id="Xa4Pj3aoFfTvYuo30iuN3L">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="0" data-page-node-id="jF2YBxJBx9GvOy5FAeepqa">
+            <polygon points="7,4 21,12 7,20" data-page-node-id="SmTUxhJJDSgWEDNhUWFeBP"></polygon>
+          </svg>
+        </div>
       </div>
+      <div class="actions" data-page-node-id="PiBVYITYnGVZtikZZm8wMg">
+        <div class="action-btn" title="点赞" data-page-node-id="7QaInYcZGvATgtCJFAAhXK">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="FQHTThEL0S3NzhPgCVwoRP">
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" data-page-node-id="QMsTFv5wf0ragPXEcN55IA"></path>
+          </svg>
+        </div>
+        <div class="action-btn" title="评论" data-page-node-id="JSHGNNbKz5hmSFHs6naSc3">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="KxJYIUwtVmEkHJXI3Izm1e">
+            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" data-page-node-id="jBhQEfs4SDkAZiCnh1qqfU"></path>
+          </svg>
+          <span class="badge" data-page-node-id="LqDNZYK2HG4pgOG7lXynfq">128</span>
+        </div>
+        <div class="action-btn" title="转发" data-page-node-id="SAx8eacEvhzC7FTecva7JP">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="RcHT8UbWjZrgbWkTEdaQEJ">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" data-page-node-id="amD45IFqPVR6KlLa6MNDVA"></path>
+            <path d="M16 6l-4-4-4 4" data-page-node-id="z8WdL8SZDPFvPl4JkvljST"></path>
+            <path d="M12 2v13" data-page-node-id="6u8edcUcrcOlWZ0tiWvbmq"></path>
+          </svg>
+        </div>
+      </div>
+      <div class="tag" data-page-node-id="apyW1rnjihJNkFJubYiCdr">单视频 · 返回关闭 · 右下角操作组</div>
+      <div class="home-bar" data-page-node-id="HCGubMycJsNyg0XyACPhmr"></div>
     </div>
-    <div class="dots">
-      <div class="dot"></div>
-      <div class="dot"></div>
-      <div class="dot active"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-    <div class="home-bar"></div>
   </div>
 
-  <!-- 状态 B：视频未播放态 -->
-  <div class="phone">
-    <div class="label">视频预览 · 未播放</div>
-    <div class="status-bar"></div>
-    <div class="top-bar">
-      <div class="counter">2 / 4</div>
-      <div class="close">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="18" y1="6" x2="6" y2="18"></line>
-          <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+  <!-- 状态 B：多图预览 3/5（点击图片关闭） -->
+  <div class="wrap" data-page-node-id="04rhZtyjK0pweVEcyMztjE">
+    <div class="label" data-page-node-id="e5WpYdbQnKAusG6NB2Wj9h">状态 B：多图预览 · 点击图片任意区域关闭</div>
+    <div class="phone" data-page-node-id="TLsm0HaKOJvagGCoz3odaD">
+      <div class="status-bar" data-page-node-id="vYLhisxfQ9XOzuDtMV0WSs"></div>
+      <div class="top-counter" data-page-node-id="FBFNwpRz60zPRtH6HzHlhz">3 / 5</div>
+      <div class="media-area" data-page-node-id="N0vlah5LFLRhvJeSDmLw4X">
+        <div class="placeholder" data-page-node-id="p8PHFlfvDc5bWKfyBOvZgF">
+          <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" data-page-node-id="3A3P9Vem6Y0tENyqIxpH7m">
+            <rect x="3" y="3" width="18" height="18" rx="2" data-page-node-id="m2yHDn3Tvx33taERUvgxvk"></rect>
+            <circle cx="8.5" cy="8.5" r="1.5" data-page-node-id="b6UL6Ykpwyeb8IOfRjqfSn"></circle>
+            <path d="M21 15l-5-5L5 21" data-page-node-id="Ehf2NgOpSjrE1o98AGce0o"></path>
+          </svg>
+        </div>
       </div>
-    </div>
-    <div class="media-area">
-      <div class="placeholder">
-        <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"></rect>
-          <circle cx="8.5" cy="8.5" r="1.5"></circle>
-          <path d="M21 15l-5-5L5 21"></path>
-        </svg>
+      <div class="dots" data-page-node-id="ROlynj0m3dgWuHFik6Ts0M">
+        <div class="dot" data-page-node-id="1RIP0nCLCXCLt2tAPnijYD"></div>
+        <div class="dot" data-page-node-id="jhpHC5VdvOJq5gkXG7quGN"></div>
+        <div class="dot active" data-page-node-id="afBoAfsqpNBzkUrzIlOTgN"></div>
+        <div class="dot" data-page-node-id="9OriZnvB319YH4YUxMPbVW"></div>
+        <div class="dot" data-page-node-id="PJHaD4HwAOHGtB8CIGEw1B"></div>
       </div>
+      <div class="tag" data-page-node-id="WARYSxn0myN3eMFA6Ysh7K">多图 · 顶部计数器 · 底部圆点</div>
+      <div class="home-bar" data-page-node-id="kpHKEb5IFRuwGzbE5AnVjt"></div>
     </div>
-    <div class="play-overlay">
-      <div class="play-btn">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="0">
-          <polygon points="7,4 21,12 7,20"></polygon>
-        </svg>
-      </div>
-    </div>
-    <div class="dots">
-      <div class="dot"></div>
-      <div class="dot active"></div>
-      <div class="dot"></div>
-      <div class="dot"></div>
-    </div>
-    <div class="home-bar"></div>
   </div>
 
 </body>
