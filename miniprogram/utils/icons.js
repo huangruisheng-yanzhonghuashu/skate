@@ -36,6 +36,8 @@ const P = {
   checkCircle: '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01 9 11.01"/>',
   edit: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5Z"/>',
   imagePlus: '<path d="M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Z"/><path d="M10 8.5a1.5 1.5 0 1 1-3 0a1.5 1.5 0 1 1 3 0Z"/><path d="M21 15l-5-5L5 21"/>',
+  /* 图片占位（lucide image：无加号，头图空态用） */
+  image: '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>',
   plus: '<path d="M12 5L12 19"/><path d="M5 12L19 12"/>',
   x: '<path d="M18 6L6 18"/><path d="M6 6L18 18"/>',
   chevronRight: '<path d="M9 18l6-6-6-6"/>',
@@ -88,6 +90,8 @@ const ICON = {
   starOrange: svg(P.star, { fill: ORANGE, stroke: ORANGE }),
   starGray: svg(P.star, { fill: '#E8E8EA', stroke: '#E8E8EA' }),
   starAmber: svg(P.star, { fill: '#FFB800', stroke: '#FFB800' }),
+  /* 深色卡上的未点亮星（设计稿 #3A3A42，与卡底同系） */
+  starDarkGray: svg(P.star, { fill: '#3A3A42', stroke: '#3A3A42' }),
 
   /* 发现页 */
   heartAsh: svg(P.heart, { stroke: ASH }),
@@ -102,7 +106,12 @@ const ICON = {
 
   /* 场地详情 */
   sendOrange: svg(P.send, { stroke: ORANGE }),
+  sendGray: svg(P.send, { stroke: '#A6A6AD' }),
   flagAsh: svg(P.flag, { stroke: ASH }),
+  /* 报错入口（信息卡右上角弱化态，设计稿 #6E6E76） */
+  flagDim: svg(P.flag, { stroke: '#6E6E76' }),
+  cameraRose: svg(P.camera, { stroke: '#FF8A6E' }),
+  imageDim: svg(P.image, { stroke: '#3A3A42' }),
   checkWhite: svg(P.check, { stroke: WHITE, sw: 2.5 }),
   tagMixed: svg(P.tagMixed, { stroke: ASH }),
   tagFree: svg(P.tagFree, { stroke: ASH }),

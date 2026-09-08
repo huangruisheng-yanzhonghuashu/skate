@@ -2,12 +2,12 @@
   padding-bottom: calc(180rpx + env(safe-area-inset-bottom));
 }
 
-/* ===== 轮播 ===== */
+/* ===== 头图区（设计稿 38vh：首屏决策信息全可见） ===== */
 .carousel {
   position: relative;
   width: 100%;
-  height: 50vh;
-  min-height: 600rpx;
+  height: 38vh;
+  min-height: 480rpx;
   background: #1A1A1E;
 }
 
@@ -21,30 +21,45 @@
   height: 100%;
 }
 
-.indicator {
+/* 无头图占位（设计稿：渐变底 + 居中图片图标） */
+.hero-empty {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, #2A2A31 0%, #1A1A1E 60%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-empty-icon {
+  width: 180rpx;
+  height: 180rpx;
+}
+
+/* 图片计数：右上角胶囊区下方（top 由 JS 按状态栏注入） */
+.hero-counter {
   position: absolute;
   right: 32rpx;
-  bottom: 32rpx;
-  padding: 8rpx 20rpx;
+  z-index: 2;
+  padding: 6rpx 20rpx;
   border-radius: 999rpx;
   background: rgba(0, 0, 0, 0.5);
   color: #FFFFFF;
-  font-size: 24rpx;
-  font-weight: 500;
+  font-size: 22rpx;
 }
 
-/* 头图底部渐变（标题/评分叠层衬底） */
+/* 头图底部渐变（名称叠层衬底） */
 .hero-grad {
   position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
-  height: 240rpx;
-  background: linear-gradient(180deg, rgba(17, 17, 20, 0) 0%, rgba(17, 17, 20, 0.88) 100%);
+  height: 160rpx;
+  background: linear-gradient(180deg, rgba(17, 17, 20, 0) 0%, rgba(17, 17, 20, 0.85) 100%);
   pointer-events: none;
 }
 
-/* 头图叠层：名称 + 聚合评分（设计稿：白名称 + ★4.8 236 人评价） */
+/* 头图叠层：名称 + 热门贴纸 */
 .hero-info {
   position: absolute;
   left: 32rpx;
@@ -53,58 +68,43 @@
   z-index: 2;
 }
 
+.hero-name-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 20rpx;
+}
+
 .hero-name {
-  display: block;
-  font-size: 44rpx;
+  font-size: 48rpx;
   font-weight: 700;
   color: #FFFFFF;
   line-height: 1.25;
   text-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.5);
 }
 
-.hero-rating {
-  display: flex;
-  align-items: center;
-  gap: 12rpx;
-  margin-top: 10rpx;
-}
-
-/* 五颗星双层裁剪（与店铺详情同款尺寸：灰星底层 + 橙星按比例顶层） */
-.hero-rating .stars {
-  position: relative;
-  width: 170rpx;
-  height: 30rpx;
-}
-
-.hero-rating .stars-bg {
-  display: flex;
-  gap: 4rpx;
-}
-
-.hero-rating .stars-fg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  gap: 4rpx;
-  white-space: nowrap;
-}
-
-.hero-star {
-  width: 30rpx;
-  height: 30rpx;
+/* 热门贴纸（橙色小方块，-6° 微倾斜） */
+.hot-sticker {
   flex-shrink: 0;
-}
-
-.hero-rating-num {
-  font-size: 30rpx;
+  padding: 6rpx 20rpx;
+  background: #FF5A36;
+  color: #FFFFFF;
+  font-size: 22rpx;
   font-weight: 600;
-  color: #FF5A36;
+  border-radius: 8rpx;
+  transform: rotate(-6deg);
+  margin-bottom: 8rpx;
 }
 
-/* 返回按钮（自定义导航悬浮，statusBarHeight 由 JS 注入） */
+/* ===== 信息卡 ===== */
+.info {
+  position: relative;
+  margin: 24rpx 32rpx 0;
+  padding: 32rpx;
+  background: #1E1E23;
+  border-radius: 16rpx;
+}
+
+/* 返回按钮（自定义导航悬浮，statusBarHeight 由 JS 注入；设计稿毛玻璃底） */
 .nav-back {
   position: fixed;
   left: 24rpx;
@@ -112,14 +112,15 @@
   width: 72rpx;
   height: 72rpx;
   border-radius: 50%;
-  background: rgba(17, 17, 20, 0.7);
+  background: rgba(17, 17, 20, 0.55);
+  backdrop-filter: blur(8rpx);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .nav-back-hover {
-  background: rgba(17, 17, 20, 0.9);
+  background: rgba(17, 17, 20, 0.8);
 }
 
 .nav-back-icon {
@@ -127,74 +128,60 @@
   height: 36rpx;
 }
 
-/* ===== 场地信息 ===== */
-/* 地址 + 标签 + 快评（设计稿：同一张深色圆角卡片） */
-.info {
-  margin: 24rpx 32rpx 0;
-  padding: 32rpx;
-  background: #1E1E23;
-  border-radius: 16rpx;
-}
-
-.info-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24rpx;
-}
-
-.name {
-  font-size: 40rpx;
-  font-weight: 700;
-  color: #FFFFFF;
-  line-height: 1.2;
-}
-
-.rating {
+/* 报错入口（设计稿：地址行行尾弱化态，旗图标 + 小字，触控区加padding保证 ≥64rpx） */
+.report-entry {
   display: flex;
   align-items: center;
-  gap: 8rpx;
+  gap: 6rpx;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  margin-top: 4rpx;
+  padding: 20rpx 0 20rpx 8rpx;
+  color: #6E6E76;
+  font-size: 22rpx;
+}
+
+.report-entry-icon {
+  width: 24rpx;
+  height: 24rpx;
+}
+
+.report-entry-hover {
+  opacity: 0.7;
+}
+
+/* 评分行：离散星 + 分数 + 人数 + 距离 pill（可点击评分） */
+.rate-row {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.rate-stars {
+  display: flex;
+  gap: 4rpx;
+}
+
+.rate-star {
+  width: 30rpx;
+  height: 30rpx;
   flex-shrink: 0;
 }
 
-.rating-star {
-  width: 32rpx;
-  height: 32rpx;
-}
-
-.rating-num {
-  font-size: 32rpx;
+.rate-num {
+  font-size: 30rpx;
   font-weight: 600;
   color: #FF5A36;
 }
 
-.address-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24rpx;
+.rate-count {
+  font-size: 22rpx;
+  color: #8C8C94;
 }
 
-.address {
-  display: flex;
-  align-items: flex-start;
-  gap: 12rpx;
-  flex: 1;
-  min-width: 0;
-  font-size: 28rpx;
-  color: #A6A6AD;
-}
-
-.address-pin {
-  width: 32rpx;
-  height: 32rpx;
-  margin-top: 2rpx;
-  flex-shrink: 0;
-}
-
-/* 距离 pill（真实定位距离，橙底胶囊） */
+/* 距离 pill（真实定位距离，橙底胶囊，评分行右侧） */
 .dist-pill {
-  flex-shrink: 0;
+  margin-left: auto;
   padding: 8rpx 20rpx;
   border-radius: 999rpx;
   background: rgba(255, 90, 54, 0.16);
@@ -204,24 +191,48 @@
   line-height: 1.2;
 }
 
-/* 快评已按需求移除（评分入口保留在头图评分区） */
+/* 地址行 */
+.addr-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  margin-top: 24rpx;
+  font-size: 28rpx;
+  color: #A6A6AD;
+  line-height: 1.5;
+}
 
-.tags {
+.addr-pin {
+  width: 28rpx;
+  height: 28rpx;
+  margin-top: 4rpx;
+  flex-shrink: 0;
+}
+
+/* 地址文字占满剩余宽度：长地址换行时行尾报错入口自动避让（设计稿 4.5） */
+.addr-text {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 标签行（首个标签高亮描边，设计稿同款） */
+.tag-row {
   display: flex;
   flex-wrap: wrap;
   gap: 16rpx;
   margin-top: 24rpx;
 }
 
-/* 运营方入口行（org↔venue 关联） */
+/* 运营方入口行（设计稿：深底 #17171B + 左侧橙色态度线） */
 .op-row {
   display: flex;
   align-items: center;
   gap: 16rpx;
-  margin-top: 20rpx;
+  margin-top: 24rpx;
   padding: 22rpx 24rpx; /* 通栏命中区尽量接近 44pt 触控基准 */
   border-radius: 12rpx;
-  background: #1E1E23;
+  background: #17171B;
+  border-left: 6rpx solid #FF5A36;
 }
 
 .op-hover {
@@ -254,7 +265,6 @@
 .tag {
   display: inline-flex;
   align-items: center;
-  gap: 8rpx;
   padding: 8rpx 20rpx;
   border-radius: 999rpx;
   background: #26262C;
@@ -262,24 +272,42 @@
   font-size: 24rpx;
 }
 
-.tag-icon {
-  width: 28rpx;
-  height: 28rpx;
+/* 首个标签：橙系高亮（设计稿 tag-first） */
+.tag-first {
+  background: rgba(255, 90, 54, 0.16);
+  border: 1rpx solid rgba(255, 90, 54, 0.4);
+  color: #FF8A6E;
 }
 
-/* ===== 实时状态（绿色调，设计稿同款在场卡） ===== */
+/* ===== 在场卡（设计稿：#1E1E23 底 + 左侧青色竖条，无人灰色弱化） ===== */
 .live {
   margin: 24rpx 32rpx 0;
-  padding: 32rpx;
-  background: rgba(0, 212, 170, 0.07);
-  border: 1rpx solid rgba(0, 212, 170, 0.18);
+  padding: 28rpx 32rpx;
+  background: #1E1E23;
   border-radius: 16rpx;
+  border-left: 6rpx solid #00D4AA;
 }
 
-.live-row {
+.live-off {
+  border-left-color: #3A3A42;
+}
+
+.live-line {
   display: flex;
   align-items: center;
   gap: 16rpx;
+}
+
+/* 在场呼吸点 */
+.pulse {
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
+  background: #00D4AA;
+}
+
+.pulse-gray {
+  background: #6E6E76;
 }
 
 .live-text {
@@ -288,18 +316,32 @@
   color: #FFFFFF;
 }
 
+/* 人数青色强调 */
+.live-n {
+  color: #00D4AA;
+  font-weight: 600;
+}
+
+/* 无人弱化态文字 */
+.live-text-gray {
+  color: #8C8C94;
+  font-weight: 400;
+}
+
+/* 头像重叠排列（设计稿：负边距 + 卡底色描边） */
 .live-avatars {
   display: flex;
   align-items: center;
-  gap: 16rpx;
   margin-top: 24rpx;
+  padding-left: 12rpx;
 }
 
 .live-avatar-img {
   width: 72rpx;
   height: 72rpx;
   border-radius: 50%;
-  border: 3rpx solid #1E1E23;
+  border: 6rpx solid #1E1E23;
+  margin-left: -12rpx;
   box-sizing: border-box;
 }
 
@@ -307,6 +349,9 @@
   width: 72rpx;
   height: 72rpx;
   border-radius: 50%;
+  border: 6rpx solid #1E1E23;
+  margin-left: -12rpx;
+  box-sizing: border-box;
   color: #FFFFFF;
   font-size: 24rpx;
   font-weight: 600;
@@ -322,7 +367,7 @@
 
 /* ===== 打卡动态 ===== */
 .checkins {
-  margin: 24rpx 32rpx 0;
+  margin: 32rpx 32rpx 0;
   padding-bottom: 32rpx;
 }
 
@@ -340,16 +385,8 @@
 }
 
 .checkins-more {
-  display: flex;
-  align-items: center;
-  gap: 4rpx;
   font-size: 28rpx;
   color: #8C8C94;
-}
-
-.checkins-more-icon {
-  width: 28rpx;
-  height: 28rpx;
 }
 
 .checkin-list {
@@ -375,9 +412,10 @@
   opacity: 0.7;
 }
 
+/* 打卡人头像（设计稿 feed 头像 72rpx） */
 .checkin-avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 72rpx;
+  height: 72rpx;
   border-radius: 50%;
   color: #FFFFFF;
   font-size: 28rpx;
@@ -389,8 +427,8 @@
 }
 
 .checkin-avatar-img {
-  width: 80rpx;
-  height: 80rpx;
+  width: 72rpx;
+  height: 72rpx;
   border-radius: 50%;
   flex-shrink: 0;
 }
@@ -424,9 +462,9 @@
   height: 100%;
 }
 
-/* 轮播图片渐显（CSS 一次性动画，播完定格，无 JS 依赖） */
+/* 轮播图片渐显（动效纪律：250ms，CSS 一次性动画，播完定格，无 JS 依赖） */
 .photo-fade {
-  animation: photo-in 0.5s ease backwards;
+  animation: photo-in 0.25s ease backwards;
 }
 
 @keyframes photo-in {
@@ -434,7 +472,7 @@
   to { opacity: 1; }
 }
 
-/* ===== 签到庆祝层（彩纸 + 橙色徽章 + 连签提示，设计稿同款） ===== */
+/* ===== 签到庆祝层（设计稿瘦身版：无彩纸，橙徽章 + 连签天数；动效纪律：无弹性过冲） ===== */
 .celebrate {
   position: fixed;
   inset: 0;
@@ -443,7 +481,7 @@
   align-items: center;
   justify-content: center;
   background: rgba(0, 0, 0, 0.55);
-  animation: cel-fade 0.25s ease;
+  animation: cel-fade 0.15s ease;
 }
 
 @keyframes cel-fade {
@@ -451,57 +489,35 @@
   to { opacity: 1; }
 }
 
-/* 彩纸层 */
-.confetti {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-}
-
-.confetti-piece {
-  position: absolute;
-  top: -40rpx;
-  width: 16rpx;
-  height: 24rpx;
-  border-radius: 4rpx;
-  opacity: 0;
-  animation: confetti-fall linear both;
-}
-
-.confetti-round {
-  width: 18rpx;
-  height: 18rpx;
-  border-radius: 50%;
-}
-
-@keyframes confetti-fall {
-  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-  85% { opacity: 1; }
-  100% { transform: translateY(85vh) rotate(540deg); opacity: 0; }
-}
-
 .celebrate-card {
   position: relative;
   width: 480rpx;
   background: #1E1E23;
-  border: 1rpx solid rgba(255, 90, 54, 0.3);
   border-radius: 32rpx;
-  padding: 56rpx 44rpx 48rpx;
+  padding: 48rpx 44rpx;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   gap: 12rpx;
-  animation: cel-pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 0 120rpx rgba(255, 90, 54, 0.25);
+  animation: cel-pop 0.2s ease-out;
 }
 
 @keyframes cel-pop {
-  from { opacity: 0; transform: scale(0.6); }
+  from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* 橙色圆形徽章 + 白色对勾（设计稿：外圈深橙描边环） */
+/* 消失：200ms 整层淡出（规范 9.2：自动消失/点遮罩关闭均淡出） */
+.celebrate-out {
+  animation: cel-out 0.2s ease forwards;
+}
+
+@keyframes cel-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+/* 橙色圆形徽章 + 白色对勾（设计稿：外圈深橙描边环；规范禁止光晕，无投影） */
 .celebrate-badge {
   width: 104rpx;
   height: 104rpx;
@@ -512,7 +528,6 @@
   justify-content: center;
   border: 6rpx solid rgba(255, 90, 54, 0.35);
   box-sizing: border-box;
-  box-shadow: 0 8rpx 32rpx rgba(255, 90, 54, 0.4);
 }
 
 .celebrate-check {
@@ -537,75 +552,39 @@
   color: #00D4AA;
 }
 
-/* 徽章进度提示 */
-.celebrate-sub {
-  align-self: flex-start;
-  font-size: 24rpx;
-  color: #8C8C94;
-  line-height: 1.5;
-  text-align: left;
-}
-
-/* ===== 名称旁聚合评分（双层裁剪星级，可点击评分） ===== */
+/* ===== 评分行点击态 ===== */
 .rate-hover {
   opacity: 0.75;
 }
 
-.rating .stars {
-  position: relative;
-  width: 160rpx;
-  height: 28rpx;
-}
-
-.rating .stars-bg {
-  display: flex;
-  gap: 3rpx;
-}
-
-.rating .stars-fg {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  overflow: hidden;
-  display: flex;
-  gap: 3rpx;
-  white-space: nowrap;
-}
-
-.rating .rating-star {
-  width: 28rpx;
-  height: 28rpx;
-  flex-shrink: 0;
-}
-
-.rating .rating-count {
-  font-size: 22rpx;
-  color: #6E6E76;
-}
-
-/* ===== 评分弹窗 ===== */
+/* ===== 评分弹窗（统一底部 sheet，设计稿同款） ===== */
 .rate-mask {
   position: fixed;
   inset: 0;
   z-index: 70;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32rpx;
+  align-items: flex-end;
   background: rgba(0, 0, 0, 0.6);
 }
 
 .rate-sheet {
   width: 100%;
-  max-width: 600rpx;
   background: #232329;
-  border: 1rpx solid #2F2F36;
-  border-radius: 20rpx;
-  padding: 48rpx 40rpx;
+  border-top: 1rpx solid #2F2F36;
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 16rpx 32rpx calc(48rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
-  box-shadow: 0 16rpx 48rpx rgba(0, 0, 0, 0.5);
   text-align: center;
+  animation: sheet-in 0.25s ease-out both;
+}
+
+/* 顶部拖拽指示条 */
+.rate-handle {
+  width: 72rpx;
+  height: 8rpx;
+  border-radius: 999rpx;
+  background: #3A3A42;
+  margin: 8rpx auto 24rpx;
 }
 
 .rate-title {
@@ -628,7 +607,7 @@
   margin: 40rpx 0 16rpx;
 }
 
-.rate-star {
+.rate-star-big {
   width: 80rpx;
   height: 80rpx;
   transition: transform 0.15s ease;
@@ -647,12 +626,15 @@
 
 .rate-btn-submit {
   margin-top: 32rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 30rpx;
   font-weight: 600;
-  border-radius: 44rpx;
-  padding: 16rpx 0;
+  border-radius: 999rpx;
 }
 
 .rate-btn-busy {
@@ -746,8 +728,12 @@
   color: #8C8C94;
 }
 
+/* 留言 28rpx，行高 1.6，最多 3 行截断（规范 6.2） */
 .checkin-text {
-  display: block;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
   margin-top: 16rpx;
   font-size: 28rpx;
   line-height: 1.6;
@@ -822,19 +808,24 @@
   background: #E63A16;
 }
 
-/* 已签到：描边弱化态（避免绿底白字对比度不足） */
+/* 已签到：青色描边窄块（与导航块同形态，键位不跳） */
 .action-done {
-  background: transparent;
+  width: 128rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6rpx;
+  padding: 14rpx 0;
+  border-radius: 20rpx;
   border: 2rpx solid rgba(0, 212, 170, 0.5);
-  box-shadow: none;
   color: #00D4AA;
   box-sizing: border-box;
 }
 
 .action-done .action-label {
-  font-size: 28rpx;
-  font-weight: 500;
-  color: #00D4AA;
+  font-size: 22rpx;
+  line-height: 1;
 }
 
 /* 发打卡副入口：未签到时主次结构中的次按钮（描边幽灵态，与主按钮拉开层级） */
@@ -876,7 +867,7 @@
   border-radius: 32rpx 32rpx 0 0;
   padding: 16rpx 32rpx calc(32rpx + env(safe-area-inset-bottom));
   box-sizing: border-box;
-  animation: sheet-in 0.28s ease-out both;
+  animation: sheet-in 0.25s ease-out both;
 }
 
 @keyframes sheet-in {
@@ -885,7 +876,7 @@
 }
 
 .anim-sheet-in {
-  animation: sheet-in 0.28s ease-out both;
+  animation: sheet-in 0.25s ease-out both;
 }
 
 /* 顶部拖拽指示条 */

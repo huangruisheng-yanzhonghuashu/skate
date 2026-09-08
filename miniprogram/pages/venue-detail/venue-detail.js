@@ -10,9 +10,6 @@ const MAX_LIVE_AVATARS = 4
 
 const REPORT_TYPES = ['地址错误', '已关闭', '设施损坏', '信息变更', '其他']
 
-/* 连签徽章里程碑（签到成功弹层提示：再打 N 天解锁「M 日坚持」） */
-const STREAK_MILESTONES = [3, 7, 30, 100]
-
 /* 状态栏高度（自定义导航：返回按钮悬浮定位用） */
 function getStatusBarHeight() {
   try {
@@ -23,31 +20,20 @@ function getStatusBarHeight() {
   }
 }
 
-/* 庆祝彩纸：14 片随机位置/颜色/时序（左起百分比，从顶部飘落） */
-function buildConfetti() {
-  const colors = ['#FF5A36', '#00D4AA', '#FFB800', '#2A8CFF', '#A06BFF', '#FF8A6E']
-  const pieces = []
-  for (let i = 0; i < 14; i++) {
-    pieces.push({
-      left: Math.round(4 + Math.random() * 92),
-      delay: Math.round(Math.random() * 500),
-      dur: 1400 + Math.round(Math.random() * 900),
-      color: colors[i % colors.length],
-      round: i % 3 === 0,
-    })
-  }
-  return pieces
-}
-
 Page({
   data: {
     venue: null,
     photos: [],
     tags: [],
+    tagMore: 0,
+    hot: false,
     operatorShop: null,
     current: 0,
     statusBarHeight: 20,
     distanceText: '',
+    rating: '',
+    ratingCount: 0,
+    rateInt: 0,
     online: 0,
     presenceUsers: [],
     moreCount: 0,
@@ -71,18 +57,21 @@ Page({
       star: ICON.starAmber,
       starOrange: ICON.starOrange,
       starGray: ICON.starGray,
+      starDarkGray: ICON.starDarkGray,
       pin: ICON.pinOrangeSmall,
-      send: ICON.sendOrange,
+      send: ICON.sendGray,
       check: ICON.checkWhite,
       checkWhite: ICON.checkWhite,
-      camera: ICON.cameraOrange,
+      camera: ICON.cameraWhite,
+      cameraRose: ICON.cameraRose,
       play: ICON.playWhite,
-      flag: ICON.flagAsh,
+      flag: ICON.flagDim,
       checkCircle: ICON.checkCircleOrange,
       edit: ICON.editAsh,
       plus: ICON.plusAsh,
       x: ICON.xWhite,
       imagePlus: ICON.imagePlusAsh,
+      imageDim: ICON.imageDim,
       chevron: ICON.chevronRightAsh,
       back: ICON.chevronLeftWhite,
     },
@@ -104,7 +93,10 @@ Page({
       this.setData({
         venue,
         photos: venue.photos,
-        tags: venue.tags.map((t) => ({ label: t.label, src: ICON[t.icon] || ICON.tagMixed })),
+        /* 标签最多 3 个平铺，溢出折叠 +N（规范 4.3：禁止超过 3 个平铺） */
+        tags: venue.tags.slice(0, 3).map((t) => ({ label: t.label, src: ICON[t.icon] || ICON.tagMixed })),
+        tagMore: Math.max(0, venue.tags.length - 3),
+        hot: !!venue.hot,
         online: 0,
         moreCount: 0,
         presenceUsers: [],
@@ -138,6 +130,8 @@ Page({
   onUnload() {
     this.stopPresence()
     if (this._unsubStore) this._unsubStore()
+    if (this._celebrateTimer) clearTimeout(this._celebrateTimer)
+    if (this._celebrateOutTimer) clearTimeout(this._celebrateOutTimer)
   },
 
   /* ===== 实时在线心跳（方案 B：定位在场校验 + 30 分钟窗口） ===== */
@@ -197,15 +191,17 @@ Page({
     })
   },
 
-  /* 签到态 + 评分统计（真实均值/人数，无评分用预设分兜底） */
+  /* 签到态 + 评分统计（真实均值/人数，无评分用预设分兜底；离散星取整下限点亮） */
   refresh() {
     const venue = this.data.venue
     this.setData({ checked: store.checkedToday(venue.id) })
     cloud.getRatingStats('venue').then((map) => {
       const st = map[venue.id]
+      const rating = st ? st.avg : venue.rating
       this.setData({
-        rating: st ? st.avg : venue.rating,
+        rating: rating ? Math.round(rating * 10) / 10 : '',
         ratingCount: st ? st.count : 0,
+        rateInt: Math.min(5, Math.max(0, Math.floor(rating || 0))),
       })
     })
   },
@@ -568,24 +564,35 @@ Page({
     wx.navigateTo({ url: '/pages/place-checkins/place-checkins?id=' + v.id + '&kind=venue' })
   },
 
-  /* 签到成功庆祝（设计稿：彩纸 + 连续天数 + 下一个徽章提示），2.6s 自动消失 */
+  /* 签到成功庆祝（设计稿瘦身版：无彩纸无激励文案，1.2s 自动消失，点遮罩立即关） */
   showCelebrate() {
     const s = store.calcStats()
-    const streak = s.streak
-    const next = STREAK_MILESTONES.find((m) => m > streak)
-    const sub = next
-      ? '再签 ' + (next - streak) + ' 天解锁「' + next + ' 日坚持」徽章'
-      : '全部徽章已解锁，滑手榜样！'
-    this.setData({
-      celebrate: true,
-      celebrateStreak: streak,
-      celebrateSub: sub,
-      confetti: buildConfetti(),
-    })
+    this.setData({ celebrate: true, celebrateClosing: false, celebrateStreak: s.streak })
     if (this._celebrateTimer) clearTimeout(this._celebrateTimer)
     this._celebrateTimer = setTimeout(() => {
-      this.setData({ celebrate: false })
-    }, 2600)
+      this._celebrateTimer = null
+      this.closeCelebrate()
+    }, 1200)
+  },
+
+  /* 关闭庆祝层：200ms 淡出后再移除节点（规范 9.2 消失动效） */
+  closeCelebrate() {
+    if (this._celebrateTimer) {
+      clearTimeout(this._celebrateTimer)
+      this._celebrateTimer = null
+    }
+    if (this.data.celebrateClosing) return
+    this.setData({ celebrateClosing: true })
+    if (this._celebrateOutTimer) clearTimeout(this._celebrateOutTimer)
+    this._celebrateOutTimer = setTimeout(() => {
+      this._celebrateOutTimer = null
+      this.setData({ celebrate: false, celebrateClosing: false })
+    }, 200)
+  },
+
+  /* 已签到副键：仅状态展示，点击轻提示（规范 7.3） */
+  onDoneTap() {
+    wx.showToast({ title: '今日已签到', icon: 'none' })
   },
 
   /* 下拉刷新：重拉打卡流 + 在线数 + 签到态 */
