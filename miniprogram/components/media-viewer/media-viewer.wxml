@@ -1,34 +1,110 @@
 <view wx:if="{{visible}}" class="mv-mask" catchtouchmove="noop">
   <swiper class="mv-swiper" current="{{idx}}" bindchange="onSwiperChange">
     <swiper-item wx:for="{{sources}}" wx:key="url">
-      <view class="mv-item">
-        <block wx:if="{{item.type === 'video'}}">
+      <!-- 视频：封面点播（点击播放）+ 右滑跟手关闭 -->
+      <view
+        wx:if="{{item.type === 'video'}}"
+        class="mv-video-wrap"
+        style="transform: translateX({{dragX}}px)"
+        catchtap="onPlayTap"
+        data-index="{{index}}"
+        bindtouchstart="onTouchStart"
+        bindtouchmove="onTouchMove"
+        bindtouchend="onTouchEnd"
+      >
+        <video
+          wx:if="{{playingIdx === index}}"
+          class="mv-video"
+          src="{{item.url}}"
+          object-fit="contain"
+          controls
+          autoplay
+        />
+        <block wx:else>
           <video
-            wx:if="{{playingIdx === index}}"
             class="mv-video"
             src="{{item.url}}"
-            object-fit="contain"
-            controls
-            autoplay
+            object-fit="cover"
+            controls="{{false}}"
+            show-center-play-btn="{{false}}"
           />
-          <view wx:else class="mv-video-wrap" catchtap="onPlayTap" data-index="{{index}}">
-            <video
-              class="mv-video"
-              src="{{item.url}}"
-              object-fit="cover"
-              controls="{{false}}"
-              show-center-play-btn="{{false}}"
-            />
-            <view class="mv-play"></view>
-          </view>
+          <view class="mv-play"></view>
         </block>
-        <image wx:else class="mv-img" src="{{item.url}}" mode="aspectFit" bindtap="onClose" />
       </view>
+      <!-- 图片：点击任意区域关闭 -->
+      <image wx:else class="mv-img" src="{{item.url}}" mode="aspectFit" bindtap="onClose" />
     </swiper-item>
   </swiper>
-  <view wx:if="{{sources.length > 1}}" class="mv-count">{{idx + 1}}/{{sources.length}}</view>
-  <view class="mv-close" catchtap="onClose">
-    <view class="mv-close-line mv-close-l1"></view>
-    <view class="mv-close-line mv-close-l2"></view>
+
+  <!-- 顶部计数器（多图，设计稿状态 B；与导航行对齐） -->
+  <view wx:if="{{sources.length > 1}}" class="mv-count" style="top: {{statusBarHeight}}px">{{idx + 1}} / {{sources.length}}</view>
+
+  <!-- 底部圆点（多图） -->
+  <view wx:if="{{sources.length > 1}}" class="mv-dots">
+    <view
+      wx:for="{{sources}}"
+      wx:for-index="di"
+      wx:key="url"
+      class="mv-dot {{di === idx ? 'mv-dot-active' : ''}}"
+    ></view>
+  </view>
+
+  <!-- 左上返回（仅视频预览显示，设计稿状态 A；与页面自绘导航行对齐） -->
+  <view wx:if="{{videoMode}}" class="mv-back" style="top: {{statusBarHeight}}px" catchtap="onClose" aria-role="button" aria-label="关闭">
+    <image class="mv-back-icon" src="{{icons.back}}" mode="aspectFit" />
+  </view>
+
+  <!-- 右下操作组（仅视频预览，设计稿状态 A；图片预览为纯浏览）：点赞 / 评论 / 转发 -->
+  <view wx:if="{{checkinId && videoMode}}" class="mv-actions">
+    <view
+      class="mv-action"
+      hover-class="mv-action-hover"
+      catchtap="toggleLike"
+      aria-role="button"
+      aria-label="点赞"
+    >
+      <image class="mv-action-icon" src="{{liked ? icons.heartOrange : icons.heartWhite}}" mode="aspectFit" />
+    </view>
+    <view
+      class="mv-action"
+      hover-class="mv-action-hover"
+      catchtap="toggleComments"
+      aria-role="button"
+      aria-label="评论"
+    >
+      <image class="mv-action-icon" src="{{icons.commentWhite}}" mode="aspectFit" />
+      <text wx:if="{{commentCount}}" class="mv-action-badge">{{commentCount}}</text>
+    </view>
+    <!-- 转发：button 包进固定尺寸 view 内绝对定位铺满，规避微信 button 默认
+      margin auto / width auto / 行高导致的椭圆与错位（设计稿状态 A） -->
+    <view class="mv-action mv-share-wrap">
+      <button
+        class="mv-share-btn"
+        open-type="share"
+        hover-class="mv-action-hover"
+        data-id="{{checkinId}}"
+        aria-label="转发"
+      >
+        <image class="mv-action-icon" src="{{icons.shareWhite}}" mode="aspectFit" />
+      </button>
+    </view>
+  </view>
+
+  <!-- 半屏评论面板（设计稿状态 C） -->
+  <view wx:if="{{commentsOpen}}" class="mv-cmask" catchtap="closeComments"></view>
+  <view wx:if="{{commentsOpen}}" class="mv-csheet" catchtap="noop">
+    <view class="mv-c-handle"><view class="mv-c-handlebar"></view></view>
+    <view class="mv-c-head">
+      <text class="mv-c-title">{{commentCount}} 条评论</text>
+      <view class="mv-c-close" hover-class="mv-action-hover" catchtap="closeComments" aria-role="button" aria-label="关闭评论">
+        <image class="mv-c-close-icon" src="{{icons.x}}" mode="aspectFit" />
+      </view>
+    </view>
+    <scroll-view class="mv-c-list" scroll-y>
+      <comment-box
+        checkin-id="{{checkinId}}"
+        bind:countchange="onCommentChange"
+      />
+    </scroll-view>
   </view>
 </view>

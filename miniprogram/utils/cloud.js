@@ -193,6 +193,31 @@ function getPublicCheckins(opts) {
     })
 }
 
+/* 发现页搜索：关键词命中留言 / 场地名 / 滑手昵称（不区分大小写），按时间倒序。
+ * 纯签到（无内容记录）由页面侧按"有留言或媒体"过滤，与社区流口径一致 */
+function escapeRe(s) {
+  return String(s).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
+function searchPublicCheckins(keyword, opts) {
+  opts = opts || {}
+  const kw = String(keyword || '').trim()
+  if (!kw) return Promise.resolve([])
+  const re = db().RegExp({ regexp: escapeRe(kw), options: 'i' })
+  let q = db().collection('checkins').where(db().command.or([
+    { note: re },
+    { venueName: re },
+    { userName: re },
+  ]))
+  if (opts.skip) q = q.skip(opts.skip)
+  return q.orderBy('at', 'desc').limit(opts.limit || 20).get()
+    .then((r) => (r.data || []).map(mapCheckin))
+    .catch((e) => {
+      console.warn('[cloud] 打卡搜索失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
+}
+
 /* 点赞计数聚合：feed_likes 集合按 feedId in ids 分组计数（需"所有用户可读"权限） */
 function getLikeCounts(ids) {
   const cmd = db().command
@@ -758,6 +783,7 @@ module.exports = {
   removeCheckinDoc: removeCheckinDoc,
   getPlaceCheckins: getPlaceCheckins,
   getPublicCheckins: getPublicCheckins,
+  searchPublicCheckins: searchPublicCheckins,
   getMediaPreviewSources: getMediaPreviewSources,
   getLikeCounts: getLikeCounts,
   getComments: getComments,

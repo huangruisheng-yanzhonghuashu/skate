@@ -26,7 +26,7 @@
 
     <!-- 素材：图视频混排（1张大图 / 2张对半 / 3+三列），点击进 media-viewer 预览 -->
     <view wx:if="{{media.length}}" class="photos photos-{{media.length >= 3 ? 'grid' : media.length}}">
-      <view wx:for="{{media}}" wx:key="url" class="photo-cell" bindtap="previewMedia" data-media="{{media}}" data-index="{{index}}">
+      <view wx:for="{{media}}" wx:key="url" class="photo-cell" bindtap="previewMedia" data-media="{{media}}" data-id="{{postId}}" data-index="{{index}}">
         <video
           wx:if="{{item.type === 'video'}}"
           class="photo-video"
@@ -148,10 +148,16 @@
   </view>
 </view>
 
-<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播） -->
+<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播；checkinId 开启预览内点赞/评论/转发） -->
 <media-viewer
   visible="{{viewerShow}}"
   sources="{{viewerSources}}"
   current="{{viewerCurrent}}"
+  checkin-id="{{postId}}"
+  liked="{{liked}}"
+  like-count="{{likeCount}}"
+  comment-count="{{commentCount}}"
   bind:close="onViewerClose"
+  bind:likechange="onViewerLike"
+  bind:commentchange="onViewerComment"
 />

@@ -488,16 +488,22 @@ Page({
 
   /* 打卡媒体预览（微博式混合查看器）：图视频混滑、视频封面点播不自动播放 */
   previewMedia(e) {
-    const media = e.currentTarget.dataset.media || []
+    const d = e.currentTarget.dataset
+    const media = d.media || []
     const current = e.currentTarget.dataset.index || 0
     cloud.getMediaPreviewSources(media).then((sources) => {
       if (!sources.length) return
-      this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: current })
+      this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: current, viewerId: d.id || '' })
     })
   },
 
   onViewerClose() {
     this.setData({ viewerShow: false })
+  },
+
+  /* 页面转发（查看器内 open-type=share 依赖页面处理器） */
+  onShareAppMessage() {
+    return { title: '去哪滑 · 发现', path: '/pages/discover/discover' }
   },
 
 })

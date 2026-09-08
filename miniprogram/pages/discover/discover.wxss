@@ -11,12 +11,13 @@
   border-bottom: 1rpx solid #26262C;
 }
 
-/* 标题行：88rpx（44px）标准导航高度，避开右侧胶囊 */
+/* 标题行：88rpx（44px）标准导航高度，避开右侧胶囊；底部与工具条各一条分隔线（与设计稿一致） */
 .dis-nav {
   height: 88rpx;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 1rpx solid #26262C;
 }
 
 .dis-nav-title {
@@ -30,19 +31,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 24rpx;
-  padding: 8rpx 32rpx;
+  padding: 16rpx 48rpx;
 }
 
 .dis-tabs {
   display: flex;
-  gap: 32rpx;
+  gap: 64rpx;
 }
 
 /* Tab：触控区 ≥88rpx 高（44px），下划线定位跟随文字而非触控区底边 */
 .dis-tab {
   position: relative;
   padding: 20rpx 16rpx;
-  font-size: 28rpx;
+  font-size: 32rpx;
   font-weight: 500;
   line-height: 1.4;
   color: #8C8C94;
@@ -52,58 +53,158 @@
   opacity: 0.7;
 }
 
-/* 发打卡：橙描边胶囊主操作（触控高度 88rpx = 44px） */
-.dis-post {
+/* 发打卡已移至右下角 FAB；工具条右侧为搜索圆钮（触控区 72rpx + padding 扩展） */
+.dis-search-btn {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  background: #17171B;
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  min-height: 88rpx;
-  padding: 0 30rpx;
-  border-radius: 999rpx;
-  border: 2rpx solid rgba(255, 90, 54, 0.4);
-  color: #FF8A6E;
-  font-size: 26rpx;
-  line-height: 1;
+  justify-content: center;
   flex-shrink: 0;
 }
 
-.dis-post-icon {
-  width: 26rpx;
-  height: 26rpx;
-}
-
-.dis-post-hover {
-  opacity: 0.75;
+.dis-search-btn-icon {
+  width: 32rpx;
+  height: 32rpx;
 }
 
 .dis-tab-active {
   color: #FF5A36;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .dis-tab-line {
   position: absolute;
   left: 50%;
-  top: 64rpx;
-  width: 40rpx;
-  height: 4rpx;
-  border-radius: 4rpx;
+  top: 70rpx;
+  width: 56rpx;
+  height: 8rpx;
+  border-radius: 8rpx;
   background: #FF5A36;
   transform: translateX(-50%);
 }
 
+/* ===== 搜索态头部：展开式输入行 ===== */
+.dis-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+  padding: 16rpx 48rpx 24rpx;
+}
+
+.dis-search-field {
+  flex: 1;
+  min-width: 0;
+  height: 80rpx;
+  background: #1E1E23;
+  border: 1rpx solid #26262C;
+  border-radius: 999rpx;
+  padding: 0 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  box-sizing: border-box;
+}
+
+.dis-search-field-icon {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
+}
+
+.dis-search-input {
+  flex: 1;
+  min-width: 0;
+  font-size: 30rpx;
+  color: #FFFFFF;
+}
+
+.dis-search-ph {
+  color: #6E6E76;
+}
+
+.dis-search-clear {
+  width: 28rpx;
+  height: 28rpx;
+  flex-shrink: 0;
+}
+
+.dis-search-cancel {
+  flex-shrink: 0;
+  font-size: 28rpx;
+  color: #A6A6AD;
+}
+
+/* ===== 最近搜索 ===== */
+.recent {
+  padding: 48rpx;
+}
+
+.recent-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32rpx;
+}
+
+.recent-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.recent-clear {
+  font-size: 24rpx;
+  color: #8C8C94;
+}
+
+.recent-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24rpx;
+}
+
+.recent-chip {
+  padding: 12rpx 24rpx;
+  border-radius: 999rpx;
+  background: #1E1E23;
+  border: 1rpx solid #26262C;
+  font-size: 24rpx;
+  color: #D9D9DE;
+  line-height: 1.2;
+}
+
+.recent-chip-hover {
+  opacity: 0.7;
+}
+
+/* 搜索结果提示（设计稿 mb-1：紧贴首卡，不受卡片间距影响） */
+.search-hint {
+  padding: 24rpx 48rpx 8rpx;
+  font-size: 24rpx;
+  color: #8C8C94;
+}
+
+.feed-search {
+  padding-top: 16rpx;
+}
+
 /* ===== 动态卡片 ===== */
 .feed {
-  padding: 24rpx;
+  padding: 48rpx;
   display: flex;
   flex-direction: column;
-  gap: 24rpx;
+  gap: 40rpx;
 }
 
 .feed-card {
   background: #1E1E23;
-  border-radius: 16rpx;
-  padding: 24rpx;
+  border: 1rpx solid #26262C;
+  border-radius: 48rpx;
+  padding: 40rpx;
+  box-sizing: border-box;
 }
 
 .feed-head {
@@ -119,12 +220,12 @@
 }
 
 .avatar {
-  width: 80rpx;
-  height: 80rpx;
+  width: 88rpx;
+  height: 88rpx;
   border-radius: 50%;
   background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
-  font-size: 28rpx;
+  font-size: 32rpx;
   font-weight: 600;
   display: flex;
   align-items: center;
@@ -154,30 +255,33 @@
   white-space: nowrap;
 }
 
-/* 第二行：类型灰标 + 场地名橙色链接 */
-.feed-place-row {
+/* 第二行：场地/门店橙色 chip（可点进详情） */
+.feed-chip-row {
   display: flex;
   align-items: center;
-  gap: 12rpx;
-  margin-top: 6rpx;
+  margin-top: 12rpx;
   min-width: 0;
 }
 
-.feed-venue {
-  font-size: 26rpx;
+.feed-chip {
+  max-width: 100%;
+  box-sizing: border-box;
+  font-size: 22rpx;
   font-weight: 500;
+  line-height: 1.2;
   color: #FF8A6E;
+  background: rgba(255, 90, 54, 0.15);
+  padding: 8rpx 16rpx;
+  border-radius: 999rpx;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  padding: 8rpx 0;
-  margin: -8rpx 0;
 }
 
 .feed-time {
   flex-shrink: 0;
   font-size: 24rpx;
-  color: #8C8C94;
+  color: #6E6E76;
 }
 
 .feed-text {
@@ -185,7 +289,7 @@
   font-size: 30rpx;
   line-height: 1.6;
   color: #D9D9DE;
-  margin-bottom: 20rpx;
+  margin-bottom: 24rpx;
 }
 
 /* ===== 图片 ===== */
@@ -202,8 +306,8 @@
 }
 
 .photos-1 .photo-cell {
-  width: 320rpx;
-  aspect-ratio: 1;
+  width: 100%;
+  aspect-ratio: 4 / 3;
 }
 
 .photos-2 .photo-cell {
@@ -212,9 +316,15 @@
 }
 
 .photo-cell {
-  border-radius: 12rpx;
+  border-radius: 24rpx;
   overflow: hidden;
   background: #17171B;
+}
+
+/* 大图/两图：rounded-2xl（设计稿） */
+.photos-1 .photo-cell,
+.photos-2 .photo-cell {
+  border-radius: 32rpx;
 }
 
 .photo {
@@ -228,19 +338,28 @@
   height: 100%;
 }
 
-/* 视频封面播放按钮（微博式） */
+/* 视频封面播放按钮（设计稿：半透明圆底 + 白色三角） */
 .video-play {
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
   z-index: 2;
-  width: 0;
-  height: 0;
-  border-left: 26rpx solid rgba(255, 255, 255, 0.92);
-  border-top: 16rpx solid transparent;
-  border-bottom: 16rpx solid transparent;
-  filter: drop-shadow(0 0 6rpx rgba(0, 0, 0, 0.4));
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: rgba(17, 17, 20, 0.55);
+}
+
+.video-play::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-32%, -50%);
+  border-left: 30rpx solid rgba(255, 255, 255, 0.92);
+  border-top: 18rpx solid transparent;
+  border-bottom: 18rpx solid transparent;
 }
 
 /* 视频异步上传中角标（微博式：本机可见临时视频，云端他人待上传完成后可见） */
@@ -260,11 +379,12 @@
   font-size: 22rpx;
 }
 
-/* ===== 点赞 / 评论 ===== */
+/* ===== 点赞 / 评论 / 转发 ===== */
 .feed-actions {
   display: flex;
-  gap: 48rpx;
-  font-size: 26rpx;
+  align-items: center;
+  gap: 80rpx;
+  font-size: 28rpx;
   color: #8C8C94;
 }
 
@@ -313,21 +433,10 @@
 
 /* ===== 头像图片（fileID） ===== */
 .avatar-img {
-  width: 80rpx;
-  height: 80rpx;
+  width: 88rpx;
+  height: 88rpx;
   border-radius: 50%;
   flex-shrink: 0;
-}
-
-/* 实体类型标签（第二行灰标） */
-.feed-kind {
-  flex-shrink: 0;
-  font-size: 22rpx;
-  color: #8C8C94;
-  background: #26262C;
-  padding: 4rpx 12rpx;
-  border-radius: 6rpx;
-  line-height: 1.2;
 }
 
 /* ===== 分页提示 ===== */
@@ -362,40 +471,120 @@
   font-weight: 600;
 }
 
-/* ===== 空态 ===== */
-.empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20rpx;
-  padding: 220rpx 40rpx 0;
-}
-
-.empty-text {
-  font-size: 32rpx;
-  font-weight: 600;
-  color: #FFFFFF;
-}
-
-.empty-sub {
-  font-size: 26rpx;
-  color: #8C8C94;
-}
-
+/* ===== 空态 CTA 按钮（设计稿 h-12 = 96rpx） ===== */
 .empty-btn {
   margin-top: 16rpx;
-  min-height: 88rpx;
-  padding: 0 72rpx;
+  min-height: 96rpx;
+  padding: 0 64rpx;
   display: flex;
   align-items: center;
   background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
-  font-size: 28rpx;
+  font-size: 32rpx;
   font-weight: 600;
-  border-radius: 44rpx;
+  border-radius: 999rpx;
 }
 
 /* 通用按压反馈（空态/失败态按钮） */
 .op-hover {
   opacity: 0.85;
+}
+
+/* ===== 转发按钮（open-type=share 的 button 样式重置为动作项） =====
+ * 不用 plain：button[plain] 的边框特异性高于类选择器，压不住；
+ * 裸 button 默认底色/::after 描边用类选择器覆盖 */
+.action-share {
+  background: transparent;
+  background-color: transparent;
+  border: none;
+  border-radius: 0;
+  width: auto;
+  min-height: 0;
+  line-height: inherit;
+  font-size: inherit;
+  color: inherit;
+}
+
+.action-share::after {
+  display: none;
+}
+
+/* ===== 搜索关键词高亮 ===== */
+.feed-hit {
+  color: #FF5A36;
+}
+
+/* ===== 发打卡 FAB（右下角悬浮；空态时描边「去签到」形态） ===== */
+.fab {
+  position: fixed;
+  right: 40rpx;
+  bottom: calc(190rpx + env(safe-area-inset-bottom));
+  width: 112rpx;
+  height: 112rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF5A36, #FF8A6E);
+  box-shadow: 0 16rpx 64rpx rgba(255, 90, 54, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+.fab-camera {
+  width: 48rpx;
+  height: 48rpx;
+}
+
+.fab-hover {
+  opacity: 0.85;
+}
+
+/* 空态引导形态：描边圆钮 + 定位图标 + 去签到 */
+.fab-empty {
+  background: #1E1E23;
+  border: 4rpx solid #FF5A36;
+  box-shadow: 0 16rpx 64rpx rgba(0, 0, 0, 0.3);
+}
+
+.fab-pin {
+  width: 36rpx;
+  height: 36rpx;
+}
+
+.fab-txt {
+  margin-top: 2rpx;
+  font-size: 18rpx;
+  font-weight: 500;
+  color: #FF5A36;
+  line-height: 1.2;
+}
+
+/* ===== 空态 / 搜索无结果（插画 + 文案 + CTA） ===== */
+.empty,
+.empty-search {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+  padding: 200rpx 80rpx 0;
+  text-align: center;
+}
+
+.empty-illus {
+  width: 240rpx;
+  height: 192rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.3;
+}
+
+.empty-title {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: #FFFFFF;
+}
+
+.empty-sub {
+  font-size: 28rpx;
+  color: #8C8C94;
 }

@@ -1,144 +1,251 @@
+<!-- 卡片模板（社区流与搜索结果共用；事件处理器均在页面） -->
+<template name="feed-card">
+  <view class="feed-card" style="animation-delay: {{delay}}ms">
+    <view class="feed-head" hover-class="feed-head-hover" catchtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-avatar="{{item.avatarFile}}">
+      <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
+      <view wx:else class="avatar">{{item.avatarText}}</view>
+      <view class="feed-user">
+        <!-- 第一行：名字 + 时间（右对齐） -->
+        <view class="feed-user-row">
+          <text class="feed-name">{{item.user}}</text>
+          <text class="feed-time">{{item.timeText}}</text>
+        </view>
+        <!-- 第二行：场地/门店橙色 chip（catchtap 防冒泡触发滑手主页） -->
+        <view class="feed-chip-row">
+          <text class="feed-chip" data-id="{{item.venueId}}" data-kind="{{item.kind}}" catchtap="goPlace">
+            <block wx:for="{{item.venueSegs}}" wx:for-item="seg" wx:key="i"><text class="{{seg.hit ? 'feed-hit' : ''}}">{{seg.t}}</text></block>
+          </text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 留言（搜索态按关键词高亮） -->
+    <text wx:if="{{item.note}}" class="feed-text">
+      <block wx:for="{{item.noteSegs}}" wx:for-item="seg" wx:key="i"><text class="{{seg.hit ? 'feed-hit' : ''}}">{{seg.t}}</text></block>
+    </text>
+
+    <!-- 媒体：1 张 4:3 大图 / 2 张对半方图 / 3+ 三列方格 -->
+    <view wx:if="{{item.media.length}}" class="feed-photos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
+      <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell" catchtap="previewMedia" data-media="{{item.media}}" data-id="{{item.id}}" data-index="{{index}}">
+        <video
+          wx:if="{{p.type === 'video'}}"
+          class="feed-video"
+          src="{{p.url}}"
+          object-fit="cover"
+          controls="{{false}}"
+          show-center-play-btn="{{false}}"
+        />
+        <image
+          wx:else
+          class="photo"
+          src="{{p.url}}"
+          mode="aspectFill"
+          lazy-load
+        />
+        <view wx:if="{{p.type === 'video'}}" class="video-play"></view>
+        <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
+      </view>
+    </view>
+
+    <!-- 互动区：点赞 / 评论 / 转发 -->
+    <view class="feed-actions">
+      <view
+        class="action {{item.liked ? 'action-liked' : ''}}"
+        hover-class="action-hover"
+        data-id="{{item.id}}"
+        bindtap="toggleLike"
+        aria-role="button"
+        aria-label="点赞"
+      >
+        <image class="action-icon" src="{{item.liked ? icons.heartOrange : icons.heartAsh}}" mode="aspectFit" />
+        <text>{{item.likeCount}}</text>
+      </view>
+      <view
+        class="action {{item.commentsOpen ? 'action-liked' : ''}}"
+        hover-class="action-hover"
+        data-id="{{item.id}}"
+        bindtap="toggleComments"
+        aria-role="button"
+        aria-label="评论"
+      >
+        <image class="action-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
+        <text>{{item.commentCount}}</text>
+      </view>
+      <button
+        class="action action-share"
+        open-type="share"
+        hover-class="action-hover"
+        data-id="{{item.id}}"
+        data-user="{{item.user}}"
+        aria-label="转发"
+      >
+        <image class="action-icon" src="{{icons.share}}" mode="aspectFit" />
+      </button>
+    </view>
+
+    <!-- 评论区（内嵌展开） -->
+    <comment-box
+      wx:if="{{item.commentsOpen}}"
+      checkin-id="{{item.id}}"
+      data-id="{{item.id}}"
+      bind:countchange="onCommentCount"
+    />
+  </view>
+</template>
+
 <view class="page">
-  <!-- 吸顶头部：状态栏 + 自绘标题（自定义导航）+ 最新/热门（左）+ 发打卡（右） -->
+  <!-- 吸顶头部：状态栏 + 自绘标题（搜索态保留标题栏）+ 工具条/搜索行 -->
   <view class="dis-header" style="padding-top: {{statusBarHeight}}px">
     <view class="dis-nav">
       <text class="dis-nav-title">发现</text>
     </view>
-    <view class="dis-toolbar">
+    <!-- 浏览态工具条：最新/热门（左）+ 搜索圆钮（右） -->
+    <view wx:if="{{!searchMode}}" class="dis-toolbar">
       <view class="dis-tabs">
-      <view
-        class="dis-tab {{tab === 'latest' ? 'dis-tab-active' : ''}}"
-        hover-class="dis-tab-hover"
-        data-tab="latest"
-        bindtap="switchTab"
-        aria-role="tab"
-        aria-label="最新"
-      >
-        <text>最新</text>
-        <view wx:if="{{tab === 'latest'}}" class="dis-tab-line"></view>
-      </view>
-      <view
-        class="dis-tab {{tab === 'hot' ? 'dis-tab-active' : ''}}"
-        hover-class="dis-tab-hover"
-        data-tab="hot"
-        bindtap="switchTab"
-        aria-role="tab"
-        aria-label="热门"
-      >
-        <text>热门</text>
-        <view wx:if="{{tab === 'hot'}}" class="dis-tab-line"></view>
-      </view>
-    </view>
-    <view class="dis-post" hover-class="dis-post-hover" bindtap="goPostPublish" aria-role="button" aria-label="发打卡">
-        <image class="dis-post-icon" src="{{icons.camera}}" mode="aspectFit" />
-        <text>发打卡</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- 打卡社区流 -->
-  <view class="feed" wx:if="{{list.length}}">
-    <view wx:for="{{list}}" wx:key="id" class="feed-card feed-in" style="animation-delay: {{index < 10 ? index * 60 : 0}}ms">
-      <view class="feed-head" hover-class="feed-head-hover" catchtap="goUserProfile" data-openid="{{item.openid}}" data-user="{{item.user}}" data-avatar="{{item.avatarFile}}">
-        <image wx:if="{{item.avatarFile}}" class="avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
-        <view wx:else class="avatar">{{item.avatarText}}</view>
-        <view class="feed-user">
-          <!-- 第一行：名字 + 时间（右对齐） -->
-          <view class="feed-user-row">
-            <text class="feed-name">{{item.user}}</text>
-            <text class="feed-time">{{item.timeText}}</text>
-          </view>
-          <!-- 第二行：类型灰标 + 场地名橙色链接（跳转入口独立成行不被截断；catchtap 防止冒泡触发滑手主页） -->
-          <view class="feed-place-row">
-            <text class="feed-kind">{{item.kind === 'shop' ? '店铺' : '场地'}}</text>
-            <text class="feed-venue" data-id="{{item.venueId}}" data-kind="{{item.kind}}" catchtap="goPlace">{{item.venueName}}</text>
-          </view>
-        </view>
-      </view>
-
-      <text wx:if="{{item.note}}" class="feed-text">{{item.note}}</text>
-
-      <view wx:if="{{item.media.length}}" class="feed-photos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
-        <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell" catchtap="previewMedia" data-id="{{item.id}}" data-index="{{index}}">
-          <video
-            wx:if="{{p.type === 'video'}}"
-            class="feed-video"
-            src="{{p.url}}"
-            object-fit="cover"
-            controls="{{false}}"
-            show-center-play-btn="{{false}}"
-          />
-          <image
-            wx:else
-            class="photo"
-            src="{{p.url}}"
-            mode="aspectFill"
-            lazy-load
-          />
-          <view wx:if="{{p.type === 'video'}}" class="video-play"></view>
-          <view wx:if="{{p.local}}" class="video-uploading">上传中</view>
-        </view>
-      </view>
-
-      <view class="feed-actions">
         <view
-          class="action {{item.liked ? 'action-liked' : ''}}"
-          hover-class="action-hover"
-          data-id="{{item.id}}"
-          bindtap="toggleLike"
-          aria-role="button"
-          aria-label="点赞"
+          class="dis-tab {{tab === 'latest' ? 'dis-tab-active' : ''}}"
+          hover-class="dis-tab-hover"
+          data-tab="latest"
+          bindtap="switchTab"
+          aria-role="tab"
+          aria-label="最新"
         >
-          <image class="action-icon" src="{{item.liked ? icons.heartOrange : icons.heartAsh}}" mode="aspectFit" />
-          <text>{{item.likeCount}}</text>
+          <text>最新</text>
+          <view wx:if="{{tab === 'latest'}}" class="dis-tab-line"></view>
         </view>
         <view
-          class="action {{item.commentsOpen ? 'action-liked' : ''}}"
-          hover-class="action-hover"
-          data-id="{{item.id}}"
-          bindtap="toggleComments"
-          aria-role="button"
-          aria-label="评论"
+          class="dis-tab {{tab === 'hot' ? 'dis-tab-active' : ''}}"
+          hover-class="dis-tab-hover"
+          data-tab="hot"
+          bindtap="switchTab"
+          aria-role="tab"
+          aria-label="热门"
         >
-          <image class="action-icon" src="{{icons.commentAsh}}" mode="aspectFit" />
-          <text>{{item.commentCount}}</text>
+          <text>热门</text>
+          <view wx:if="{{tab === 'hot'}}" class="dis-tab-line"></view>
         </view>
       </view>
-
-      <!-- 评论区（内嵌展开） -->
-      <comment-box
-        wx:if="{{item.commentsOpen}}"
-        checkin-id="{{item.id}}"
-        data-id="{{item.id}}"
-        bind:countchange="onCommentCount"
-      />
+      <view class="dis-search-btn" hover-class="op-hover" bindtap="openSearch" aria-role="button" aria-label="搜索">
+        <image class="dis-search-btn-icon" src="{{icons.search}}" mode="aspectFit" />
+      </view>
     </view>
 
-    <view wx:if="{{loading}}" class="more">加载中...</view>
-    <view wx:if="{{finished && list.length}}" class="more">— 没有更多了 —</view>
+    <!-- 搜索态：展开式输入行 + 取消 -->
+    <view wx:else class="dis-search-bar">
+      <view class="dis-search-field">
+        <image class="dis-search-field-icon" src="{{icons.search}}" mode="aspectFit" />
+        <input
+          class="dis-search-input"
+          value="{{keyword}}"
+          placeholder="搜索滑手、场地或打卡内容"
+          placeholder-class="dis-search-ph"
+          confirm-type="search"
+          focus="{{searchMode}}"
+          bindinput="onSearchInput"
+          bindconfirm="onSearchConfirm"
+        />
+        <image wx:if="{{keyword}}" class="dis-search-clear" src="{{icons.xCircle}}" mode="aspectFit" catchtap="clearKeyword" aria-role="button" aria-label="清空" />
+      </view>
+      <text class="dis-search-cancel" hover-class="op-hover" bindtap="closeSearch">取消</text>
+    </view>
   </view>
 
-  <!-- 失败态：首屏加载失败（下拉刷新也可恢复） -->
-  <view wx:if="{{error && !loading}}" class="error">
-    <text class="error-text">加载失败</text>
-    <view class="error-btn" hover-class="op-hover" bindtap="onRetry" aria-role="button" aria-label="重新加载">点击重试</view>
-  </view>
+  <!-- ===== 搜索态内容 ===== -->
+  <block wx:if="{{searchMode}}">
+    <!-- 最近搜索 -->
+    <view wx:if="{{!searched}}" class="recent">
+      <view class="recent-head">
+        <text class="recent-title">最近搜索</text>
+        <text wx:if="{{recent.length}}" class="recent-clear" hover-class="op-hover" bindtap="clearRecent" aria-role="button" aria-label="清除最近搜索">清除</text>
+      </view>
+      <view class="recent-chips">
+        <view
+          wx:for="{{recent}}"
+          wx:key="*this"
+          class="recent-chip"
+          hover-class="recent-chip-hover"
+          data-kw="{{item}}"
+          bindtap="tapRecent"
+        >{{item}}</view>
+      </view>
+    </view>
 
-  <!-- 空态：CTA 直达发打卡（文案与行为一致） -->
-  <view wx:if="{{empty && !loading && !error}}" class="empty">
-    <text class="empty-text">还没有打卡内容</text>
-    <text class="empty-sub">去发一条打卡，你的分享会出现在这里</text>
-    <view class="empty-btn" hover-class="op-hover" bindtap="goPostPublish">发打卡</view>
-  </view>
+    <!-- 搜索结果 / 无结果 -->
+    <block wx:else>
+      <block wx:if="{{results.length}}">
+        <!-- 提示紧贴首卡（设计稿 mb-1） -->
+        <view class="search-hint">找到 {{results.length}} 条相关打卡</view>
+        <view class="feed feed-search">
+          <block wx:for="{{results}}" wx:key="id">
+            <template is="feed-card" data="{{item, delay: 0, icons}}" />
+          </block>
+        </view>
+      </block>
+      <view wx:if="{{searching}}" class="more">搜索中...</view>
+      <view wx:if="{{!results.length && !searching}}" class="empty-search">
+        <image class="empty-illus" src="{{icons.emptySearch}}" mode="aspectFit" />
+        <text class="empty-title">没找到相关内容</text>
+        <text class="empty-sub">换个关键词试试</text>
+      </view>
+    </block>
+  </block>
 
-  <!-- 首屏加载中（列表为空时的独立提示） -->
-  <view wx:if="{{loading && !list.length}}" class="more">加载中...</view>
+  <!-- ===== 浏览态内容 ===== -->
+  <block wx:else>
+    <!-- 打卡社区流 -->
+    <view class="feed" wx:if="{{list.length}}">
+      <block wx:for="{{list}}" wx:key="id">
+        <template is="feed-card" data="{{item: item, delay: item.delay, icons: icons}}" />
+      </block>
+      <view wx:if="{{loading}}" class="more">加载中...</view>
+      <view wx:if="{{finished && list.length}}" class="more">— 没有更多了 —</view>
+    </view>
+
+    <!-- 失败态：首屏加载失败（下拉刷新也可恢复） -->
+    <view wx:if="{{error && !loading}}" class="error">
+      <text class="error-text">加载失败</text>
+      <view class="error-btn" hover-class="op-hover" bindtap="onRetry" aria-role="button" aria-label="重新加载">点击重试</view>
+    </view>
+
+    <!-- 空态：插画引导签到（设计稿 AB3） -->
+    <view wx:if="{{empty && !loading && !error}}" class="empty">
+      <image class="empty-illus" src="{{icons.emptySkate}}" mode="aspectFit" />
+      <text class="empty-title">这片场地还没人滑</text>
+      <text class="empty-sub">先找个场地签到，再留下你的痕迹</text>
+      <view class="empty-btn" hover-class="op-hover" bindtap="goNearby">去附近场地签到</view>
+    </view>
+
+    <!-- 首屏加载中（列表为空时的独立提示） -->
+    <view wx:if="{{loading && !list.length}}" class="more">加载中...</view>
+  </block>
 </view>
 
-<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播） -->
+<!-- 发打卡 FAB（右下角悬浮；空态时切换为「去签到」描边入口；评论展开时隐藏避让输入行） -->
+<view
+  wx:if="{{!searchMode && !fabHide}}"
+  class="fab {{empty && !error ? 'fab-empty' : ''}}"
+  hover-class="fab-hover"
+  bindtap="onFabTap"
+  aria-role="button"
+  aria-label="{{empty && !error ? '去签到' : '发打卡'}}"
+>
+  <block wx:if="{{empty && !error}}">
+    <image class="fab-pin" src="{{icons.pin}}" mode="aspectFit" />
+    <text class="fab-txt">去签到</text>
+  </block>
+  <image wx:else class="fab-camera" src="{{icons.camera}}" mode="aspectFit" />
+</view>
+
+<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播；checkinId 开启预览内点赞/评论/转发） -->
 <media-viewer
   visible="{{viewerShow}}"
   sources="{{viewerSources}}"
   current="{{viewerCurrent}}"
+  checkin-id="{{viewerId}}"
+  liked="{{viewerLiked}}"
+  like-count="{{viewerLikeCount}}"
+  comment-count="{{viewerCommentCount}}"
   bind:close="onViewerClose"
+  bind:likechange="onViewerLike"
+  bind:commentchange="onViewerComment"
 />

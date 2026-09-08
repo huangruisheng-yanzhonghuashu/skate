@@ -12,6 +12,17 @@ function svg(inner, opts) {
   return 'data:image/svg+xml;utf8,' + encodeURIComponent(s)
 }
 
+/* 自定义 viewBox 的 SVG（空态插画等设计稿专用图形） */
+function svgVB(inner, viewBox, opts) {
+  opts = opts || {}
+  const stroke = opts.stroke || '#FF5A36'
+  const sw = opts.sw || 3
+  const s =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + viewBox + '" fill="none" stroke="' + stroke +
+    '" stroke-width="' + sw + '" stroke-linecap="round" stroke-linejoin="round">' + inner + '</svg>'
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(s)
+}
+
 const P = {
   home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22L9 12 15 12 15 22"/>',
   flame: '<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-2.072-2.143-2.072-2.143S8.5 8.5 7 10c-1.5 1.5-2 2.5-2 3.5a4.5 4.5 0 0 0 8.5 1.5c.5-1 0-2-1-3-1-1-2-1.5-2-1.5s.5 1 0 2c-.5 1-1.5 1.5-2.5 1.5Z"/><path d="M22 12a10 10 0 1 1-20 0a10 10 0 1 1 20 0Z"/>',
@@ -20,6 +31,8 @@ const P = {
   star: '<path d="M12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2Z"/>',
   heart: '<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/>',
   comment: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>',
+  /* 圆形气泡评论（lucide message-circle，media-viewer 操作组用，与设计稿一致） */
+  commentCircle: '<path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>',
   venue: '<path d="M3.5 17.2h17" stroke-width="2.6"/><path d="M5.4 16.9V14.3Q5.4 10.6 8.8 10.1L10.6 9.85Q11.9 9.7 12.4 10.9L13.3 12.9Q14.6 12.3 16.2 12.3H18.6Q20.4 12.35 20.4 14.1V16.9"/><path d="M12.1 12.3L13.5 11.85"/>',
   /* 门店（lucide store：雨棚 + 门面 + 门） */
   store: '<path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/>',
@@ -61,6 +74,12 @@ const P = {
   trash: '<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M10 11v6"/><path d="M14 11v6"/>',
   /* 视频打卡封面角标（实心播放键） */
   play: '<path d="M7 4.5L20 12 7 19.5 7 4.5Z"/>',
+  /* 转发（lucide share：方框上箭头，media-viewer 操作组用） */
+  share: '<path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="m16 6-4-4-4 4"/><path d="M12 2v13"/>',
+  /* 分享节点（lucide share-2：三节点互联，feed 卡片分享用，与设计稿 fa-share-nodes 一致） */
+  shareNodes: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>',
+  /* 清除输入（circle-xmark） */
+  xCircle: '<circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/>',
 }
 
 const ASH = '#8C8C8C'
@@ -96,7 +115,20 @@ const ICON = {
   /* 发现页 */
   heartAsh: svg(P.heart, { stroke: ASH }),
   heartOrange: svg(P.heart, { fill: ORANGE, stroke: ORANGE }),
+  heartWhite: svg(P.heart, { stroke: WHITE }),
   commentAsh: svg(P.comment, { stroke: ASH }),
+  commentWhite: svg(P.commentCircle, { stroke: WHITE }),
+  shareAsh: svg(P.share, { stroke: ASH }),
+  shareWhite: svg(P.share, { stroke: WHITE }),
+  shareNodesAsh: svg(P.shareNodes, { stroke: ASH }),
+  shareNodesWhite: svg(P.shareNodes, { stroke: WHITE }),
+  /* 搜索输入框内图标（t4 #8C8C94）与清除按钮 */
+  searchT4: svg(P.search, { stroke: '#8C8C94' }),
+  xCircleAsh: svg(P.xCircle, { stroke: '#8C8C94' }),
+
+  /* 发现页空态插画（设计稿 AB3 / 搜索稿 C 的橙色线条图形） */
+  emptySkate: svgVB('<path d="M10 70H110"/><path d="M30 70V50C30 35 45 30 60 30C75 30 90 35 90 50V70"/><circle cx="60" cy="20" r="12"/><path d="M100 70L115 55"/><path d="M20 70L5 55"/>', '0 0 120 80'),
+  emptySearch: svgVB('<circle cx="52" cy="40" r="26"/><path d="M71 59L104 92"/><path d="M10 80H110"/><path d="M30 80V65C30 52 42 48 52 48"/>', '0 0 120 96'),
 
   /* 场地卡片 / 空态 */
   venueOrange: svg(P.venue, { stroke: ORANGE }),
@@ -164,4 +196,4 @@ const ICON = {
   gradCapOrange: svg(P.gradCap, { stroke: ORANGE }),
 }
 
-module.exports = { ICON, svg }
+module.exports = { ICON, svg, svgVB }

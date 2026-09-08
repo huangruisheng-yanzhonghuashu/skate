@@ -64,39 +64,224 @@
   height: 100%;
 }
 
+/* 顶部计数器（设计稿状态 B：3 / 5；top 由 JS 按状态栏高度内联，行高与页面自绘导航一致） */
 .mv-count {
   position: absolute;
   left: 0;
   right: 0;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 28rpx;
+  font-weight: 500;
+  z-index: 3;
+}
+
+/* 底部圆点指示器（多图） */
+.mv-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
   bottom: calc(60rpx + env(safe-area-inset-bottom));
-  text-align: center;
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20rpx;
+  z-index: 3;
 }
 
-/* 右上角关闭 × */
-.mv-close {
-  position: absolute;
-  top: calc(40rpx + env(safe-area-inset-top));
-  right: 30rpx;
-  width: 64rpx;
-  height: 64rpx;
+.mv-dot {
+  width: 12rpx;
+  height: 12rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
 }
 
-.mv-close-line {
+.mv-dot-active {
+  width: 14rpx;
+  height: 14rpx;
+  background: #FF5A36;
+}
+
+/* 左上返回（设计稿状态 A：导航栏返回；top 由 JS 按状态栏高度内联，行高 88rpx 与页面导航行一致） */
+.mv-back {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 8rpx;
+  width: 88rpx;
+  height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+}
+
+.mv-back-icon {
   width: 44rpx;
-  height: 4rpx;
-  border-radius: 2rpx;
-  background: rgba(255, 255, 255, 0.92);
+  height: 44rpx;
 }
 
-.mv-close-l1 {
-  transform: translate(-50%, -50%) rotate(45deg);
+/* ===== 右下操作组（点赞 / 评论 / 转发，设计稿状态 A） =====
+ * 位置与稿一致：right 20px / bottom 120px（固定值，含底部安全区量程）
+ * align-items: flex-end 保证三个圆钮右缘对齐，不受子项宽度差异影响 */
+.mv-actions {
+  position: absolute;
+  right: 40rpx;
+  bottom: 240rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 36rpx;
+  z-index: 4;
 }
 
-.mv-close-l2 {
-  transform: translate(-50%, -50%) rotate(-45deg);
+.mv-action {
+  position: relative;
+  width: 104rpx;
+  height: 104rpx;
+  border-radius: 50%;
+  background: rgba(30, 30, 35, 0.72);
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.mv-action-hover {
+  opacity: 0.7;
+}
+
+.mv-action-icon {
+  width: 44rpx;
+  height: 44rpx;
+}
+
+/* 计数角标：贴按钮正下方（设计稿 badge bottom -6px） */
+.mv-action-badge {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 2rpx;
+  color: #FFFFFF;
+  font-size: 20rpx;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* 转发按钮壳：固定尺寸圆钮（几何由 view 锁定，不受 button UA 样式影响） */
+.mv-share-wrap {
+  position: relative;
+  width: 104rpx;
+  height: 104rpx;
+}
+
+/* open-type=share 的 button 绝对铺满壳，UA 默认 margin auto / width auto /
+ * 行高 2.55 / 内边距全部显式归零 */
+.mv-share-btn {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 104rpx;
+  height: 104rpx;
+  padding: 0;
+  margin: 0;
+  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  background: rgba(30, 30, 35, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  font-size: 0;
+  overflow: hidden;
+}
+
+.mv-share-btn::after {
+  display: none;
+}
+
+/* 点赞动效（与发现页卡片一致） */
+.mv-actions .mv-action-icon {
+  transition: transform 0.15s ease-in-out;
+}
+
+/* ===== 半屏评论面板（设计稿状态 C） ===== */
+.mv-cmask {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 10;
+}
+
+.mv-csheet {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 62%;
+  background: #1E1E23;
+  border-radius: 48rpx 48rpx 0 0;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  padding: 0 32rpx;
+  box-sizing: border-box;
+}
+
+.mv-c-handle {
+  width: 100%;
+  height: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.mv-c-handlebar {
+  width: 72rpx;
+  height: 8rpx;
+  border-radius: 6rpx;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.mv-c-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+  flex-shrink: 0;
+}
+
+.mv-c-title {
+  font-size: 32rpx;
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.mv-c-close {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mv-c-close-icon {
+  width: 34rpx;
+  height: 34rpx;
+}
+
+.mv-c-list {
+  flex: 1;
+  min-height: 0;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
 }

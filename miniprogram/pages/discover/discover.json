@@ -2,7 +2,8 @@
   "navigationStyle": "custom",
   "navigationBarTitleText": "发现",
   "usingComponents": {
-    "media-viewer": "/components/media-viewer/media-viewer"
+    "media-viewer": "/components/media-viewer/media-viewer",
+    "comment-box": "/components/comment-box/index"
   },
   "enablePullDownRefresh": true,
   "backgroundTextStyle": "light"

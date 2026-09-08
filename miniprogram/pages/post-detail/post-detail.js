@@ -162,6 +162,24 @@ Page({
     this.setData({ viewerShow: false })
   },
 
+  /* 查看器内点赞 → 同步页面计数 */
+  onViewerLike(e) {
+    const { liked, likeCount } = e.detail
+    this._counts[this.data.postId] = likeCount
+    this.setData({ liked: liked, likeCount: likeCount })
+  },
+
+  /* 查看器内评论增删 → 计数同步 */
+  onViewerComment(e) {
+    const delta = (e.detail && e.detail.delta) || 0
+    this.setData({ commentCount: Math.max(0, this.data.commentCount + delta) })
+  },
+
+  /* 页面转发（查看器内 open-type=share 依赖页面处理器） */
+  onShareAppMessage() {
+    return { title: '去哪滑 · 发现', path: '/pages/discover/discover' }
+  },
+
   /* ===== 编辑打卡 ===== */
   openEdit() {
     const rec = store.getState().checkins.find((c) => c.id === this.data.postId)

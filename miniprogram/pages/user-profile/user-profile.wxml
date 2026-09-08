@@ -76,7 +76,7 @@
         </view>
         <text wx:if="{{item.note}}" class="note">{{item.note}}</text>
         <view wx:if="{{item.media.length}}" class="photos photos-{{item.media.length >= 3 ? 'grid' : item.media.length}}">
-          <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell" catchtap="previewMedia" data-media="{{item.media}}" data-index="{{index}}">
+          <view wx:for="{{item.media}}" wx:for-item="p" wx:key="url" class="photo-cell" catchtap="previewMedia" data-media="{{item.media}}" data-id="{{item.id}}" data-index="{{index}}">
             <video
               wx:if="{{p.type === 'video'}}"
               class="card-video"
@@ -123,10 +123,16 @@
   </view>
 </view>
 
-<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播） -->
+<!-- 打卡媒体查看器（微博式：图视频混滑、视频封面点播；checkinId 开启预览内点赞/评论/转发） -->
 <media-viewer
   visible="{{viewerShow}}"
   sources="{{viewerSources}}"
   current="{{viewerCurrent}}"
+  checkin-id="{{viewerId}}"
+  liked="{{viewerLiked}}"
+  like-count="{{viewerLikeCount}}"
+  comment-count="{{viewerCommentCount}}"
   bind:close="onViewerClose"
+  bind:likechange="onViewerLike"
+  bind:commentchange="onViewerComment"
 />

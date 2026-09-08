@@ -225,17 +225,51 @@ Page({
     }
   },
 
-  /* 打卡媒体预览（微博式混合查看器） */
+  /* 打卡媒体预览（微博式混合查看器；checkinId 开启预览内点赞/评论/转发） */
   previewMedia(e) {
-    const media = e.currentTarget.dataset.media || []
+    const d = e.currentTarget.dataset
+    const media = d.media || []
     const current = e.currentTarget.dataset.index || 0
+    const item = this.data.list.find((x) => x.id === d.id)
     cloud.getMediaPreviewSources(media).then((sources) => {
       if (!sources.length) return
-      this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: current })
+      this.setData({
+        viewerShow: true,
+        viewerSources: sources,
+        viewerCurrent: current,
+        viewerId: d.id || '',
+        viewerLiked: item ? item.liked : false,
+        viewerLikeCount: item ? item.likeCount : 0,
+        viewerCommentCount: item ? item.commentCount : 0,
+      })
     })
   },
 
   onViewerClose() {
     this.setData({ viewerShow: false })
+  },
+
+  /* 查看器内点赞 → 同步动态卡片 */
+  onViewerLike(e) {
+    const id = this.data.viewerId
+    const { liked, likeCount } = e.detail
+    this._counts[id] = likeCount
+    const list = this.data.list.map((x) => (x.id === id ? { ...x, liked: liked, likeCount: likeCount } : x))
+    this.setData({ list: list })
+  },
+
+  /* 查看器内评论增删 → 计数同步卡片 */
+  onViewerComment(e) {
+    const id = this.data.viewerId
+    const delta = e.detail.delta || 0
+    const list = this.data.list.map((x) => (
+      x.id === id ? { ...x, commentCount: Math.max(0, (x.commentCount || 0) + delta) } : x
+    ))
+    this.setData({ list: list })
+  },
+
+  /* 页面转发（查看器内 open-type=share 依赖页面处理器） */
+  onShareAppMessage() {
+    return { title: '去哪滑 · 发现', path: '/pages/discover/discover' }
   },
 })
