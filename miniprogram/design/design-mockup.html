@@ -78,6 +78,12 @@
     .pulse-dot {
       animation: pulse-dot 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
     }
+    @keyframes slogan-rise {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .slogan-l1 { animation: slogan-rise 0.2s ease-out both; }
+    .slogan-l2 { animation: slogan-rise 0.2s ease-out 0.08s both; }
   </style>
 </head>
 <body class="min-h-screen p-8" data-page-node-id="hmszl23AIQORoP88SJCKDm">
@@ -147,7 +153,12 @@
           <div class="px-6 pt-2 pb-5" data-page-node-id="ALHNG71ImbdAFvNoV8uYUe">
             <h1 class="text-[44px] font-medium text-t1 italic leading-tight" data-page-node-id="9OFeB1XOD8iqqfWEOWLgrM">去哪滑</h1>
             <div class="flex items-center justify-between mt-2" data-page-node-id="SloganRow01">
-              <p class="text-[22px] text-primary font-medium leading-snug" data-page-node-id="cKpT8PYdeXI5St2cH3CgEJ">想去哪滑，就去哪滑。</p>
+              <div class="flex-1 min-w-0" data-page-node-id="cKpT8PYdeXI5St2cH3CgEJ">
+                <p class="text-[22px] font-medium leading-[1.25] text-t2 slogan-l1">想去哪滑，</p>
+                <p class="text-[22px] font-medium leading-[1.25] slogan-l2">
+                  <span class="relative inline-block ml-[22px] text-t1"><span class="absolute -left-0.5 -right-1.5 bottom-[1px] h-[9px] rounded-[2px] bg-primary/80 -rotate-2 origin-left"></span><span class="relative">就去哪滑。</span></span>
+                </p>
+              </div>
               <!-- 在线热度 -->
               <div class="inline-flex items-center gap-2 bg-card border border-primary/40 rounded-full px-3 py-1.5 flex-shrink-0 ml-3" data-page-node-id="oydmUrRBgbg5RFVRT8FnBU">
                 <div class="relative w-2.5 h-2.5" data-page-node-id="8Fi4qE5rTmHFtbhyv7ncOf">
