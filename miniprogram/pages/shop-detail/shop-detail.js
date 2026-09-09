@@ -6,6 +6,7 @@ const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 const nav = require('../../utils/nav.js')
 const mediaPick = require('../../utils/media-pick.js')
+const preview = require('../../utils/preview.js')
 
 /* 连签徽章里程碑（庆祝层提示用，与场地详情页一致） */
 const STREAK_MILESTONES = [3, 7, 30, 100]
@@ -99,6 +100,10 @@ Page({
   },
 
   onShow() {
+    if (this._backFromVideoPreview) {
+      this._backFromVideoPreview = false
+      return /* 视频预览返回：不重拉签到态与打卡流 */
+    }
     if (this.data.shop) {
       this.refresh()
       this.loadFeed()
@@ -486,14 +491,15 @@ Page({
     wx.navigateTo({ url: '/pages/place-checkins/place-checkins?id=' + this.data.shop.id + '&kind=shop' })
   },
 
-  /* 打卡媒体预览（微博式混合查看器）：图视频混滑、视频封面点播不自动播放 */
+  /* 打卡媒体预览：图片走浮层，视频跳原生 video-preview 页（系统右滑返回，页面自拉计数） */
   previewMedia(e) {
     const d = e.currentTarget.dataset
     const media = d.media || []
     const current = e.currentTarget.dataset.index || 0
     cloud.getMediaPreviewSources(media).then((sources) => {
-      if (!sources.length) return
-      this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: current, viewerId: d.id || '' })
+      /* 视频走原生页面：标记来源，返回时 onShow 跳过刷新 */
+      if (sources.some((s) => s.type === 'video')) this._backFromVideoPreview = true
+      preview.open(this, { sources: sources, current: current, id: d.id || '' })
     })
   },
 

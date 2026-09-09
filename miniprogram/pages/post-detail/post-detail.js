@@ -8,6 +8,7 @@ const { toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 const nav = require('../../utils/nav.js')
 const mediaPick = require('../../utils/media-pick.js')
+const preview = require('../../utils/preview.js')
 
 /* shops.category → 徽章文案（板店对外叫「门店」，与「场地、门店与俱乐部」文案统一） */
 const CAT_TEXT = { '板店': '门店', '俱乐部': '俱乐部', '培训机构': '培训机构' }
@@ -148,13 +149,20 @@ Page({
     }
   },
 
-  /* 素材预览（media-viewer 全屏滑动，视频封面点播） */
+  /* 素材预览：图片走 media-viewer 浮层，视频跳原生 video-preview 页（系统右滑返回） */
   previewMedia(e) {
-    const media = e.currentTarget.dataset.media || []
+    const d = e.currentTarget.dataset
+    const media = d.media || []
     const current = e.currentTarget.dataset.index || 0
     cloud.getMediaPreviewSources(media).then((sources) => {
-      if (!sources.length) return
-      this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: current })
+      preview.open(this, {
+        sources: sources,
+        current: current,
+        id: d.id || this.data.postId,
+        liked: this.data.liked,
+        likeCount: this.data.likeCount,
+        commentCount: this.data.commentCount,
+      })
     })
   },
 

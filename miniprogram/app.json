@@ -15,7 +15,8 @@
     "pages/post-publish/post-publish",
     "pages/my-posts/my-posts",
     "pages/post-detail/post-detail",
-    "pages/city-picker/city-picker"
+    "pages/city-picker/city-picker",
+    "pages/video-preview/video-preview"
   ],
   "window": {
     "navigationBarBackgroundColor": "#1A1A1E",

@@ -4,6 +4,7 @@ const { QQ_MAP_KEY } = require('../../utils/config.js')
 const qqmap = require('../../utils/qqmap.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
+const preview = require('../../utils/preview.js')
 
 const FIELD_FILTERS = ['全部', '碗池', '街式', '平地', 'U池', '混合']
 /* 机构服务筛选（拆 Tab 后每个机构 Tab 内的第二行 chips，toggle，无「全部」占位） */
@@ -506,10 +507,7 @@ Page({
       return
     }
     cloud.getMediaPreviewSources(media).then((sources) => {
-      if (!sources.length) return
-      const tb = typeof this.getTabBar === 'function' && this.getTabBar()
-      if (tb) tb.setData({ hidden: true })
-      this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: d.index || 0 })
+      preview.open(this, { sources: sources, current: d.index || 0, id: d.id || '' })
     })
   },
 

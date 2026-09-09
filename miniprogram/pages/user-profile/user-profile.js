@@ -7,6 +7,7 @@ const store = require('../../utils/store.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 const nav = require('../../utils/nav.js')
+const preview = require('../../utils/preview.js')
 
 const PAGE_SIZE = 20
 /* 常去场地：聚合上限 100（兼做足迹场地数统计），展示前 10 张 */
@@ -225,22 +226,22 @@ Page({
     }
   },
 
-  /* 打卡媒体预览（微博式混合查看器；checkinId 开启预览内点赞/评论/转发） */
+  /* 打卡媒体预览：图片走浮层，视频跳原生 video-preview 页（系统右滑返回）；
+   * checkinId 开启预览内点赞/评论/转发 */
   previewMedia(e) {
     const d = e.currentTarget.dataset
     const media = d.media || []
     const current = e.currentTarget.dataset.index || 0
     const item = this.data.list.find((x) => x.id === d.id)
     cloud.getMediaPreviewSources(media).then((sources) => {
-      if (!sources.length) return
-      this.setData({
-        viewerShow: true,
-        viewerSources: sources,
-        viewerCurrent: current,
-        viewerId: d.id || '',
-        viewerLiked: item ? item.liked : false,
-        viewerLikeCount: item ? item.likeCount : 0,
-        viewerCommentCount: item ? item.commentCount : 0,
+      preview.open(this, {
+        sources: sources,
+        current: current,
+        id: d.id || '',
+        liked: item && item.liked,
+        likeCount: item && item.likeCount,
+        commentCount: item && item.commentCount,
+        user: item && item.user,
       })
     })
   },

@@ -1,11 +1,15 @@
-<view wx:if="{{visible}}" class="mv-mask" catchtouchmove="noop">
+<view
+  wx:if="{{visible}}"
+  class="mv-mask {{anim ? 'mv-anim' : ''}}"
+  style="transform: translateX({{dragX}}px)"
+  catchtouchmove="noop"
+>
   <swiper class="mv-swiper" current="{{idx}}" bindchange="onSwiperChange">
     <swiper-item wx:for="{{sources}}" wx:key="url">
-      <!-- 视频：封面点播（点击播放）+ 右滑跟手关闭 -->
+      <!-- 视频：封面点播（点击播放）+ 右滑整层跟手关闭 -->
       <view
         wx:if="{{item.type === 'video'}}"
         class="mv-video-wrap"
-        style="transform: translateX({{dragX}}px)"
         catchtap="onPlayTap"
         data-index="{{index}}"
         bindtouchstart="onTouchStart"

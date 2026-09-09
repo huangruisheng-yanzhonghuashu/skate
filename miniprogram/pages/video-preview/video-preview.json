@@ -1,0 +1,9 @@
+{
+  "navigationStyle": "custom",
+  "navigationBarTextStyle": "white",
+  "backgroundColor": "#000000",
+  "disableScroll": true,
+  "usingComponents": {
+    "comment-box": "/components/comment-box/index"
+  }
+}

@@ -4,6 +4,7 @@ const cloud = require('../../utils/cloud.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 const { getStatusBarHeight } = require('../../utils/nav.js')
+const preview = require('../../utils/preview.js')
 
 const PAGE_SIZE = 20
 const SEARCH_LIMIT = 30
@@ -78,6 +79,10 @@ Page({
     const tb = typeof this.getTabBar === 'function' && this.getTabBar()
     if (tb) {
       tb.setData({ selected: 1, hidden: false }) /* 防御：任何路径回页都恢复 TabBar */
+    }
+    if (this._backFromVideoPreview) {
+      this._backFromVideoPreview = false
+      return /* 视频预览返回：点赞/评论已事件同步进卡片，不整页刷新 */
     }
     if (this.data.searchMode) return /* 搜索态返回本页不打断 */
     /* 打卡/点赞可能已变化：重置分页重新加载 */
@@ -327,8 +332,8 @@ Page({
     }
   },
 
-  /* 打卡媒体预览（微博式混合查看器）：图视频混滑、视频封面点播不自动播放
-   * Tab 页特有：预览期间隐藏底部 TabBar（全屏沉浸），关闭恢复 */
+  /* 打卡媒体预览：图片走 media-viewer 浮层，视频跳原生 video-preview 页（系统右滑返回）
+   * 浮层路径 Tab 页特有：预览期间隐藏底部 TabBar（全屏沉浸），关闭恢复 */
   previewMedia(e) {
     const d = e.currentTarget.dataset
     const media = d.media || []
@@ -336,17 +341,16 @@ Page({
     const current = Number(d.index) || 0
     const item = this.data.list.find((x) => x.id === id) || this.data.results.find((x) => x.id === id)
     cloud.getMediaPreviewSources(media).then((sources) => {
-      if (!sources.length) return
-      const tb = typeof this.getTabBar === 'function' && this.getTabBar()
-      if (tb) tb.setData({ hidden: true })
-      this.setData({
-        viewerShow: true,
-        viewerSources: sources,
-        viewerCurrent: current,
-        viewerId: id,
-        viewerLiked: item ? item.liked : false,
-        viewerLikeCount: item ? item.likeCount : 0,
-        viewerCommentCount: item ? item.commentCount : 0,
+      /* 视频走原生页面：标记来源，返回时 onShow 跳过整页 reload */
+      if (sources.some((s) => s.type === 'video')) this._backFromVideoPreview = true
+      preview.open(this, {
+        sources: sources,
+        current: current,
+        id: id,
+        liked: item && item.liked,
+        likeCount: item && item.likeCount,
+        commentCount: item && item.commentCount,
+        user: item && item.user,
       })
     })
   },

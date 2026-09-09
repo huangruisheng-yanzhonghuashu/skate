@@ -3,6 +3,7 @@ const cloud = require('../../utils/cloud.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 const nav = require('../../utils/nav.js')
+const preview = require('../../utils/preview.js')
 
 const PAGE_SIZE = 20
 
@@ -104,14 +105,13 @@ Page({
     this.loadMore()
   },
 
-  /* 打卡媒体预览（微博式混合查看器）：图视频混滑、视频封面点播不自动播放 */
+  /* 打卡媒体预览：图片走浮层，视频跳原生 video-preview 页（系统右滑返回，页面自拉计数） */
   previewMedia(e) {
     const d = e.currentTarget.dataset
     const media = d.media || []
     const current = e.currentTarget.dataset.index || 0
     cloud.getMediaPreviewSources(media).then((sources) => {
-      if (!sources.length) return
-      this.setData({ viewerShow: true, viewerSources: sources, viewerCurrent: current, viewerId: d.id || '' })
+      preview.open(this, { sources: sources, current: current, id: d.id || '' })
     })
   },
 

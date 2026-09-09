@@ -1,38 +1,23 @@
-.mv-mask {
+/* 视频预览页样式：与 media-viewer 视频分支同构（vp- 前缀），宿主为原生页面 */
+page {
+  background: #000000;
+}
+
+.vp-page {
   position: fixed;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
   background: #000000;
-  z-index: 9999;
-  will-change: transform;
 }
 
-/* 右滑回弹/退场过渡：跟手过程中不加（anim=false），松手判定后加 */
-.mv-anim {
-  transition: transform 0.24s ease-out;
-}
-
-.mv-swiper {
+.vp-swiper {
   width: 100%;
   height: 100%;
 }
 
-.mv-item {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.mv-video {
-  width: 100%;
-  height: 100%;
-}
-
-.mv-video-wrap {
+.vp-video-wrap {
   position: relative;
   width: 100%;
   height: 100%;
@@ -41,8 +26,13 @@
   justify-content: center;
 }
 
+.vp-video {
+  width: 100%;
+  height: 100%;
+}
+
 /* 播放按钮：半透明圆底 + 白色三角 */
-.mv-play {
+.vp-play {
   position: absolute;
   left: 50%;
   top: 50%;
@@ -54,7 +44,7 @@
   z-index: 2;
 }
 
-.mv-play::after {
+.vp-play::after {
   content: '';
   position: absolute;
   left: 50%;
@@ -65,13 +55,8 @@
   border-bottom: 22rpx solid transparent;
 }
 
-.mv-img {
-  width: 100%;
-  height: 100%;
-}
-
-/* 顶部计数器（设计稿状态 B：3 / 5；top 由 JS 按状态栏高度内联，行高与页面自绘导航一致） */
-.mv-count {
+/* 顶部计数器（多视频；top 由 JS 按状态栏高度内联，行高与页面自绘导航一致） */
+.vp-count {
   position: absolute;
   left: 0;
   right: 0;
@@ -85,8 +70,8 @@
   z-index: 3;
 }
 
-/* 底部圆点指示器（多图） */
-.mv-dots {
+/* 底部圆点指示器（多视频） */
+.vp-dots {
   position: absolute;
   left: 0;
   right: 0;
@@ -98,21 +83,21 @@
   z-index: 3;
 }
 
-.mv-dot {
+.vp-dot {
   width: 12rpx;
   height: 12rpx;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.35);
 }
 
-.mv-dot-active {
+.vp-dot-active {
   width: 14rpx;
   height: 14rpx;
   background: #FF5A36;
 }
 
-/* 左上返回（设计稿状态 A：导航栏返回；top 由 JS 按状态栏高度内联，行高 88rpx 与页面导航行一致） */
-.mv-back {
+/* 左上返回（top 由 JS 按状态栏高度内联，行高 88rpx 与页面导航行一致） */
+.vp-back {
   position: absolute;
   left: 8rpx;
   width: 88rpx;
@@ -123,15 +108,15 @@
   z-index: 4;
 }
 
-.mv-back-icon {
+.vp-back-icon {
   width: 44rpx;
   height: 44rpx;
 }
 
-/* ===== 右下操作组（点赞 / 评论 / 转发，设计稿状态 A） =====
- * 位置与稿一致：right 20px / bottom 120px（固定值，含底部安全区量程）
- * align-items: flex-end 保证三个圆钮右缘对齐，不受子项宽度差异影响 */
-.mv-actions {
+/* ===== 右下操作组（点赞 / 评论 / 转发） =====
+ * 位置与 media-viewer 视频态一致：right 40rpx / bottom 240rpx
+ * align-items: flex-end 保证三个圆钮右缘对齐 */
+.vp-actions {
   position: absolute;
   right: 40rpx;
   bottom: 240rpx;
@@ -142,7 +127,7 @@
   z-index: 4;
 }
 
-.mv-action {
+.vp-action {
   position: relative;
   width: 104rpx;
   height: 104rpx;
@@ -158,17 +143,17 @@
   line-height: 1;
 }
 
-.mv-action-hover {
+.vp-action-hover {
   opacity: 0.7;
 }
 
-.mv-action-icon {
+.vp-action-icon {
   width: 44rpx;
   height: 44rpx;
 }
 
-/* 计数角标：贴按钮正下方（设计稿 badge bottom -6px） */
-.mv-action-badge {
+/* 计数角标：贴按钮正下方 */
+.vp-action-badge {
   position: absolute;
   top: 100%;
   left: 50%;
@@ -180,45 +165,42 @@
   white-space: nowrap;
 }
 
-/* 转发按钮壳：固定尺寸圆钮（几何由 view 锁定，不受 button UA 样式影响） */
-.mv-share-wrap {
-  position: relative;
+/* 转发按钮壳：固定尺寸圆钮，图标由壳内 image 直接渲染 */
+.vp-share-wrap {
   width: 104rpx;
   height: 104rpx;
 }
 
-/* open-type=share 的 button 绝对铺满壳，UA 默认 margin auto / width auto /
- * 行高 2.55 / 内边距全部显式归零 */
-.mv-share-btn {
+/* open-type=share 的透明命中层：绝对铺满壳、完全隐形，仅承接点击 */
+.vp-share-btn {
   position: absolute;
   left: 0;
   top: 0;
-  width: 104rpx;
-  height: 104rpx;
+  width: 100%;
+  height: 100%;
   padding: 0;
   margin: 0;
-  border: 1rpx solid rgba(255, 255, 255, 0.08);
+  border: none;
+  background: transparent;
   border-radius: 50%;
-  background: rgba(30, 30, 35, 0.72);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 1;
+  opacity: 0;
+  z-index: 2;
   font-size: 0;
+  line-height: 1;
   overflow: hidden;
 }
 
-.mv-share-btn::after {
+.vp-share-btn::after {
   display: none;
 }
 
 /* 点赞动效（与发现页卡片一致） */
-.mv-actions .mv-action-icon {
+.vp-actions .vp-action-icon {
   transition: transform 0.15s ease-in-out;
 }
 
-/* ===== 半屏评论面板（设计稿状态 C） ===== */
-.mv-cmask {
+/* ===== 半屏评论面板 ===== */
+.vp-cmask {
   position: absolute;
   left: 0;
   top: 0;
@@ -228,7 +210,7 @@
   z-index: 10;
 }
 
-.mv-csheet {
+.vp-csheet {
   position: absolute;
   left: 0;
   right: 0;
@@ -243,7 +225,7 @@
   box-sizing: border-box;
 }
 
-.mv-c-handle {
+.vp-c-handle {
   width: 100%;
   height: 44rpx;
   display: flex;
@@ -252,14 +234,14 @@
   flex-shrink: 0;
 }
 
-.mv-c-handlebar {
+.vp-c-handlebar {
   width: 72rpx;
   height: 8rpx;
   border-radius: 6rpx;
   background: rgba(255, 255, 255, 0.25);
 }
 
-.mv-c-head {
+.vp-c-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -267,13 +249,13 @@
   flex-shrink: 0;
 }
 
-.mv-c-title {
+.vp-c-title {
   font-size: 32rpx;
   color: #FFFFFF;
   font-weight: 600;
 }
 
-.mv-c-close {
+.vp-c-close {
   width: 56rpx;
   height: 56rpx;
   display: flex;
@@ -281,12 +263,12 @@
   justify-content: center;
 }
 
-.mv-c-close-icon {
+.vp-c-close-icon {
   width: 34rpx;
   height: 34rpx;
 }
 
-.mv-c-list {
+.vp-c-list {
   flex: 1;
   min-height: 0;
   padding-bottom: calc(16rpx + env(safe-area-inset-bottom));

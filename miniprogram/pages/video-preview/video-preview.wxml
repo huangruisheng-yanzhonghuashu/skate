@@ -1,0 +1,92 @@
+<view class="vp-page" catchtouchmove="noop">
+  <swiper class="vp-swiper" current="{{idx}}" bindchange="onSwiperChange">
+    <swiper-item wx:for="{{sources}}" wx:key="url">
+      <!-- 视频：封面点播（点击播放）；右滑返回 = 系统页面手势 -->
+      <view class="vp-video-wrap" catchtap="onPlayTap" data-index="{{index}}">
+        <video
+          wx:if="{{playingIdx === index}}"
+          class="vp-video"
+          src="{{item.url}}"
+          object-fit="contain"
+          controls
+          autoplay
+        />
+        <block wx:else>
+          <video
+            class="vp-video"
+            src="{{item.url}}"
+            object-fit="cover"
+            controls="{{false}}"
+            show-center-play-btn="{{false}}"
+          />
+          <view class="vp-play"></view>
+        </block>
+      </view>
+    </swiper-item>
+  </swiper>
+
+  <!-- 多视频顶部计数器（与导航行对齐） -->
+  <view wx:if="{{sources.length > 1}}" class="vp-count" style="top: {{statusBarHeight}}px">{{idx + 1}} / {{sources.length}}</view>
+
+  <!-- 多视频底部圆点 -->
+  <view wx:if="{{sources.length > 1}}" class="vp-dots">
+    <view
+      wx:for="{{sources}}"
+      wx:for-index="di"
+      wx:key="url"
+      class="vp-dot {{di === idx ? 'vp-dot-active' : ''}}"
+    ></view>
+  </view>
+
+  <!-- 左上返回（top 由 JS 按状态栏高度内联；右滑返回走系统手势） -->
+  <view class="vp-back" style="top: {{statusBarHeight}}px" catchtap="goBack" aria-role="button" aria-label="返回">
+    <image class="vp-back-icon" src="{{icons.back}}" mode="aspectFit" />
+  </view>
+
+  <!-- 右下操作组：点赞 / 评论 / 转发 -->
+  <view wx:if="{{checkinId}}" class="vp-actions">
+    <view
+      class="vp-action"
+      hover-class="vp-action-hover"
+      catchtap="toggleLike"
+      aria-role="button"
+      aria-label="点赞"
+    >
+      <image class="vp-action-icon" src="{{liked ? icons.heartOrange : icons.heartWhite}}" mode="aspectFit" />
+    </view>
+    <view
+      class="vp-action"
+      hover-class="vp-action-hover"
+      catchtap="toggleComments"
+      aria-role="button"
+      aria-label="评论"
+    >
+      <image class="vp-action-icon" src="{{icons.commentWhite}}" mode="aspectFit" />
+      <text wx:if="{{commentCount}}" class="vp-action-badge">{{commentCount}}</text>
+    </view>
+    <!-- 转发：透明 button 只做命中层铺满壳（open-type=share 必须用 button），
+      图标放壳内直接渲染（与点赞/评论图标同路径），彻底隔离 button UA 样式 -->
+    <view class="vp-action vp-share-wrap">
+      <image class="vp-action-icon" src="{{icons.shareWhite}}" mode="aspectFit" />
+      <button class="vp-share-btn" open-type="share" aria-label="转发"></button>
+    </view>
+  </view>
+
+  <!-- 半屏评论面板 -->
+  <view wx:if="{{commentsOpen}}" class="vp-cmask" catchtap="closeComments"></view>
+  <view wx:if="{{commentsOpen}}" class="vp-csheet" catchtap="noop">
+    <view class="vp-c-handle"><view class="vp-c-handlebar"></view></view>
+    <view class="vp-c-head">
+      <text class="vp-c-title">{{commentCount}} 条评论</text>
+      <view class="vp-c-close" hover-class="vp-action-hover" catchtap="closeComments" aria-role="button" aria-label="关闭评论">
+        <image class="vp-c-close-icon" src="{{icons.x}}" mode="aspectFit" />
+      </view>
+    </view>
+    <scroll-view class="vp-c-list" scroll-y>
+      <comment-box
+        checkin-id="{{checkinId}}"
+        bind:countchange="onCommentChange"
+      />
+    </scroll-view>
+  </view>
+</view>
