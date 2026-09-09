@@ -16,7 +16,15 @@
     <view class="brand">
       <view class="brand-wordmark">去哪滑</view>
       <view class="brand-row">
-        <text class="brand-slogan">想去哪滑，就去哪滑。</text>
+        <view class="brand-slogan" aria-label="想去哪滑，就去哪滑">
+          <text class="slogan-l1">想去哪滑，</text>
+          <view class="slogan-l2">
+            <view class="slogan-mark">
+              <view class="slogan-mark-bar"></view>
+              <text class="slogan-mark-text">就去哪滑。</text>
+            </view>
+          </view>
+        </view>
         <!-- 在线热度：设计稿位于 slogan 右侧，无人时显示弱化态 -->
         <view class="heat {{heatCount > 0 ? '' : 'heat-quiet'}}" aria-label="{{heatCount > 0 ? '今日 ' + heatCount + ' 人在滑' : '今日暂无人在滑'}}">
           <view class="heat-dot {{heatCount > 0 ? '' : 'heat-dot-quiet'}}"></view>
