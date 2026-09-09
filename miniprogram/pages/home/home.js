@@ -352,10 +352,9 @@ Page({
     if (!this.data.markers || this.data.markers.length === 0) {
       this.buildMarkers()
     }
-    /* 无定位时回退到当前城市第一个场地 */
-    if (!this.data.latitude || !this.data.longitude) {
-      this.centerOnCity()
-    }
+    /* 展开=按首页当前城市定位中心（覆盖定位点在其他城市、切换城市后
+     * 中心未跟随等场景）；当前城市无可上地图实体时保持原中心 */
+    this.centerOnCity()
     this.setData({ mapSheetVisible: true })
   },
 
@@ -641,9 +640,12 @@ Page({
    * 无场地的城市保持当前地图中心，列表按城市过滤自然呈现空态 */
   centerOnCity() {
     const c = this.data.city
+    /* 只取有坐标的实体（无坐标无法作为地图中心） */
+    const shops = (this._shops || []).filter((v) => typeof v.latitude === 'number' && typeof v.longitude === 'number')
+    const venues = (this._venues || []).filter((v) => typeof v.latitude === 'number' && typeof v.longitude === 'number')
     const first = this.data.entity === 'shop'
-      ? ((this._shops || []).find((v) => v.city === c) || (this._venues || []).find((v) => v.city === c))
-      : ((this._venues || []).find((v) => v.city === c) || (this._shops || []).find((v) => v.city === c))
+      ? (shops.find((v) => v.city === c) || venues.find((v) => v.city === c))
+      : (venues.find((v) => v.city === c) || shops.find((v) => v.city === c))
     if (!first) return
     this._located = false
     this.setData({ latitude: first.latitude, longitude: first.longitude, scale: 13, selectedVenueId: '' })
