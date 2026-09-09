@@ -89,8 +89,9 @@ Page({
       search: ICON.searchPh,
       xWhite: ICON.xWhite,
       venueFog: ICON.venueFog,
-      /* 地图入口箭头 */
+      /* 地图入口箭头 / 缩略图 */
       chevronRightAsh: ICON.chevronRightAsh,
+      mapThumb: ICON.mapThumb,
     },
   },
 

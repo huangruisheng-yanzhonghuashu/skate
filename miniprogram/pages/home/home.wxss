@@ -249,27 +249,13 @@
   overflow: hidden;
 }
 
-.map-entry-grid {
+.map-entry-thumb-img {
   position: absolute;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0.35;
-  background-image:
-    repeating-linear-gradient(0deg, transparent, transparent 14rpx, #3A3A42 14rpx, #3A3A42 15rpx),
-    repeating-linear-gradient(90deg, transparent, transparent 14rpx, #3A3A42 14rpx, #3A3A42 15rpx);
-}
-
-.map-entry-pin {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 24rpx;
-  height: 24rpx;
-  margin: -12rpx 0 0 -12rpx;
-  border-radius: 50%;
-  background: #FF5A36;
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .map-entry-text {

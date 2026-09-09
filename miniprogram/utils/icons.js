@@ -12,6 +12,13 @@ function svg(inner, opts) {
   return 'data:image/svg+xml;utf8,' + encodeURIComponent(s)
 }
 
+/* 纯填充 SVG（设计稿专用图形：元素自带 fill/stroke，无统一描边） */
+function svgRaw(inner, viewBox) {
+  const s =
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + viewBox + '" preserveAspectRatio="none">' + inner + '</svg>'
+  return 'data:image/svg+xml;utf8,' + encodeURIComponent(s)
+}
+
 /* 自定义 viewBox 的 SVG（空态插画等设计稿专用图形） */
 function svgVB(inner, viewBox, opts) {
   opts = opts || {}
@@ -194,6 +201,22 @@ const ICON = {
   storeOrange: svg(P.store, { stroke: ORANGE }),
   usersOrange: svg(P.users, { stroke: ORANGE }),
   gradCapOrange: svg(P.gradCap, { stroke: ORANGE }),
+
+  /* 首页地图入口缩略图（设计稿迷你地图：街区 + 道路 + 橙色 pin，76:56 与卡片 152:112rpx 同比例） */
+  mapThumb: svgRaw(
+    '<rect width="76" height="56" fill="#26262C"/>' +
+    '<rect x="32" y="10" width="24" height="13" rx="1.5" fill="#2C2C33"/>' +
+    '<rect x="4" y="40" width="20" height="12" rx="1.5" fill="#2C2C33"/>' +
+    '<rect x="50" y="44" width="22" height="10" rx="1.5" fill="#2C2C33"/>' +
+    '<path d="M0 11 L76 7" fill="none" stroke="#3A3A42" stroke-width="1.2"/>' +
+    '<path d="M60 0 L64 56" fill="none" stroke="#3A3A42" stroke-width="1.2"/>' +
+    '<path d="M0 34 L76 27" fill="none" stroke="#484852" stroke-width="2.6"/>' +
+    '<path d="M28 0 L24 56" fill="none" stroke="#484852" stroke-width="2"/>' +
+    '<circle cx="66" cy="16" r="2" fill="#FF5A36" opacity="0.45"/>' +
+    '<path d="M38 17c-4.2 0-7.6 3.2-7.6 7.4 0 5.5 7.6 12.8 7.6 12.8s7.6-7.3 7.6-12.8c0-4.2-3.4-7.4-7.6-7.4z" fill="#FF5A36"/>' +
+    '<circle cx="38" cy="24.2" r="2.5" fill="#26262C"/>',
+    '0 0 76 56'
+  ),
 }
 
-module.exports = { ICON, svg, svgVB }
+module.exports = { ICON, svg, svgVB, svgRaw }

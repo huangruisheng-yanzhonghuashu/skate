@@ -16,7 +16,7 @@
     <view class="brand">
       <view class="brand-wordmark">去哪滑</view>
       <view class="brand-row">
-        <text class="brand-slogan">今天 street 起来。</text>
+        <text class="brand-slogan">想去哪滑，就去哪滑。</text>
         <!-- 在线热度：设计稿位于 slogan 右侧，无人时显示弱化态 -->
         <view class="heat {{heatCount > 0 ? '' : 'heat-quiet'}}" aria-label="{{heatCount > 0 ? '今日 ' + heatCount + ' 人在滑' : '今日暂无人在滑'}}">
           <view class="heat-dot {{heatCount > 0 ? '' : 'heat-dot-quiet'}}"></view>
@@ -110,13 +110,12 @@
   </view>
 
   <!-- 地图入口卡片（默认收起） -->
-  <view class="map-entry" hover-class="hv" bindtap="openMapSheet" aria-role="button" aria-label="展开附近场地地图">
+  <view class="map-entry" hover-class="hv" bindtap="openMapSheet" aria-role="button" aria-label="展开附近{{entityLabel}}地图">
     <view class="map-entry-thumb">
-      <view class="map-entry-grid"></view>
-      <view class="map-entry-pin"></view>
+      <image class="map-entry-thumb-img" src="{{icons.mapThumb}}" mode="scaleToFill" />
     </view>
     <view class="map-entry-text">
-      <text class="map-entry-title">附近场地地图</text>
+      <text class="map-entry-title">附近{{entityLabel}}地图</text>
       <text class="map-entry-sub">{{mapChip}}</text>
     </view>
     <view class="map-entry-arrow">
@@ -147,7 +146,7 @@
             <cover-view class="sheet-bar-cover"></cover-view>
           </cover-view>
           <cover-view class="sheet-head-cover">
-            <cover-view class="sheet-title-cover">附近场地地图</cover-view>
+            <cover-view class="sheet-title-cover">附近{{entityLabel}}地图</cover-view>
             <cover-view class="sheet-close-cover" bindtap="closeMapSheet">收起</cover-view>
           </cover-view>
         </cover-view>
