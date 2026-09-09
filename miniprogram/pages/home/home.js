@@ -35,7 +35,7 @@ function fmtHm(iso) {
   return pad(d.getHours()) + ':' + pad(d.getMinutes())
 }
 
-/* 两坐标球面距离（米）：最近场地推断城市用 */
+/* 两坐标球面距离（米）：最近场地推断城市 / 列表卡片真实距离 */
 function haversine(lat1, lng1, lat2, lng2) {
   const R = 6371000
   const rad = Math.PI / 180
@@ -44,6 +44,11 @@ function haversine(lat1, lng1, lat2, lng2) {
   const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLng / 2) * Math.sin(dLng / 2)
   return 2 * R * Math.asin(Math.sqrt(a))
+}
+
+/* 卡片距离文案：1km 内按米，超出按 km 保留一位小数（设计稿「距你 1.2km」样式） */
+function fmtDistance(m) {
+  return m < 1000 ? Math.round(m) + 'm' : (m / 1000).toFixed(1) + 'km'
 }
 
 Page({
@@ -245,6 +250,8 @@ Page({
         this._loc = { latitude: res.latitude, longitude: res.longitude }
         this.setData({ latitude: res.latitude, longitude: res.longitude, scale: 14, locating: false })
         this.autoMatchCity(res.latitude, res.longitude)
+        /* 定位就位后重刷列表：卡片「距你 xx」用真实球面距离 */
+        this.refresh()
       },
       fail: (e) => {
         /* 用户拒绝授权或定位失败：保持默认中心（当前城市第一个场地） */
@@ -290,6 +297,14 @@ Page({
       console.warn('[home] 逆地理编码失败，回退最近场地推断', (e && e.message) || e)
       this.tryLocateCity()
     })
+  },
+
+  /* 卡片距离文案：有定位且场地有坐标才算真实球面距离；
+   * 无定位/无坐标返回空串，卡片不显示「距你 xx」（不展示种子假距离） */
+  venueDistance(v) {
+    const loc = this._loc
+    if (!loc || typeof v.latitude !== 'number' || typeof v.longitude !== 'number') return ''
+    return fmtDistance(haversine(loc.latitude, loc.longitude, v.latitude, v.longitude))
   },
 
   /* 定位城市应用（统一入口，防竞态）：
@@ -569,7 +584,7 @@ Page({
           name: v.name,
           rating: rating ? Number(rating).toFixed(1) : 0,
           ratingCount: st ? st.count : 0,
-          distance: v.distance,
+          distance: this.venueDistance(v),
           shortAddr: v.shortAddr,
           displayAddr: displayAddr,
           category: v.category,
