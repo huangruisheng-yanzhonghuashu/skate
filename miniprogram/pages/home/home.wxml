@@ -32,7 +32,6 @@
           <text class="heat-label">{{heatCount > 0 ? '人在滑' : '暂无人在滑'}}</text>
         </view>
       </view>
-      <view class="brand-bar"></view>
     </view>
   </view>
 

@@ -157,8 +157,8 @@
 
 .slogan-mark-bar {
   position: absolute;
-  left: -1rpx;
-  right: -3rpx;
+  left: -4rpx;
+  right: -12rpx;
   bottom: 2rpx;
   height: 18rpx;
   border-radius: 4rpx;
@@ -180,14 +180,6 @@
     opacity: 1;
     transform: translateY(0);
   }
-}
-
-.brand-bar {
-  width: 120rpx;
-  height: 12rpx;
-  margin-top: 32rpx;
-  border-radius: 999rpx;
-  background: #FF5A36;
 }
 
 /* ===== 搜索（面板内） ===== */
