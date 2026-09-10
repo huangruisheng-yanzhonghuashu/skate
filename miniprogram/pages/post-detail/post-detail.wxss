@@ -135,19 +135,20 @@
   color: #6E6E76;
 }
 
-/* ===== 素材网格（与发现页同布局：1张大图 / 2张对半 / 3+三列） ===== */
+/* ===== 素材网格（通栏直角：负 margin 出血贴屏幕边，与发现页同布局：1张大图 / 2张对半 / 3+三列） ===== */
 .photos {
   display: flex;
   flex-wrap: wrap;
-  gap: 12rpx;
+  gap: 4rpx;
+  margin-left: -32rpx;
+  margin-right: -32rpx;
   margin-bottom: 24rpx;
 }
 
 .photos .photo-cell {
   position: relative;
-  width: calc((100% - 24rpx) / 3);
+  width: calc((100% - 8rpx) / 3);
   aspect-ratio: 1;
-  border-radius: 12rpx;
   overflow: hidden;
   background: #17171B;
 }
@@ -158,7 +159,7 @@
 }
 
 .photos.photos-2 .photo-cell {
-  width: calc((100% - 12rpx) / 2);
+  width: calc((100% - 4rpx) / 2);
 }
 
 .photo-img,
