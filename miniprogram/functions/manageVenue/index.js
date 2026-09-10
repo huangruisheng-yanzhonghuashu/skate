@@ -73,7 +73,6 @@ exports.main = async (event) => {
           latitude: data.latitude,
           longitude: data.longitude,
           category: data.category,
-          online: 0,
           hot: !!data.hot,
           status: data.status === 'off' ? 'off' : 'on',
           address: data.address || '',

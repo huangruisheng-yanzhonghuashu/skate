@@ -1,13 +1,10 @@
 const store = require('../../utils/store.js')
 const cloud = require('../../utils/cloud.js')
-const { HEARTBEAT_INTERVAL_MS, PRESENCE_RADIUS_M } = require('../../utils/config.js')
+const { PRESENCE_RADIUS_M } = require('../../utils/config.js')
 const { fmtAgo, toMedia } = require('../../utils/format.js')
 const { ICON } = require('../../utils/icons.js')
 const mediaPick = require('../../utils/media-pick.js')
 const preview = require('../../utils/preview.js')
-
-/* 在场头像最多展示 4 个（真实心跳数据，超出折叠为 +N） */
-const MAX_LIVE_AVATARS = 4
 
 const REPORT_TYPES = ['地址错误', '已关闭', '设施损坏', '信息变更', '其他']
 
@@ -35,9 +32,6 @@ Page({
     rating: '',
     ratingCount: 0,
     rateInt: 0,
-    online: 0,
-    presenceUsers: [],
-    moreCount: 0,
     feed: [],
     checked: false,
     /* 打卡弹窗 */
@@ -98,9 +92,6 @@ Page({
         tags: venue.tags.slice(0, 3).map((t) => ({ label: t.label, src: ICON[t.icon] || ICON.tagMixed })),
         tagMore: Math.max(0, venue.tags.length - 3),
         hot: !!venue.hot,
-        online: 0,
-        moreCount: 0,
-        presenceUsers: [],
       })
       /* 运营方（org↔venue 关联）：有 operator 时解析机构供跳转 */
       if (venue.operator) {
@@ -120,7 +111,6 @@ Page({
   },
 
   onShow() {
-    this.startPresence()
     if (this._backFromVideoPreview) {
       this._backFromVideoPreview = false
       return /* 视频预览返回：不重拉签到态与打卡流 */
@@ -131,69 +121,11 @@ Page({
     }
   },
 
-  onHide() { this.stopPresence() },
+  onHide() {},
   onUnload() {
-    this.stopPresence()
     if (this._unsubStore) this._unsubStore()
     if (this._celebrateTimer) clearTimeout(this._celebrateTimer)
     if (this._celebrateOutTimer) clearTimeout(this._celebrateOutTimer)
-  },
-
-  /* ===== 实时在线心跳（方案 B：定位在场校验 + 30 分钟窗口） ===== */
-  /* 前台期间定时：定位 → 距场地 PRESENCE_RADIUS_M 内才上报心跳 → 刷新在线数 */
-  startPresence() {
-    this.stopPresence()
-    this.tickPresence()
-    this._presenceTimer = setInterval(() => this.tickPresence(), HEARTBEAT_INTERVAL_MS)
-  },
-
-  stopPresence() {
-    if (this._presenceTimer) {
-      clearInterval(this._presenceTimer)
-      this._presenceTimer = null
-    }
-  },
-
-  tickPresence() {
-    const v = this.data.venue
-    if (!v) return
-    wx.getLocation({
-      type: 'gcj02',
-      success: (res) => {
-        const dist = cloud.distanceM(res.latitude, res.longitude, v.latitude, v.longitude)
-        /* 只统计真实在场的用户：距离超阈值不上报 */
-        if (dist <= PRESENCE_RADIUS_M) {
-          const u = store.getUser()
-          cloud.heartbeat(v.id, { nickname: u.nickname, avatarFileID: u.avatarFileID }).catch((e) => {
-            console.warn('[venue-detail] 心跳上报失败', (e && e.errCode) || (e && e.message))
-          })
-        }
-        this.refreshOnline()
-      },
-      fail: () => {
-        /* 无定位权限/定位失败：不上报心跳（不算在场），但仍展示真实在线数 */
-        this.refreshOnline()
-      },
-    })
-  },
-
-  /* 当前场地真实在线人数 + 在场用户头像（30 分钟窗口内有心跳的独立用户） */
-  refreshOnline() {
-    const v = this.data.venue
-    if (!v) return
-    cloud.getOnlineCount(v.id).then((n) => {
-      this.setData({ online: n, moreCount: Math.max(0, n - MAX_LIVE_AVATARS) })
-    })
-    cloud.getPresenceUsers(v.id).then((users) => {
-      /* 文字头像色板轮换；fileID 头像直接用 image 渲染 */
-      const palette = ['#FF5A36', '#2A8CFF', '#FFB800', '#00D4AA']
-      const avatars = users.slice(0, MAX_LIVE_AVATARS).map((u, i) => ({
-        text: (u.userName || '滑').slice(0, 1),
-        avatarFile: u.avatarFileID || '',
-        color: palette[i % palette.length],
-      }))
-      this.setData({ presenceUsers: avatars })
-    })
   },
 
   /* 签到态 + 评分统计（真实均值/人数，无评分用预设分兜底；离散星取整下限点亮） */
@@ -604,7 +536,6 @@ Page({
   onPullDownRefresh() {
     this.refresh()
     this.loadFeed()
-    this.refreshOnline()
     wx.stopPullDownRefresh()
   },
 

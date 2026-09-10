@@ -74,23 +74,6 @@
     </view>
   </view>
 
-  <!-- 实时状态（在线口径：30 分钟窗口内有过在场心跳；无人时左侧竖条/文字灰色弱化） -->
-  <view class="live {{online > 0 ? '' : 'live-off'}}">
-    <view class="live-line">
-      <view class="pulse {{online > 0 ? '' : 'pulse-gray'}}"></view>
-      <text wx:if="{{online > 0}}" class="live-text">此刻 <text class="live-n">{{online}}</text> 位滑手在此</text>
-      <text wx:else class="live-text live-text-gray">近 30 分钟暂无滑手在场</text>
-    </view>
-    <!-- 在场头像：真实心跳用户，重叠排列；无人时整块隐藏 -->
-    <view class="live-avatars" wx:if="{{online > 0 && presenceUsers.length}}">
-      <block wx:for="{{presenceUsers}}" wx:key="index">
-        <image wx:if="{{item.avatarFile}}" class="live-avatar-img" src="{{item.avatarFile}}" mode="aspectFill" />
-        <view wx:else class="live-avatar" style="background: {{item.color}}">{{item.text}}</view>
-      </block>
-      <view wx:if="{{moreCount > 0}}" class="live-avatar live-more">+{{moreCount}}</view>
-    </view>
-  </view>
-
   <!-- 打卡动态（云端真实流：所有人带留言的打卡，最近3条） -->
   <view class="checkins">
     <view class="checkins-head">

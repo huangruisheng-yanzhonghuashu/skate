@@ -1,7 +1,6 @@
 /* 云开发数据访问层：数据全部来源于云数据库
  * 读失败/无数据返回空数组（页面展示空态）；写失败由调用方处理（store 有重试队列） */
 const ENV_ID = 'cloud1-d4grizmp31acb587e'
-const { ONLINE_WINDOW_MIN } = require('./config.js')
 
 /* wx.cloud.init 在 app.js 执行后才可用，因此全部惰性获取实例 */
 let _db = null
@@ -709,85 +708,13 @@ function getMediaPreviewSources(media) {
     .catch(function () { return build({}) })
 }
 
-/* ===== 场地实时在线（方案 B：位置心跳） ===== */
+/* ===== 场地距离（位置心跳已下线，distanceM 保留给距离 pill 与签到硬校验） ===== */
 /* 两点球面距离（米），haversine 公式 */
 function distanceM(lat1, lng1, lat2, lng2) {
   const rad = Math.PI / 180
   const a = 0.5 - Math.cos((lat2 - lat1) * rad) / 2 +
     Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * (1 - Math.cos((lng2 - lng1) * rad)) / 2
   return 12742000 * Math.asin(Math.sqrt(a))
-}
-
-/* 心跳上报（详情页前台 + 定位在场地 PRESENCE_RADIUS_M 内时调用）
- * presence 集合一人一场地一条记录，upsert 刷新 updatedAt；
- * 冗余携带用户身份（昵称/头像），供"在场头像"展示（改资料后下次心跳自动同步）
- * 在线数 = 该场地 updatedAt 在窗口内的记录数（天然按人去重） */
-function heartbeat(venueId, user) {
-  const col = db().collection('presence')
-  const now = new Date().toISOString()
-  const identity = {
-    userName: (user && user.nickname) || '滑手',
-    avatarFileID: (user && user.avatarFileID) || '',
-  }
-  return col.where({ venueId: venueId }).limit(1).get()
-    .then(function (r) {
-      if (r.data && r.data[0]) {
-        return col.doc(r.data[0]._id).update({ data: { updatedAt: now, userName: identity.userName, avatarFileID: identity.avatarFileID } })
-      }
-      return col.add({ data: { venueId: venueId, updatedAt: now, userName: identity.userName, avatarFileID: identity.avatarFileID } })
-    })
-}
-
-/* 某场地当前在场用户（窗口内，按心跳时间倒序，最多 8 个）
- * 返回 [{ userName, avatarFileID }]；旧记录无身份字段时 userName 为空串 */
-function getPresenceUsers(venueId) {
-  const cmd = db().command
-  const since = new Date(Date.now() - ONLINE_WINDOW_MIN * 60 * 1000).toISOString()
-  return db().collection('presence')
-    .where({ venueId: venueId, updatedAt: cmd.gte(since) })
-    .orderBy('updatedAt', 'desc')
-    .limit(8)
-    .get()
-    .then((r) => (r.data || []).map(function (d) {
-      return { userName: d.userName || '', avatarFileID: d.avatarFileID || '' }
-    }))
-    .catch(function (e) {
-      console.warn('[cloud] 在场用户读取失败', (e && e.errCode) || (e && e.message))
-      return []
-    })
-}
-
-/* 某场地当前在线人数（窗口内有心跳的独立用户数） */
-function getOnlineCount(venueId) {
-  const cmd = db().command
-  const since = new Date(Date.now() - ONLINE_WINDOW_MIN * 60 * 1000).toISOString()
-  return db().collection('presence')
-    .where({ venueId: venueId, updatedAt: cmd.gte(since) })
-    .count()
-    .then(function (r) { return r.total || 0 })
-    .catch(function () { return 0 })
-}
-
-/* 批量：所有场地的在线人数映射 { venueId: count }（一次聚合，首页列表用）
- * 成功返回 map（可能为空对象 = 当前无人在线）；失败返回 null（调用方保留兜底显示）
- * 需 presence 集合"所有用户可读"权限，否则只能统计到自己 */
-function getOnlineMap() {
-  const cmd = db().command
-  const $ = agg()
-  const since = new Date(Date.now() - ONLINE_WINDOW_MIN * 60 * 1000).toISOString()
-  return db().collection('presence').aggregate()
-    .match({ updatedAt: cmd.gte(since) })
-    .group({ _id: '$venueId', total: $.sum(1) })
-    .end()
-    .then(function (r) {
-      const map = {}
-      ;(r.list || []).forEach(function (x) { map[x._id] = x.total })
-      return map
-    })
-    .catch(function (e) {
-      console.warn('[cloud] 在线数聚合失败', (e && e.errCode) || (e && e.message))
-      return null
-    })
 }
 
 module.exports = {
@@ -837,10 +764,6 @@ module.exports = {
   uploadFileTo: uploadFileTo,
   saveProfile: saveProfile,
   distanceM: distanceM,
-  heartbeat: heartbeat,
-  getPresenceUsers: getPresenceUsers,
-  getOnlineCount: getOnlineCount,
-  getOnlineMap: getOnlineMap,
   getShops: getShops,
   findShop: findShop,
   openStatus: openStatus,

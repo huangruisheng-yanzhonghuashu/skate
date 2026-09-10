@@ -42,7 +42,6 @@ const SEED_HZ_VENUES = [
     latitude: 30.3140,
     longitude: 120.3655,
     category: '混合',
-    online: 20,
     hot: true,
     address: '钱塘区拾里路100号钱塘轮滑中心北侧',
     shortAddr: '钱塘轮滑中心（拾里路）',
@@ -68,7 +67,6 @@ const SEED_HZ_VENUES = [
     latitude: 30.3095,
     longitude: 120.3925,
     category: '混合',
-    online: 9,
     hot: false,
     address: '钱塘区东部湾总部基地，22号大街与之江东路交叉口',
     shortAddr: '东部湾（之江东路）',
@@ -93,7 +91,6 @@ const SEED_HZ_VENUES = [
     latitude: 30.2075,
     longitude: 120.2050,
     category: '街式',
-    online: 10,
     hot: false,
     address: '滨江区 MOREPRK 滑板公园',
     shortAddr: '滨江区（MOREPRK）',
@@ -118,7 +115,6 @@ const SEED_HZ_VENUES = [
     latitude: 30.2280,
     longitude: 120.2260,
     category: '平地',
-    online: 12,
     hot: true,
     address: '滨江区飞虹路3号奥体博览城',
     shortAddr: '奥体博览城（飞虹路）',
@@ -143,7 +139,6 @@ const SEED_HZ_VENUES = [
     latitude: 30.2665,
     longitude: 120.1335,
     category: '平地',
-    online: 6,
     hot: false,
     address: '西湖区黄龙路1号黄龙体育中心',
     shortAddr: '黄龙体育中心',
@@ -174,9 +169,7 @@ const SEED_VENUES = [
     latitude: 30.7475,
     longitude: 120.7665,
     category: '混合',
-    online: 14,
-    hot: true,
-    address: '南湖区城东路嘉兴火车站北广场',
+    hot: true,    address: '南湖区城东路嘉兴火车站北广场',
     shortAddr: '火车站北广场',
     tags: [
       { label: '混合', icon: 'tagMixed' },
@@ -199,7 +192,6 @@ const SEED_VENUES = [
     latitude: 30.7385,
     longitude: 120.7745,
     category: '混合',
-    online: 18,
     hot: true,
     address: '南湖区中环南路与纺工路交汇处中央公园',
     shortAddr: '中央公园（纺工路）',
@@ -224,7 +216,6 @@ const SEED_VENUES = [
     latitude: 30.7505,
     longitude: 120.7915,
     category: '街式',
-    online: 6,
     hot: false,
     address: '南湖区双溪路凌公塘公园内',
     shortAddr: '凌公塘公园（双溪路）',
@@ -249,7 +240,6 @@ const SEED_VENUES = [
     latitude: 30.7655,
     longitude: 120.7085,
     category: '平地',
-    online: 5,
     hot: false,
     address: '秀洲区秀湖公园东广场',
     shortAddr: '秀湖公园东广场',
@@ -274,7 +264,6 @@ const SEED_VENUES = [
     latitude: 30.7835,
     longitude: 120.8020,
     category: '平地',
-    online: 3,
     hot: false,
     address: '南湖区七星街道湘家荡环湖景区',
     shortAddr: '湘家荡环湖景区',
@@ -395,7 +384,7 @@ const SEED_FEEDS = [
   { id: 'f10', user: '大龙', avatar: '大龙', avatarColor: '#4D4D4D', venueId: 'hz-huanglong', at: hoursAgo(50), text: '黄龙广场练滑行，地铁直达就是方便。', photos: [FEED_IMGS[1]], likes: 9, comments: 1 },
 ]
 
-const COLLECTIONS = ['venues', 'feeds', 'checkins', 'feed_likes', 'user_profiles', 'venue_reports', 'presence', 'shops', 'config', 'comments', 'ratings', 'feedback']
+const COLLECTIONS = ['venues', 'feeds', 'checkins', 'feed_likes', 'user_profiles', 'venue_reports', 'shops', 'config', 'comments', 'ratings', 'feedback']
 
 /* 建集合（已存在则忽略） */
 async function ensureCollections() {
