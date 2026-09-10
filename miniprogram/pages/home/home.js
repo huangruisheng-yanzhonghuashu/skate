@@ -111,7 +111,6 @@ Page({
         this.setData({ navContentHeight: rect.height + (rect.top - win.statusBarHeight) * 2 })
       }
     } catch (e) { /* 取不到时用默认 20/44 兜底 */ }
-    this._online = {}
     this._venues = []
     this._shops = []
     this._markerMap = []
@@ -139,7 +138,6 @@ Page({
     /* 数据 onLoad 已加载（云数据会话内不变，管理页改动会刷新 cloud 缓存），这里只刷新渲染 */
     this.refresh()
     this.buildMarkers()
-    this.refreshOnline()
     this.refreshCityCheckins()
     if (cityChanged) this.centerOnCity()
   },
@@ -149,8 +147,6 @@ Page({
     cloud.getVenues().then((venues) => {
       /* 只保留上架状态（status !== 'off'，旧数据无 status 视为上架），下架场地列表/地图/城市推断全不可见 */
       this._venues = venues.filter((v) => v.status !== 'off')
-      /* 在线人数：种子热度值先兜底，真实心跳数据随后覆盖 */
-      venues.forEach((v) => { this._online[v.id] = v.online })
       this._venuesLoaded = true
       this.setData({ loaded: this._venuesLoaded && this._shopsLoaded })
       this.centerOnCityIfNeeded(venues)
@@ -158,7 +154,6 @@ Page({
       this.tryLocateCity()
       this.refresh()
       this.buildMarkers()
-      this.refreshOnline()
       this.refreshCityCheckins()
     })
   },
@@ -186,15 +181,6 @@ Page({
     this.setData({ latitude: cityVenues[0].latitude, longitude: cityVenues[0].longitude })
     const any = cityVenues.some((v) => v.id === this.data.selectedVenueId)
     if (!any) this.setData({ selectedVenueId: cityVenues[0].id })
-  },
-
-  /* 真实在线人数：一次聚合查询所有场地的窗口内心跳分布，覆盖列表「此刻 N 人在场」显示 */
-  refreshOnline() {
-    cloud.getOnlineMap().then((map) => {
-      if (!map) return /* 查询失败（如权限未配置），保留兜底热度值 */
-      ;(this._venues || []).forEach((v) => { this._online[v.id] = map[v.id] || 0 })
-      this.refresh()
-    })
   },
 
   /* 头部「今日 N 人打过卡」胶囊：当前城市全部实体（场地+门店）今日签到/打卡按人去重
@@ -398,15 +384,13 @@ Page({
   /* 阻止 bottom-sheet 触摸事件向后穿透，避免底层列表滚动 */
   preventScroll() {},
 
-  /* 下拉刷新：强制重拉云端两实体 + 在线数 + 评分统计 */
+  /* 下拉刷新：强制重拉云端两实体 + 评分统计 + 今日打卡数 + 打卡流 */
   onPullDownRefresh() {
     Promise.all([cloud.getVenues(true), cloud.getShops(true)]).then((rs) => {
       this._venues = rs[0].filter((v) => v.status !== 'off')
       this._shops = rs[1].filter((v) => v.status !== 'off')
-      rs[0].forEach((v) => { this._online[v.id] = v.online })
       this.refresh()
       this.buildMarkers()
-      this.refreshOnline()
       this.refreshRatings()
       this.refreshCityCheckins()
       this.loadFeed()
