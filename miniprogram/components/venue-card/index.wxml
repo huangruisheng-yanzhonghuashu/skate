@@ -9,8 +9,8 @@
       <image class="thumb-icon" src="{{icons.venue}}" mode="aspectFit" />
     </view>
 
-    <!-- 热门角标：左上，倾斜贴纸感 -->
-    <view wx:if="{{venue.hot}}" class="badge-hot">热门</view>
+    <!-- 本周来滑贴纸：左上，倾斜贴纸感（无口径的「热门」二字已按设计规范移除；0 人也显示） -->
+    <view wx:if="{{venue.weekCount !== undefined}}" class="badge-hot">本周 {{venue.weekCount}} 人来滑</view>
   </view>
 
   <view class="body">

@@ -20,7 +20,7 @@
     <view class="hero-info">
       <view class="hero-name-row">
         <text class="hero-name">{{venue.name}}</text>
-        <view wx:if="{{hot}}" class="hot-sticker">{{weekCheckins ? '本周 ' + weekCheckins + ' 人来滑' : '热门'}}</view>
+        <view class="hot-sticker">本周 {{weekCheckins}} 人来滑</view>
       </view>
     </view>
     <!-- 图片计数：悬浮在胶囊区下方（设计稿右上角位） -->

@@ -126,6 +126,8 @@ Page({
     this.loadFeed()
     /* 用户评分统计 */
     this.refreshRatings()
+    /* 本周各场地去重打卡人数（场地卡片「本周 N 人来滑」贴纸） */
+    this.refreshWeekCounts()
     /* 手机定位：设置地图中心 + 自动匹配城市 */
     this.locate()
   },
@@ -237,6 +239,18 @@ Page({
     Promise.all([cloud.getRatingStats('venue'), cloud.getRatingStats('shop')]).then((rs) => {
       this._venueRatings = rs[0]
       this._shopRatings = rs[1]
+      this.refresh()
+    })
+  },
+
+  /* 本周各场地去重打卡人数（周一零点起，与详情页「本周 N 人来滑」同口径）；
+   * 拉取后重渲染，场地卡片「本周 N 人来滑」贴纸据此显示 */
+  refreshWeekCounts() {
+    const weekStart = new Date()
+    weekStart.setDate(weekStart.getDate() - ((weekStart.getDay() + 6) % 7))
+    weekStart.setHours(0, 0, 0, 0)
+    cloud.getVenueWeekCounts(weekStart.toISOString()).then((map) => {
+      this._weekCounts = map || {}
       this.refresh()
     })
   },
@@ -391,6 +405,7 @@ Page({
       this._shops = rs[1].filter((v) => v.status !== 'off')
       this.refresh()
       this.buildMarkers()
+      this.refreshWeekCounts()
       this.refreshRatings()
       this.refreshCityCheckins()
       this.loadFeed()
@@ -591,6 +606,8 @@ Page({
           displayAddr: displayAddr,
           category: v.category,
           hot: v.hot,
+          /* 「本周 N 人来滑」贴纸人数（去重，0 时不显示贴纸） */
+          weekCount: (this._weekCounts && this._weekCounts[v.id]) || 0,
           /* 将场地类型作为第一个标签高亮，其余标签保持组件默认样式 */
           tags: (v.category ? [{ label: v.category }] : []).concat((v.tags || []).map((t) => typeof t === 'string' ? { label: t } : t)),
           photo: (v.photos && v.photos[0]) || '',

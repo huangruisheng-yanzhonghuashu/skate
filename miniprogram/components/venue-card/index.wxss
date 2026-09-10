@@ -68,7 +68,7 @@
   opacity: 0.9;
 }
 
-/* 热门角标（左上，倾斜贴纸） */
+/* 本周来滑贴纸（左上，倾斜贴纸；设计稿 text-[10px]） */
 .badge-hot {
   position: absolute;
   top: 12rpx;
@@ -76,7 +76,7 @@
   padding: 4rpx 12rpx;
   background: #FF5A36;
   color: #FFFFFF;
-  font-size: 22rpx;
+  font-size: 20rpx;
   font-weight: 600;
   line-height: 1;
   text-shadow: 0 1rpx 2rpx rgba(0, 0, 0, 0.25);

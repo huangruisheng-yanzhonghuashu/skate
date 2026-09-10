@@ -465,6 +465,29 @@ function getVenueWeekCheckins(venueId, weekStartISO) {
     })
 }
 
+/* 本周各场地去重打卡人数（weekStartISO 起，按 venueId×openid 去重）——
+ * 首页场地卡片「本周 N 人来滑」贴纸；返回 { venueId: count } map；失败返回 {} */
+function getVenueWeekCounts(weekStartISO) {
+  const $ = agg()
+  const cmd = db().command
+  return db().collection('checkins').aggregate()
+    .match({ at: cmd.gte(weekStartISO) })
+    .group({ _id: { venueId: '$venueId', openid: '$_openid' } })
+    .group({ _id: '$_id.venueId', count: $.sum(1) })
+    .end()
+    .then((r) => {
+      const map = {}
+      ;(r.list || []).forEach(function (x) {
+        if (x && x._id) map[x._id] = x.count
+      })
+      return map
+    })
+    .catch((e) => {
+      console.warn('[cloud] 本周场地打卡聚合失败', (e && e.errCode) || (e && e.message))
+      return {}
+    })
+}
+
 /* ===== 排行榜（聚合所有人场地"签到"数，需 checkins"所有用户可读"权限）
  * limit 参数化（首页榜 5 / 完整榜 20）；month: { start, end } 可选月份边界（ISO 字符串，
  * 云端 at 存 ISO 串可字典序比较），传了则只统计该月，不传为累计；只数签到：type=checkin，
@@ -801,6 +824,7 @@ module.exports = {
   getCityTodayCheckins: getCityTodayCheckins,
   getVenueTodayCheckins: getVenueTodayCheckins,
   getVenueWeekCheckins: getVenueWeekCheckins,
+  getVenueWeekCounts: getVenueWeekCounts,
   getUserProfileByOpenid: getUserProfileByOpenid,
   getUserFrequentVenues: getUserFrequentVenues,
   getUserStats: getUserStats,
