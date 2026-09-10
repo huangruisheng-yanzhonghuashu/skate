@@ -279,6 +279,73 @@
   color: #FF8A6E;
 }
 
+/* ===== 今日打卡卡（设计稿 v1.1 ③：热度数据，非在场语义——橙线、无脉冲无循环动画） ===== */
+.live-card {
+  margin: 24rpx 32rpx 0;
+  padding: 28rpx 32rpx;
+  background: #1E1E23;
+  border-radius: 16rpx;
+  border-left: 6rpx solid #FF5A36;
+}
+
+/* 今日无人打卡：整卡弱化（灰线灰字），不显示头像行 */
+.live-card-off {
+  border-left-color: #3A3A42;
+}
+
+.live-line {
+  display: flex;
+  align-items: center;
+}
+
+.live-text {
+  font-size: 26rpx;
+  color: #8C8C94;
+}
+
+/* 数字白字加重（纯排版强调，无图标无脉冲） */
+.live-n {
+  color: #FFFFFF;
+  font-size: 32rpx;
+  font-weight: 600;
+  margin: 0 4rpx;
+}
+
+/* 今日打卡滑手头像 ×4：72rpx 圆形叠放 + 折叠 +N */
+.live-avatars {
+  display: flex;
+  margin-top: 24rpx;
+  padding-left: 12rpx;
+}
+
+.live-ava {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 50%;
+  border: 6rpx solid #1E1E23;
+  margin-left: -12rpx;
+  background: #2A2A30;
+}
+
+.live-ava-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #FFFFFF;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.live-ava-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #26262C;
+  color: #A6A6AD;
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
 /* ===== 打卡动态 ===== */
 .checkins {
   margin: 32rpx 32rpx 0;

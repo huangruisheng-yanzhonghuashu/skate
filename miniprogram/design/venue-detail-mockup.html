@@ -131,23 +131,19 @@
     .op-name { flex: 1; font-size: 13px; font-weight: 600; color: #FF8A6E; }
     .op-arrow { color: #8C8C94; font-size: 15px; }
 
-    /* ===== 在场卡 ===== */
+    /* ===== 今日打卡卡 ===== */
     .live-card {
       margin: 12px 16px 0;
       padding: 14px 16px;
       background: #1E1E23;
       border-radius: 8px;
-      border-left: 3px solid #00D4AA;
+      border-left: 3px solid #FF5A36;
     }
     .live-card.off { border-left-color: #3A3A42; }
-    .live-line { display: flex; align-items: center; gap: 8px; }
-    .pulse {
-      width: 8px; height: 8px; border-radius: 50%; background: #00D4AA;
-    }
-    .pulse.gray { background: #6E6E76; }
-    .live-text { font-size: 14px; font-weight: 500; color: #fff; }
-    .live-text .n { color: #00D4AA; font-weight: 600; }
-    .live-text.gray { color: #8C8C94; font-weight: 400; }
+    .live-line { display: flex; align-items: center; gap: 6px; }
+    .live-text { font-size: 13px; color: #8C8C94; }
+    .live-text .n { color: #fff; font-size: 16px; font-weight: 600; margin: 0 2px; }
+    .live-text.gray { color: #8C8C94; }
     .live-avatars { display: flex; margin-top: 12px; padding-left: 6px; }
     .l-ava {
       width: 36px; height: 36px; border-radius: 50%;
@@ -157,7 +153,7 @@
       color: #fff; font-size: 12px; font-weight: 600;
     }
     .l-ava.c1 { background: #FF5A36; } .l-ava.c2 { background: #2A8CFF; }
-    .l-ava.c3 { background: #FFB800; } .l-ava.c4 { background: #00D4AA; }
+    .l-ava.c3 { background: #FFB800; } .l-ava.c4 { background: #FF8A6E; }
     .l-ava.more { background: #26262C; color: #A6A6AD; }
 
     /* ===== 打卡动态 ===== */
@@ -327,8 +323,7 @@
 
         <div class="live-card" data-page-node-id="HfRwKUWHNTOKT8QHNzNaYy">
           <div class="live-line" data-page-node-id="iboPvge557pgQbKOjWYdmF">
-            <span class="pulse" data-page-node-id="XAEsa23eUixwsA9ZptiAAj"></span>
-            <span class="live-text" data-page-node-id="pVlSZt6tCEozqjn2Aczvkk">此刻 <span class="n" data-page-node-id="5hWIrC6wqHFOA0cYKKiSmG">6</span> 位滑手在此</span>
+            <span class="live-text" data-page-node-id="pVlSZt6tCEozqjn2Aczvkk">今日 <span class="n" data-page-node-id="5hWIrC6wqHFOA0cYKKiSmG">6</span> 位滑手打卡</span>
           </div>
           <div class="live-avatars" data-page-node-id="HMxMihzIhulTmdQj5UkPFu">
             <span class="l-ava c1" data-page-node-id="Fbt5FCDgZTEpnWsTujWeQ5">伟</span><span class="l-ava c2" data-page-node-id="yfqYGhjj0DMYYtdstY0bbh">鹿</span><span class="l-ava c3" data-page-node-id="54w8iSSQ5sDxr2b8PHoIVr">C</span><span class="l-ava c4" data-page-node-id="HeOzcGYZzFJCEWXrJ3ducP">K</span><span class="l-ava more" data-page-node-id="EZB7N4wwo1ry00QhutuFSx">+2</span>
@@ -433,8 +428,7 @@
         <!-- 无人在场弱化态 -->
         <div class="live-card off" data-page-node-id="2hsEcuC50cbMSXzzknjC3H">
           <div class="live-line" data-page-node-id="qOdveniNqHijejbNkuEm5y">
-            <span class="pulse gray" data-page-node-id="PZqHcmWdWhDAQTxz5J8jG0"></span>
-            <span class="live-text gray" data-page-node-id="NlxeWpL3iI3LTrCH0W0ioF">近 30 分钟暂无滑手在场</span>
+            <span class="live-text gray" data-page-node-id="NlxeWpL3iI3LTrCH0W0ioF">今日还没滑手打卡</span>
           </div>
         </div>
 

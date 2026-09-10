@@ -33,6 +33,10 @@ Page({
     ratingCount: 0,
     rateInt: 0,
     feed: [],
+    /* 今日打卡卡（设计稿 v1.1 ③：今日 N 位滑手打卡 + 头像×4 + 折叠+N） */
+    todayCount: 0,
+    todayAvatars: [],
+    todayMore: 0,
     checked: false,
     /* 打卡弹窗 */
     checkinOpen: false,
@@ -132,6 +136,7 @@ Page({
   refresh() {
     const venue = this.data.venue
     this.setData({ checked: store.checkedToday(venue.id) })
+    this.loadToday()
     cloud.getRatingStats('venue').then((map) => {
       const st = map[venue.id]
       const rating = st ? st.avg : venue.rating
@@ -211,6 +216,27 @@ Page({
         wx.showToast({ title: '评分失败，请重试', icon: 'none' })
       }
       console.error('[venue-detail] 评分失败', code, (e && e.errMsg) || e)
+    })
+  },
+
+  /* 今日打卡卡：今日该场地打卡/签到的去重滑手（与首页「今日 N 人打过卡」同口径），
+   * 头像取今日记录（同一滑手取最近一条），×4 平铺 + 折叠 +N */
+  loadToday() {
+    const venue = this.data.venue
+    if (!venue) return
+    const dayStart = new Date()
+    dayStart.setHours(0, 0, 0, 0)
+    cloud.getVenueTodayCheckins(venue.id, dayStart.toISOString()).then((rows) => {
+      this.setData({
+        todayCount: rows.length,
+        todayAvatars: rows.slice(0, 4).map((r) => ({
+          openid: r.openid,
+          avatarFile: r.avatarFile,
+          avatarText: r.avatarText,
+          color: '#FF5A36',
+        })),
+        todayMore: Math.max(0, rows.length - 4),
+      })
     })
   },
 
@@ -479,6 +505,7 @@ Page({
       this.setData({ checkinOpen: false, checkinSubmitting: false, checkinMedia: [], checkinMediaMode: '', note: '' })
       wx.showToast({ title: '打卡已发布', icon: 'success' })
       this.loadFeed()
+      this.loadToday() /* 打卡记录计入今日打卡卡 */
     }
     /* 留言内容安全（复用 checkMsg 云函数，msgSecCheck v2） */
     if (note) {

@@ -74,6 +74,22 @@
     </view>
   </view>
 
+  <!-- 今日打卡卡（设计稿 v1.1 ③：今日 N 位滑手打卡 + 头像×4 + 折叠+N；
+       今日无人打卡时整卡弱化（灰线灰字），无引导文案，内容克制） -->
+  <view class="live-card {{todayCount ? '' : 'live-card-off'}}">
+    <view class="live-line">
+      <text wx:if="{{todayCount}}" class="live-text">今日 <text class="live-n">{{todayCount}}</text> 位滑手打卡</text>
+      <text wx:else class="live-text">今日还没滑手打卡</text>
+    </view>
+    <view wx:if="{{todayCount}}" class="live-avatars">
+      <block wx:for="{{todayAvatars}}" wx:key="openid">
+        <image wx:if="{{item.avatarFile}}" class="live-ava" src="{{item.avatarFile}}" mode="aspectFill" />
+        <view wx:else class="live-ava live-ava-text" style="background: {{item.color}}">{{item.avatarText}}</view>
+      </block>
+      <view wx:if="{{todayMore}}" class="live-ava live-ava-more">+{{todayMore}}</view>
+    </view>
+  </view>
+
   <!-- 打卡动态（云端真实流：所有人带留言的打卡，最近3条） -->
   <view class="checkins">
     <view class="checkins-head">
