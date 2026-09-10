@@ -222,7 +222,7 @@
 .avatar {
   width: 88rpx;
   height: 88rpx;
-  border-radius: 50%;
+  border-radius: 20rpx;
   background: linear-gradient(135deg, #FF5A36, #FF8A6E);
   color: #FFFFFF;
   font-size: 32rpx;
@@ -430,7 +430,7 @@
 .avatar-img {
   width: 88rpx;
   height: 88rpx;
-  border-radius: 50%;
+  border-radius: 20rpx;
   flex-shrink: 0;
 }
 

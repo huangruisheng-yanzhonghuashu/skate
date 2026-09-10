@@ -39,7 +39,6 @@
   <view class="feed-sec" wx:if="{{feed.length}}">
     <view class="sec-head">
       <text class="sec-title">最新打卡</text>
-      <text class="sec-sub">实时社区</text>
     </view>
     <scroll-view class="feed-scroll" scroll-x enhanced show-scrollbar="{{false}}">
       <view

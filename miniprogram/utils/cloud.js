@@ -413,6 +413,58 @@ function getCityTodayCheckins(venueIds, dayStartISO) {
     })
 }
 
+/* 某场地今日打卡滑手：今日（dayStartISO 之后）该场地的全部签到/打卡记录（含纯签到），
+ * 按 openid 去重（同一滑手取最近一条记录的头像/昵称），时间倒序，上限 200 条（今日热
+ * 度口径与首页「今日 N 人打过卡」同源，人数为去重滑手数；需 checkins"所有用户可读"权限）。
+ * 语义为今日打卡热度数据，非"在场/在线"；失败返回 [] */
+function getVenueTodayCheckins(venueId, dayStartISO) {
+  if (!venueId) return Promise.resolve([])
+  const cmd = db().command
+  return db().collection('checkins')
+    .where({ venueId: venueId, at: cmd.gte(dayStartISO) })
+    .orderBy('at', 'desc')
+    .limit(200)
+    .get()
+    .then((r) => {
+      const seen = {}
+      const rows = []
+      ;(r.data || []).forEach(function (d) {
+        const m = mapCheckin(d)
+        if (!m.openid || seen[m.openid]) return
+        seen[m.openid] = true
+        rows.push(m)
+      })
+      return rows
+    })
+    .catch((e) => {
+      console.warn('[cloud] 今日场地打卡滑手查询失败', (e && e.errCode) || (e && e.message))
+      return []
+    })
+}
+
+/* 某场地本周打卡滑手数（weekStartISO 起，按 openid 去重，含纯签到）——
+ * 详情页 hero 贴纸「本周 N 人来滑」；与 getVenueTodayCheckins 同口径；失败返回 0 */
+function getVenueWeekCheckins(venueId, weekStartISO) {
+  if (!venueId) return Promise.resolve(0)
+  const cmd = db().command
+  return db().collection('checkins')
+    .where({ venueId: venueId, at: cmd.gte(weekStartISO) })
+    .orderBy('at', 'desc')
+    .limit(500)
+    .get()
+    .then((r) => {
+      const seen = {}
+      ;(r.data || []).forEach(function (d) {
+        if (d._openid) seen[d._openid] = true
+      })
+      return Object.keys(seen).length
+    })
+    .catch((e) => {
+      console.warn('[cloud] 本周场地打卡滑手查询失败', (e && e.errCode) || (e && e.message))
+      return 0
+    })
+}
+
 /* ===== 排行榜（聚合所有人场地"签到"数，需 checkins"所有用户可读"权限）
  * limit 参数化（首页榜 5 / 完整榜 20）；month: { start, end } 可选月份边界（ISO 字符串，
  * 云端 at 存 ISO 串可字典序比较），传了则只统计该月，不传为累计；只数签到：type=checkin，
@@ -747,6 +799,8 @@ module.exports = {
   saveCity: saveCity,
   getLeaderboard: getLeaderboard,
   getCityTodayCheckins: getCityTodayCheckins,
+  getVenueTodayCheckins: getVenueTodayCheckins,
+  getVenueWeekCheckins: getVenueWeekCheckins,
   getUserProfileByOpenid: getUserProfileByOpenid,
   getUserFrequentVenues: getUserFrequentVenues,
   getUserStats: getUserStats,

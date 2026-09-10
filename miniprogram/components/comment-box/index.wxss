@@ -16,14 +16,14 @@
 .cavatar-img {
   width: 52rpx;
   height: 52rpx;
-  border-radius: 50%;
+  border-radius: 12rpx;
   flex-shrink: 0;
 }
 
 .cavatar {
   width: 52rpx;
   height: 52rpx;
-  border-radius: 50%;
+  border-radius: 12rpx;
   background: #2A8CFF;
   color: #FFFFFF;
   font-size: 22rpx;

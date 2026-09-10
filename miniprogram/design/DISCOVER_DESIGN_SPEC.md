@@ -146,7 +146,7 @@
 
 ```
 容器：bg #1E1E23，border 1rpx solid #26262C，border-radius 24rpx，padding 24rpx
-头像：72rpx 圆形，无渐变，用用户头像或首字占位
+头像：72rpx **圆角方形（圆角 20rpx）**，无渐变，用用户头像或首字占位。全站头像统一方角语言（与通栏直角媒体同构），圆形只保留给控件（按钮/输入框/开关）。
 用户名：30rpx，#FFFFFF，font-weight 600
 时间：24rpx，#6B6B75，右对齐
 场地胶囊：bg rgba(255,90,54,0.14)，color #FF8A6E，font-size 22rpx，padding 8rpx 16rpx，圆角 999rpx
@@ -250,7 +250,7 @@ CTA：橙色渐变胶囊，文字「去附近场地签到」
 - 评论列表：
 
 ```
-头像：56rpx 圆形
+头像：56rpx 圆角方形（圆角 16rpx）
 用户名：26rpx，#FFFFFF，font-weight 600
 时间：22rpx，#6E6E76
 内容：28rpx，#D9D9DE，line-height 1.6
