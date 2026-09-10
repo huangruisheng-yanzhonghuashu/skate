@@ -78,7 +78,7 @@ Page({
     locating: true,
     mapSheetVisible: false, /* 地图默认收起为入口卡片，点击展开半屏 bottom-sheet */
     markers: [],
-    heatCount: 0, /* 今日在滑总人数（presence 聚合求和） */
+    cityCheckins: 0, /* 今日城市打卡人数（当前城市全部实体今日签到/打卡按人去重） */
     feed: [], /* 最新打卡横滑卡（发现页同源前 10 条） */
     /* 打卡媒体预览（media-viewer，同发现页） */
     viewerShow: false,
@@ -140,6 +140,7 @@ Page({
     this.refresh()
     this.buildMarkers()
     this.refreshOnline()
+    this.refreshCityCheckins()
     if (cityChanged) this.centerOnCity()
   },
 
@@ -158,6 +159,7 @@ Page({
       this.refresh()
       this.buildMarkers()
       this.refreshOnline()
+      this.refreshCityCheckins()
     })
   },
 
@@ -171,6 +173,7 @@ Page({
       this.tryLocateCity()
       this.refresh()
       this.buildMarkers()
+      this.refreshCityCheckins()
     })
   },
 
@@ -185,15 +188,27 @@ Page({
     if (!any) this.setData({ selectedVenueId: cityVenues[0].id })
   },
 
-  /* 真实在线人数：一次聚合查询所有场地的窗口内心跳分布，覆盖列表显示
-   * 同时汇总为头部「今日 N 人在滑」热度胶囊（全城市合计） */
+  /* 真实在线人数：一次聚合查询所有场地的窗口内心跳分布，覆盖列表「此刻 N 人在场」显示 */
   refreshOnline() {
     cloud.getOnlineMap().then((map) => {
       if (!map) return /* 查询失败（如权限未配置），保留兜底热度值 */
       ;(this._venues || []).forEach((v) => { this._online[v.id] = map[v.id] || 0 })
-      const heat = Object.keys(map).reduce((s, k) => s + (map[k] || 0), 0)
-      this.setData({ heatCount: heat })
       this.refresh()
+    })
+  },
+
+  /* 头部「今日 N 人打过卡」胶囊：当前城市全部实体（场地+门店）今日签到/打卡按人去重
+   * 实体未就位时跳过（loadVenues/loadShops 回调会补调）；切城/下拉刷新也会重算 */
+  refreshCityCheckins() {
+    const city = store.getCity()
+    const ids = (this._venues || []).concat(this._shops || [])
+      .filter((v) => v.city === city)
+      .map((v) => v.id)
+    if (!ids.length) return
+    const dayStart = new Date()
+    dayStart.setHours(0, 0, 0, 0)
+    cloud.getCityTodayCheckins(ids, dayStart.toISOString()).then((n) => {
+      this.setData({ cityCheckins: n })
     })
   },
 
@@ -329,6 +344,7 @@ Page({
     store.setCity(name)
     this.refresh()
     this.buildMarkers()
+    this.refreshCityCheckins()
     wx.showToast({ title: '已定位到' + name, icon: 'none' })
   },
 
@@ -354,6 +370,7 @@ Page({
       store.setCity(best.city)
       this.refresh()
       this.buildMarkers()
+      this.refreshCityCheckins()
       wx.showToast({ title: '已定位到' + best.city, icon: 'none' })
     }
   },
@@ -391,6 +408,7 @@ Page({
       this.buildMarkers()
       this.refreshOnline()
       this.refreshRatings()
+      this.refreshCityCheckins()
       this.loadFeed()
       wx.stopPullDownRefresh()
       wx.showToast({ title: '已刷新', icon: 'none' })
@@ -592,7 +610,6 @@ Page({
           /* 将场地类型作为第一个标签高亮，其余标签保持组件默认样式 */
           tags: (v.category ? [{ label: v.category }] : []).concat((v.tags || []).map((t) => typeof t === 'string' ? { label: t } : t)),
           photo: (v.photos && v.photos[0]) || '',
-          online: this._online ? this._online[v.id] : v.online,
           checked: !!today,
           checkedTime: today ? fmtHm(today.at) : '',
         }
@@ -655,6 +672,8 @@ Page({
    * 无场地的城市保持当前地图中心，列表按城市过滤自然呈现空态 */
   centerOnCity() {
     const c = this.data.city
+    /* 切城后打卡人数按新城市重算（无实体城市也要刷，归零呈现空态） */
+    this.refreshCityCheckins()
     /* 只取有坐标的实体（无坐标无法作为地图中心） */
     const shops = (this._shops || []).filter((v) => typeof v.latitude === 'number' && typeof v.longitude === 'number')
     const venues = (this._venues || []).filter((v) => typeof v.latitude === 'number' && typeof v.longitude === 'number')

@@ -54,7 +54,7 @@
   flex-shrink: 0;
 }
 
-/* 在线热度胶囊（位于 slogan 右侧） */
+/* 城市打卡数胶囊（位于 slogan 右侧）：今日 N 人打过卡 */
 .heat {
   display: flex;
   align-items: center;
@@ -67,32 +67,9 @@
   margin-left: 20rpx;
 }
 
-.heat-quiet {
-  border-color: #26262C;
-  background: #1E1E23;
-}
-
-.heat-dot {
-  width: 12rpx;
-  height: 12rpx;
-  border-radius: 50%;
-  background: #00D4AA;
-  animation: heat-pulse 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
-}
-
-.heat-dot-quiet {
-  background: #3A3A42;
-  animation: none;
-}
-
-@keyframes heat-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.3); }
-}
-
 .heat-num {
-  font-size: 28rpx;
-  font-weight: 700;
+  font-size: 32rpx;
+  font-weight: 500;
   color: #FFFFFF;
   line-height: 1.5;
 }
@@ -924,7 +901,7 @@
 
 /* ===== 系统减弱动效适配 ===== */
 @media (prefers-reduced-motion: reduce) {
-  .heat-dot { animation: none; }
+  .slogan-l1, .slogan-l2 { animation: none; }
   .feed-card { animation: none; }
   .map-sheet-body { animation: none; }
   .entity-bar { transition: none; }

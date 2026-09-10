@@ -6,7 +6,6 @@ Component({
   },
   properties: {
     venue: { type: Object, value: {} },
-    online: { type: Number, value: 0 },
     checked: { type: Boolean, value: false },
     /* 今日签到时间（HH:mm），用于「今日已签到 · 14:20」状态行 */
     checkedTime: { type: String, value: '' },

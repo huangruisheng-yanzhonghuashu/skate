@@ -393,6 +393,27 @@ function saveCity(city) {
   })
 }
 
+/* 今日城市打卡人数：今日（dayStartISO 之后）该批城市实体（venueId 集）的全部签到/打卡，
+ * 聚合按 openid 去重计「人数」（需 checkins「所有用户可读」权限；失败返回 0）
+ * group 后 limit 1000（去重人数分页上限，日常城市规模远够用） */
+function getCityTodayCheckins(venueIds, dayStartISO) {
+  if (!venueIds || !venueIds.length) return Promise.resolve(0)
+  const cmd = db().command
+  return db().collection('checkins').aggregate()
+    .match(cmd.and([
+      { venueId: cmd.in(venueIds) },
+      { at: cmd.gte(dayStartISO) },
+    ]))
+    .group({ _id: '$_openid' })
+    .limit(1000)
+    .end()
+    .then((r) => (r.list || []).length)
+    .catch((e) => {
+      console.warn('[cloud] 今日城市打卡数查询失败', (e && e.errCode) || (e && e.message))
+      return 0
+    })
+}
+
 /* ===== 排行榜（聚合所有人场地"签到"数，需 checkins"所有用户可读"权限）
  * limit 参数化（首页榜 5 / 完整榜 20）；month: { start, end } 可选月份边界（ISO 字符串，
  * 云端 at 存 ISO 串可字典序比较），传了则只统计该月，不传为累计；只数签到：type=checkin，
@@ -798,6 +819,7 @@ module.exports = {
   getMyProfile: getMyProfile,
   saveCity: saveCity,
   getLeaderboard: getLeaderboard,
+  getCityTodayCheckins: getCityTodayCheckins,
   getUserProfileByOpenid: getUserProfileByOpenid,
   getUserFrequentVenues: getUserFrequentVenues,
   getUserStats: getUserStats,

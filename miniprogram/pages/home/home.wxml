@@ -25,11 +25,11 @@
             </view>
           </view>
         </view>
-        <!-- 在线热度：设计稿位于 slogan 右侧，无人时显示弱化态 -->
-        <view class="heat {{heatCount > 0 ? '' : 'heat-quiet'}}" aria-label="{{heatCount > 0 ? '今日 ' + heatCount + ' 人在滑' : '今日暂无人在滑'}}">
-          <view class="heat-dot {{heatCount > 0 ? '' : 'heat-dot-quiet'}}"></view>
-          <text wx:if="{{heatCount > 0}}" class="heat-num">{{heatCount}}</text>
-          <text class="heat-label">{{heatCount > 0 ? '人在滑' : '暂无人在滑'}}</text>
+        <!-- 城市打卡数：设计稿位于 slogan 右侧，今日当前城市去重打卡人数 -->
+        <view class="heat" aria-label="今日 {{cityCheckins}} 人打过卡">
+          <text class="heat-label">今日</text>
+          <text class="heat-num">{{cityCheckins}}</text>
+          <text class="heat-label">人打过卡</text>
         </view>
       </view>
     </view>
@@ -279,7 +279,6 @@
         <view wx:for="{{list}}" wx:key="id" class="list-item" data-id="{{item.id}}" bindtap="syncSelection">
           <venue-card
             venue="{{item}}"
-            online="{{item.online}}"
             checked="{{item.checked}}"
             checked-time="{{item.checkedTime}}"
             index="{{index}}"

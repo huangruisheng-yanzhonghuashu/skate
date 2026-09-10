@@ -11,12 +11,6 @@
 
     <!-- 热门角标：左上，倾斜贴纸感 -->
     <view wx:if="{{venue.hot}}" class="badge-hot">热门</view>
-
-    <!-- 在线人数角标：右上，绿色脉冲点 + 数字 -->
-    <view wx:if="{{online > 0}}" class="badge-online" aria-label="{{online}} 人在场">
-      <view class="badge-online-dot"></view>
-      <text class="badge-online-num">{{online}}</text>
-    </view>
   </view>
 
   <view class="body">
@@ -39,19 +33,15 @@
       <view wx:for="{{venue.tags}}" wx:key="label" wx:if="{{index < 2}}" class="tag {{index === 0 ? 'tag-primary' : ''}}">{{item.label}}</view>
     </view>
 
-    <!-- 状态行 -->
+    <!-- 状态行：仅打卡维度两种态（设计稿已移除实时在线态） -->
     <view class="foot">
       <view wx:if="{{checked}}" class="state state-checked">
         <view class="dot-green"></view>
         <text>今日已签到{{checkedTime ? ' · ' + checkedTime : ''}}</text>
       </view>
-      <view wx:elif="{{online > 0}}" class="state state-live">
-        <view class="dot-ping"></view>
-        <text>此刻 {{online}} 人在场</text>
-      </view>
       <view wx:else class="state state-quiet">
         <view class="dot"></view>
-        <text>今日暂无人在场</text>
+        <text>今日还没人打过卡</text>
       </view>
     </view>
   </view>
