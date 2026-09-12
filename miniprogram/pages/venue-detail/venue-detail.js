@@ -45,6 +45,7 @@ Page({
     checkinMedia: [],
     checkinMediaMode: '', /* '' 未定 / image 图片态 / video 视频态（图视频互斥） */
     checkinSubmitting: false,
+    checkinCanSubmit: false, /* 留言有内容才激活发布钮 */
     /* 报错弹窗 */
     reportOpen: false,
     reportTypes: REPORT_TYPES,
@@ -381,6 +382,7 @@ Page({
       checkinMedia: [],
       checkinMediaMode: '',
       checkinSubmitting: false,
+      checkinCanSubmit: false,
     })
   },
 
@@ -395,6 +397,7 @@ Page({
       checkinMedia: media,
       checkinMediaMode: mediaPick.modeOf(media),
       checkinSubmitting: false,
+      checkinCanSubmit: !!(rec.note || '').trim(),
     })
   },
 
@@ -429,11 +432,26 @@ Page({
 
   closeCheckin() {
     if (this.data.checkinSubmitting) return
-    this.setData({ checkinOpen: false })
+    /* 误触防护：已有内容时先确认，避免丢失（Error Recovery） */
+    const dirty = (this.data.note || '').trim().length > 0 || this.data.checkinMedia.length > 0
+    if (!dirty) {
+      this.setData({ checkinOpen: false })
+      return
+    }
+    wx.showModal({
+      title: '放弃这条打卡？',
+      content: '关闭后未发布的内容和照片不会保留',
+      confirmText: '放弃',
+      cancelText: '继续编辑',
+      confirmColor: '#E5484D',
+      success: (r) => { if (r.confirm) this.setData({ checkinOpen: false }) },
+    })
   },
 
   onNoteInput(e) {
-    this.setData({ note: e.detail.value })
+    const note = e.detail.value
+    /* 留言必填：有内容才激活发布钮 */
+    this.setData({ note, checkinCanSubmit: note.trim().length > 0 })
   },
 
   /* 选媒体（图/视频互斥：图≤9张 或 视频1个），选择规则统一在 utils/media-pick.js */
@@ -483,11 +501,12 @@ Page({
   },
 
   confirmPost() {
-    if (this.data.checkinSubmitting) return
+    /* 空态禁用 + 提交中防重复点击 */
+    if (this.data.checkinSubmitting || !this.data.checkinCanSubmit) return
     const v = this.data.venue
     const note = this.data.note.trim()
     const media = this.data.checkinMedia
-    /* 留言必填 */
+    /* 留言必填（兜底，正常流程被禁用钮拦截） */
     if (!note) {
       wx.showToast({ title: '说点什么后再发布', icon: 'none' })
       return
@@ -498,6 +517,8 @@ Page({
       wx.showToast({ title: invalidMsg, icon: 'none' })
       return
     }
+    /* 修复：此前从未置 true，发布中 loading 态不生效 */
+    this.setData({ checkinSubmitting: true })
     const submit = () => {
       const m = this.splitCheckinMedia(media)
       if (this._editId) {

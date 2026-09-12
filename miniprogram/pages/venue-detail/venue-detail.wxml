@@ -181,31 +181,34 @@
     <view class="sheet anim-sheet-in" catchtap="noop">
       <view class="sheet-handle"></view>
       <view class="sheet-head">
-        <view class="sheet-head-badge">
-          <image class="sheet-head-badge-icon" src="{{icons.camera}}" mode="aspectFit" />
-        </view>
         <text class="sheet-title">{{checkinMode === 'edit' ? '编辑打卡' : '发布打卡'}}</text>
         <view class="sheet-close" hover-class="sheet-close-hover" bindtap="closeCheckin" aria-role="button" aria-label="关闭">
           <image class="sheet-close-icon" src="{{icons.x}}" mode="aspectFit" />
         </view>
       </view>
 
-      <view class="venue-chip">
-        <image class="venue-chip-icon" src="{{icons.pin}}" mode="aspectFit" />
-        <text class="venue-chip-text">{{venue.name}}</text>
+      <!-- 打卡地点行（只读弱化）：绿点=已到场（近 7 天有签到记录），绿仅表在场语义 -->
+      <view class="venue-loc">
+        <view class="venue-loc-dot"></view>
+        <text class="venue-loc-name">{{venue.name}}</text>
+        <text class="venue-loc-sub">· 已到场</text>
       </view>
 
       <view class="field">
         <view class="note-head">
           <text class="note-label">说点什么</text>
-          <text class="note-count">{{note.length}}/200</text>
+          <!-- 计数弱化：未输入不显示（内容克制） -->
+          <text wx:if="{{note.length}}" class="note-count">{{note.length}}/200</text>
         </view>
         <textarea
           class="field-textarea"
           value="{{note}}"
           maxlength="200"
-          placeholder="说点什么... (选填)"
+          placeholder="说点什么..."
           placeholder-class="ph"
+          adjust-position="{{true}}"
+          cursor-spacing="32"
+          show-confirm-bar="{{false}}"
           bindinput="onNoteInput"
         />
       </view>
@@ -234,13 +237,20 @@
           <view wx:if="{{checkinMediaMode !== 'video'}}" class="photo-add" bindtap="chooseCheckinMedia">
             <image class="photo-add-icon" src="{{icons.plus}}" mode="aspectFit" />
             <text class="photo-add-text">{{checkinMediaMode === 'image' ? '添加图片' : '添加图片/视频'}}</text>
-            <text class="photo-add-sub">{{checkinMediaMode === 'image' ? checkinMedia.length + '/9' : '图最多 9 张 或 视频 1 个'}}</text>
+            <text class="photo-add-sub">{{checkinMediaMode === 'image' ? checkinMedia.length + '/9' : '照片 / 视频'}}</text>
           </view>
         </view>
       </view>
 
-      <view class="sheet-btn {{checkinSubmitting ? 'sheet-btn-loading' : ''}}" bindtap="confirmPost">
-        <image class="sheet-btn-icon" src="{{icons.check}}" mode="aspectFit" />
+      <!-- 空态禁用：无内容时置灰不可点，避免静默失败 -->
+      <view
+        class="sheet-btn {{checkinCanSubmit ? '' : 'sheet-btn-disabled'}} {{checkinSubmitting ? 'sheet-btn-loading' : ''}}"
+        hover-class="{{checkinCanSubmit && !checkinSubmitting ? 'sheet-btn-active' : ''}}"
+        bindtap="confirmPost"
+        aria-role="button"
+        aria-disabled="{{!checkinCanSubmit}}"
+      >
+        <image wx:if="{{checkinCanSubmit}}" class="sheet-btn-icon" src="{{icons.check}}" mode="aspectFit" />
         <text>{{checkinSubmitting ? (checkinMode === 'edit' ? '更新中...' : '发布中...') : (checkinMode === 'edit' ? '更新打卡' : '发布打卡')}}</text>
       </view>
       <view class="sheet-cancel" bindtap="closeCheckin">取消</view>

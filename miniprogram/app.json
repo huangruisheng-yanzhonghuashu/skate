@@ -52,7 +52,7 @@
   },
   "permission": {
     "scope.userLocation": {
-      "desc": "用于展示附近滑板场地、当前位置以及场地实时在场人数"
+      "desc": "用于展示附近的滑板场地与当前位置"
     }
   },
   "requiredPrivateInfos": ["getLocation", "chooseLocation"],
